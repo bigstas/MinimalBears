@@ -1,0 +1,41 @@
+body {
+	background-color: #df9850;
+}
+	
+p {
+	color: red;
+	font-family: cursive;
+}
+
+p1 {
+	color: blue;
+	font-family: Arial, sans-serif;
+}
+
+ul li {
+	color: purple;
+	font-family: Copperplate, Didot;
+}
+
+div {
+    margin: auto;
+    text-align: center;
+    height: 50px;
+    width: 120px;
+    border-color: #6495ed;
+    background-color: #bcd2ee;
+    border-style: dashed;
+    border-width: 5px;
+    border-radius: 4px;
+}
+
+a {
+    color: grey;
+    font-size: 0.8em;
+    text-decoration: none;
+    font-family: cursive;
+}
+
+a:hover {
+	color: white;
+}
