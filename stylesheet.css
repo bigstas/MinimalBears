@@ -1,6 +1,4 @@
-body {
-	background-color: #df9850;
-}
+body { background-color: #df9850; }
 	
 p {
 	color: red;
@@ -12,30 +10,145 @@ p1 {
 	font-family: Arial, sans-serif;
 }
 
+h2 {
+	font-size:2em;
+	text-align: center;
+}
+
+h1 {
+	font-family: Verdana;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	color: #acd1b2;
+}
+
+/* This is a really useful way of seeing where the divs are.
+
+div:hover {
+	background-color: white;
+} */
+
 ul li {
 	color: purple;
 	font-family: Copperplate, Didot;
 }
 
-div {
+#header {
+	position: relative;
+	top: -10px;
+	background-color: #3c4543;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+#menuList {
+	list-style-type: none;
+	position: fixed;
+	margin: -10px;
+}
+
+.menuListItem {
+	display: inline;
+	border: 2px solid #000000;
+	font-family: Futura, Tahoma, sans-serif;
+	color: #ffffff;
+	padding: 5px;
+	border-radius: 5px 5px;
+	background-color: #cc0323
+}
+
+#right {
+	float: right;
+	width: 55%;
+}
+
+#left {
+	float: left;
+	width: 45%;
+}
+
+#footer{
+	clear: both;
+	position: relative;
+	bottom: -20px;
+	padding-top: 10px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	height: 100px;
+	background-color: #3c4543;
+}
+
+.colourbox {
+	height: 200px;
+	width: 200px;
+}
+.colourbox:hover { background-color: white; }
+
+#redbox {background-color: red;}
+#redbox:hover {background-color: white;}
+#bluebox {background-color: blue;}
+#bluebox:hover {background-color: white;}
+#greenbox {background-color: green;}
+#greenbox:hover {background-color: white;}
+#yellowbox {background-color: yellow;}
+#yellowbox:hover {background-color: white;}
+
+/* Want this to only appear on hover. Need to re-structure it slightly for that to work. */
+td p {
+	text-align: center;
+	font-family: serif;
+	font-size: 3em;
+	color: black;
+}
+
+#vandal {
     margin: auto;
     text-align: center;
-    height: 50px;
+    height: 70px;
     width: 120px;
     border-color: #6495ed;
     background-color: #bcd2ee;
     border-style: dashed;
     border-width: 5px;
     border-radius: 4px;
+    clear: both;
+}
+
+#navbar {
+	position: fixed;
+	top:10px;
+	left:56.5%;
+	margin-left:-254px;
 }
 
 a {
-    color: grey;
-    font-size: 0.8em;
-    text-decoration: none;
-    font-family: cursive;
+	text-decoration: none;
+	color: white;
 }
 
 a:hover {
+	font-weight: bold;
+}
+
+/* #menubar {
+	height: 600px;
+	width: 100px;
+	background-color: blue;
+	float: left;
+	border: solid black 2px;
+	position: fixed;
+	left: -10px;
+	top: -10px;
+} */
+
+.whitelink {
+    color: grey;
+    font-size: 0.8em;
+    font-family: cursive;
+}
+
+.whitelink:hover {
 	color: white;
 }
