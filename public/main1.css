@@ -33,33 +33,6 @@ h1, h2, h3, p, nav a {
 
 
 /* ================================== */
-/* =========== about.html =========== */
-/* ================================== */
-
-
-#maintitle {
-    text-align: center; 
-    font-size: 4em;
-}
-
-#redbox {background-color: red;}
-#redbox:hover {background-color: white;}
-#bluebox {background-color: blue;}
-#bluebox:hover {background-color: white;}
-#greenbox {background-color: green;}
-#greenbox:hover {background-color: white;}
-#yellowbox {background-color: yellow;}
-#yellowbox:hover {background-color: white;}
-
-td p {
-	text-align: center;
-	font-family: serif;
-	font-size: 3em;
-	color: black;
-}
-
-
-/* ================================== */
 /* =========== train.html =========== */
 /* ================================== */
 
@@ -96,15 +69,3 @@ td p {
     margin-top: 100px;
     margin-left: 45%;
 }
-
-
-#contact {
-    background: url(http://www.defenders.org/sites/default/files/styles/large/public/grizzly-bear-harry-bosen-dpc.jpg) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-
-
-
