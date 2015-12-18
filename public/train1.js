@@ -2,8 +2,8 @@
 var Nav = React.createClass({
     render: function () {
         return (
-            <div class="nav">
-                <div class="container">
+            <div className="nav">
+                <div className="container">
                     <ul>
                         <li><a href="#">Logo</a></li>
                         <li><a href="#">Train</a></li>
@@ -40,7 +40,7 @@ var ProgressBar = React.createClass({
 var Button = React.createClass({    
     render: function () {
         return (
-            <input type="button" id="button" value="Progress" onClick={this.props.handle}></input>
+            <input type="button" id="button" value="Progress" disabled={this.props.disabled} onClick={this.props.handle}></input>
         );
     }
 })
@@ -51,23 +51,36 @@ Parse.initialize('sQd6phAVnaN8vGtSWIHiLb0vcxr92gSL2EpyXNK8', '10tf0eOb5UcxDPWX7E
 var Option = React.createClass({
     getInitialState: function () {
         return {
-            clicked: false
+            clicked: false,
+            currentWordCounter : 0
         };
     },
  
     handleClick: function (e) {
-        this.setState({
-            clicked: true
-        });
-        //alert("You are clicking me!");
+        if (!this.state.clicked) {
+            var newState = true;
+            this.setState({
+                clicked: newState
+            });
+            this.props.callbackParent(newState);
+            //alert("You are clicking me!");
+        }
     },
     
     render: function () {
-        if (this.props.feedback === "Correct!") {
+        /*if (this.props.feedback === "Correct!") {
             var clickedStyle = { backgroundColor: "green" };
         } else {
             var clickedStyle = { backgroundColor: "red" };
-        }
+        }*/
+        var clickedStyle = {backgroundColor: (this.props.feedback === "Correct!") ? "green" : "red" }
+        
+        if (this.state.clicked && (this.state.currentWordCounter < this.props.wordCounter)) {
+            this.setState({
+                currentWordCounter: this.props.wordCounter,
+                clicked: false
+            });  
+        } 
             
         let unclickedStyle = {
             backgroundColor: "aqua"
@@ -81,6 +94,8 @@ var Option = React.createClass({
                 ? clickedStyle
                 : unclickedStyle
             }>
+        {/* style={this.props.style}
+            > */}
                 {text}
             </div>
         );
@@ -108,9 +123,29 @@ var Arena = React.createClass({
         };
     },
     
-    handleClick: function (e) {
+    onOptionChanged: function (newState) {
+        this.setState({
+            mode: "feedback"
+        })
+    },
+    
+    handleProgressClick: function (e) {
         document.getElementById("button").style.color = "red";
-        //document.getElementById("button").value = this.data.word;
+        
+        /*function reviveOptions (element) {
+            element.setState({
+                clicked: false
+            });
+        }
+        
+        var optionDivsNodelist = document.getElementsByClassName("option");
+        var optionDivsArray = [].slice.call(optionDivsNodelist);
+        optionDivsArray.forEach(reviveOptions);
+        /*optionDivsArray.forEach(function(c) {
+            c.setState({
+                clicked: false
+            });
+        }); */
 
         // var snd = new Audio("Stapler.mp3"); // buffers automatically when created (what does this mean?)
         // snd.play();
@@ -134,6 +169,7 @@ var Arena = React.createClass({
         //snd.play()
         
         this.setState({
+            mode: "ask",
             counter: this.state.counter +1
         });
         
@@ -153,23 +189,24 @@ var Arena = React.createClass({
             ["Wang", "Gav"]
         ]
         
+        var buttonDisabled = (this.state.mode==="ask") ? true : false;
+        
         return (
             <div id="arena">
                 <p>This is the arena.</p>
-                <p>{this.data.sound[0]}</p>
                 <ProgressBar />
                 <ul>
                     {this.data.word.map(function(c) {
                         return <li>{c.Name}</li>;
                     })}
                 </ul>
-                <Button handle={this.handleClick} />
-                <div class="container">
+                <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
+                <div className="container">
                     {/* <Option word={currentWords[this.state.counter][0]} feedback="Correct!" />
                     <Option word={currentWords[this.state.counter][1]} feedback="Wrong!" />  */}
                     {this.data.item.map(function(c) {
-                        return <Option word={c.Homophones[0]} feedback="Correct!" />
-                    })}
+                        return <Option key={c.id} word={c.Homophones[0]} feedback="Correct!" callbackParent={this.onOptionChanged} mode={this.state.mode} wordCounter={this.state.counter} />
+                    }, this) }
                 </div>
             </div>
         );
