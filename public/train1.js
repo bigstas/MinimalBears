@@ -57,40 +57,30 @@ var Option = React.createClass({
     },
  
     handleClick: function (e) {
-        if (!this.state.clicked) {
-            var newState = true;
-            this.setState({
-                clicked: newState
-            });
-            this.props.callbackParent(newState);
-            //alert("You are clicking me!");
+        if (this.props.mode === "ask") {
+            this.props.callbackParent();
         }
     },
     
     render: function () {
-        /*if (this.props.feedback === "Correct!") {
-            var clickedStyle = { backgroundColor: "green" };
-        } else {
-            var clickedStyle = { backgroundColor: "red" };
-        }*/
         var clickedStyle = {backgroundColor: (this.props.feedback === "Correct!") ? "green" : "red" }
         
-        if (this.state.clicked && (this.state.currentWordCounter < this.props.wordCounter)) {
+        /* if (this.state.clicked && (this.state.currentWordCounter < this.props.wordCounter)) {
             this.setState({
                 currentWordCounter: this.props.wordCounter,
                 clicked: false
             });  
-        } 
+        } */
             
         let unclickedStyle = {
             backgroundColor: "aqua"
         };
-        var text = this.state.clicked ? this.props.feedback : this.props.word;
+        var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
         
         return (
             <div className='option'
             onClick={this.handleClick}
-            style={(this.state.clicked) 
+            style={(this.props.mode === "feedback") 
                 ? clickedStyle
                 : unclickedStyle
             }>
@@ -123,50 +113,17 @@ var Arena = React.createClass({
         };
     },
     
-    onOptionChanged: function (newState) {
+    onOptionChanged: function () {
         this.setState({
             mode: "feedback"
-        })
+        });
     },
     
     handleProgressClick: function (e) {
         document.getElementById("button").style.color = "red";
-        
-        /*function reviveOptions (element) {
-            element.setState({
-                clicked: false
-            });
-        }
-        
-        var optionDivsNodelist = document.getElementsByClassName("option");
-        var optionDivsArray = [].slice.call(optionDivsNodelist);
-        optionDivsArray.forEach(reviveOptions);
-        /*optionDivsArray.forEach(function(c) {
-            c.setState({
-                clicked: false
-            });
-        }); */
 
-        // var snd = new Audio("Stapler.mp3"); // buffers automatically when created (what does this mean?)
-        // snd.play();
-
-        //this.data.sound.equalTo("filename", "stas thing")
-        //this.data.sound.find({
-        //var Audio = Parse.Object.extend("Audio");
-        var query = new Parse.Query("Audio");
-        query.equalTo("filename", "stas thing");
-        query.first({
-            success: function (object) {
-                alert("Successfully retrieved " + object);
-                var snd = new Audio(object.File);
-                snd.play();
-            },
-            error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
-            } 
-        });
-        //var snd = new Audio(this.data.sound[0].File)
-        //snd.play()
+        var snd = new Audio(this.data.sound[0]["File"]["_url"]);
+        snd.play();
         
         this.setState({
             mode: "ask",
