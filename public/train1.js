@@ -79,6 +79,7 @@ var Arena = React.createClass({
         return {
             selection: 0,
             counter: 0,
+            maxRounds: 10,
             mode: "ask"
         };
     },
@@ -95,7 +96,7 @@ var Arena = React.createClass({
     onOptionChanged: function () {
         this.setState({
             mode: "feedback",
-            counter: (this.state.counter < 10) ? this.state.counter +1 : 10
+            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
         });
     },
     
@@ -109,12 +110,12 @@ var Arena = React.createClass({
     },
     
     render: function () {
-        var buttonDisabled = (this.state.mode==="ask") ? true : false;
+        var buttonDisabled = (this.state.mode==="ask" || this.state.counter === this.state.maxRounds) ? true : false;
         
         return (
             <div id="arena">
-                <p>This is the arena.</p>
-                <ProgressBar style={{ width: (this.state.counter*10).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
+                <p>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
+                <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
                 <div className="container">
                     {this.data.item.map(function(c) {
