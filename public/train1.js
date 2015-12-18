@@ -1,4 +1,4 @@
-          
+
 var Nav = React.createClass({
     render: function () {
         return (
@@ -51,8 +51,7 @@ Parse.initialize('sQd6phAVnaN8vGtSWIHiLb0vcxr92gSL2EpyXNK8', '10tf0eOb5UcxDPWX7E
 var Option = React.createClass({
     getInitialState: function () {
         return {
-            clicked: false,
-            currentWordCounter : 0
+            clicked: false
         };
     },
  
@@ -64,17 +63,7 @@ var Option = React.createClass({
     
     render: function () {
         var clickedStyle = {backgroundColor: (this.props.feedback === "Correct!") ? "green" : "red" }
-        
-        /* if (this.state.clicked && (this.state.currentWordCounter < this.props.wordCounter)) {
-            this.setState({
-                currentWordCounter: this.props.wordCounter,
-                clicked: false
-            });  
-        } */
-            
-        let unclickedStyle = {
-            backgroundColor: "aqua"
-        };
+        var unclickedStyle = { backgroundColor: "aqua" };
         var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
         
         return (
@@ -84,8 +73,6 @@ var Option = React.createClass({
                 ? clickedStyle
                 : unclickedStyle
             }>
-        {/* style={this.props.style}
-            > */}
                 {text}
             </div>
         );
@@ -96,6 +83,7 @@ var Option = React.createClass({
 var Arena = React.createClass({
     getInitialState: function () {
         return {
+            selection: 0,
             counter: 0,
             mode: "ask"
         };
@@ -104,10 +92,7 @@ var Arena = React.createClass({
     mixins: [ParseReact.Mixin], // Enable query subscriptions
 
     observe: function() {
-    // Subscribe to all Comment objects, ordered by creation date
-    // The results will be available at this.data.comments
         return {
-            word: (new Parse.Query('Language')).ascending('createdAt'),
             item: (new Parse.Query('Item')).ascending('createdAt'),
             sound: (new Parse.Query('Audio')).ascending('createdAt')
         };
@@ -122,13 +107,13 @@ var Arena = React.createClass({
     handleProgressClick: function (e) {
         document.getElementById("button").style.color = "red";
 
-        var snd = new Audio(this.data.sound[0]["File"]["_url"]);
-        snd.play();
-        
         this.setState({
             mode: "ask",
-            counter: this.state.counter +1
+            counter: this.state.counter +1,
+            selection: Math.floor(Math.random() * this.data.sound.length)
         });
+        var snd = new Audio(this.data.sound[this.state.selection]["File"]["_url"]);
+        snd.play();
         
         var barWidth = document.getElementById("progress").offsetWidth;
         var fillWidth = document.getElementById("fill").offsetWidth;
@@ -152,17 +137,14 @@ var Arena = React.createClass({
             <div id="arena">
                 <p>This is the arena.</p>
                 <ProgressBar />
-                <ul>
-                    {this.data.word.map(function(c) {
-                        return <li>{c.Name}</li>;
-                    })}
-                </ul>
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
                 <div className="container">
                     {/* <Option word={currentWords[this.state.counter][0]} feedback="Correct!" />
                     <Option word={currentWords[this.state.counter][1]} feedback="Wrong!" />  */}
                     {this.data.item.map(function(c) {
-                        return <Option key={c.id} word={c.Homophones[0]} feedback="Correct!" callbackParent={this.onOptionChanged} mode={this.state.mode} wordCounter={this.state.counter} />
+                        console.log(this.data.sound[this.state.selection]["spoken"]);
+                        var theFeedback = (c.Homophones[0]==this.data.sound[this.state.selection]["spoken"] ? "Correct!" : "Wrong!");
+                        return <Option key={c.id} word={c.Homophones[0]} feedback={theFeedback} callbackParent={this.onOptionChanged} mode={this.state.mode} />
                     }, this) }
                 </div>
             </div>
