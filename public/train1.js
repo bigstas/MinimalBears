@@ -21,16 +21,10 @@ var Nav = React.createClass({
           
 
 var ProgressBar = React.createClass({
-    getInitialState: function () {
-        return {
-            style: { width: "10%", borderRadius: "20px", transitionDuration: "1s" },
-        };
-    },
-    
     render: function () {
         return (
             <div id="progress">
-                <div id="fill" style={this.state.style}></div>
+                <div id="fill" style={this.props.style}></div>
             </div>
         );
     }
@@ -100,47 +94,29 @@ var Arena = React.createClass({
     
     onOptionChanged: function () {
         this.setState({
-            mode: "feedback"
+            mode: "feedback",
+            counter: (this.state.counter < 10) ? this.state.counter +1 : 10
         });
     },
     
     handleProgressClick: function (e) {
-        document.getElementById("button").style.color = "red";
-
         this.setState({
-            mode: "ask",
-            counter: this.state.counter +1,
+            mode: "ask", 
             selection: Math.floor(Math.random() * this.data.sound.length)
         });
         var snd = new Audio(this.data.sound[this.state.selection]["File"]["_url"]);
         snd.play();
-        
-        var barWidth = document.getElementById("progress").offsetWidth;
-        var fillWidth = document.getElementById("fill").offsetWidth;
-        if (fillWidth < barWidth -20) {
-        // if (fillWidthPercent < 100 ) {
-            document.getElementById("fill").style.width = (fillWidth + 10) + 'px';
-            //document.getElementById("button").value = toString(this.data.sound);
-        };
     },
     
     render: function () {
-        var currentWords = [
-            ["Moo", "Quack"],
-            ["Woof", "Meow"],
-            ["Wang", "Gav"]
-        ]
-        
         var buttonDisabled = (this.state.mode==="ask") ? true : false;
         
         return (
             <div id="arena">
                 <p>This is the arena.</p>
-                <ProgressBar />
+                <ProgressBar style={{ width: (this.state.counter*10).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
                 <div className="container">
-                    {/* <Option word={currentWords[this.state.counter][0]} feedback="Correct!" />
-                    <Option word={currentWords[this.state.counter][1]} feedback="Wrong!" />  */}
                     {this.data.item.map(function(c) {
                         console.log(this.data.sound[this.state.selection]["spoken"]);
                         var theFeedback = (c.Homophones[0]==this.data.sound[this.state.selection]["spoken"] ? "Correct!" : "Wrong!");
