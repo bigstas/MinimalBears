@@ -74,7 +74,7 @@ html {
     /* This is a hack. Should be possible to do this with margin-left: auto; etc. But didn't work for some reason. */
 }
 
-.option {
+.wordOption {
     height: 40px;
     width: 60px;
     textAlign: center;
