@@ -56,7 +56,7 @@ var WordOption = React.createClass({
     
     render: function () {
         var clickedStyle = {backgroundColor: (this.props.feedback === "Correct!") ? "green" : "red" }
-        var unclickedStyle = { backgroundColor: "aqua" };
+        var unclickedStyle = { backgroundColor: "#b0b0e0" };
         var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
         
         return (
@@ -124,7 +124,7 @@ var Arena = React.createClass({
         });
     },
     
-    handleProgressClick: function (e) {
+    handleProgressClick: function () {
         this.setState({
             mode: "ask", 
             selection: Math.floor(Math.random() * this.data.sounds.length)

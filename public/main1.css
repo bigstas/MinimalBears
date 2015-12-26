@@ -31,6 +31,14 @@ h1, h2, h3, p, nav a {
     font-family: Courier, Gill Sans, Helvetica, sans-serif;
 }
 
+ul#menu li {
+    display: inline;
+}
+
+.nav .container ul li {
+		display: inline;
+}
+
 
 /* ================================== */
 /* =========== train.html =========== */
