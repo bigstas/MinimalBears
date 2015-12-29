@@ -73,6 +73,30 @@ var WordOption = React.createClass({
 })
 
 
+/* var EmptyArray = {
+    subscribers: {},
+    observerCount: 0,
+    
+    subscibe: function(callbacks) {
+        var observerId = 'o' + this.observerCount++;
+        this.subscibers[observerId] = callbacks;
+        callbacks.OnNext([]);
+        
+        return {
+            dispose: () => {
+                delete this.subscibers[observerId];
+            }
+        }
+    },
+    
+    update: function(changes) {
+        for (var oid in this.subscibers) {
+            this.subscibers[oid].onNext([]);
+        }
+    }
+}; */
+
+
 var Arena = React.createClass({
     getInitialState: function () {
         return {
@@ -80,35 +104,40 @@ var Arena = React.createClass({
             counter: 0,
             maxRounds: 10,
             mode: "ask",
-            activeLanguage: "English",
-            activeContrast: "th/s"
+            activeLanguageId: null,
+            activeContrast: null
         };
     },
     
     mixins: [ParseReact.Mixin], // Enable query subscriptions
 
-    observe: function() {
-        return {
+    observe: function(props, state) {
+        /* q.equalTo('practice_session', Parse.Object('_PracticeSession',
+  { id: this.props.practice_session.objectId }));
+        var Guy = new Parse.Object('Language', {id: this.state.activeLanguageId});
+        console.log(Guy); */
+        
+        var subs = {
             languages: (new Parse.Query('Language')).ascending('createdAt'),
+            //activeLanguage: (new Parse.Query('Language')).equalTo('Name',this.state.activeLanguage),
             items: (new Parse.Query('Item')).ascending('createdAt'),
             sounds: (new Parse.Query('Audio')).ascending('createdAt')
         };
+        
+        if (this.state.activeLanguageId) {
+            subs.contrasts = (new Parse.Query('Contrast')).equalTo('Language', new Parse.Object('Language', {id: this.state.activeLanguageId}));
+        } 
+        
+        return subs;
     },
     
-    handleLanguageChange: function () {
+    handleLanguageChange: function() {
         this.setState({
-            activeLanguage: document.getElementById("chooseLanguage").value,
-            activeContrast: null    // need to reset contrasts when language changes
+            activeLanguageId: document.getElementById("chooseLanguage").value,
+            activeContrast: null,    // need to reset contrasts when language changes
+            isLoading: true
         });
-    /*    var contrastQuery = new Parse.Query('Contrast')
-        var langID = '8j7h40dWzq'
-        contrastQuery.equalTo("Language", langID)
-        contrastQuery.find({
-            success: function(results) {
-                alert("Successfully accessed database, got " + results.length + " results");
-                
-            }
-        })  */
+        //this.refreshQueries(["contrasts"])
     },
     
     handleContrastChange: function () {
@@ -131,23 +160,55 @@ var Arena = React.createClass({
         });
         var snd = new Audio(this.data.sounds[this.state.selection]["File"]["_url"]);
         snd.play();
+        console.log(this.data.activeLanguage[0]["Contrasts"]);
+    },
+    
+    componentDidUpdate: function (props, state) {
+        if (state.isLoading && this.pendingQueries().length === 0) {
+            this.setState({
+                isLoading: false
+            })
+        }
     },
     
     render: function () {
         var buttonDisabled = (this.state.mode==="ask" || this.state.counter === this.state.maxRounds) ? true : false;
+        var contrastOptions = null
+        
+        
+        console.log(this.pendingQueries())
+        
+        try {
+            contrastOptions = this.data.contrasts.map(function(c) {
+                return <option value={c.objectId}>{c.Name}</option>
+            })
+        } catch(e) {
+            contrastOptions = []
+        }
+            
         
         return (
             <div id="arena">
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
                     {this.data.languages.map(function(c) {
-                        return <option value={c.Name}>{c.Name}</option>
+                        
+                        return <option value={c.objectId}>{c.Name}</option>
                     })}
                 </select>
-                <select id="chooseContrast" onChange={this.handleContrastChange}>
-                    <option value="contrast">Contrast</option>
+                <select>
+                    {contrastOptions}
+    {/*             {this.state.contrastList.map(function(c) {
+                    return <option value={c.objectId}>{c.Name}</option>  */}
+                    
+                </select>
+ {/*               <select id="chooseContrast" onChange={this.handleContrastChange}>
+                    {this.data.activeLanguage[0]['Contrasts'].map(function(c) {
+                            return <option value={c.Name}>{c.Name}</option>
+                        })}     */}
+{/*                    <option value="contrast">Contrast</option>
                     <option value="bontrast">Bontrast</option>
                     <option value="flomtrast">Flomtrast</option>
-                </select>
+                </select>       */}
     
                 <p>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
                               
@@ -157,7 +218,6 @@ var Arena = React.createClass({
                 
                 <div className="container">
                     {this.data.items.map(function(c) {
-                        console.log(this.data.sounds[this.state.selection]["spoken"]);
                         var theFeedback = (c.Homophones[0]===this.data.sounds[this.state.selection]["spoken"] ? "Correct!" : "Wrong!");
                      
                         return <WordOption key={c.id} word={c.Homophones[0]} feedback={theFeedback} callbackParent={this.onWordChosen} mode={this.state.mode} />
