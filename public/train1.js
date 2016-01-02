@@ -1,9 +1,5 @@
 // Allow access to the server
 Parse.initialize('sQd6phAVnaN8vGtSWIHiLb0vcxr92gSL2EpyXNK8', '10tf0eOb5UcxDPWX7ECQ86HpATQYU7YJ9apnYXId');
-// Import Cloud Code mixin
-//var ParseCCMixin = require(['react-cloud-code-mixin'])
-//import ParseCCMixin from 'react-cloud-code-mixin'
-//var ParseCCMixin = require('react-cloud-code-mixin');
 
 /*-- React classes --*/
 
@@ -49,31 +45,23 @@ var Button = React.createClass({
 })
 
 // Button for responding to a recording
-var WordOption = React.createClass({
-    getInitialState: function () {
-        return {
-            clicked: false
-        };
-    },
- 
-    handleClick: function (e) {
+var WordOption = React.createClass({ 
+    handleClick: function () {
         if (this.props.mode === "ask") {
             this.props.callbackParent();
         }
     },
     
     render: function () {
-        var clickedStyle = {backgroundColor: (this.props.feedback === "Correct!") ? "green" : "red" }
-        var unclickedStyle = { backgroundColor: "#b0b0e0" };
+        var background = (this.props.mode === "feedback")
+            ? (this.props.feedback === "Correct!") ? "green" : "red"
+            : "#b0b0e0" ;
         var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
         
         return (
             <div className='wordOption'
             onClick={this.handleClick}
-            style={(this.props.mode === "feedback") 
-                ? clickedStyle
-                : unclickedStyle
-            }>
+            style={{backgroundColor: background}}>
                 {text}
             </div>
         );
@@ -83,6 +71,7 @@ var WordOption = React.createClass({
 // The arena - where the action happens
 var Arena = React.createClass({
     getInitialState: function () {
+        this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
             selection: 0,
             counter: 0,
@@ -90,45 +79,44 @@ var Arena = React.createClass({
             mode: "wait",
             activeLanguageId: null,
             activeContrast: null,
+            activePair: {items: []},
             items: [],
             isLoading: true
         };
     },
     
-    // Enable query subscriptions and cloud code subscriptions
-    mixins: [ParseCCMixin], //ParseReact.Mixin
+    // Enable cloud code subscriptions
+    mixins: [ParseCCMixin],
     
-    /*// Queries
-    observe: function() {
+    // Cloud code subscriptions
+    loadData: function(props, state) {
         var subs = {
-            languages: (new Parse.Query('Language')).ascending('Name')
-        };
-        
-        if (this.state.activeLanguageId) {
-            subs.contrasts = (new Parse.Query('Contrast')).equalTo('Language', new Parse.Object('Language', {id: this.state.activeLanguageId}));
-        }
-        
-        return subs;
-    },*/
-    
-    // Cloud code
-    loadData: function() {
-        return {
             languages: {
-                name: "fetchLanguages"
-                //propDeps: [],
-                //stateDeps: [],
-                //defaultValue: []
-            }/*,
-            contrasts: {
-                name: "fetchContrasts",
-                params: {pointer: new Parse.Object('Language', {id: this.state.activeLanguageId})}
-            },
-            pair: {
-                name: "fetchPair",
-                params: {pointer: new Parse.Object('Contrast', {id: this.state.activeContrast.objectId})}
-            }*/
+                name: "fetchLanguages",
+                propDeps: [],
+                stateDeps: [],
+                defaultValue: []
+            }
         }
+        if (state.activeLanguageId) {
+            subs.contrasts = {
+                name: "fetchContrasts",
+                params: {languageId: state.activeLanguageId},
+                propDeps: [],
+                stateDeps: ['activeLanguageId'],
+                defaultValue: []
+            }
+        }
+        if (state.activeContrast) {
+            subs.pair = {
+                name: "fetchPair",
+                params: {contrastId: state.activeContrast.objectId},
+                propDeps: [],
+                stateDeps: ['activeContrast'],
+                defaultValue: null
+            }
+        }
+        return subs
     },
     
     // After the user chooses a language
@@ -157,32 +145,19 @@ var Arena = React.createClass({
     
     // After the user wants move on to the next recording
     handleProgressClick: function () {
-        /* Annoyingly, this doesn't work, presumably because "fetch" only works in cloud code...
-        or use Parse.Object?
-        
-        // Choose a pair, fetch the items
-        var pairIndex = Math.floor(Math.random() * this.state.activeContrast.Pairs.length);
-        console.log(this.state.activeContrast.Pairs[pairIndex]);
-        var pair = this.state.activeContrast.Pairs[pairIndex].fetch();
-        var firstItem = pair.First.fetch();
-        var secondItem = pair.Second.fetch();
-        var items = [firstItem, secondItem];
-        
-        // Choose the correct item, choose a file and fetch it
-        var correct = Math.floor(Math.random() * 2);
-        var audioIndex = Math.floor(Math.random() * items[correct].Audio.length);
-        var audio = items[correct].Audio[audioIndex].fetch();
-        */
-        
-        // Set the state and play the file
+        // Set the state, play the file, and issue a new query
+        var pair = JSON.parse(this.data.pair);
+        console.log(pair);
         this.setState({
-            mode: "ask"
+            mode: "ask",
+            activePair: pair
         });
-        var snd = new Audio(this.data.pair.url);
+        var snd = new Audio(pair.url);
         snd.play();
+        this.reloadData(['pair'])
     },
     
-    // Forces a re-render after a query is returned
+    // Force a re-render after a query is returned
     componentDidUpdate: function (props, state) {
         console.log(this.pendingQueries())
         if (state.isLoading && this.pendingQueries().length === 0) {
@@ -192,54 +167,24 @@ var Arena = React.createClass({
         }
     },
     
+    
     render: function () {
-        console.log(this.pendingQueries());
-        console.log(this.data);
-        
         var buttonDisabled = (this.state.mode==="ask" || this.state.counter === this.state.maxRounds) ? true : false;
-        // If the language query hasn't returned, set languageOptions to be an empty array
-        var languageOptions = null;
-        try {
-            languageOptions = this.data.languages.map(function(c) {
-                return <option value={c.objectId}>{c.Name}</option>
-            })
-        } catch(e) {
-            languageOptions = []
-        }
-        
-        // If the contrast query hasn't returned, set contrastOptions to be an empty array
-        var contrastOptions = null;
-        try {
-            contrastOptions = this.data.contrasts.map(function(c) {
-                return <option value={JSON.stringify(c)}>{c.Name}</option>
-            })
-        } catch(e) {
-            contrastOptions = []
-        }
-        
-        // If we're not ready for training, set wordOptions to be an empty array
-        var wordOptions = null
-        try {
-            wordOptions = this.data.pair.items.map(function(c) {
-                return <WordOption
-                        key={c.id}
-                        word={c.text}
-                        feedback={c.correct}
-                        callbackParent={this.onWordChosen}
-                        mode={this.state.mode} />
-            })
-        } catch(e) {
-            wordOptions = []
-        }
         
         return (
             <div id="arena">
                 {/* Dropdown menus for language and contrast */}
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
-                    {languageOptions}
+                    {this.data.languages.map(function(stringified) {
+                        var c = JSON.parse(stringified);
+                        return <option value={c.objectId}>{c.Name}</option>
+                    })}
                 </select>
                 <select id="chooseContrast" onChange={this.handleContrastChange}>
-                    {contrastOptions}                    
+                    {this.data.contrasts.map(function(stringified) {
+                        var c = JSON.parse(stringified);
+                        return <option value={stringified}>{c.Name}</option>
+                    })}                    
                 </select>
                 
                 {/* Training area */}
@@ -251,7 +196,13 @@ var Arena = React.createClass({
                 
                 {/* Buttons for choosing options */}
                 <div className="container">
-                    {wordOptions}
+                    {this.state.activePair.items.map(function(c) {
+                        return <WordOption
+                                word={c.text}
+                                feedback={c.correct ? "Correct!" : "Wrong!"}
+                                callbackParent={this.onWordChosen}
+                                mode={this.state.mode} />
+                    }, this)}
                 </div>
             </div>
         );
