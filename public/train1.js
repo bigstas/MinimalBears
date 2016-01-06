@@ -154,6 +154,7 @@ var Arena = React.createClass({
         });
         var snd = new Audio(pair.url);
         snd.play();
+        // (If the file is blocked, the response header will have connection: close)
         this.reloadData(['pair'])
     },
     
