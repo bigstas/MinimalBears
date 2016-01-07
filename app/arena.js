@@ -1,3 +1,6 @@
+var React = require('react');
+var ParseCCMixin = require('react-cloud-code-mixin');
+
 // Progress bar
 var ProgressBar = React.createClass({
     render: function () {
@@ -7,7 +10,7 @@ var ProgressBar = React.createClass({
             </div>
         );
     }
-})
+});
 
 // Progress button
 var Button = React.createClass({    
@@ -16,7 +19,7 @@ var Button = React.createClass({
             <input type="button" id="button" value="Progress" disabled={this.props.disabled} onClick={this.props.handle}></input>
         );
     }
-})
+});
 
 // Button for responding to a recording
 var WordOption = React.createClass({ 
@@ -40,7 +43,7 @@ var WordOption = React.createClass({
             </div>
         );
     }
-})
+});
 
 // The arena - where the action happens
 var Arena = React.createClass({
@@ -182,4 +185,6 @@ var Arena = React.createClass({
             </div>
         );
     }
-})
+});
+
+module.exports = Arena;

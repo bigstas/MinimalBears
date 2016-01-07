@@ -1,0 +1,11 @@
+.project
+.settings
+node_modules
+parse.exe
+build/main.js
+build/specs.js
+build/vendors.js
+build/main.css
+TEST-App.xml
+npm-debug.log
+public

@@ -1,8 +1,6 @@
 // Navigation bar
 
-//alert(4);
-
-//var React = require('react');
+var React = require('react');
 
 var Nav = React.createClass({
     render: function () {
@@ -23,3 +21,5 @@ var Nav = React.createClass({
         );
     }
 });
+
+module.exports = Nav;
