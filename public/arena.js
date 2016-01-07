@@ -1,29 +1,3 @@
-// Allow access to the server
-Parse.initialize('sQd6phAVnaN8vGtSWIHiLb0vcxr92gSL2EpyXNK8', '10tf0eOb5UcxDPWX7ECQ86HpATQYU7YJ9apnYXId');
-
-/*-- React classes --*/
-
-// Navigation bar
-var Nav = React.createClass({
-    render: function () {
-        return (
-            <div className="nav">
-                <div className="container">
-                    <ul>
-                        <li><a href="#">Logo</a></li>
-                        <li><a href="#">Train</a></li>
-                    </ul>
-                    <ul>
-                        <li><a href="#">Sign Up</a></li>
-                        <li><a href="#">Log In</a></li>
-                        <li><a href="#">About</a></li>
-                    </ul>
-                </div>
-            </div>
-        );
-    }
-})
-
 // Progress bar
 var ProgressBar = React.createClass({
     render: function () {
@@ -209,21 +183,3 @@ var Arena = React.createClass({
         );
     }
 })
-
-// Combine navigation bar and arena
-var FullContent = React.createClass({
-    render: function () {
-        return (
-            <div id="outerDiv">
-                <Nav />
-                <Arena />
-            </div>
-        )
-    }
-})
-
-// Render!
-ReactDOM.render(
-    <FullContent />,
-    document.getElementById('content')
-);
