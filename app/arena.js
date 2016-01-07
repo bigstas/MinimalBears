@@ -13,10 +13,16 @@ var ProgressBar = React.createClass({
 });
 
 // Progress button
-var Button = React.createClass({    
+var Button = React.createClass({
     render: function () {
+        var btnClass = 'enabledProgress';
+        var click = this.props.handle;
+        if (this.props.disabled) {
+            btnClass = 'disabledProgress';
+            click = function () {};
+        }
         return (
-            <input type="button" id="button" value="Progress" disabled={this.props.disabled} onClick={this.props.handle}></input>
+            <div id="button" className={btnClass} onClick={click}>Progress</div>
         );
     }
 });
@@ -166,14 +172,14 @@ var Arena = React.createClass({
                 </select>
                 
                 {/* Training area */}
-                <p>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
+                <p style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
                               
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
                 
                 {/* Buttons for choosing options */}
-                <div className="container">
+                <div id='optionContainer' className="container">
                     {this.state.activePair.items.map(function(c) {
                         return <WordOption
                                 word={c.text}

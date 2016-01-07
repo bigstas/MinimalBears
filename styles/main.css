@@ -2,63 +2,78 @@
 /* ========= all documents ========== */
 /* ================================== */
 
-nav {
-    text-align: center;
-}
-
-.navlink:link, .navlink:visited {
-    /*display: block;*/
-    width: 120px;
-    font-weight: bold;
-    color: #FFFFFF;
-    background-color: #00BFFF;
-    border-radius: 7px;
-    text-align: center;
-    padding: 4px;
-    text-decoration: none;
-    text-transform: lowercase;
-}
-
-.navlink:hover, .navlink:active {
-    background-color: #00008B;
-    transition-duration: 1s;
-}
-
-#about body { background-color: #00BFFF; }
+* {font-family: Verdana, Geneva, sans-serif;}
 
 h1, h2, h3, p, nav a {
     color: aliceblue;
-    font-family: Courier, Gill Sans, Helvetica, sans-serif;
 }
 
-ul#menu li {
-    display: inline;
+nav {
+    text-align: center;
+    background-color: #9977ff;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 0.5%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
 }
 
-.nav .container ul li {
-		display: inline;
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    padding: 8px;
+    margin: 3px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.inactive:hover {
+    background-color: #553388;
 }
 
 
-/* ================================== */
-/* =========== train.html =========== */
-/* ================================== */
 
-html {
+.active {
+    background-color: aliceblue;
+    color: #9977ff;
+}
+
+/* html {
     background: url(http://www.wildnatureimages.com/images%202/050612-100..jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+} */
+
+html {
+    background-color: #eeeeee;
 }
+
+
+/* ================================== */
+/* ============ arena.js ============ */
+/* ================================== */
 
 #arena {
     overflow: auto;
-    border: thin solid black;
-    width: 50%;
+    background-color: white;
+    border-radius: 8px;
     height: 300px;
-    margin: 0 auto;
-    margin-top: 100px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 40px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
 }
 
 #progress {
@@ -74,20 +89,37 @@ html {
     background-color: greenyellow;
 }
 
-#button {
+.enabledProgress, .disabledProgress {
+    background-color: goldenrod;
     margin-top: 50px;
-    /*margin-left: auto;
-    margin-right: auto;*/
-    margin-left: 45%;
-    /* This is a hack. Should be possible to do this with margin-left: auto; etc. But didn't work for some reason. */
+    margin-left: 35%;
+    width: 30%;
+    text-align: center;
+    border-radius: 5px;
+    padding-top: 3px;
+    padding-bottom: 5px;
+}
+
+.enabledProgress:hover {
+    background-color: antiquewhite;
+}
+
+#optionContainer {
+    margin-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    display: block;
 }
 
 .wordOption {
-    height: 40px;
-    width: 60px;
-    textAlign: center;
-    backgroundColor: aqua;
+    width: 30%;
     color: white;
     display: inline-block;
-    padding-left: 20px;
+    padding-top: 3%;
+    padding-bottom: 5%;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 6px;
+    cursor: pointer;
 }

@@ -9,11 +9,23 @@ Parse.initialize('sQd6phAVnaN8vGtSWIHiLb0vcxr92gSL2EpyXNK8', '10tf0eOb5UcxDPWX7E
 
 // Combine navigation bar and arena
 var FullContent = React.createClass({
+    getInitialState: function() {
+        return {
+            active: 0
+        }
+    },
+    
+    handleNavClick: function(id) {
+        this.setState({
+            active: id
+        })
+    },
+    
     render: function () {
         return (
             <div id="outerDiv">
-                <Nav />
-                <Arena />
+                <Nav active={this.state.active} callbackParent={this.handleNavClick} />
+                {this.state.active === 1 ? <Arena /> : []}
             </div>
         )
     }
@@ -22,7 +34,7 @@ var FullContent = React.createClass({
 // Render!
 ReactDOM.render(
     <FullContent />,
-    document.body
+    document.getElementById('content')
 );
 
 // Reminder: change to 'content'
