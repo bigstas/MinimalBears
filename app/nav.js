@@ -10,7 +10,7 @@ var Nav = React.createClass({
                           {id: 3, text: 'About', float: false, isActive: false},
                           {id: 4, text: 'Help', float: false, isActive: false},
                           {id: 5, text: 'Profile', float: true, isActive: false},
-                          {id: 6, text: 'Stats', float: true, isActive: false}];
+                          {id: 6, text: 'Settings', float: true, isActive: false}];
         setupArray[this.props.active].isActive = true;
         
         return (
