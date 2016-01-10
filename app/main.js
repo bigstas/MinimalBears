@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var Parse = require('parse');
 var Nav = require('./nav.js');
 var Arena = require('./arena.js');
+var Record = require('./record.js');
 var About = require('./about.js');
 var Profile = require('./profile.js');
 
@@ -28,6 +29,7 @@ var FullContent = React.createClass({
             <div id="outerDiv">
                 <Nav active={this.state.active} callbackParent={this.handleNavClick} />
                 {this.state.active === 1 ? <Arena /> : []}
+                {this.state.active === 2 ? <Record /> : []}
                 {this.state.active === 3 ? <About /> : []}
                 {this.state.active === 5 ? <Profile /> : []}
             </div>
