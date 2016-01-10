@@ -1,3 +1,7 @@
+// Arena object and children for 'Train' page
+// Star image by Yellowicon (licence: GNU/GPL)
+// Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
+
 var React = require('react');
 var ParseCCMixin = require('react-cloud-code-mixin');
 
@@ -15,7 +19,7 @@ var ProgressBar = React.createClass({
 // Progress button
 var Button = React.createClass({
     render: function () {
-        var btnClass = 'enabledProgress';
+        var btnClass = 'enabledProgress animated rubberBand';
         var click = this.props.handle;
         if (this.props.disabled) {
             btnClass = 'disabledProgress';
@@ -40,9 +44,10 @@ var WordOption = React.createClass({
             ? (this.props.feedback === "Correct!") ? "green" : "red"
             : "#b0b0e0" ;
         var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
+        var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption');
         
         return (
-            <div className='wordOption'
+            <div className={wordOptionClass}
             onClick={this.handleClick}
             style={{backgroundColor: background}}>
                 {text}
@@ -76,6 +81,20 @@ var Arena = React.createClass({
         var subs = {
             languages: {
                 name: "fetchLanguages",
+                propDeps: [],           // What are propDeps?
+                stateDeps: [],          // What are stateDeps?
+                defaultValue: [] 
+            },
+            starImage: {
+                name: "fetchMedia",
+                params: {mediaType: 'Image', Name: 'star'},
+                propDeps: [],
+                stateDeps: [],
+                defaultValue: []
+            },
+            tadaSound: {
+                name: "fetchMedia",
+                params: {mediaType: 'SFX', Name: 'Ta Da'},
                 propDeps: [],
                 stateDeps: [],
                 defaultValue: []
@@ -114,7 +133,8 @@ var Arena = React.createClass({
     // After the user chooses a contrast
     handleContrastChange: function () {
         this.setState({
-            activeContrast: JSON.parse(document.getElementById("chooseContrast").value)
+            activeContrast: JSON.parse(document.getElementById("chooseContrast").value),
+            mode: 'feedback'
         });
     },
     
@@ -153,7 +173,12 @@ var Arena = React.createClass({
     
     
     render: function () {
-        var buttonDisabled = (this.state.mode==="ask" || this.state.counter === this.state.maxRounds) ? true : false;
+        var buttonDisabled = (this.state.mode!=="feedback" || this.state.counter === this.state.maxRounds) ? true : false;
+        var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
+        if (this.state.counter === this.state.maxRounds) {
+            var snd = new Audio(this.data.tadaSound);
+            snd.play()
+        }
         
         return (
             <div id="arena">
@@ -172,8 +197,9 @@ var Arena = React.createClass({
                 </select>
                 
                 {/* Training area */}
-                <p style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
-                              
+                <p id='arenaMessage' style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
+                <img className={starClass} src={this.data.starImage} alt='star' />
+                
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />

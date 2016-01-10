@@ -1,3 +1,21 @@
+// Return image or sound effects
+Parse.Cloud.define("fetchMedia", function(request, response) {
+    var query = new Parse.Query(request.params.mediaType);
+    query.equalTo('Name', request.params.Name);
+    console.log('we are here');
+    query.find({
+        success: function(results) {
+            // Stringify the results, so that we can return a flat object
+            response.success(
+                results[0].get('File')._url
+            )
+        },
+        error: function() {
+            response.error("Media query failed")
+        }
+    });
+});
+
 // Return all languages
 Parse.Cloud.define("fetchLanguages", function(request, response) {
     var query = new Parse.Query('Language');
@@ -10,7 +28,7 @@ Parse.Cloud.define("fetchLanguages", function(request, response) {
             }))
         },
         error: function() {
-            response.error("Language query failed")
+            response.error("Language query failed") // Guy - where dos this error show? In the console?
         }
     });
 });
