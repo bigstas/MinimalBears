@@ -76,7 +76,7 @@ li a {
     margin-top: 40px;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
 }
-#arena, #record {
+#arena {
     height: 300px; /* Only the Arena needs a limited height - other pages can stretch more */
 }
 

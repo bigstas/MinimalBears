@@ -18,6 +18,22 @@ Parse.Cloud.define("fetchMedia", function(request, response) {
     });
 });
 
+// Return all items
+Parse.Cloud.define("fetchItems", function(request, response) {
+    var query = new Parse.Query('Item');
+    query.ascending('Homophones');  // this may not work as sorting arrays, not strings ints or floats
+    query.find({
+        success: function(results) {
+            response.success(results.map(function(c) {
+                return JSON.stringify(c)
+            }))
+        },
+        error: function() {
+            response.error("Item query failed")
+        }
+    });
+});
+
 // Return all languages
 Parse.Cloud.define("fetchLanguages", function(request, response) {
     var query = new Parse.Query('Language');
@@ -30,7 +46,7 @@ Parse.Cloud.define("fetchLanguages", function(request, response) {
             }))
         },
         error: function() {
-            response.error("Language query failed") // Guy - where dos this error show? In the console?
+            response.error("Language query failed")
         }
     });
 });
