@@ -1,54 +1,21 @@
 //'Record' page
-
 var React = require('react');
 var FileInput = require('./file-input.js');
 var Parse = require('parse');
 var ParseCCMixin = require('react-cloud-code-mixin');
 
 
-var AudioForm = React.createClass({
+var Form = React.createClass({
     getInitialState: function() {
-        return {fileReady: false}   // initially no file has been provided, so file is not ready
+        return {
+            fileReady: false, // initially no file has been provided, so file is not ready
+            isLoading: true
+        }
     },
     
-    onSubmitAudio: function() {
-        var Audio = Parse.Object.extend("Audio");
-        var audio = new Audio();
-        
-        // more stuff happens here...
-    },
-    
-    handleChange: function(event) {
-        console.log('Selected file:', event.target.files[0]);
-        this.setState({
-            fileReady: true     // file is set to ready now that the user has selected a file
-        });
-    },
-
-    render: function() {
-        var submitStyle = {
-            display: 'none'
-        };
-        if (this.state.fileReady) {submitStyle.display = 'inline'}
-        
-        return (
-            <form>
-                <FileInput name="mySound"
-                    accept=".wav"
-                    placeholder="My Sound"
-                    className="uploadSound"
-                    onChange={this.handleChange} />
-                <input type="button" value="submit" style={submitStyle} onClick={this.onSubmitAudio} />
-            </form>
-        );
-    }
-});
-
-var ItemForm = React.createClass({
     // Enable cloud code subscriptions
     mixins: [ParseCCMixin],
     
-    // Cloud code subscriptions
     loadData: function(props, state) {
         var subs = {
             languages: {
@@ -57,66 +24,97 @@ var ItemForm = React.createClass({
                 stateDeps: [],
                 defaultValue: [] 
             }
-        };
+        }
         return subs;
     },
- 
-    onSubmitItem: function() {
-        // Define Item as a class which represents addition to the Item class; declare item as an instance of Item
+    
+    handleFileChange: function(event) {
+        console.log('Selected file:', event.target.files[0]);
+        this.setState({
+            fileReady: true
+        });
+    },
+    
+    handleLanguageChange: function() {},
+    
+    submitItem: function() {
+        var homophones = document.getElementById("homophonesText").value;
+        homophones = homophones.toLowerCase();
+        console.log(homophones);
+        var langId = document.getElementById("chooseLanguageForItem").value;
+        console.log(langId);
+        
         var Item = Parse.Object.extend("Item");
         var item = new Item();
-
-        // Set Item properties
-        var homophones = document.getElementById('itemNameInput').value;
+        var Language = new Parse.Object("Language");
+        Language.id = langId;
+        item.set("Language", Language );
         item.set("Homophones", [homophones]);
-        var language = document.getElementById('itemLanguageInput').value;  // this is actually a language id, so can be used directly
-        item.set("Language", language);
+        item.set("Audio", []);
         
-        // Save the item
         item.save(null, {
             success: function(item) {
-            // Execute any logic that should take place after the object is saved.
-            alert('New object created with objectId: ' + item.id);
+                console.log('Item saved with homophones ' + homophones + ' and language id ' + langId);
             },
             error: function(item, error) {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert('Failed to create new object, with error code: ' + error.message);
+                console.log('Failed to create new object, with error code: ' + error.message);
             }
         });
     },
     
+    // Force a re-render after a query is returned
+    // Copied code - make once and import, to accord with DRY principle?
+    componentDidUpdate: function (props, state) {
+        console.log(this.pendingQueries())
+        if (state.isLoading && this.pendingQueries().length === 0) {
+            this.setState({
+                isLoading: false
+            })
+        }
+    },
+    
     render: function() {
+        var submitStyle = {
+            marginLeft: '2%',
+            display: 'none'
+        };
+        if (this.state.fileReady) {submitStyle.display = 'inline'}
+        
         return (
-            <form>
-                Item name:<br/>
-                <input id="itemNameInput" type="text" name="firstname" defaultValue="Mickey" /><br/>
-                Item language:<br/>
-                <select id="itemLanguageInput">    {/* this code is repeated from Arena - is there a way to DRY? */}
+            <div>
+                <p>Upload a sound file</p>
+                <form>
+                    <FileInput name="mySound"
+                        accept=".wav"
+                        placeholder="My Sound"
+                        className="uploadSound"
+                        onChange={this.handleFileChange} />
+                    Contribute an item<br/>
+                    Homophones:<br/>
+                    <input id="homophonesText" type="text" name="firstname"/><br/>
+                </form>
+                <select id="chooseLanguageForItem" onChange={this.handleLanguageChange}>
                     {this.data.languages.map(function(stringified) {
-                    var c = JSON.parse(stringified);
-                    return <option value={c.objectId} key={c.objectId}>{c.Name}</option>
+                        var c = JSON.parse(stringified);
+                        return <option value={c.objectId} key={c.objectId}>{c.Name}</option>
                     })}
                 </select>
-                <br/>
-                <input type="submit" value="Submit" onClick={this.onSubmitItem} />
-            </form>
+                <button type="button" style={submitStyle} onClick={this.submitItem}>Submit</button>
+            </div>
         );
     }
 });
 
 
-var Record = React.createClass({    
+var Record = React.createClass({
     render: function() {
         return (
             <div id='record'>
                 <p>Record a sound</p>
                 <p style={{color: 'lightgray'}}><em>Sound recording gizmo goes here</em></p>
-                <p>Upload a sound file</p>
-                <AudioForm />
-                <ItemForm />
+                <Form />
             </div>
-        );
+        )
     }
 });
 
