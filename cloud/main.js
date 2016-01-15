@@ -1,3 +1,5 @@
+require('cloud/jobs.js'); // Background jobs
+
 // Return image or sound effects
 Parse.Cloud.define("fetchMedia", function(request, response) {
     var query = new Parse.Query(request.params.mediaType);
@@ -54,31 +56,26 @@ Parse.Cloud.define("fetchContrasts", function(request, response) {
 // Given a pointer to a contrast,
 // return a pair of options, a correct option, and a url for a recording of the correct option
 Parse.Cloud.define("fetchPair", function(request, response) {
-    var contrastPointer = new Parse.Object('Contrast', {id: request.params.contrastId});
-    // Variables that should be available in wider scope:
+    // Variables available in wider scope
     var pair = null;
     var items = [];
-    var correctIndex = null;
+    var contrastPointer = new Parse.Object('Contrast', {id: request.params.contrastId});
     contrastPointer.fetch().then(function(contrast) {
-        // Choose a pair, fetch it, and fetch the items
+        // Choose a pair and fetch the items
         var pairIndex = Math.floor(Math.random() * contrast.get('Pairs').length);
-        return contrast.get('Pairs')[pairIndex].fetch()
-    }).then(function(_pair) {
-        pair = _pair;
-        return pair.get('First').fetch()
+        pair = contrast.get('Pairs')[pairIndex];
+        return pair[0].fetch();
     }).then(function(first) {
         items.push(first);
-        return pair.get('Second').fetch()
+        return pair[1].fetch();
     }).then(function(second) {
-        items.push(second);
-        // Choose the correct item, choose a file and fetch it
+        items.push(second)
+        // Choose the correct item, and choose a file
         correctIndex = Math.floor(Math.random() * 2);
         var audioArray = items[correctIndex].get('Audio');
         var audioIndex = Math.floor(Math.random() * audioArray.length);
-        return audioArray[audioIndex].fetch()
-    }).then(function(audio) {
         // Package the response
-        var url = audio.get('File')._url;
+        var url = audioArray[audioIndex];
         var answers = [0,1].map(function(i) {
             return {text: items[i].get('Homophones')[0], correct: correctIndex===i ? true : false}
         });
