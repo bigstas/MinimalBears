@@ -81,8 +81,8 @@ var Arena = React.createClass({
         var subs = {
             languages: {
                 name: "fetchLanguages",
-                propDeps: [],           // What are propDeps?
-                stateDeps: [],          // What are stateDeps?
+                propDeps: [],
+                stateDeps: [],
                 defaultValue: [] 
             },
             starImage: {
@@ -186,13 +186,13 @@ var Arena = React.createClass({
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
                     {this.data.languages.map(function(stringified) {
                         var c = JSON.parse(stringified);
-                        return <option value={c.objectId}>{c.Name}</option>
+                        return <option value={c.objectId} key={c.objectId}>{c.Name}</option>
                     })}
                 </select>
                 <select id="chooseContrast" onChange={this.handleContrastChange}>
                     {this.data.contrasts.map(function(stringified) {
                         var c = JSON.parse(stringified);
-                        return <option value={stringified}>{c.Name}</option>
+                        return <option value={stringified} key={stringified}>{c.Name}</option>
                     })}                    
                 </select>
                 

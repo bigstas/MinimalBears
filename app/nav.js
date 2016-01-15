@@ -20,8 +20,8 @@ var Nav = React.createClass({
                         {setupArray.map( function(c) {
                             var style = {};
                             if (c.float) {style.float = 'right';}
-                            return <li style={style}>
-                                <a href='#' 
+                            return <li style={style} key={c.id}>
+                                <a href='#'
                                 key={c.id}
                                 className={c.isActive ? 'active' : 'inactive'}
                                 onClick={this.props.callbackParent.bind(null, c.id)}

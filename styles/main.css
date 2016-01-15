@@ -169,7 +169,7 @@ li a {
 /* ============ record.js =========== */
 /* ================================== */
 
-#record p{padding-left: 2%;}
+#record * {margin-left: 10px;}
 .fileNotReady {display: none;}
 
 
