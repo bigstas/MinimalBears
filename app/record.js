@@ -7,6 +7,7 @@ var ParseCCMixin = require('react-cloud-code-mixin');
 
 var Form = React.createClass({
     getInitialState: function() {
+        this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
             file: false,   // initially no file has been provided
             activeLanguageId: null,
@@ -55,6 +56,7 @@ var Form = React.createClass({
         if (!this.state.file) {
             alert("Cannot process - you have not chosen a file");
         } else {
+            console.log(this.state.file);
             //alert("This part of the program is not ready yet, so although you provided a file, nothing happened.");
             var speaker = document.getElementById("chooseSpeakerForAudio").value;
             var itemId = document.getElementById("chooseItemForAudio").value;
@@ -62,10 +64,11 @@ var Form = React.createClass({
             var Audio = Parse.Object.extend("Audio");
             var audio = new Audio();
             var Item = new Parse.Object("Item");
+            var file = new Parse.File(this.state.file.name, this.state.file)
             Item.id = itemId;
             audio.set("Item", Item );
             audio.set("speaker", speaker);
-            // audio.set("File", this.state.file);      This doesn't work yet and throws an error. Will work on this.
+            audio.set("File", file);
             
             audio.save(null, {
                 success: function(audio) {
@@ -105,6 +108,39 @@ var Form = React.createClass({
                 }
             });
         }
+    },
+    
+    submitPair: function() {
+        // collect stringified objects
+        var contrastString = document.getElementById("chooseContrastForPair").value;
+        var item1String = document.getElementById("chooseItem1ForPair").value;
+        var item2String = document.getElementById("chooseItem2ForPair").value;
+        // turn them back into objects
+        var contrastObject = JSON.parse(contrastString);
+        var item1Object = JSON.parse(item1String);
+        var item2Object = JSON.parse(item2String);
+        // get their id's
+        var contrast = new Parse.Object("Contrast");
+        contrast.id = contrastObject.objectId;
+        var item1 = new Parse.Object("Item");
+        item1.id = item1Object.objectId;
+        var item2 = new Parse.Object("Item");
+        item2.id = item2Object.objectId;
+        
+        var Pair = Parse.Object.extend("Pair");
+        var pair = new Pair();
+        pair.set("Contrast", contrast);
+        pair.set("First", item1);
+        pair.set("Second", item2);
+        
+        pair.save(null, {
+            success: function(pair) {
+                console.log('Pair saved');
+            },
+            error: function(pair, error) {
+                console.log('Failed to create new object, with error code: ' + error.message);
+            }
+        });
     },
         
     handleLanguageChange: function() {
@@ -161,18 +197,31 @@ var Form = React.createClass({
                 </select><br/>
                 <button type="button" onClick={this.submitItem}>Submit item</button>
                 <h3>Link a pair</h3>
-                <select id="chooseLanguageForPair">
+                <select id="chooseLanguageForPair" onChange={this.handleLanguageChange} >
                     {this.data.languages.map(function(stringified) {
                         var c = JSON.parse(stringified);
                         return <option value={c.objectId} key={c.objectId}>{c.Name}</option>
                     })}
                 </select>
-            {/*    <select id="chooseContrastForPair">
+                <select id="chooseContrastForPair">
                     {this.data.contrasts.map(function(stringified) {
                         var c = JSON.parse(stringified);
                         return <option value={stringified} key={stringified}>{c.Name}</option>
                     })}                    
-                </select>   */}
+                </select>
+                <select id="chooseItem1ForPair">
+                    {this.data.items.map(function(stringified) {
+                        var c = JSON.parse(stringified);
+                        return <option value={stringified} key={stringified}>{c.Homophones[0]}</option>
+                    })}                    
+                </select>
+                <select id="chooseItem2ForPair">
+                    {this.data.items.map(function(stringified) {
+                        var c = JSON.parse(stringified);
+                        return <option value={stringified} key={stringified}>{c.Homophones[0]}</option>
+                    })}                    
+                </select>
+                <button type="button" onClick={this.submitPair}>Submit pair</button>
                     {/* TO DO - in here put two more dropdowns, which allow you to choose among the words in the language */}
             </div>
         );
