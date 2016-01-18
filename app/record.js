@@ -4,6 +4,25 @@ var FileInput = require('./file-input.js');
 var Parse = require('parse');
 var ParseCCMixin = require('react-cloud-code-mixin');
 
+// split a string up into words according to placement of commas, and ignoring spaces
+function parseCommas (str) {
+    var commas = [];
+    var homophones = [];
+    for (var i in str) {
+        if (str[i] === ",") {
+            commas.push(i);
+        }
+    }
+    commas.push(str.length);
+    for (var j in commas) {
+            var start = parseInt(commas[j-1]) + 1;
+            var toAdd = str.substring(start, commas[j]);
+            toAdd = toAdd.replace(/\s/g, '');
+            homophones.push(toAdd);
+        }
+    return homophones;
+}
+
 
 var Form = React.createClass({
     getInitialState: function() {
@@ -87,6 +106,7 @@ var Form = React.createClass({
             alert("Cannot process - you have not written an item name");
         } else {
             homophones = homophones.toLowerCase();
+            homophones = parseCommas(homophones);
             console.log(homophones);
             var langId = document.getElementById("chooseLanguageForItem").value;
             console.log(langId);
@@ -96,7 +116,7 @@ var Form = React.createClass({
             var Language = new Parse.Object("Language");
             Language.id = langId;
             item.set("Language", Language );
-            item.set("Homophones", [homophones]);
+            item.set("Homophones", homophones);
             item.set("Audio", []);
 
             item.save(null, {
