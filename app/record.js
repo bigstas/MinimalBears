@@ -4,24 +4,16 @@ var FileInput = require('./file-input.js');
 var Parse = require('parse');
 var ParseCCMixin = require('react-cloud-code-mixin');
 
-// split a string up into words according to placement of commas, and ignoring spaces
+// split a string up into words according to placement of commas,
+// ignoring spaces at the beginning and end,
+// and changing any internal whitespace to a single space.
 function parseCommas (str) {
-    var commas = [];
-    var homophones = [];
-    for (var i in str) {
-        if (str[i] === ",") {
-            commas.push(i);
-        }
+    var split = str.split(',');
+    for (var j in split) {
+        split[j] = split[j].trim().replace(/\s+/g, ' ');
     }
-    commas.push(str.length);
-    for (var j in commas) {
-            var start = parseInt(commas[j-1]) + 1;
-            var toAdd = str.substring(start, commas[j]);
-            toAdd = toAdd.replace(/\s/g, '');
-            homophones.push(toAdd);
-        }
-    return homophones;
-}
+    return split;
+};
 
 
 var Form = React.createClass({
