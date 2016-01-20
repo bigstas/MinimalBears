@@ -91,6 +91,7 @@ var Form = React.createClass({
             });
             */
             var Audio = Parse.Object.extend("Audio");
+            // Loop through selected files
             for (var i in this.state.files) {
                 // This loop appears to go one too many times, based on console.log's.
                 // It doesn't mean that it fails (it still works), it just means that we get an error:
@@ -101,7 +102,28 @@ var Form = React.createClass({
                 var file = this.state.files[i];
                 console.log(file.name);
                 var fileParseObject = new Parse.File(file.name, file);
+                var myArray = file.name.split(" ");
+                var speaker = myArray[0];
+                var item = myArray[1].substring(0, myArray[1].length-4);
+                
+                // Loop through all items
+                for (x in this.data.items) {
+                    var currentItem = this.data.items[x];
+                    currentItem = JSON.parse(currentItem);
+                    var homophones = currentItem.Homophones;
+                    // If the last part of the file's name matches one of the homophones, save the item's id to make a pointer
+                    if (homophones.indexOf(item) !== -1) {
+                        itemId = currentItem.objectId;
+                        console.log(itemId + " is a " + (typeof itemId));
+                        break
+                    }
+                }
+                
+                var Item = new Parse.Object("Item");
+                Item.id = itemId;
                 audio.set("File", fileParseObject);
+                audio.set("speaker", speaker);
+                audio.set("Item", Item);
                 
                 audio.save(null, {
                     success: function(audio) {
