@@ -20,7 +20,7 @@ var Form = React.createClass({
     getInitialState: function() {
         this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
-            file: false,   // initially no file has been provided
+            files: false,   // initially no file has been provided
             activeLanguageId: null,
             isLoading: true     // to ensure re-render when queries mature
         }
@@ -57,25 +57,25 @@ var Form = React.createClass({
     },
     
     handleFileChange: function(event) {
-        console.log('Selected file:', event.target.files[0]);
+        console.log('Selected files:', event.target.files);
         this.setState({
-            file: event.target.files[0]
+            files: event.target.files
         });
     },
     
     submitAudio: function() {
-        if (!this.state.file) {
+        if (!this.state.files) {
             alert("Cannot process - you have not chosen a file");
         } else {
-            console.log(this.state.file);
-            //alert("This part of the program is not ready yet, so although you provided a file, nothing happened.");
+            console.log(this.state.files);
+            /*
             var speaker = document.getElementById("chooseSpeakerForAudio").value;
             var itemId = document.getElementById("chooseItemForAudio").value;
             
             var Audio = Parse.Object.extend("Audio");
             var audio = new Audio();
             var Item = new Parse.Object("Item");
-            var file = new Parse.File(this.state.file.name, this.state.file)
+            var file = new Parse.File(this.state.file.name, this.state.file);
             Item.id = itemId;
             audio.set("Item", Item );
             audio.set("speaker", speaker);
@@ -89,6 +89,29 @@ var Form = React.createClass({
                     console.log('Failed to create new object, with error code: ' + error.message);
                 }
             });
+            */
+            var Audio = Parse.Object.extend("Audio");
+            for (var i in this.state.files) {
+                // This loop appears to go one too many times, based on console.log's.
+                // It doesn't mean that it fails (it still works), it just means that we get an error:
+                // "Uncaught TypeError: cannot create a Parse.File with that data."
+                // This is because "undefined" is being passed as the name, and presumably the file,
+                // of the last round of the loop - the extra round that shouldn't be happening, as all the data has already been saved.
+                var audio = new Audio();
+                var file = this.state.files[i];
+                console.log(file.name);
+                var fileParseObject = new Parse.File(file.name, file);
+                audio.set("File", fileParseObject);
+                
+                audio.save(null, {
+                    success: function(audio) {
+                        console.log('File saved with file name ' + file.name);
+                    },
+                    error: function(error) {
+                        console.log('Failed to create new object, with error code: ' + error.message);
+                    }
+                });
+            }
         }
     },
     
@@ -178,11 +201,12 @@ var Form = React.createClass({
         return (
             <div>
                 <h3>Upload a sound file</h3>
-                <FileInput name="mySound"
+                <input type="file" name="filesInput" id="filesInput" onChange={this.handleFileChange} multiple /><br/>
+            {/*    <FileInput name="mySound"
                     accept=".wav"
                     placeholder="My Sound"
                     className="uploadSound"
-                    onChange={this.handleFileChange} />
+                    onChange={this.handleFileChange} />     */}
                 Speaker:
                 <select id="chooseSpeakerForAudio">
                     {speakerList.map(function(c) {
