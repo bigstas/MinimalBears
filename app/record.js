@@ -107,7 +107,8 @@ var Form = React.createClass({
                 var item = myArray[1].substring(0, myArray[1].length-4);
                 
                 // Loop through all items
-                for (x in this.data.items) {
+                var x = 0;
+                while (x < this.data.items.length) {
                     var currentItem = this.data.items[x];
                     currentItem = JSON.parse(currentItem);
                     var homophones = currentItem.Homophones;
@@ -117,22 +118,28 @@ var Form = React.createClass({
                         console.log(itemId + " is a " + (typeof itemId));
                         break
                     }
+                    x = x+1;
                 }
-                
-                var Item = new Parse.Object("Item");
-                Item.id = itemId;
-                audio.set("File", fileParseObject);
-                audio.set("speaker", speaker);
-                audio.set("Item", Item);
-                
-                audio.save(null, {
-                    success: function(audio) {
-                        console.log('File saved with file name ' + file.name);
-                    },
-                    error: function(error) {
-                        console.log('Failed to create new object, with error code: ' + error.message);
-                    }
-                });
+                console.log(x);
+                console.log(this.data.items.length);
+                if (x < this.data.items.length) {                
+                    var Item = new Parse.Object("Item");
+                    Item.id = itemId;
+                    audio.set("File", fileParseObject);
+                    audio.set("speaker", speaker);
+                    audio.set("Item", Item);
+
+                    audio.save(null, {
+                        success: function(audio) {
+                            console.log('File saved with file name ' + file.name);
+                        },
+                        error: function(error) {
+                            console.log('Failed to create new object, with error code: ' + error.message);
+                        }
+                    });
+                } else {
+                    console.log("Error: Audio file " + file.name + " not saved since item not recognised");
+                }
             }
         }
     },
@@ -147,23 +154,45 @@ var Form = React.createClass({
             console.log(homophones);
             var langId = document.getElementById("chooseLanguageForItem").value;
             console.log(langId);
-
-            var Item = Parse.Object.extend("Item");
-            var item = new Item();
-            var Language = new Parse.Object("Language");
-            Language.id = langId;
-            item.set("Language", Language );
-            item.set("Homophones", homophones);
-            item.set("Audio", []);
-
-            item.save(null, {
-                success: function(item) {
-                    console.log('Item saved with homophones ' + homophones + ' and language id ' + langId);
-                },
-                error: function(item, error) {
-                    console.log('Failed to create new object, with error code: ' + error.message);
+            
+            // Iterate through items to check for existing matches
+            var x = 0;
+            var broken = false;
+            while (x < this.data.items.length) {
+                for (var y in homophones) {
+                    // If match found, log error and break loops
+                    if (this.data.items[x].indexOf(homophones[y]) !== -1 ) {
+                        console.log("Error: Item with homophones " + homophones + " cannot be saved, as it already exists.")
+                        var currentItem = JSON.parse(this.data.items[x])
+                        console.log("Homophones of existing item: " + currentItem.Homophones);
+                        console.log("Id of existing item: " + currentItem.objectId);
+                        broken = true;
+                        break;
+                    }
                 }
-            });
+                x = x+1;
+                if (broken) {break;}
+            }
+            
+            // If no matches found above, then save new instance of Item
+            if (x === this.data.items.length) {
+                var Item = Parse.Object.extend("Item");
+                var item = new Item();
+                var Language = new Parse.Object("Language");
+                Language.id = langId;
+                item.set("Language", Language );
+                item.set("Homophones", homophones);
+                item.set("Audio", []);
+
+                item.save(null, {
+                    success: function(item) {
+                        console.log('Item saved with homophones ' + homophones + ' and language id ' + langId);
+                    },
+                    error: function(item, error) {
+                        console.log('Failed to create new object, with error code: ' + error.message);
+                    }
+                });
+            }
         }
     },
     
@@ -228,7 +257,7 @@ var Form = React.createClass({
                     accept=".wav"
                     placeholder="My Sound"
                     className="uploadSound"
-                    onChange={this.handleFileChange} />     */}
+                    onChange={this.handleFileChange} />
                 Speaker:
                 <select id="chooseSpeakerForAudio">
                     {speakerList.map(function(c) {
@@ -241,7 +270,7 @@ var Form = React.createClass({
                         var c = JSON.parse(stringified);
                         return <option value={c.objectId} key={c.objectId}>{c.Homophones}</option>
                     })}
-                </select><br/>
+                </select><br/>      */}
                 <button type="button" onClick={this.submitAudio}>Submit audio</button>
                 <h3>Contribute an item</h3>
                 Homophones:
