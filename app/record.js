@@ -20,7 +20,7 @@ var Form = React.createClass({
     getInitialState: function() {
         this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
-            file: false,   // initially no file has been provided
+            files: false,   // initially no file has been provided
             activeLanguageId: null,
             isLoading: true     // to ensure re-render when queries mature
         }
@@ -57,25 +57,25 @@ var Form = React.createClass({
     },
     
     handleFileChange: function(event) {
-        console.log('Selected file:', event.target.files[0]);
+        console.log('Selected files:', event.target.files);
         this.setState({
-            file: event.target.files[0]
+            files: event.target.files
         });
     },
     
     submitAudio: function() {
-        if (!this.state.file) {
+        if (!this.state.files) {
             alert("Cannot process - you have not chosen a file");
         } else {
-            console.log(this.state.file);
-            //alert("This part of the program is not ready yet, so although you provided a file, nothing happened.");
+            console.log(this.state.files);
+            /*
             var speaker = document.getElementById("chooseSpeakerForAudio").value;
             var itemId = document.getElementById("chooseItemForAudio").value;
             
             var Audio = Parse.Object.extend("Audio");
             var audio = new Audio();
             var Item = new Parse.Object("Item");
-            var file = new Parse.File(this.state.file.name, this.state.file)
+            var file = new Parse.File(this.state.file.name, this.state.file);
             Item.id = itemId;
             audio.set("Item", Item );
             audio.set("speaker", speaker);
@@ -89,6 +89,58 @@ var Form = React.createClass({
                     console.log('Failed to create new object, with error code: ' + error.message);
                 }
             });
+            */
+            var Audio = Parse.Object.extend("Audio");
+            // Loop through selected files
+            for (var i in this.state.files) {
+                // This loop appears to go one too many times, based on console.log's.
+                // It doesn't mean that it fails (it still works), it just means that we get an error:
+                // "Uncaught TypeError: cannot create a Parse.File with that data."
+                // This is because "undefined" is being passed as the name, and presumably the file,
+                // of the last round of the loop - the extra round that shouldn't be happening, as all the data has already been saved.
+                var audio = new Audio();
+                var file = this.state.files[i];
+                console.log(file.name);
+                var fileParseObject = new Parse.File(file.name, file);
+                var myArray = file.name.split(" ");
+                var speaker = myArray[0];
+                var item = myArray[1].substring(0, myArray[1].length-4);
+                
+                // Loop through all items
+                var x = 0;
+                while (x < this.data.items.length) {
+                    var currentItem = this.data.items[x];
+                    currentItem = JSON.parse(currentItem);
+                    var homophones = currentItem.Homophones;
+                    // If the last part of the file's name matches one of the homophones, save the item's id to make a pointer
+                    if (homophones.indexOf(item) !== -1) {
+                        itemId = currentItem.objectId;
+                        console.log(itemId + " is a " + (typeof itemId));
+                        break
+                    }
+                    x = x+1;
+                }
+                console.log(x);
+                console.log(this.data.items.length);
+                if (x < this.data.items.length) {                
+                    var Item = new Parse.Object("Item");
+                    Item.id = itemId;
+                    audio.set("File", fileParseObject);
+                    audio.set("speaker", speaker);
+                    audio.set("Item", Item);
+
+                    audio.save(null, {
+                        success: function(audio) {
+                            console.log('File saved with file name ' + file.name);
+                        },
+                        error: function(error) {
+                            console.log('Failed to create new object, with error code: ' + error.message);
+                        }
+                    });
+                } else {
+                    console.log("Error: Audio file " + file.name + " not saved since item not recognised");
+                }
+            }
         }
     },
     
@@ -102,23 +154,45 @@ var Form = React.createClass({
             console.log(homophones);
             var langId = document.getElementById("chooseLanguageForItem").value;
             console.log(langId);
-
-            var Item = Parse.Object.extend("Item");
-            var item = new Item();
-            var Language = new Parse.Object("Language");
-            Language.id = langId;
-            item.set("Language", Language );
-            item.set("Homophones", homophones);
-            item.set("Audio", []);
-
-            item.save(null, {
-                success: function(item) {
-                    console.log('Item saved with homophones ' + homophones + ' and language id ' + langId);
-                },
-                error: function(item, error) {
-                    console.log('Failed to create new object, with error code: ' + error.message);
+            
+            // Iterate through items to check for existing matches
+            var x = 0;
+            var broken = false;
+            while (x < this.data.items.length) {
+                for (var y in homophones) {
+                    // If match found, log error and break loops
+                    if (this.data.items[x].indexOf(homophones[y]) !== -1 ) {
+                        console.log("Error: Item with homophones " + homophones + " cannot be saved, as it already exists.")
+                        var currentItem = JSON.parse(this.data.items[x])
+                        console.log("Homophones of existing item: " + currentItem.Homophones);
+                        console.log("Id of existing item: " + currentItem.objectId);
+                        broken = true;
+                        break;
+                    }
                 }
-            });
+                x = x+1;
+                if (broken) {break;}
+            }
+            
+            // If no matches found above, then save new instance of Item
+            if (x === this.data.items.length) {
+                var Item = Parse.Object.extend("Item");
+                var item = new Item();
+                var Language = new Parse.Object("Language");
+                Language.id = langId;
+                item.set("Language", Language );
+                item.set("Homophones", homophones);
+                item.set("Audio", []);
+
+                item.save(null, {
+                    success: function(item) {
+                        console.log('Item saved with homophones ' + homophones + ' and language id ' + langId);
+                    },
+                    error: function(item, error) {
+                        console.log('Failed to create new object, with error code: ' + error.message);
+                    }
+                });
+            }
         }
     },
     
@@ -178,7 +252,8 @@ var Form = React.createClass({
         return (
             <div>
                 <h3>Upload a sound file</h3>
-                <FileInput name="mySound"
+                <input type="file" name="filesInput" id="filesInput" onChange={this.handleFileChange} multiple /><br/>
+            {/*    <FileInput name="mySound"
                     accept=".wav"
                     placeholder="My Sound"
                     className="uploadSound"
@@ -195,7 +270,7 @@ var Form = React.createClass({
                         var c = JSON.parse(stringified);
                         return <option value={c.objectId} key={c.objectId}>{c.Homophones}</option>
                     })}
-                </select><br/>
+                </select><br/>      */}
                 <button type="button" onClick={this.submitAudio}>Submit audio</button>
                 <h3>Contribute an item</h3>
                 Homophones:
