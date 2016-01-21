@@ -45,3 +45,11 @@ Parse.Cloud.job("itemAudioPointers", function(request, status) {
         status.error(error);
     })
 });
+
+
+
+// Database sanity:
+// Should check that no two items in the same language share a homophone
+// Should check that no pair has items that are the same
+// Should check that no contrast has no pairs?  Or just don't show these...
+// Should check that no item in a contrast's pairs has no files?  Or just don't add these pairs
