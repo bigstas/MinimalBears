@@ -149,7 +149,8 @@ var Form = React.createClass({
         if (homophones === "") {
             alert("Cannot process - you have not written an item name");
         } else {
-            homophones = homophones.toLowerCase();
+            // There are some that need to have an upper case first letter, like Rick and Streep.
+            //homophones = homophones.toLowerCase();
             homophones = parseCommas(homophones);
             console.log(homophones);
             var langId = document.getElementById("chooseLanguageForItem").value;
@@ -161,6 +162,7 @@ var Form = React.createClass({
             while (x < this.data.items.length) {
                 for (var y in homophones) {
                     // If match found, log error and break loops
+                    // At the moment, it matches substrings, e.g. "sin" is blocked by "sing". This needs to be fixed.
                     if (this.data.items[x].indexOf(homophones[y]) !== -1 ) {
                         console.log("Error: Item with homophones " + homophones + " cannot be saved, as it already exists.")
                         var currentItem = JSON.parse(this.data.items[x])
@@ -196,6 +198,7 @@ var Form = React.createClass({
         }
     },
     
+    // still need to do duplicate checking on pair submission
     submitPair: function() {
         // collect stringified objects
         var contrastString = document.getElementById("chooseContrastForPair").value;

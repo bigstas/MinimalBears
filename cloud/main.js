@@ -7,6 +7,7 @@ require('cloud/save.js'); // Functions to save to database
 Parse.Cloud.define("fetchItems", function(request, response) {
     var query = new Parse.Query('Item');
     query.ascending('Homophones');  // this may not work as sorting arrays, not strings ints or floats
+    query.limit(500);      // default limit is 100 but we have over 200 items now (max limit is 1000, you need tricks to get around that) 
     query.find({
         success: function(results) {
             response.success(results.map(function(c) {
