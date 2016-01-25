@@ -93,6 +93,7 @@ var Form = React.createClass({
             var Audio = Parse.Object.extend("Audio");
             // Loop through selected files
             for (var i in this.state.files) {
+                //console.log(i);
                 // This loop appears to go one too many times, based on console.log's.
                 // It doesn't mean that it fails (it still works), it just means that we get an error:
                 // "Uncaught TypeError: cannot create a Parse.File with that data."
@@ -105,6 +106,10 @@ var Form = React.createClass({
                 var myArray = file.name.split(" ");
                 var speaker = myArray[0];
                 var item = myArray[1].substring(0, myArray[1].length-4);
+                if ( item[item.length -1] in ['1','2', '3', 'happy christmas'] ) {
+                    item = item.substring(0, item.length-1);
+                }
+                console.log(item);
                 
                 // Loop through all items
                 var x = 0;
@@ -112,6 +117,9 @@ var Form = React.createClass({
                     var currentItem = this.data.items[x];
                     currentItem = JSON.parse(currentItem);
                     var homophones = currentItem.Homophones;
+                    for (i in homophones) {
+                        homophones[i] = homophones[i].toLowerCase();
+                    }
                     // If the last part of the file's name matches one of the homophones, save the item's id to make a pointer
                     if (homophones.indexOf(item) !== -1) {
                         itemId = currentItem.objectId;
