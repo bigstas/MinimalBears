@@ -1,3 +1,79 @@
+var Pairsdata = require('cloud/pairsdata.js'); // pairs are stored here
+
+// looks for strings in arrays of strings
+function matchSomewhere(sample, testArray) {
+    for (i=0; i < testArray.length; i++) {
+        if (testArray[i] === sample) { return true; }
+    }
+    return false;
+}
+
+// This is the most biggest chunk of code I have written without testing any of it.
+// Recipe for disaster. Here goes!
+// Produce pairs from pairsdata.js
+Parse.Cloud.job("readPairs", function(request, status) {
+    // *first, delete all existing pairs*
+    // [TO DO]
+    
+    // *then, fill in all the pairs*
+    var Pair = Parse.Object.extend("Pair");
+    // iterate over all languages
+    for (lang in Pairsdata.allPairs) {
+        var currentLanguage = allPairs[lang];
+        // iterate over all contrasts in the language
+        for (x=0; x < currentLanguage; x++) {
+            var currentContrast = currentLanguage[x];
+            // iterate over all pairs in the contrast
+            for (y=0; y < currentContrast.length; y++) {                
+                var pair = new Pair();
+                var currentPair = currentContrast[y];
+                console.log(currentPair);
+                
+                // loop through all items to find items referred to by pairs, and extract the objectId
+                var query = new Parse.Query("Item");
+                var firstItemId = "";
+                var secondItemId = "";
+                
+                query.each(function(item) {
+                    var homophones = item.get("Homophones");
+                    if ( matchSomewhere(currentPair[0], homophones) ) {
+                        firstItemId = item.id;
+                        console.log(firstItemId + " is a " + (typeof firstItemId));
+                    } else if ( matchSomewhere(currentPair[1], homophones) ) {
+                        secondItemId = item.id;
+                        console.log(secondItemId + " is a " + (typeof secondItemId));
+                    }
+                }).then(function() {
+                    status.success("No errors iterating over items");
+                }, function(error) {
+                    status.error(error);
+                });
+                
+                // define the pointers, set them as pair properties, and save
+                var Contrast = new Parse.Object("Contrast");
+                var Item1 = new Parse.Object("Item");
+                var Item2 = new Parse.Object("Item");
+                Contrast.id = currentContrast.contrastId;
+                Item1.id = firstItemId;
+                Item2.id = secondItemId;
+                pair.set("Contrast", Contrast);
+                pair.set("First", Item1);
+                pair.set("Second", Item2);
+                
+                pair.save(null, {
+                    success: function(audio) {
+                        console.log('Pair saved');
+                    },
+                    error: function(error) {
+                        console.log('Failed to create new pair, with error code: ' + error.message);
+                    }
+                });
+            }
+        }
+    }
+});
+
+
 // Cache pairs of items in contrasts
 Parse.Cloud.job("contrastPairPointers", function(request, status) {
     // Iterate through all contrasts
@@ -45,7 +121,6 @@ Parse.Cloud.job("itemAudioPointers", function(request, status) {
         status.error(error);
     })
 });
-
 
 
 // Database sanity:

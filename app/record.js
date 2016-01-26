@@ -1,6 +1,5 @@
 //'Record' page
 var React = require('react');
-var FileInput = require('./file-input.js');
 var Parse = require('parse');
 var ParseCCMixin = require('react-cloud-code-mixin');
 
@@ -68,28 +67,7 @@ var Form = React.createClass({
             alert("Cannot process - you have not chosen a file");
         } else {
             console.log(this.state.files);
-            /*
-            var speaker = document.getElementById("chooseSpeakerForAudio").value;
-            var itemId = document.getElementById("chooseItemForAudio").value;
-            
-            var Audio = Parse.Object.extend("Audio");
-            var audio = new Audio();
-            var Item = new Parse.Object("Item");
-            var file = new Parse.File(this.state.file.name, this.state.file);
-            Item.id = itemId;
-            audio.set("Item", Item );
-            audio.set("speaker", speaker);
-            audio.set("File", file);
-            
-            audio.save(null, {
-                success: function(audio) {
-                    console.log('Audio saved with speaker ' + speaker + ' and item id ' + itemId);
-                },
-                error: function(item, error) {
-                    console.log('Failed to create new object, with error code: ' + error.message);
-                }
-            });
-            */
+
             var Audio = Parse.Object.extend("Audio");
             // Loop through selected files
             for (var i in this.state.files) {
@@ -264,24 +242,7 @@ var Form = React.createClass({
             <div>
                 <h3>Upload a sound file</h3>
                 <input type="file" name="filesInput" id="filesInput" onChange={this.handleFileChange} multiple /><br/>
-            {/*    <FileInput name="mySound"
-                    accept=".wav"
-                    placeholder="My Sound"
-                    className="uploadSound"
-                    onChange={this.handleFileChange} />
-                Speaker:
-                <select id="chooseSpeakerForAudio">
-                    {speakerList.map(function(c) {
-                        return <option value={c} key={c}>{c}</option>
-                    })}
-                </select><br/>
-                Item:
-                <select id="chooseItemForAudio">
-                    {this.data.items.map(function(stringified) {
-                        var c = JSON.parse(stringified);
-                        return <option value={c.objectId} key={c.objectId}>{c.Homophones}</option>
-                    })}
-                </select><br/>      */}
+
                 <button type="button" onClick={this.submitAudio}>Submit audio</button>
                 <h3>Contribute an item</h3>
                 Homophones:

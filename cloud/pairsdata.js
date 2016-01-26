@@ -2,11 +2,13 @@
 // Each pair is a binary array.
 // Each binary is in an array of all the pairs for that contrast.
 // Each contrast array is in an array with all the other contrasts belonging to the same language.
-// Each language is in an array of all the languages we have.
-// And each such array is in an array of ... only joking. The nesting has to end somewhere.
+// Each language is in a dictionary (or whatever Javascript calls these) with all the languages we have as keys.
+// And each such dictionary is in an array of ... only joking. The nesting has to end somewhere.
 
-var allPairs = [engPairArrays, deuPairArrays];
 
+var allPairs = {"English" : engPairArrays, "German" : deuPairArrays};
+
+/* COMMENTED OUT FOR TESTING PURPOSES
 var engPairArrays = [eng_ee_i_array, eng_i_e_array, eng_e_a_array, eng_u_o_array, eng_a_u_array, eng_u_o_array, eng_s_th_array, eng_f_th_array, eng_z_th_array, eng_b_v_array, eng_v_w_array];
 
 var eng_ee_i_array = [
@@ -31,7 +33,7 @@ var eng_ee_i_array = [
 ['keep', 'kip'],
 ['eat', 'it'],
 ['seek', 'sick'],
-['eel', 'Ill'],
+['eel', 'ill'],
 ['heel', 'hill'],
 ['sheen', 'shin'],
 ['leave', 'live'],
@@ -68,6 +70,9 @@ var eng_ee_i_array = [
 ['beater', 'bitter'],
 ['weaned', 'wind']
 ];
+// Here's that dumb JS thing you can do, put to good use
+eng_ee_i_array.contrast = 'ee/i';
+eng_ee_i_array.contrastId = 'PyU54yQ74i';
 
 var eng_i_e_array = [
 ['bit', 'bet'],
@@ -114,6 +119,8 @@ var eng_i_e_array = [
 ['wind', 'wend'],
 ['Livy', 'levy']
 ];
+eng_i_e_array.contrast = 'i/e';
+eng_i_e_array.contrastId = 'S3a9ROc7Mu';
 
 var eng_e_a_array = [
 ['bet', 'bat'],
@@ -156,6 +163,8 @@ var eng_e_a_array = [
 ['Ken', 'can'],
 ['better', 'batter']
 ];
+eng_e_a_array.contrast = 'e/a';
+eng_e_a_array.contrastId = 'h3uuMEwWES';
 
 var eng_a_u_array = [
 ['bat', 'but'],
@@ -185,6 +194,8 @@ var eng_a_u_array = [
 ['stack', 'stuck'],
 ['batter', 'butter']
 ];
+eng_a_u_array.contrast = 'a/u';
+eng_a_u_array.contrastId = 'z9xvwwGTIJ';
 
 var eng_u_o_array = [
 ['but', 'bot'],
@@ -207,6 +218,8 @@ var eng_u_o_array = [
 ['colt', 'cult'],
 ['colour', 'collar']
 ];
+eng_u_o_array.contrast = 'u/o';
+eng_u_o_array.contrastId = 'zPIcdZKbOq';
 
 var eng_s_th_array = [
 ['sing', 'thing'],
@@ -236,6 +249,8 @@ var eng_s_th_array = [
 ['song', 'thong'],
 ['serum', 'theorem']
 ];
+eng_s_th_array.contrast = 'th/s';
+eng_s_th_array.contrastId = 'hWcC9g4pry';
 
 var eng_f_th_array = [
 ['fought', 'thought'],
@@ -248,6 +263,14 @@ var eng_f_th_array = [
 ['doff', 'doth'],
 ['roof', 'Ruth']
 ];
+eng_f_th_array.contrast = 'th/f';
+eng_f_th_array.contrastId = 'Qhr4scmitm';
+*/
+
+// FOR TESTING PURPOSES - remove after test
+var engPairArrays = [eng_z_th_array];
+var deuPairArrays = [];
+// FOR TESTING PURPOSES
 
 var eng_z_th_array = [
 ['bays', 'bathe'],
@@ -260,7 +283,10 @@ var eng_z_th_array = [
 ['rise', 'writhe'],
 ['size', 'scythe']
 ];
+eng_z_th_array.contrast = 'z/th';
+eng_z_th_array.contrastId = 'd0N7qKfTDe';
 
+/* COMMENTED OUT FOR TESTING PURPOSES
 var eng_b_v_array = [
 ['bet', 'vet'],
 ['bile', 'vile'],
@@ -277,6 +303,8 @@ var eng_b_v_array = [
 ['bicker', 'vicar'],
 ['bolt', 'volt']
 ];
+eng_b_v_array.contrast = 'v/b';
+eng_b_v_array.contrastId = 'OaLj6meiK5';
 
 var eng_v_w_array = [
 ['vet', 'wet'],
@@ -293,6 +321,8 @@ var eng_v_w_array = [
 ['vicar', 'wicker'],
 ['vary', 'wary']
 ];
+eng_v_w_array.contrast = 'v/w';
+eng_v_w_array.contrastId = 'GAFtcg8vW5';
 
 
 
@@ -305,6 +335,7 @@ var deuPairArrays = [deu_ch_sch_array];
 var deu_ch_sch_array = [
 ['ich', '-isch']
 ];
+deu_ch_sch_array.contrast = 'ch/sch';
 
 
 
@@ -313,3 +344,5 @@ var deu_ch_sch_array = [
 ////////////
 
 // etc.
+
+*/
