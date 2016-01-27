@@ -296,7 +296,7 @@ var Record = React.createClass({
                 <p style={{color: 'lightgray'}}><em>Sound recording gizmo goes here</em></p>
                 <Form />
             </div>
-        )
+        );
     }
 });
 
