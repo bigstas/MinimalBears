@@ -1,9 +1,6 @@
 //'About' page
-
-var React = require('react');
-
-var About = React.createClass({
-    render: function () {
+About = React.createClass({
+    render() {
         return (
             <div id='about'>
                 <h1>Minimal Bears: the research-based web app that improves your accent.</h1>
@@ -12,8 +9,6 @@ var About = React.createClass({
                 <h2>How do you know that this stuff works?</h2>
                 <p>Research carried out by Mr Green shows that bla bla. The original research article is available <a href='#'>here</a>.</p>
             </div>
-        )
+        );
     }
-})
-
-module.exports = About;
+});

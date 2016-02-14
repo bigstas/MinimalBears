@@ -2,12 +2,13 @@
 // Star image by Yellowicon (licence: GNU/GPL)
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
-var React = require('react');
-var ParseCCMixin = require('react-cloud-code-mixin');
+
+// Define a collection to hold languages
+Languages = new Mongo.Collection("languages");
 
 // Progress bar
 var ProgressBar = React.createClass({
-    render: function () {
+    render() {
         return (
             <div id="progress">
                 <div id="fill" style={this.props.style}></div>
@@ -18,12 +19,12 @@ var ProgressBar = React.createClass({
 
 // Progress button
 var Button = React.createClass({
-    render: function () {
+    render() {
         var btnClass = 'enabledProgress animated rubberBand';
         var click = this.props.handle;
         if (this.props.disabled) {
             btnClass = 'disabledProgress';
-            click = function () {};
+            click = function () {}; // click doesn't do anything when it's disabled
         }
         return (
             <div id="button" className={btnClass} onClick={click}>Progress</div>
@@ -33,13 +34,13 @@ var Button = React.createClass({
 
 // Button for responding to a recording
 var WordOption = React.createClass({ 
-    handleClick: function () {
+    handleClick() {
         if (this.props.mode === "ask") {
             this.props.callbackParent();
         }
     },
     
-    render: function () {
+    render() {
         var background = (this.props.mode === "feedback")
             ? (this.props.feedback === "Correct!") ? "green" : "red"
             : "#b0b0e0" ;
@@ -57,8 +58,9 @@ var WordOption = React.createClass({
 });
 
 // The arena - where the action happens
-var Arena = React.createClass({
-    getInitialState: function () {
+// currently in the process of ADAPTING this from Parse to Meteor
+Arena = React.createClass({
+    getInitialState() {
         this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
             selection: 0,
@@ -69,69 +71,29 @@ var Arena = React.createClass({
             activeContrast: null,
             activePair: {items: []},
             items: [],
-            isLoading: true
         };
     },
     
-    // Enable cloud code subscriptions
-    mixins: [ParseCCMixin],
+    // This mixin makes the getMeteorData method work
+    mixins: [ReactMeteorData],
     
-    // Cloud code subscriptions
-    loadData: function(props, state) {
-        var subs = {
-            languages: {
-                name: "fetchLanguages",
-                propDeps: [],
-                stateDeps: [],
-                defaultValue: [] 
-            },
-            starImage: {
-                name: "fetchMedia",
-                params: {mediaType: 'Image', Name: 'star'},
-                propDeps: [],
-                stateDeps: [],
-                defaultValue: []
-            },
-            tadaSound: {
-                name: "fetchMedia",
-                params: {mediaType: 'SFX', Name: 'Ta Da'},
-                propDeps: [],
-                stateDeps: [],
-                defaultValue: []
-            }
+    // Loads items from the Languages collection and puts them in this.data.languages
+    getMeteorData() {
+        return {
+            languages: Languages.find({}, {sort: {createdAt: -1}}).fetch()
         }
-        if (state.activeLanguageId) {
-            subs.contrasts = {
-                name: "fetchContrasts",
-                params: {languageId: state.activeLanguageId},
-                propDeps: [],
-                stateDeps: ['activeLanguageId'],
-                defaultValue: []
-            }
-        }
-        if (state.activeContrast) {
-            subs.pair = {
-                name: "fetchPair",
-                params: {contrastId: state.activeContrast.objectId},
-                propDeps: [],
-                stateDeps: ['activeContrast'],
-                defaultValue: null
-            }
-        }
-        return subs
     },
     
     // After the user chooses a language
-    handleLanguageChange: function() {
+    handleLanguageChange() {
         this.setState({
             activeLanguageId: document.getElementById("chooseLanguage").value,
             activeContrast: null,    // need to reset contrasts when language changes
-            isLoading: true
         });
     },
     
     // After the user chooses a contrast
-    handleContrastChange: function () {
+    handleContrastChange() {
         this.setState({
             activeContrast: JSON.parse(document.getElementById("chooseContrast").value),
             mode: 'feedback'
@@ -139,7 +101,7 @@ var Arena = React.createClass({
     },
     
     // After the user chooses an option during training
-    onWordChosen: function () {
+    onWordChosen() {
         this.setState({
             mode: "feedback",
             counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
@@ -147,7 +109,7 @@ var Arena = React.createClass({
     },
     
     // After the user wants move on to the next recording
-    handleProgressClick: function () {
+    handleProgressClick() {
         // Set the state, play the file, and issue a new query
         var pair = JSON.parse(this.data.pair);
         console.log(pair);
@@ -162,17 +124,16 @@ var Arena = React.createClass({
     },
     
     // Force a re-render after a query is returned
-    componentDidUpdate: function (props, state) {
+    /* componentDidUpdate: function (props, state) {
         console.log(this.pendingQueries())
         if (state.isLoading && this.pendingQueries().length === 0) {
             this.setState({
                 isLoading: false
             })
         }
-    },
+    }, */
     
-    
-    render: function () {
+    render() {
         var buttonDisabled = (this.state.mode!=="feedback" || this.state.counter === this.state.maxRounds) ? true : false;
         var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
         if (this.state.counter === this.state.maxRounds) {
@@ -184,12 +145,11 @@ var Arena = React.createClass({
             <div id="arena">
                 {/* Dropdown menus for language and contrast */}
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
-                    {this.data.languages.map(function(stringified) {
-                        var c = JSON.parse(stringified);
-                        return <option value={c.objectId} key={c.objectId}>{c.Name}</option>
+                    {this.data.languages.map(function(c) {
+                        return <option value={c.Name} key={c._id}>{c.Name}</option>
                     })}
-                </select>
-                <select id="chooseContrast" onChange={this.handleContrastChange}>
+        </select>
+        {/*        <select id="chooseContrast" onChange={this.handleContrastChange}>
                     {this.data.contrasts.map(function(stringified) {
                         var c = JSON.parse(stringified);
                         return <option value={stringified} key={stringified}>{c.Name}</option>
@@ -214,9 +174,7 @@ var Arena = React.createClass({
                                 mode={this.state.mode} />
                     }, this)}
                 </div>
-            </div>
+            </div> 
         );
     }
 });
-
-module.exports = Arena;

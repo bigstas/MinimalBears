@@ -1,9 +1,7 @@
 // Navigation bar
 
-var React = require('react');
-
-var Nav = React.createClass({    
-    render: function () {
+Nav = React.createClass({    
+    render() {
         var setupArray = [{id: 0, text: 'Logo', float: false, isActive: false},
                           {id: 1, text: 'Train', float: false, isActive: false},
                           {id: 2, text: 'Record', float: false, isActive: false},
@@ -39,5 +37,3 @@ var Nav = React.createClass({
         );
     }
 });
-
-module.exports = Nav;
