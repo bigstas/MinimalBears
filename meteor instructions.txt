@@ -1,0 +1,5 @@
+0. correct permissions
+1. run database server with [anywhere]$ postgres -D usr/local/var/postgres
+2. create db using [anywhere]$ createdb NAME
+3. migrate the database with (own .knex directory) .knex$ knex migrate:latest
+4. run the app with (own app) APP$ ./run-app.sh

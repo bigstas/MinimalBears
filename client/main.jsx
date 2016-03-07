@@ -1,5 +1,5 @@
 // Define a collection to hold our tasks
-Tasks = new Mongo.Collection("tasks");
+//Tasks = new Mongo.Collection("tasks");
 
 
 // Combine navigation bar and 'arena', to produce whole app

@@ -4,7 +4,9 @@
 
 
 // Define a collection to hold languages
-Languages = new Mongo.Collection("languages");
+//Languages = new Mongo.Collection("languages");
+
+// Bears = new PG.Table('bearcubs');
 
 // Progress bar
 var ProgressBar = React.createClass({
@@ -79,8 +81,20 @@ Arena = React.createClass({
     
     // Loads items from the Languages collection and puts them in this.data.languages
     getMeteorData() {
-        return {
-            languages: Languages.find({}, {sort: {createdAt: -1}}).fetch()
+        console.log("Getting data");
+        const bearSubHandle = Meteor.subscribe("beardata");
+        console.log(bearSubHandle.ready());
+        
+        if (bearSubHandle.ready()) {
+            return {
+                bears: Bears.fetch(),
+                bearsLoading: false
+                //languages: Languages.find({}, {sort: {createdAt: -1}}).fetch()
+            };
+        } else {
+            return {
+                bearsLoading: true,
+            };
         }
     },
     
@@ -133,6 +147,12 @@ Arena = React.createClass({
         }
     }, */
     
+    increment() {
+        this.setState({
+            counter: this.state.counter +1
+        })
+    },
+    
     render() {
         var buttonDisabled = (this.state.mode!=="feedback" || this.state.counter === this.state.maxRounds) ? true : false;
         var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
@@ -140,15 +160,26 @@ Arena = React.createClass({
             var snd = new Audio(this.data.tadaSound);
             snd.play()
         }
+        var mything = this.data.bears;
+        console.log(mything);
+        console.log(typeof mything);
+        //var x = [1,2,3];
+        //console.log(typeof x);
+        //console.log(mything.length);
+        //var newthing = mything[0];
+        console.log(this.data);
+        console.log(this.data.bears);
         
         return (
             <div id="arena">
+                <button type='button' onClick={this.increment} />
+                <p>{"this.data.bears"}</p>
                 {/* Dropdown menus for language and contrast */}
-                <select id="chooseLanguage" onChange={this.handleLanguageChange}>
+        {/*        <select id="chooseLanguage" onChange={this.handleLanguageChange}>
                     {this.data.languages.map(function(c) {
                         return <option value={c.Name} key={c._id}>{c.Name}</option>
                     })}
-        </select>
+        </select> */}
         {/*        <select id="chooseContrast" onChange={this.handleContrastChange}>
                     {this.data.contrasts.map(function(stringified) {
                         var c = JSON.parse(stringified);
