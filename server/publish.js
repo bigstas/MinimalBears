@@ -27,9 +27,18 @@ console.log(Bears.fetch());
 
 
 Meteor.methods({
-    'sendSound': function(){
+    'sendSound': function() {
         var testSound = Assets.getBinary('wozza wreck.wav');
         return testSound;
+    },
+    'saveMyBear': function(bear) {
+        Bears.insert({
+            age: bear.age,
+            colour: bear.colour
+        }).run();
+        console.log("I am inserting a bear");
+        console.log(bear.age);
+        console.log(bear.colour);
     }
 });
 

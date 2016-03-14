@@ -150,8 +150,20 @@ Arena = React.createClass({
             mySound: new Audio(Meteor.call('sendSound'))
         })
         Meteor.call('getFerocity', this.data.bears[0].age, this.dataCallback);
-        //var blob = Assets.getBinary('wozza wreck.wav', this.soundCallback);
-        //var mySound = new Audio(Meteor.call('sendSound'));
+        
+        var myNewBear = {
+            colour: 'yellow',
+            age: 20
+        }
+        Meteor.call('saveMyBear', myNewBear, this.bearCallback);
+    },
+    
+    bearCallback(error, result) {
+        if (error) {
+            console.log("RAWR! error");
+        } else {
+            console.log("RAWR! curiosity?");
+        }
     },
     
     dataCallback(error, result) {
@@ -180,6 +192,7 @@ Arena = React.createClass({
         console.log(this.state.mySound);
         console.log(typeof this.state.mySound);
         if ((typeof this.state.mySound) !== 'string') {
+            console.log("it's not a string");
             this.state.mySound.play();
         }
         
