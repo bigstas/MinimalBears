@@ -3,11 +3,6 @@
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
 
-// Define a collection to hold languages
-//Languages = new Mongo.Collection("languages");
-
-// Bears = new PG.Table('bearcubs');
-
 // Progress bar
 var ProgressBar = React.createClass({
     render() {
@@ -65,6 +60,8 @@ Arena = React.createClass({
     getInitialState() {
         this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
+            ferocity: 'ferocity not ready',
+            mySound: 'sound not ready',
             selection: 0,
             counter: 0,
             maxRounds: 10,
@@ -149,7 +146,23 @@ Arena = React.createClass({
     
     increment() {
         this.setState({
-            counter: this.state.counter +1
+            counter: this.state.counter +1,
+            mySound: new Audio(Meteor.call('sendSound'))
+        })
+        Meteor.call('getFerocity', this.data.bears[0].age, this.dataCallback);
+        //var blob = Assets.getBinary('wozza wreck.wav', this.soundCallback);
+        //var mySound = new Audio(Meteor.call('sendSound'));
+    },
+    
+    dataCallback(error, result) {
+        this.setState({
+            ferocity: result
+        })
+    },
+    
+    soundCallback(error, result) {
+        this.setState({
+            mySound: result
         })
     },
     
@@ -160,20 +173,21 @@ Arena = React.createClass({
             var snd = new Audio(this.data.tadaSound);
             snd.play()
         }
-        var mything = this.data.bears;
-        console.log(mything);
-        console.log(typeof mything);
-        //var x = [1,2,3];
-        //console.log(typeof x);
-        //console.log(mything.length);
-        //var newthing = mything[0];
+        
         console.log(this.data);
         console.log(this.data.bears);
+        
+        console.log(this.state.mySound);
+        console.log(typeof this.state.mySound);
+        if ((typeof this.state.mySound) !== 'string') {
+            this.state.mySound.play();
+        }
         
         return (
             <div id="arena">
                 <button type='button' onClick={this.increment} />
-                <p>{"this.data.bears"}</p>
+                <p>{this.state.ferocity}</p>
+                <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
                 {/* Dropdown menus for language and contrast */}
         {/*        <select id="chooseLanguage" onChange={this.handleLanguageChange}>
                     {this.data.languages.map(function(c) {
