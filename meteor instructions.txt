@@ -15,3 +15,15 @@ DEMETEORIZE INSTRUCTIONS
 3. change directory: $ cd ./.demeteorized/bundle/programs/server
 4. install packages: server$ npm install
 5. run app with environment variables (postgres path is essential): server$ POSTGRESQL_URL="postgres://127.0.0.1/minbears" PORT=8080 ROOT_URL=http://localhost:8080 npm start
+
+
+DEPLOYMENT TO GANDI INSTRUCTIONS
+(See also docs at https://wiki.gandi.net/en/simple/git)
+0*. create local directory for git (if not done so): $ mkdir {vhost} , i.e. $ mkdir www.minimalbears.com
+1. go to that directory: $ cd www.minimalbears.com
+2*. initialise git (if directory just created): $ git init
+3*. connect this directory to the remote directory (if not yet done so): $ git remote add origin ssh+git://639050@git.dc2.gpaas.net/default.git
+4. add files to current commit (? not sure how this works or why it is necessary) $ git add -A
+5. commit: $ git commit -m "Version 0.0.2" (or whatever version number you want)
+6. push: $ git push origin master
+7. deploy: $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
