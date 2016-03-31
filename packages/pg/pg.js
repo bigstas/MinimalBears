@@ -1,4 +1,6 @@
-PG.defaultConnectionUrl = process.env.POSTGRESQL_URL || 'postgres://127.0.0.1/postgres';
+// PG.defaultConnectionUrl = process.env.POSTGRESQL_URL || 'postgres://127.0.0.1/postgres';
+PG.defaultConnectionUrl = process.env.POSTGRESQL_URL || 'postgres://hosting-db:@127.0.0.1/postgres';
+
 
 var pg = Npm.require('pg');
 

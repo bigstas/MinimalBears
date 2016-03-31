@@ -23,7 +23,16 @@ DEPLOYMENT TO GANDI INSTRUCTIONS
 1. go to that directory: $ cd www.minimalbears.com
 2*. initialise git (if directory just created): $ git init
 3*. connect this directory to the remote directory (if not yet done so): $ git remote add origin ssh+git://639050@git.dc2.gpaas.net/default.git
-4. add files to current commit (? not sure how this works or why it is necessary) $ git add -A
-5. commit: $ git commit -m "Version 0.0.2" (or whatever version number you want)
+4. add files to current commit (-A is "all") $ git add -A
+5. commit: $ git commit -m "Version 0.0.2" (this is the text about what you just did / are committing)
 6. push: $ git push origin master
 7. deploy: $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
+
+
+BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
+0. inside MinimalBears run $ meteor build ../MinimalBearsBuild/ --directory --architecture os.linux.x86_64
+1a. inside MinimalBearsBuild run $ git add .
+1b. to check that things are added, run $ git status
+2. $ git commit -m "<your message here for future reference>"
+3. $ git push origin master
+4. $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
