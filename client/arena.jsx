@@ -80,17 +80,20 @@ Arena = React.createClass({
     getMeteorData() {
         console.log("Getting data");
         const bearSubHandle = Meteor.subscribe("beardata");
+        const langSubHandle = Meteor.subscribe("langdata");
         console.log(bearSubHandle.ready());
+        console.log(langSubHandle.ready());
         
-        if (bearSubHandle.ready()) {
+        if (bearSubHandle.ready() && langSubHandle.ready()) {
             return {
                 bears: Bears.fetch(),
+                languages: Languages.fetch(),
                 bearsLoading: false
                 //languages: Languages.find({}, {sort: {createdAt: -1}}).fetch()
             };
         } else {
             return {
-                bearsLoading: true,
+                bearsLoading: true
             };
         }
     },
@@ -146,14 +149,14 @@ Arena = React.createClass({
     
     increment() {
         this.setState({
-            counter: this.state.counter +1,
-            mySound: new Audio(Meteor.call('sendSound'))
+            // mySound: new Audio(Meteor.call('sendSound')),
+            counter: this.state.counter +1
         })
         Meteor.call('getFerocity', this.data.bears[0].age, this.dataCallback);
         
         var myNewBear = {
             colour: 'yellow',
-            age: 20
+            age: this.state.counter
         }
         Meteor.call('saveMyBear', myNewBear, this.bearCallback);
     },
@@ -189,12 +192,13 @@ Arena = React.createClass({
         console.log(this.data);
         console.log(this.data.bears);
         
+        /* use URLs!
         console.log(this.state.mySound);
         console.log(typeof this.state.mySound);
         if ((typeof this.state.mySound) !== 'string') {
             console.log("it's not a string");
             this.state.mySound.play();
-        }
+        }*/
         
         return (
             <div id="arena">
@@ -202,11 +206,14 @@ Arena = React.createClass({
                 <p>{this.state.ferocity}</p>
                 <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
                 {/* Dropdown menus for language and contrast */}
-        {/*        <select id="chooseLanguage" onChange={this.handleLanguageChange}>
+                <select id="chooseLanguage" onChange={this.handleLanguageChange}>
+                    
+                    {/*
                     {this.data.languages.map(function(c) {
                         return <option value={c.Name} key={c._id}>{c.Name}</option>
                     })}
-        </select> */}
+                    */}
+                </select>
         {/*        <select id="chooseContrast" onChange={this.handleContrastChange}>
                     {this.data.contrasts.map(function(stringified) {
                         var c = JSON.parse(stringified);

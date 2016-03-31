@@ -1,10 +1,19 @@
 Meteor.publish('beardata', function() {
-	var cursor = Bears
+	var bearCursor = Bears
 		.select("*")
 		.from("bearcubs");
 		
-	return cursor;
+    return bearCursor;
 });
+
+Meteor.publish('langdata', function() {
+    var langCursor = Languages
+        .select("*")
+        .from("languages");
+    
+    return langCursor;
+});
+
 
 Meteor.methods({
 	'getFerocity': function(age) {return "angry"},
@@ -27,6 +36,7 @@ console.log(Bears.fetch());
 
 
 Meteor.methods({
+    // we will actually do this with URLs, not getBinary
     'sendSound': function() {
         var testSound = Assets.getBinary('wozza wreck.wav');
         return testSound;
