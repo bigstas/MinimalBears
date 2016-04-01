@@ -18,6 +18,8 @@ var ProgressBar = React.createClass({
 // Progress button
 var Button = React.createClass({
     render() {
+        // Uses CSS animate.css library. Syntax is:
+        // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
         var btnClass = 'enabledProgress animated rubberBand';
         var click = this.props.handle;
         if (this.props.disabled) {
@@ -34,7 +36,7 @@ var Button = React.createClass({
 var WordOption = React.createClass({ 
     handleClick() {
         if (this.props.mode === "ask") {
-            this.props.callbackParent();
+            this.props.callbackParent(); // you only want things to happen in 'ask' mode, as outside of that mode these buttons shouldn't do anything
         }
     },
     
@@ -193,6 +195,13 @@ Arena = React.createClass({
         console.log(this.data);
         console.log(this.data.bears);
         
+        var toBeMapped;
+        if (this.data.languages === undefined) {
+            toBeMapped = ['loading...'];
+        } else {
+            toBeMapped = this.data.languages;
+        }
+        
         /* use URLs!
         console.log(this.state.mySound);
         console.log(typeof this.state.mySound);
@@ -208,12 +217,9 @@ Arena = React.createClass({
                 <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
                 {/* Dropdown menus for language and contrast */}
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
-                    
-                    {/*
-                    {this.data.languages.map(function(c) {
-                        return <option value={c.Name} key={c._id}>{c.Name}</option>
+                    {toBeMapped.map(function(c) {
+                            return <option value={c.name} key={c.id}>{c.name}</option>
                     })}
-                    */}
                 </select>
         {/*        <select id="chooseContrast" onChange={this.handleContrastChange}>
                     {this.data.contrasts.map(function(stringified) {
