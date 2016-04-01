@@ -1,5 +1,7 @@
 // Navigation bar
 
+import React from 'react';
+
 Nav = React.createClass({    
     render() {
         var setupArray = [{id: 0, text: 'Logo', float: false, isActive: false},

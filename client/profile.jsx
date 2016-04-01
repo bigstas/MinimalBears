@@ -1,6 +1,8 @@
 //'Profile' page
 // Medal images by Farm-Fresh Web (licence: Creative Commons Attribution Licence)
 
+import React from 'react';
+
 Profile = React.createClass({
     
     render() {

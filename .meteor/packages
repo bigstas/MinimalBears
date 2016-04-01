@@ -18,7 +18,9 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 # autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
-react
+
+# react                 # Now using npm packages instead
+react-meteor-data       # This is meteor-specific so belongs here, rather than with npm
 
 simple:pg
 # maximum:server-transform

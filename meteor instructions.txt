@@ -2,7 +2,8 @@ LOCAL POSTGRES INSTRUCTIONS
 0. correct permissions
 1. run database server with [anywhere]$ postgres -D usr/local/var/postgres
 2. create db using [anywhere]$ createdb NAME
-3. migrate the database with (own .knex directory) .knex$ knex migrate:latest
+3A. [if there are migrations] migrate the database with (own .knex directory) .knex$ knex migrate:latest
+3B. [if creating from scratch] add tables as desired, making sure that every column has a column named 'id' with unique elements
 4. run the app with (own app) APP$ ./run-app.sh
 
 
@@ -36,3 +37,10 @@ BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 2. $ git commit -m "<your message here for future reference>"
 3. $ git push origin master
 4. $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
+
+
+NPM INSTRUCTIONS
+(Installing npm modules, rather than Meteor Atmosphere modules)
+0. run $ npm install --save react react-dom react-addons-pure-render-mixin
+(Perhaps we can put these in dependencies (in package.json?) and then npm can sort it all out...)
+(We might want to add react-router)

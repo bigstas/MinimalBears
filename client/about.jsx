@@ -1,4 +1,7 @@
 //'About' page
+
+import React from 'react';
+
 About = React.createClass({
     render() {
         return (

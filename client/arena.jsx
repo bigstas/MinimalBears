@@ -2,6 +2,7 @@
 // Star image by Yellowicon (licence: GNU/GPL)
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
+import React from 'react';
 
 // Progress bar
 var ProgressBar = React.createClass({
