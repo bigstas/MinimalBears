@@ -1,17 +1,23 @@
+// Ideally we would DRY this but I don't know if Meteor allows that
 Meteor.publish('beardata', function() {
-	var bearCursor = Bears
+	var cursor = Bears
 		.select("*")
 		.from("bearcubs");
-		
-    return bearCursor;
+    return cursor;
 });
 
 Meteor.publish('langdata', function() {
-    var langCursor = Languages
+    var cursor = Languages
         .select("*")
-        .from("languages");
-    
-    return langCursor;
+        .from("Languages");
+    return cursor;
+});
+
+Meteor.publish('contrastdata', function() {
+    var cursor = Contrasts
+        .select("*")
+        .from("Contrasts");
+    return cursor;
 });
 
 

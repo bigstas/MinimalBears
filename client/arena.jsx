@@ -80,19 +80,31 @@ Arena = React.createClass({
     mixins: [ReactMeteorData],
     
     // Loads items from the Languages collection and puts them in this.data.languages
+    // This is kind of working fine, except that React seems to reload the data every time the user does anything
+    // (e.g. choose something from the language dropdown, even before I've enabled contrasts in this code).
+    // This is causing a visible lag of about a quarter of a second.
+    // We will probably want some sort of componentShouldUpdate thing here to only have the data be re-fetched when we really need it.
     getMeteorData() {
         console.log("Getting data");
         const bearSubHandle = Meteor.subscribe("beardata");
         const langSubHandle = Meteor.subscribe("langdata");
+        const contrastSubHandle = Meteor.subscribe("contrastdata");
         console.log(bearSubHandle.ready());
         console.log(langSubHandle.ready());
+        console.log(contrastSubHandle.ready());
         
-        if (bearSubHandle.ready() && langSubHandle.ready()) {
+        if (bearSubHandle.ready() && langSubHandle.ready() && contrastSubHandle.ready()) {
+            var langId = this.state.activeLanguageId === null ? 0: this.state.activeLanguageId;
+            
             return {
                 bears: Bears.fetch(),
                 languages: Languages.fetch(),
+                contrasts: Contrasts.where({
+                    // The line immediately below fails at the moment, so commented out. The line below it works, and gives all the contrasts for English (language id = 1 in the database).
+                    //language: langId
+                    language: 1
+                }).select("name"),
                 bearsLoading: false
-                //languages: Languages.find({}, {sort: {createdAt: -1}}).fetch()
             };
         } else {
             return {
@@ -105,14 +117,15 @@ Arena = React.createClass({
     handleLanguageChange() {
         this.setState({
             activeLanguageId: document.getElementById("chooseLanguage").value,
-            activeContrast: null,    // need to reset contrasts when language changes
+            activeContrast: null    // need to reset contrasts when language changes
         });
+        console.log("The current activeLanguageId is " + this.state.activeLanguageId + " , with a type of " + typeof this.state.activeLanguageId);
     },
     
     // After the user chooses a contrast
     handleContrastChange() {
         this.setState({
-            activeContrast: JSON.parse(document.getElementById("chooseContrast").value),
+            activeContrast: document.getElementById("chooseContrast").value,
             mode: 'feedback'
         });
     },
@@ -195,11 +208,18 @@ Arena = React.createClass({
         console.log(this.data);
         console.log(this.data.bears);
         
-        var toBeMapped;
+        // Turn this into a single function to be defined elsewhere, or keep it here as these two?
+        var languagesToBeMapped;
         if (this.data.languages === undefined) {
-            toBeMapped = ['loading...'];
+            languagesToBeMapped = ['loading...'];
         } else {
-            toBeMapped = this.data.languages;
+            languagesToBeMapped = this.data.languages;
+        }
+        var contrastsToBeMapped;
+        if (this.data.contrasts === undefined) {
+            contrastsToBeMapped = ['loading...'];
+        } else {
+            contrastsToBeMapped = this.data.contrasts;
         }
         
         /* use URLs!
@@ -217,15 +237,14 @@ Arena = React.createClass({
                 <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
                 {/* Dropdown menus for language and contrast */}
                 <select id="chooseLanguage" onChange={this.handleLanguageChange}>
-                    {toBeMapped.map(function(c) {
-                            return <option value={c.name} key={c.id}>{c.name}</option>
+                    {languagesToBeMapped.map(function(c) {
+                        return <option value={c.id} key={c.id}>{c.name}</option>
                     })}
                 </select>
-        {/*        <select id="chooseContrast" onChange={this.handleContrastChange}>
-                    {this.data.contrasts.map(function(stringified) {
-                        var c = JSON.parse(stringified);
-                        return <option value={stringified} key={stringified}>{c.Name}</option>
-                    })}                    
+                <select id="chooseContrast" onChange={this.handleContrastChange}>
+                    {contrastsToBeMapped.map(function(c) {
+                        return <option value={c.name} key={c.id}>{c.name}</option>
+                    })}                  
                 </select>
                 
                 {/* Training area */}
