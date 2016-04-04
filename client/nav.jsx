@@ -1,7 +1,7 @@
 // Navigation bar
 
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 Nav = React.createClass({
     render() {
@@ -9,8 +9,10 @@ Nav = React.createClass({
             <div className="container">
                 <nav>
                     <ul>
+                        <li><IndexLink to="/">Home</IndexLink></li>
                         <li><Link to="/about">About</Link></li>
                         <li><Link to="/train">Train</Link></li>
+                        <li><Link to="/profile">Profile</Link></li>
                     </ul>
                 </nav>
             </div>

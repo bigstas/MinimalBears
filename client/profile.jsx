@@ -2,9 +2,10 @@
 // Medal images by Farm-Fresh Web (licence: Creative Commons Attribution Licence)
 
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+
 
 Profile = React.createClass({
-    
     render() {
         return (
             <div id='profile'>
@@ -29,4 +30,6 @@ Profile = React.createClass({
             </div>
         )
     }
-})
+});
+
+export default createContainer(({params}) => {return {};}, Profile);
