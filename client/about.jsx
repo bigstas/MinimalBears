@@ -1,6 +1,7 @@
 //'About' page
 
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
 About = React.createClass({
     render() {
@@ -15,3 +16,10 @@ About = React.createClass({
         );
     }
 });
+
+export default createContainer(({params}) => {
+    const placeholder = "I'm so important";
+    return {
+        placeholder
+    };
+}, About);

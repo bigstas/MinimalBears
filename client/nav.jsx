@@ -1,7 +1,23 @@
 // Navigation bar
 
 import React from 'react';
+import { Link } from 'react-router';
 
+Nav = React.createClass({
+    render() {
+        return (
+            <div className="container">
+                <nav>
+                    <ul>
+                        <li><Link to="/about">About</Link></li>
+                        <li><Link to="/train">Train</Link></li>
+                    </ul>
+                </nav>
+            </div>
+        );
+    }
+});
+/*
 Nav = React.createClass({    
     render() {
         var setupArray = [{id: 0, text: 'Logo', float: false, isActive: false},
@@ -31,11 +47,12 @@ Nav = React.createClass({
                                 We're using bind to pass an argument, not to bind the context (because it's already bound):
                                 null could be anything here;
                                 c.id is passed as the first argument to callbackParent;
-                                the new function returned by bind does not need any further arguments */}
-                        }, this)}
+                                the new function returned by bind does not need any further arguments */
+/*                        }, this)} 
                     </ul>
                 </nav>
             </div>
         );
     }
 });
+*/
