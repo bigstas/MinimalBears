@@ -17,9 +17,10 @@ About = React.createClass({
     }
 });
 
-export default createContainer(({params}) => {
-    const placeholder = "I'm so important";
+// see https://themeteorchef.com/snippets/react-router-basics/#tmc-working-with-params
+export default createContainer(({params, location}) => {
+    const { shoutout } = params;
     return {
-        placeholder
+        shoutout
     };
 }, About);

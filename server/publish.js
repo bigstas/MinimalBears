@@ -57,13 +57,3 @@ Meteor.methods({
         console.log(bear.colour);
     }
 });
-
-/*
-if (Meteor.isServer) {
-    console.log('hello');
-    var stuff = JSON.parse(Assets.getText('test.json'));
-    console.log(stuff);
-    
-    var testSound = Assets.getBinary('wozza wreck.wav');
-}
-*/

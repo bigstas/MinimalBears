@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-// not sure if we need IndexRoute
 
 // route components
 import HomeContainer from '../client/home';
@@ -13,7 +12,6 @@ export const renderRoutes = () => (
     <Router history={browserHistory} >
         <Route path="/" component={AppContainer} >
             <IndexRoute component={HomeContainer} />
-        {/*    <Route path="home" component={HomeContainer} /> */}
             <Route path="train" component={ArenaContainer} />
             <Route path="about" component={AboutContainer} />
             <Route path="profile" component={ProfileContainer} />
