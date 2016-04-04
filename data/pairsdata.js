@@ -215,8 +215,13 @@ var eng_u_o_array = [
 ['rut', 'rot'],
 ['muck', 'mock'],
 ['stuck', 'stock'],
-['colt', 'cult'],
-['colour', 'collar']
+['cult', 'colt'],
+['colour', 'collar'],
+['tongues', 'tongs'],
+['wonder', 'wander'],
+['come', 'com'],
+['done', 'don'],
+['some', 'Somme']
 ];
 eng_u_o_array.contrast = 'u/o';
 eng_u_o_array.contrastId = 'zPIcdZKbOq';
@@ -323,6 +328,125 @@ var eng_v_w_array = [
 ];
 eng_v_w_array.contrast = 'v/w';
 eng_v_w_array.contrastId = 'GAFtcg8vW5';
+
+
+//with some suggestions from https://www.englishclub.com/pronunciation/minimal-pairs-l-r.htm
+eng_l_r_array = [
+['law', 'raw'], // 'lore', 'roar'
+['low', 'row'], // 'roe'
+['allow', 'a row'],
+['alive', 'arrive'],
+['fly', 'fry'],
+['light', 'right'], // 'rite'
+['long', 'wrong'],
+['collect', 'correct'],
+['glamour', 'grammar'],
+['glam', 'gram'],
+['glass', 'grass'],
+['lace', 'race'],
+['lane', 'rain'],
+['lead', 'reed'], // 'read'
+['leader', 'reader'],
+['lighter', 'writer'],
+['load', 'road'],
+['lock', 'rock'],
+['locker', 'rocker'],
+['lot', 'rot'],
+['play', 'pray'],
+['belly', 'berry'],
+['blew', 'brew'], // 'blue'
+['blush', 'brush'],
+['clash', 'crash'],
+['clown', 'crown'],
+['glow', 'grow'],
+['lack', 'rack'],
+['lamb', 'ram'],
+['lice', 'rice'],
+['lied', 'ride'],
+['lies', 'rise'],
+['lip', 'rip'],
+['list', 'wrist'],
+['locket', 'rocket'],
+['lows', 'rose'],
+['luck', 'ruck'],
+['lush', 'rush'],
+['pilot', 'pirate'],
+['blues', 'bruise'],
+['laid', 'raid'],
+['lair', 'rare'],
+['lamp', 'ramp'],
+['lap', 'wrap'],
+['late', 'rate'],
+['lay', 'ray'],
+['led', 'red'], // 'lead', 'read'
+['leech', 'reach'],
+['lentil', 'rental'],
+['lid', 'rid'],
+['loot', 'root'],
+['loyal', 'royal'],
+['blacken', 'bracken'],
+['blight', 'bright'],
+['flea', 'free'], // 'flee'
+['fleas', 'freeze'], // 'flees', 'frees'
+['gland', 'grand'],
+['jelly', 'jerry'],
+['lag', 'rag'],
+['lagging', 'ragging'],
+['lake', 'rake'],
+['lank', 'rank'],
+['lash', 'rash'],
+['lather', 'rather'], // if long vowel in 'lather'
+['laze', 'raise'], // 'raze'
+['leek', 'reek'],
+['leap', 'reap'],
+['leer', 'rear'],
+['lib', 'rib'],
+['lick', 'rick'], // 'Rick'
+['limb', 'rim'],
+['lime', 'rhyme'],
+['link', 'rink'],
+['lit', 'writ'],
+['loam', 'roam'],
+['loaves', 'roves'],
+['lob', 'rob'], // 'Rob'
+['lobe', 'robe'],
+['look', 'rook'],
+['loom', 'room'], // if long vowel in 'room'
+['lute', 'route'],
+['lope', 'rope'],
+['elope', 'a rope'], // maybe
+['lout', 'rout'],
+['lubber', 'rubber'],
+['lug', 'rug'],
+['lump', 'rump'],
+['lung', 'rung'],
+['lust', 'rust'],
+['splat', 'sprat'],
+['splint', 'sprint'],
+['bled', 'bread'],
+['fled', 'Fred'],
+['flay', 'fray'],
+['loud', 'rowed'],
+['splay', 'spray'],
+['splain', 'sprain'],
+['split', 'sprit'],
+['mis-splice', 'misprice'],  // maybe
+['cloud', 'crowd'],
+['clack', 'crack'], // 'claque'
+['clamp', 'cramp'],
+['clank', 'crank'],
+['clap', 'crap'],
+['claw', 'craw'],
+['clique', 'creak'], // 'creek'
+['click', 'crick'],
+['climb', 'crime'],
+['clit', 'crit'],
+['cloak', 'croak'],
+['clone', 'crone'],
+['close', 'crows'],
+['lavish', 'ravish'],
+['glaze', 'graze'], // 'greys'
+];
 
 
 
