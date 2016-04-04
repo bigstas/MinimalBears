@@ -6,7 +6,7 @@
 // And each such dictionary is in an array of ... only joking. The nesting has to end somewhere.
 
 
-var allPairs = {"English" : engPairArrays, "German" : deuPairArrays};
+//var allPairs = {"English" : engPairArrays, "German" : deuPairArrays};
 
 /* COMMENTED OUT FOR TESTING PURPOSES
 var engPairArrays = [eng_ee_i_array, eng_i_e_array, eng_e_a_array, eng_u_o_array, eng_a_u_array, eng_u_o_array, eng_s_th_array, eng_f_th_array, eng_z_th_array, eng_b_v_array, eng_v_w_array];
@@ -268,10 +268,10 @@ eng_f_th_array.contrastId = 'Qhr4scmitm';
 */
 
 // FOR TESTING PURPOSES - remove after test
-var engPairArrays = [eng_z_th_array];
-var deuPairArrays = [];
+//var engPairArrays = [eng_z_th_array];
+//var deuPairArrays = [];
 // FOR TESTING PURPOSES
-
+/*
 var eng_z_th_array = [
 ['bays', 'bathe'],
 ["Mao's", 'mouthe'],
@@ -285,7 +285,7 @@ var eng_z_th_array = [
 ];
 eng_z_th_array.contrast = 'z/th';
 eng_z_th_array.contrastId = 'd0N7qKfTDe';
-
+*/
 /* COMMENTED OUT FOR TESTING PURPOSES
 var eng_b_v_array = [
 ['bet', 'vet'],

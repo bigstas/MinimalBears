@@ -3,6 +3,7 @@
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
 // Progress bar
 var ProgressBar = React.createClass({
@@ -59,9 +60,10 @@ var WordOption = React.createClass({
 
 // The arena - where the action happens
 // currently in the process of ADAPTING this from Parse to Meteor
+//class Arena extends React.Component {    
 Arena = React.createClass({
     getInitialState() {
-        this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
+    //    this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
             ferocity: 'ferocity not ready',
             mySound: 'sound not ready',
@@ -76,6 +78,7 @@ Arena = React.createClass({
         };
     },
     
+    /*
     // This mixin makes the getMeteorData method work
     mixins: [ReactMeteorData],
     
@@ -111,7 +114,7 @@ Arena = React.createClass({
                 bearsLoading: true
             };
         }
-    },
+    }, */
     
     // After the user chooses a language
     handleLanguageChange() {
@@ -161,13 +164,14 @@ Arena = React.createClass({
                 isLoading: false
             })
         }
-    }, */
+    },
     
     increment() {
         this.setState({
             // mySound: new Audio(Meteor.call('sendSound')),
             counter: this.state.counter +1
         })
+        
         Meteor.call('getFerocity', this.data.bears[0].age, this.dataCallback);
         
         var myNewBear = {
@@ -181,7 +185,7 @@ Arena = React.createClass({
         if (error) {
             console.log("RAWR! error");
         } else {
-            console.log("RAWR! curiosity?");
+            console.log("RAWR! saved your bear");
         }
     },
     
@@ -196,30 +200,33 @@ Arena = React.createClass({
             mySound: result
         })
     },
-    
+    */
     render() {
+        var buttonDisabled = true; // <-- placeholder while below is commented out
+        /*
         var buttonDisabled = (this.state.mode!=="feedback" || this.state.counter === this.state.maxRounds) ? true : false;
         var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
         if (this.state.counter === this.state.maxRounds) {
             var snd = new Audio(this.data.tadaSound);
             snd.play()
         }
+        */
         
-        console.log(this.data);
-        console.log(this.data.bears);
+        console.log(this.props);
+        //console.log(this.data.bears);
         
         // Turn this into a single function to be defined elsewhere, or keep it here as these two?
         var languagesToBeMapped;
-        if (this.data.languages === undefined) {
+        if (this.props.languages === undefined) {
             languagesToBeMapped = ['loading...'];
         } else {
-            languagesToBeMapped = this.data.languages;
+            languagesToBeMapped = this.props.languages;
         }
         var contrastsToBeMapped;
-        if (this.data.contrasts === undefined) {
+        if (this.props.contrasts === undefined) {
             contrastsToBeMapped = ['loading...'];
         } else {
-            contrastsToBeMapped = this.data.contrasts;
+            contrastsToBeMapped = this.props.contrasts;
         }
         
         /* use URLs!
@@ -232,6 +239,7 @@ Arena = React.createClass({
         
         return (
             <div id="arena">
+                {/*
                 <button type='button' onClick={this.increment} />
                 <p>{this.state.ferocity}</p>
                 <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
@@ -249,7 +257,7 @@ Arena = React.createClass({
                 
                 {/* Training area */}
                 <p id='arenaMessage' style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
-                <img className={starClass} src={this.data.starImage} alt='star' />
+                {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
@@ -269,3 +277,30 @@ Arena = React.createClass({
         );
     }
 });
+
+// These are props to decide how the arena will render
+Arena.propTypes = {
+    loading: React.PropTypes.bool,
+    languages: React.PropTypes.array,
+    contrasts: React.PropTypes.array,
+    activeLanguageId: React.PropTypes.number
+};
+
+export default createContainer(({params}) => {
+    const { activeLanguageId } = params; // we're so ES6! Bring on the future
+    // the above means
+    // const activeLanguageId = params.activeLanguageId;
+    const languagesHandle = Meteor.subscribe('langdata');
+    const contrastHandle = Meteor.subscribe('contrastdata');
+    const loading = !languagesHandle.ready() && !contrastHandle.ready();
+    const languages = Languages.fetch();
+    const contrasts = Contrasts.where({
+        language: activeLanguageId
+    }).fetch(); // alternative syntax is }).select("*");
+    return {
+        activeLanguageId,
+        loading,
+        languages,
+        contrasts
+    };
+}, Arena);

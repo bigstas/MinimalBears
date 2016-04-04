@@ -8,6 +8,7 @@
     "react": "^0.14.8",
     "react-addons-pure-render-mixin": "^0.14.8",
     "react-addons-test-utils": "^0.14.8",
-    "react-dom": "^0.14.8"
+    "react-dom": "^0.14.8",
+    "react-router": "^2.0.1"
   }
 }
