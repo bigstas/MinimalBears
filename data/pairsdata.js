@@ -334,7 +334,7 @@ eng_v_w_array.contrastId = 'GAFtcg8vW5';
 eng_l_r_array = [
 ['law', 'raw'], // 'lore', 'roar'
 ['low', 'row'], // 'roe'
-['allow', 'a row'],
+['allow', 'a row'], // as in an argument
 ['alive', 'arrive'],
 ['fly', 'fry'],
 ['light', 'right'], // 'rite'
@@ -446,6 +446,7 @@ eng_l_r_array = [
 ['close', 'crows'],
 ['lavish', 'ravish'],
 ['glaze', 'graze'], // 'greys'
+['flock', 'frock']
 ];
 
 
@@ -457,9 +458,61 @@ eng_l_r_array = [
 var deuPairArrays = [deu_ch_sch_array];
 
 var deu_ch_sch_array = [
-['ich', '-isch']
+['ich', '-isch'],
+['Wicht', 'wischt'],
+['Kirche', 'Kirsche'],
+['Männchen', 'Menschen'],
+['Löcher', 'Löscher'],
+['Veilchen', 'feilschen'],
+['Gicht', 'Gischt'],
+['welche', 'welsche'],
+['wichen', 'wischen'],
+['ficht', 'fischt'],
+['brechen', 'Breschen'],
+['mich', 'misch'],
+['-malig', 'malisch'],
+['selig', 'seelisch'],
+['gallig', 'gallisch'],
+['Märchen', 'Märschen'],
+['Herrchen', 'herrschen'],
+['Fällchen', 'fälschen'],
+['hallig', 'Hallisch'],
+['hässig', 'Hessisch'],
 ];
+
 deu_ch_sch_array.contrast = 'ch/sch';
+
+var deu_ü_u_long_array = [
+['spüren', 'Spuren'],
+['Tüten', 'Tuten'],
+['Güte', 'gute'],
+['schwül', 'schwul'],
+['Mühen', 'muhen'],
+['führen', 'Fuhren'],
+['für', 'fuhr'],
+['würde', 'wurde'],
+['füge', 'Fuge'],
+['Verfügung', 'Verfugung'],
+['dürfte', 'durfte'],
+['Bühne', 'Buhne'],
+['Süd', 'Sud'],
+['kürzen', 'kurzen'],
+['gebührt', 'Geburt'],
+['rüder', 'Ruder'],
+['Füßen', 'fußen'],
+['Brüder', 'Bruder'],
+['Blüten', 'bluten'],
+['Mythen', 'muten'],
+['rühr', 'Ruhr'],
+['grüß', 'Gruß'],
+['stürz', 'Sturz'],
+['Küchen', 'Kuchen'],
+['Flüge', 'Fluge'],  // archaic?
+['Züge', 'Zuge'],  // archaic?
+['fürchte', 'furchte'],
+['hüt', 'Hut'],
+['Schüler', 'Schuler']  // family name
+]
 
 
 
