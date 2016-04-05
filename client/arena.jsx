@@ -287,6 +287,7 @@ Arena.propTypes = {
 };
 
 export default createContainer(({params}) => {
+    // a "param" is part of the url, e.g. minimalbears.com/home/:guy has a param of "guy".
     const { activeLanguageId } = params; // we're so ES6! Bring on the future
     // the above means
     // const activeLanguageId = params.activeLanguageId;

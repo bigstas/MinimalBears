@@ -12,12 +12,22 @@ import { Link, Navigation, State, RouteHandler } from 'react-router'; // could p
 import { createContainer } from 'meteor/react-meteor-data';
 
 
-AppBody = React.createClass({
+AppBody = React.createClass({    
+    getInitialState() {
+        return {
+            activeLanguageId: 1,
+            interfaceLangauge: "English",
+            user: "Guest"
+        };
+    },
+    
     render() {
         return (
             <div id="container" >
                 <div id="content-container">
                     <Nav />
+                    <p>{this.props.stas}</p>
+            {/* the above line is just test code to see how props work with createContainer */}
                     {this.props.children}
             {/* <RouteHandler /> */}
                 </div>

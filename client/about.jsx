@@ -18,9 +18,4 @@ About = React.createClass({
 });
 
 // see https://themeteorchef.com/snippets/react-router-basics/#tmc-working-with-params
-export default createContainer(({params, location}) => {
-    const { shoutout } = params;
-    return {
-        shoutout
-    };
-}, About);
+export default About;
