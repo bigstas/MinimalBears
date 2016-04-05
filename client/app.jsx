@@ -28,8 +28,13 @@ AppBody = React.createClass({
                     <Nav />
                     <p>{this.props.stas}</p>
             {/* the above line is just test code to see how props work with createContainer */}
-                    {this.props.children}
-            {/* <RouteHandler /> */}
+                    {/* this.props.children */}
+                    {React.cloneElement(
+                        this.props.children, 
+                        {activeLanguageId: this.state.activeLanguageId, 
+                            interfaceLanguage: this.state.interfaceLangauge,
+                            user: this.state.user}
+                    )}
                 </div>
             </div>
         );

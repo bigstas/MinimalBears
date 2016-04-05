@@ -2,7 +2,7 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 
-Profile = React.createClass({
+Home = React.createClass({
     render() {
         return (
             <div id='home'>
@@ -19,4 +19,4 @@ Profile = React.createClass({
     }
 });
 
-export default createContainer(({params}) => {return {};}, Profile);
+export default createContainer(({params}) => {return {};}, Home);

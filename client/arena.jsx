@@ -278,6 +278,7 @@ Arena = React.createClass({
     }
 });
 
+/*
 // These are props to decide how the arena will render
 Arena.propTypes = {
     loading: React.PropTypes.bool,
@@ -305,3 +306,6 @@ export default createContainer(({params}) => {
         contrasts
     };
 }, Arena);
+*/
+
+export default createContainer(({params}) => {return {};}, Arena);

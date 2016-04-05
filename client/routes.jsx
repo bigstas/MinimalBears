@@ -3,8 +3,9 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 // route components
 import AppContainer from '../client/app';
-import HomeContainer from '../client/home';
-import ArenaContainer from '../client/arena';
+import Home from '../client/home';
+import TrainPage from '../client/train'; // takes place of arena
+//import ArenaContainer from '../client/arena';
 import ProfileContainer from '../client/profile';
 import About from '../client/about';
 import NotFound from '../client/notfound';
@@ -13,8 +14,8 @@ import NotFound from '../client/notfound';
 export const renderRoutes = () => (
     <Router history={browserHistory} >
         <Route path="/" component={AppContainer} >
-            <IndexRoute component={HomeContainer} />
-            <Route path="train" component={ArenaContainer} />
+            <IndexRoute component={Home} />
+            <Route path="train" component={TrainPage} />
             <Route path="about" component={About} />
             <Route path="profile" component={ProfileContainer} />
             <Route path="*" component={NotFound} />

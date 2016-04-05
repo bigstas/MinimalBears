@@ -5,7 +5,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 Selector = React.createClass({
     render() {
         return (
-            <p>sth</p>
+            <div>
+                <p>This is the selector</p>
+                <button type='button' onClick={this.props.callback}>Press me!</button>
+            </div>
         );
     }
 });
@@ -16,13 +19,15 @@ Selector.propTypes = {
     loading: React.PropTypes.bool,
     languages: React.PropTypes.array,
     contrasts: React.PropTypes.array,
-    activeLanguageId: React.PropTypes.number
+    //activeLanguageId: React.PropTypes.number
+    // (above handled elsewhere)
 };
 
 export default createContainer(({params}) => {
-    const { activeLanguageId } = params; // we're so ES6! Bring on the future
+    //const { activeLanguageId } = params; // we're so ES6! Bring on the future
     // the above means
     // const activeLanguageId = params.activeLanguageId;
+    const activeLanguageId = "placholder"; // to be changed!
     const languagesHandle = Meteor.subscribe('langdata');
     const contrastHandle = Meteor.subscribe('contrastdata');
     const loading = !languagesHandle.ready() && !contrastHandle.ready();
