@@ -150,7 +150,7 @@ li a {
     display: block;
 }
 
-.wordOption {
+.wordOption, .chooseLanguage {
     width: 30%;
     color: white;
     display: inline-block;
@@ -161,7 +161,10 @@ li a {
     margin-right: 10%;
     border-radius: 6px;
 }
-.wordOptionActive {cursor: pointer;}
+.wordOptionActive, .chooseLanguage {cursor: pointer;}
+.chooseLanguage {
+    background-color: aqua;
+}
 
 
 /* ================================== */

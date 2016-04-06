@@ -21,6 +21,12 @@ AppBody = React.createClass({
         };
     },
     
+    setLanguage(langId) {
+        this.setState({
+            activeLanguageId: langId
+        });
+    },
+    
     render() {
         return (
             <div id="container" >
@@ -33,7 +39,8 @@ AppBody = React.createClass({
                         this.props.children, 
                         {activeLanguageId: this.state.activeLanguageId, 
                             interfaceLanguage: this.state.interfaceLangauge,
-                            user: this.state.user}
+                            user: this.state.user,
+                            callbackApp: this.setLanguage}
                     )}
                 </div>
             </div>

@@ -6,10 +6,10 @@
 // And each such dictionary is in an array of ... only joking. The nesting has to end somewhere.
 
 
-//var allPairs = {"English" : engPairArrays, "German" : deuPairArrays};
+//var allPairs = {"English" : engPairArrays, "German" : deuPairArrays, "Polish": polPairArrays};
 
 /* COMMENTED OUT FOR TESTING PURPOSES
-var engPairArrays = [eng_ee_i_array, eng_i_e_array, eng_e_a_array, eng_u_o_array, eng_a_u_array, eng_u_o_array, eng_s_th_array, eng_f_th_array, eng_z_th_array, eng_b_v_array, eng_v_w_array];
+var engPairArrays = [eng_ee_i_array, eng_i_e_array, eng_e_a_array, eng_u_o_array, eng_a_u_array, eng_u_o_array, eng_s_th_array, eng_f_th_array, eng_z_th_array, eng_b_v_array, eng_v_w_array, eng_l_r_array];
 
 var eng_ee_i_array = [
 ['feet', 'fit'],
@@ -72,7 +72,7 @@ var eng_ee_i_array = [
 ];
 // Here's that dumb JS thing you can do, put to good use
 eng_ee_i_array.contrast = 'ee/i';
-eng_ee_i_array.contrastId = 'PyU54yQ74i';
+
 
 var eng_i_e_array = [
 ['bit', 'bet'],
@@ -120,7 +120,7 @@ var eng_i_e_array = [
 ['Livy', 'levy']
 ];
 eng_i_e_array.contrast = 'i/e';
-eng_i_e_array.contrastId = 'S3a9ROc7Mu';
+
 
 var eng_e_a_array = [
 ['bet', 'bat'],
@@ -164,7 +164,7 @@ var eng_e_a_array = [
 ['better', 'batter']
 ];
 eng_e_a_array.contrast = 'e/a';
-eng_e_a_array.contrastId = 'h3uuMEwWES';
+
 
 var eng_a_u_array = [
 ['bat', 'but'],
@@ -195,7 +195,7 @@ var eng_a_u_array = [
 ['batter', 'butter']
 ];
 eng_a_u_array.contrast = 'a/u';
-eng_a_u_array.contrastId = 'z9xvwwGTIJ';
+
 
 var eng_u_o_array = [
 ['but', 'bot'],
@@ -224,7 +224,7 @@ var eng_u_o_array = [
 ['some', 'Somme']
 ];
 eng_u_o_array.contrast = 'u/o';
-eng_u_o_array.contrastId = 'zPIcdZKbOq';
+
 
 var eng_s_th_array = [
 ['sing', 'thing'],
@@ -255,7 +255,7 @@ var eng_s_th_array = [
 ['serum', 'theorem']
 ];
 eng_s_th_array.contrast = 'th/s';
-eng_s_th_array.contrastId = 'hWcC9g4pry';
+
 
 var eng_f_th_array = [
 ['fought', 'thought'],
@@ -269,7 +269,7 @@ var eng_f_th_array = [
 ['roof', 'Ruth']
 ];
 eng_f_th_array.contrast = 'th/f';
-eng_f_th_array.contrastId = 'Qhr4scmitm';
+
 */
 
 // FOR TESTING PURPOSES - remove after test
@@ -289,7 +289,7 @@ var eng_z_th_array = [
 ['size', 'scythe']
 ];
 eng_z_th_array.contrast = 'z/th';
-eng_z_th_array.contrastId = 'd0N7qKfTDe';
+
 */
 /* COMMENTED OUT FOR TESTING PURPOSES
 var eng_b_v_array = [
@@ -309,7 +309,6 @@ var eng_b_v_array = [
 ['bolt', 'volt']
 ];
 eng_b_v_array.contrast = 'v/b';
-eng_b_v_array.contrastId = 'OaLj6meiK5';
 
 var eng_v_w_array = [
 ['vet', 'wet'],
@@ -327,7 +326,6 @@ var eng_v_w_array = [
 ['vary', 'wary']
 ];
 eng_v_w_array.contrast = 'v/w';
-eng_v_w_array.contrastId = 'GAFtcg8vW5';
 
 
 //with some suggestions from https://www.englishclub.com/pronunciation/minimal-pairs-l-r.htm
@@ -448,15 +446,15 @@ eng_l_r_array = [
 ['glaze', 'graze'], // 'greys'
 ['flock', 'frock']
 ];
-
+eng_l_r_array.contrast = 'l/r';
 
 
 ////////////
 // GERMAN //
 ////////////
 
-var deuPairArrays = [deu_ch_sch_array];
-
+var deuPairArrays = [deu_ch_sch_array, var deu_ü_u_long_array];
+/*
 var deu_ch_sch_array = [
 ['ich', '-isch'],
 ['Wicht', 'wischt'],
@@ -512,14 +510,61 @@ var deu_ü_u_long_array = [
 ['fürchte', 'furchte'],
 ['hüt', 'Hut'],
 ['Schüler', 'Schuler']  // family name
-]
+];
 
+var deu_ü_u_long_array.contrast = 'ü/u';
 
 
 ////////////
 // POLISH //
 ////////////
 
-// etc.
+var polPairArrays = [pol_ć_cz_array, pol_ś_sz_array, pol_ź_ż_array];
+
+var pol_ć_cz_array = [
+    ['ciapki', 'czapki'],
+    ['zdobyć', 'zdobycz'],
+    ['płać', 'płacz'],
+    ['cierpię', 'czerpię'],
+    ['paćka', 'paczka'],
+    ['pchać', 'pchacz'],
+    ['grać', 'gracz'],
+    ['zmywać', 'zmywacz'],
+    ['mieć', 'miecz'],
+    ['wyciekać', 'wyczekać'],
+    ['krocie', 'krocze'],
+    ['cierń','czerń'],
+    ['uciecha'], ['u Czecha'],
+    ['w lecie'], ['wlecze'],
+    ['żyć'], ['życz'],
+    ['bić'], ['bicz']
+];
+pol_ć_cz_array.contrast = 'ć/cz';
+
+var pol_ś_sz_array = [
+    ['Kasia, 'kasza'],
+    ['prosię, 'proszę'],
+    ['noś, 'nosz'],
+    ['wsie, 'wsze'],
+    ['siata, 'szata'],
+    ['siara, 'szara'],
+    ['kuś, 'kurz'],
+    ['wieś, 'wiesz'],
+    ['koś, 'kosz'],
+    ['paś, 'pasz'],
+    ['Stasiek, 'Staszek']
+];
+pol_ś_sz_array.contrast = 'ś/sz';
+
+
+var pol_ź_ż_array = [
+    ['ziarno', 'żarno'],
+    ['ziele', 'żele'],
+    ['ziewnie', 'rzewnie'],
+    ['paź', 'parz'],
+    ['buzia', 'burza'],
+    ['ziet', 'żet'] // letter names (?)
+];
+pol_ź_ż_array.contrast = 'ź/ż';
 
 */
