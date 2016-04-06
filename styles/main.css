@@ -66,7 +66,7 @@ li a {
     color: #9977ff;
 }
 
-#gate, #arena, #record, #about, #profile {
+#home, #selector, #arena, #record, #about, #profile, #register, #login {
     position: relative;
     overflow: auto;
     background-color: white;
@@ -150,21 +150,26 @@ li a {
     display: block;
 }
 
-.wordOption, .chooseLanguage, .chooseContrast {
-    width: 30%;
-    color: white;
+.wordOption, .chooseLanguage, .chooseContrast, .homebtn {
     display: inline-block;
+    color: white;
     padding-top: 3%;
     padding-bottom: 5%;
     text-align: center;
-    margin-left: 10%;
-    margin-right: 10%;
     border-radius: 6px;
 }
-.wordOptionActive, .chooseLanguage, .chooseContrast {cursor: pointer;}
-.chooseLanguage, .chooseContrast {
-    background-color: aqua;
+.wordOption, .chooseLanguage, .chooseContrast { 
+    width: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
+.homebtn { 
+    width: 20%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.wordOptionActive, .chooseLanguage, .chooseContrast, .homebtn { cursor: pointer; }
+.chooseLanguage, .chooseContrast, .homebtn { background-color: aqua; }
 
 
 /* ================================== */
@@ -226,11 +231,12 @@ li a {
 
 
 /* ================================== */
-/* =========== profile.js =========== */
+/* ============ home.js ============= */
 /* ================================== */
-
+/*
 .homebtn {
     width: 80px;
     height: 30px;
     background-color: orangered;
 }
+*/

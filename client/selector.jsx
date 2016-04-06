@@ -37,7 +37,7 @@ Selector = React.createClass({
         }
             
         return (
-            <div>
+            <div id='selector'>
                 <p>This is the selector</p>
                 {selectionMessage}
                 {!this.props.activeLanguageId ? 
