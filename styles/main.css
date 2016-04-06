@@ -155,6 +155,7 @@ li a {
     color: white;
     padding-top: 3%;
     padding-bottom: 5%;
+    margin-bottom: 2%;
     text-align: center;
     border-radius: 6px;
 }
@@ -170,6 +171,13 @@ li a {
 }
 .wordOptionActive, .chooseLanguage, .chooseContrast, .homebtn { cursor: pointer; }
 .chooseLanguage, .chooseContrast, .homebtn { background-color: aqua; }
+#changeLanguage {
+    color: white;
+    background-color: gold;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
 
 
 /* ================================== */

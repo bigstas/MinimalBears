@@ -130,7 +130,6 @@ Arena = React.createClass({
         */
         
         console.log(this.props);
-        //console.log(this.data.bears);
         
         // Turn this into a single function to be defined elsewhere, or keep it here as these two?
         var languagesToBeMapped;
@@ -146,33 +145,8 @@ Arena = React.createClass({
             contrastsToBeMapped = this.props.contrasts;
         }
         
-        /* use URLs!
-        console.log(this.state.mySound);
-        console.log(typeof this.state.mySound);
-        if ((typeof this.state.mySound) !== 'string') {
-            console.log("it's not a string");
-            this.state.mySound.play();
-        }*/
-        
         return (
             <div id="arena">
-                {/*
-                <button type='button' onClick={this.increment} />
-                <p>{this.state.ferocity}</p>
-                <p>{this.data.bears === undefined ? undefined : this.data.bears[0].age}</p>
-                {/* Dropdown menus for language and contrast */}
-                <select id="chooseLanguage" onChange={this.handleLanguageChange}>
-                    {languagesToBeMapped.map(function(c) {
-                        return <option value={c.id} key={c.id}>{c.name}</option>
-                    })}
-                </select>
-                <select id="chooseContrast" onChange={this.handleContrastChange}>
-                    {contrastsToBeMapped.map(function(c) {
-                        return <option value={c.name} key={c.id}>{c.name}</option>
-                    })}                  
-                </select>
-                
-                {/* Training area */}
                 <p id='arenaMessage' style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 

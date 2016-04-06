@@ -2,7 +2,7 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 
-Selector = React.createClass({
+Selector = React.createClass({    
     render() {
         // A lot of repeating code here, could be optimised in future
         var selectionMessage;
@@ -38,7 +38,6 @@ Selector = React.createClass({
             
         return (
             <div id='selector'>
-                <p>This is the selector</p>
                 {selectionMessage}
                 {!this.props.params.activeLanguageId ? 
                     languagesToBeMapped.map(function(c) {
@@ -47,6 +46,11 @@ Selector = React.createClass({
                         return <div className='chooseContrast' key={c.id} onClick={()=>callbackContrastId(c.id)}>{c.name}</div>
                     })
                 }
+                {!!this.props.params.activeLanguageId ? 
+                    <div className='chooseLanguage' id='changeLanguage' onClick={()=>this.props.callbackLangId(0)}>Change language</div> :
+                    <div></div> 
+                }
+                {/* empty div is equivalent to nothing at all - I want to have an "if" statement but must use ternary because we're inside render's return method */}
             </div>
         );
     }

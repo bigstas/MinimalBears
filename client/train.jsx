@@ -13,8 +13,12 @@ TrainPage = React.createClass({
     },
     
     setLanguage(langId) {
+        var id_ok = false;
+        if (typeof langId === 'number' && langId > 0) {
+            id_ok = true;
+        }
         this.setState ({
-            languageChosen: true
+            languageChosen: id_ok
         });
         this.props.callbackApp(langId);
     },
@@ -36,7 +40,6 @@ TrainPage = React.createClass({
         
         return (
             <div>
-                <h2>'Train' page</h2>
                 {activeComponent}
             </div>
         );
