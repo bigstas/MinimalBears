@@ -27,6 +27,12 @@ AppBody = React.createClass({
         });
     },
     
+    // There is a funny choice in how data is to be handled.
+    // Either one can call this.props.callbackApp(langId) to update the language,
+    // or one call propagate with callbacks through parents.
+    // I think having both available as options seems fine 
+    // (atm selector calls back to train, and train back to app; choosing the language in some sort of settings tab would probably directly use this.props.callbackApp(langId) ),
+    // but it might be neater to choose one way or the other rather than have both.
     render() {
         return (
             <div id="container" >

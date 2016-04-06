@@ -7,7 +7,7 @@ Selector = React.createClass({
         // A lot of repeating code here, could be optimised in future
         var selectionMessage;
         // If there is no active language...
-        if (!this.props.activeLanguageId) {
+        if (!this.props.params.activeLanguageId) {
             selectionMessage = <p>Choose the language you want to train</p>;
             // ...set up the language buttons...
             var languagesToBeMapped, callbackLangId;
@@ -40,7 +40,7 @@ Selector = React.createClass({
             <div id='selector'>
                 <p>This is the selector</p>
                 {selectionMessage}
-                {!this.props.activeLanguageId ? 
+                {!this.props.params.activeLanguageId ? 
                     languagesToBeMapped.map(function(c) {
                         return <div className='chooseLanguage' key={c.id} onClick={()=>callbackLangId(c.id)}>{c.name}</div>
                     }) : contrastsToBeMapped.map(function(c) {
@@ -63,18 +63,13 @@ Selector.propTypes = {
 };
 
 export default createContainer(({params}) => {
-    //const { activeLanguageId } = params; // we're so ES6! Bring on the future
+    const { activeLanguageId } = params; // we're so ES6! Bring on the future
     // the above means
     // const activeLanguageId = params.activeLanguageId;
-    const activeLanguageId = 1; // to be changed!
     const languagesHandle = Meteor.subscribe('langdata');
     const contrastHandle = Meteor.subscribe('contrastdata');
     const loading = !languagesHandle.ready() && !contrastHandle.ready();
     const languages = Languages.fetch();
-    // BELOW - TO BE FIXED
-    // At the moment, this fetches contrast for the activeLanguageId given above (i.e. 1).
-    // However, we want this to depend on the props as defined by user input (i.e. which button is pressed).
-    // Currently there is a disconnect here, and I'm not sure how to solve it.
     const contrasts = Contrasts.where({
         language: activeLanguageId
     }).fetch(); // alternative syntax is }).select("*");

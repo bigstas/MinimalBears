@@ -78,44 +78,6 @@ Arena = React.createClass({
         };
     },
     
-    /*
-    // This mixin makes the getMeteorData method work
-    mixins: [ReactMeteorData],
-    
-    // Loads items from the Languages collection and puts them in this.data.languages
-    // This is kind of working fine, except that React seems to reload the data every time the user does anything
-    // (e.g. choose something from the language dropdown, even before I've enabled contrasts in this code).
-    // This is causing a visible lag of about a quarter of a second.
-    // We will probably want some sort of componentShouldUpdate thing here to only have the data be re-fetched when we really need it.
-    getMeteorData() {
-        console.log("Getting data");
-        const bearSubHandle = Meteor.subscribe("beardata");
-        const langSubHandle = Meteor.subscribe("langdata");
-        const contrastSubHandle = Meteor.subscribe("contrastdata");
-        console.log(bearSubHandle.ready());
-        console.log(langSubHandle.ready());
-        console.log(contrastSubHandle.ready());
-        
-        if (bearSubHandle.ready() && langSubHandle.ready() && contrastSubHandle.ready()) {
-            var langId = this.state.activeLanguageId === null ? 0: this.state.activeLanguageId;
-            
-            return {
-                bears: Bears.fetch(),
-                languages: Languages.fetch(),
-                contrasts: Contrasts.where({
-                    // The line immediately below fails at the moment, so commented out. The line below it works, and gives all the contrasts for English (language id = 1 in the database).
-                    //language: langId
-                    language: 1
-                }).select("name"),
-                bearsLoading: false
-            };
-        } else {
-            return {
-                bearsLoading: true
-            };
-        }
-    }, */
-    
     // After the user chooses a language
     handleLanguageChange() {
         this.setState({
@@ -156,51 +118,6 @@ Arena = React.createClass({
         this.reloadData(['pair'])
     },
     
-    // Force a re-render after a query is returned
-    /* componentDidUpdate: function (props, state) {
-        console.log(this.pendingQueries())
-        if (state.isLoading && this.pendingQueries().length === 0) {
-            this.setState({
-                isLoading: false
-            })
-        }
-    },
-    
-    increment() {
-        this.setState({
-            // mySound: new Audio(Meteor.call('sendSound')),
-            counter: this.state.counter +1
-        })
-        
-        Meteor.call('getFerocity', this.data.bears[0].age, this.dataCallback);
-        
-        var myNewBear = {
-            colour: 'yellow',
-            age: this.state.counter
-        }
-        Meteor.call('saveMyBear', myNewBear, this.bearCallback);
-    },
-    
-    bearCallback(error, result) {
-        if (error) {
-            console.log("RAWR! error");
-        } else {
-            console.log("RAWR! saved your bear");
-        }
-    },
-    
-    dataCallback(error, result) {
-        this.setState({
-            ferocity: result
-        })
-    },
-    
-    soundCallback(error, result) {
-        this.setState({
-            mySound: result
-        })
-    },
-    */
     render() {
         var buttonDisabled = true; // <-- placeholder while below is commented out
         /*
@@ -277,35 +194,5 @@ Arena = React.createClass({
         );
     }
 });
-
-/*
-// These are props to decide how the arena will render
-Arena.propTypes = {
-    loading: React.PropTypes.bool,
-    languages: React.PropTypes.array,
-    contrasts: React.PropTypes.array,
-    activeLanguageId: React.PropTypes.number
-};
-
-export default createContainer(({params}) => {
-    // a "param" is part of the url, e.g. minimalbears.com/home/:guy has a param of "guy".
-    const { activeLanguageId } = params; // we're so ES6! Bring on the future
-    // the above means
-    // const activeLanguageId = params.activeLanguageId;
-    const languagesHandle = Meteor.subscribe('langdata');
-    const contrastHandle = Meteor.subscribe('contrastdata');
-    const loading = !languagesHandle.ready() && !contrastHandle.ready();
-    const languages = Languages.fetch();
-    const contrasts = Contrasts.where({
-        language: activeLanguageId
-    }).fetch(); // alternative syntax is }).select("*");
-    return {
-        activeLanguageId,
-        loading,
-        languages,
-        contrasts
-    };
-}, Arena);
-*/
 
 export default createContainer(({params}) => {return {};}, Arena);

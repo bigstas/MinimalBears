@@ -26,11 +26,12 @@ TrainPage = React.createClass({
     },
     
     render() {
-        // By default, render the Selector
-        var activeComponent = <Selector activeLanguageId={this.props.activeLanguageId} callbackLangId={this.setLanguage} callbackContrastId={this.setContrast} />;
-        // If language and contrast are both specified, render the Arena
+        var activeComponent;
+        // If language and contrast are both specified, render the Arena, otherwise render the Selector
         if (this.state.languageChosen && !!this.state.activeContrastId) {
             activeComponent = <Arena activeLanguageId={this.props.activeLanguageId} activeContrastId={this.state.activeContrastId} />;
+        } else {
+            activeComponent = <Selector params={{activeLanguageId: this.props.activeLanguageId}} callbackLangId={this.setLanguage} callbackContrastId={this.setContrast} />;
         }
         
         return (
