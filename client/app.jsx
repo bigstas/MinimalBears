@@ -15,7 +15,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 AppBody = React.createClass({    
     getInitialState() {
         return {
-            activeLanguageId: 1,
+            activeLanguageId: 0,
             interfaceLangauge: "English",
             user: "Guest"
         };
@@ -32,7 +32,6 @@ AppBody = React.createClass({
             <div id="container" >
                 <div id="content-container">
                     <Nav />
-                    <p>{this.props.stas}</p>
             {/* the above line is just test code to see how props work with createContainer */}
                     {/* this.props.children */}
                     {React.cloneElement(
@@ -48,9 +47,4 @@ AppBody = React.createClass({
     }
 });
 
-export default createContainer(({params}) => {
-    const stas = "dude";
-    return {
-        stas
-    };
-}, AppBody);
+export default AppBody;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 // route components
-import AppContainer from '../client/app';
+import AppBody from '../client/app';
 import Home from '../client/home';
 import TrainPage from '../client/train'; // takes place of arena
 //import ArenaContainer from '../client/arena';
@@ -13,7 +13,7 @@ import NotFound from '../client/notfound';
 
 export const renderRoutes = () => (
     <Router history={browserHistory} >
-        <Route path="/" component={AppContainer} >
+        <Route path="/" component={AppBody} >
             <IndexRoute component={Home} />
             <Route path="train" component={TrainPage} />
             <Route path="about" component={About} />
