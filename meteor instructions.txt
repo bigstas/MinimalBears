@@ -45,6 +45,10 @@ NPM INSTRUCTIONS
 (Perhaps we can put these in dependencies (in package.json?) and then npm can sort it all out...)
 
 
+GIVE YOURSELF PERMISSION TO EXECUTE FILE
+chmod +x [filename] , e.g.
+chmod +x test-app.sh
+
 KILL LOCAL POSTGRES POSTMASTER ON MAC (a special note to Staś)
 0. If you shut down the terminal without "killing" the PostgreSQL server, then there is a (temporary) file called postmaster.pid that will still be there. If you try to re-run that server afterwards by reloading the terminal and typing:
 [anywhere]$ postgres -D /usr/local/var/postgres/

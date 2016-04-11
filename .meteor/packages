@@ -24,7 +24,5 @@ react-meteor-data       # This is meteor-specific so belongs here, rather than w
 
 simple:pg
 # maximum:server-transform
-sanjo:jasmine
-velocity:html-reporter
-xolvio:cucumber
-velocity:console-reporter
+practicalmeteor:mocha
+practicalmeteor:chai
