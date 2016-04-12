@@ -3,16 +3,16 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 // route components
 import AppBody from '../client/app';
-import Home from '../client/home';
+import Home from '../client/static/home';
 //import RegisterPage from '../client/register';
 //import LoginPage from '../client/login';
 import AuthJoinPage from '../client/auth/joinpage';
 import AuthSignInPage from '../client/auth/loginpage';
-import TrainPage from '../client/train'; // takes place of arena
+import TrainPage from '../client/training/train'; // takes place of arena
 //import ArenaContainer from '../client/arena';
 import ProfileContainer from '../client/profile';
-import About from '../client/about';
-import NotFound from '../client/notfound';
+import About from '../client/static/about';
+import NotFound from '../client/static/notfound';
 
 
 export const renderRoutes = () => (
