@@ -33,18 +33,22 @@ nav a:hover {
 }
 
 nav {
-    height: 43px;
+    height: 46px;
     text-align: center;
     background-color: #9977ff;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 19%;
+    margin-right: 19%;
     margin-top: 10px;
-    width: 60%;
-    /*padding: 0.5%;*/
+    width: 62%;
+    padding: 2px;
     border-radius: 8px;
     box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
 }
-
+#loggedInAs {
+    float: right;
+    color: indigo;
+    font-weight: bold;
+}
 .dropdownDiv {
     right: 0;
     position: absolute;
@@ -77,7 +81,7 @@ li {
     float: left;
 }
 
-li a {
+li a, li p {
     display: block;
     padding: 8px;
     margin: 3px;

@@ -16,7 +16,7 @@ AppBody = React.createClass({
     getInitialState() {
         return {
             activeLanguageId: 0,
-            interfaceLangauge: "English",
+            interfaceLanguage: "polish",
             user: "Guest"
         };
     },
@@ -37,13 +37,13 @@ AppBody = React.createClass({
         return (
             <div id="container" >
                 <div id="content-container">
-                    <Nav />
+                    <Nav username={this.state.user} />
             {/* the above line is just test code to see how props work with createContainer */}
                     {/* this.props.children */}
                     {React.cloneElement(
                         this.props.children, 
                         {activeLanguageId: this.state.activeLanguageId, 
-                            interfaceLanguage: this.state.interfaceLangauge,
+                            interfaceLanguage: this.state.interfaceLanguage,
                             user: this.state.user,
                             callbackApp: this.setLanguage}
                     )}

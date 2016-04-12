@@ -54,6 +54,7 @@ Nav = React.createClass({
                         <li><Link to="/train" activeClassName="active">Train</Link></li>
                         <li><Link to="/profile" activeClassName="active">Profile</Link></li>
                         <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
+                        <li style={{float: 'right'}}><p id="loggedInAs">{this.props.username}</p></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}
