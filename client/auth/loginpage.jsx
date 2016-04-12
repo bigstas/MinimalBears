@@ -6,6 +6,7 @@ const {
 */
 import { Navigation, Link } from 'react-router';
 import React from 'react';
+import MenuOpenToggle from '../auth/menuopentoggle';
 
 AuthSignInPage = React.createClass({
   mixins: [Navigation],
@@ -52,10 +53,10 @@ AuthSignInPage = React.createClass({
     });
   },
   render() {
-    return <div className="page auth">
-      <nav>
+    return <div className="page-auth">
+        {/* <nav>
         <MenuOpenToggle />
-      </nav>
+      </nav> */}
 
       <div className="content-scrollable">
         <div className="wrapper-auth">
@@ -85,10 +86,12 @@ AuthSignInPage = React.createClass({
             </button>
           </form>
         </div>
-        <Link to="join" className="link-auth-alt">
+        <Link to="register" className="link-auth-alt">
           Need an account? Join Now.
         </Link>
       </div>
     </div>
   }
 });
+          
+export default AuthSignInPage;

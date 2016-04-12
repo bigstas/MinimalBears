@@ -3,22 +3,6 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
-/*
-Dropdown = React.createClass({
-    render() {
-        return (
-            <div className='dropdownDiv'>
-                <ul className='dropdownList'>
-                    <li className='horizontalListElement'>stuff</li>
-                    <li className='horizontalListElement'>more stuff</li>
-                    <li className='horizontalListElement'>even more stuff</li>
-                </ul>
-            </div>
-        );
-    }
-});
-*/
-
 Dropdown = React.createClass({
     render() {
         return (
@@ -38,33 +22,28 @@ Nav = React.createClass({
         }
     },
     
-    toggleDropdown() {
-        this.setState({
-            dropdown: !this.state.dropdown
-        });
+    // This is the most stupid piece of code you may have seen in a long time.
+    // Obviously a better way would be for a single method to handle the state change, depending on a bool parameter.
+    // When I try to do that, the weirdest thing happens - the method *no longer* binds to the intended element,
+    // but now binds to all the other <li>'s in the <ul>! WTF!! I have no idea why, but this is my stupid way around it.
+    dropdownTrue () {
+        console.log("hello!");
+        this.setState({ dropdown: true });
+    },
+    dropdownFalse () {
+        this.setState({ dropdown: false });
     },
     
-    removeDropdown() {
-        this.setState({
-            dropdown: false
-        });
-    },
-    
-    render() {
-        var dropdownClass = "dropdownDiv";
-        if (!this.state.dropdown) {
-            dropdownClass += " inactiveDropdown";
-        }
-        
+    render() { 
         return (
             <div className="container">
                 <nav>
                     <ul>
-                        <li><IndexLink to="/" activeClassName="active" onClick={this.removeDropdown}>Home</IndexLink></li>
-                        <li><Link to="/about" activeClassName="active" onClick={this.removeDropdown}>About</Link></li>
-                        <li><Link to="/train" activeClassName="active" onClick={this.removeDropdown}>Train</Link></li>
-                        <li><Link to="/profile" activeClassName="active" onClick={this.removeDropdown}>Profile</Link></li>
-                        <li style={{float: 'right', cursor: 'pointer'}}><img src="gears-original.png" style={{height: '40px'}} onClick={this.toggleDropdown} /></li>
+                        <li><IndexLink to="/" activeClassName="active">Home</IndexLink></li>
+                        <li><Link to="/about" activeClassName="active">About</Link></li>
+                        <li><Link to="/train" activeClassName="active">Train</Link></li>
+                        <li><Link to="/profile" activeClassName="active">Profile</Link></li>
+                        <li style={{float: 'right', cursor: 'pointer'}} onMouseOver={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ? <Dropdown /> : <span />}

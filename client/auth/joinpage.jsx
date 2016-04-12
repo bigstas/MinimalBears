@@ -61,10 +61,10 @@ AuthJoinPage = React.createClass({
   },
   render() {
     return (
-      <div className="page auth">
-        <nav>
+      <div className="page-auth">
+        {/* <nav>
           <MenuOpenToggle />
-        </nav>
+        </nav> */}
 
         <div className="content-scrollable">
           <div className="wrapper-auth">
@@ -103,7 +103,7 @@ AuthJoinPage = React.createClass({
             </form>
           </div>
 
-          <Link to="signin" className="link-auth-alt">
+          <Link to="login" className="link-auth-alt">
             Have an account? Sign in.
           </Link>
         </div>
@@ -111,3 +111,5 @@ AuthJoinPage = React.createClass({
     );
   }
 });
+
+export default AuthJoinPage;

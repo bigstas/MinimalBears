@@ -10,7 +10,7 @@
     background-size: cover;
 } */
 
-html {
+body {
     background-color: #eeeeee;
 }
 
@@ -26,6 +26,10 @@ h4 {
 
 nav a {
     color: aliceblue;
+    text-decoration: none;
+}
+nav a:hover {
+    text-decoration: none;
 }
 
 nav {
@@ -34,14 +38,16 @@ nav {
     background-color: #9977ff;
     margin-left: 20%;
     margin-right: 20%;
+    margin-top: 10px;
     width: 60%;
-    padding: 0.5%;
+    /*padding: 0.5%;*/
     border-radius: 8px;
     box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
 }
 
 .dropdownDiv {
-    float: right;
+    right: 0;
+    position: absolute;
     margin-right: 20%;
     background-color: white;
     border-radius: 8px;
@@ -51,19 +57,13 @@ nav {
 }
 .dropdownElement {
     cursor: pointer;
-}
-.horizontalListElement {
     clear: left;
-    cursor: pointer;
-}
-.horizontalListElement:hover {
-    background-color: #9977ff;
-}
-
-.dropdownList {
+    border-radius: 5px;
     text-align: right;
 }
-
+.dropdownElement:hover {
+    background-color: #9977ff;
+}
 
 
 ul {
@@ -85,16 +85,19 @@ li a {
     border-radius: 5px;
 }
 
+/* not working - "inactive" no longer a className? */
 .inactive:hover {
     background-color: #553388;
 }
 
-.active {
+/* need to be so specific (with .container first) to lend "authority", otherwise the browser will automatically underline! */
+.container .active {
     background-color: aliceblue;
     color: #9977ff;
+    text-decoration: none;
 }
 
-#home, #selector, #arena, #record, #about, #profile, #register, #login {
+#home, #selector, #arena, #record, #about, #profile, #register, #login, .page-auth {
     position: absolute;
     z-index: -1;
     overflow: auto;
