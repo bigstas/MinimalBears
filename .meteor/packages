@@ -26,3 +26,4 @@ simple:pg
 # maximum:server-transform
 practicalmeteor:mocha
 practicalmeteor:chai
+maxencecornet:audio-recorder

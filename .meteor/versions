@@ -39,6 +39,7 @@ lai:collection-extensions@0.2.1_1
 launch-screen@1.0.8
 livedata@1.0.16
 logging@1.0.10
+maxencecornet:audio-recorder@0.0.4
 meteor@1.1.12
 meteor-base@1.0.2
 minifier-css@1.1.9
