@@ -5,7 +5,6 @@ import INTERPRETED from '../static/translations';
 
 Home = React.createClass({    
     render() {
-        console.log(this.props);
         return (
             <div id='home'>
                 <div id='usermessage'>

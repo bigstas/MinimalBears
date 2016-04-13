@@ -152,7 +152,7 @@ li a, li p {
 }
 
 #progress {
-    height: 10px;
+    height: 25px;
     border: thick solid gold;
     border-radius: 20px;
     margin-left: 20px;

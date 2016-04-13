@@ -24,7 +24,6 @@ Nav = React.createClass({
     },
     
     dropdownTrue () {
-        console.log("hello!");
         this.setState({ dropdown: true });
     },
     
@@ -52,6 +51,7 @@ Nav = React.createClass({
                         <li><IndexLink to="/" activeClassName="active">Home</IndexLink></li>
                         <li><Link to="/about" activeClassName="active">About</Link></li>
                         <li><Link to="/train" activeClassName="active">Train</Link></li>
+                        <li><Link to="/record" activeClassName="active">Record</Link></li>
                         <li><Link to="/profile" activeClassName="active">Profile</Link></li>
                         <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
                         <li style={{float: 'right'}}><p id="loggedInAs">{this.props.username}</p></li>
