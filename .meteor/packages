@@ -24,6 +24,22 @@ react-meteor-data       # This is meteor-specific so belongs here, rather than w
 
 simple:pg
 # maximum:server-transform
+
+# testing
 practicalmeteor:mocha
 practicalmeteor:chai
+
+# audio recorder (might be replaced)
 maxencecornet:audio-recorder
+
+# accounts (added by hand):
+# accounts-password-pg-driver
+# accounts-password
+# currently gives an error:
+# While selecting package versions:
+# error: No version of accounts-password satisfies all constraints: @=1.1.2-rc.0, @=1.1.6
+# Constraints on package "accounts-password":
+# * accounts-password@=1.1.2-rc.0 <- top level
+# * accounts-password@=1.1.6 <- top level
+
+

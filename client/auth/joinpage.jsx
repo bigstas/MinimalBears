@@ -1,5 +1,6 @@
 import { Navigation, Link } from 'react-router';
 import React from 'react';
+//import Accounts from 'accounts-password';
 
 AuthJoinPage = React.createClass({
     mixins: [Navigation],     // is this still a thing in Meteor 1.3? See comment on loginpage

@@ -3,6 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
 import INTERPRETED from '../client/static/translations';
 
+
 // using $ meteor add maxencecornet:audio-recorder
 // if ultimately not used, delete this code and run
 // $ meteor remove maxencecornet:audio-recorder
@@ -35,3 +36,4 @@ RecordPage = React.createClass({
 });
 
 export default RecordPage;
+
