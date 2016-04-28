@@ -8,8 +8,10 @@
     "react": "^0.14.8",
     "react-addons-pure-render-mixin": "^0.14.8",
     "react-addons-test-utils": "^0.14.8",
+    "react-audio-recorder": "^0.1.0",
     "react-dom": "^0.14.8",
     "react-onclickoutside": "^4.9.0",
-    "react-router": "^2.0.1"
+    "react-router": "^2.0.1",
+    "recorderjs": "^1.0.1"
   }
 }
