@@ -152,8 +152,14 @@ RecordPage = React.createClass({
         recorder.clear();
     },
     
+    // function to be passed to exportWAV
+    makeUrl (blob) {
+        this.setState({
+            audioURL: URL.createObjectURL(blob)
+        });
+    },
+    
     createDownloadLink() {
-        // The below throws ReferenceError: blob is not defined.
         // When this.setState is inside recorder.exportWAV, then you get another error: this.setState is not a function.
         // recorder.exportWAV doesn't have a problem understanding what 'blob' is, even though it's not defined elsewhere.
         // I guess that the exportWAV method makes a blob, which is what it uses with the function (callback?) inside it,
@@ -162,25 +168,8 @@ RecordPage = React.createClass({
         // so I thought it might be better to use a state variable since that would force a re-render, and also because direct sub-objects
         // like this.X rather than this.state.X or this.props.X seem to non-React-ish and perhaps slightly hacky.
         // Another solution might be to use this.url after all and force a re-render when you record something.
-        this.setState({
-            audioURL: URL.createObjectURL(blob)
-        });
         
-        recorder && recorder.exportWAV(function(blob) {
-            //var url = URL.createObjectURL(blob);
-            // We can't do document.createElement when we use React. We'll just referenece an existing element.
-            //var li = document.createElement('li');
-            //var au = document.createElement('audio');
-            //var hf = document.createElement('a');
-            
-            //au.src = url;
-            //hf.href = url;
-            //hf.download = new Date().toISOString() + '.wav';
-            //hf.innerHTML = hf.download;
-            //li.appendChild(au);
-            //li.appendChild(hf);
-            //recordingslist.appendChild(li);
-        });
+        recorder && recorder.exportWAV(this.makeUrl);
     },
     
     // This is used instead of window.onload = function init () {...}.
