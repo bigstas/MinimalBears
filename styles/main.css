@@ -234,6 +234,12 @@ li a, li p {
 #record * {margin-left: 10px;}
 .fileNotReady {display: none;}
 
+.recWord {clear: left;}
+#recWord-1 {
+    color: red;
+    /*background-color: yellow;*/
+}
+
 
 /* ================================== */
 /* ============ about.js ============ */

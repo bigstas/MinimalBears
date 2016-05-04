@@ -4,79 +4,6 @@ import { Link } from 'react-router';
 //import INTERPRETED from '../client/static/translations';
 import AudioRecorder from 'react-audio-recorder';
 
-/*
-// from the recorder.js example
-function __log(e, data) {
-    //log.innerHTML += "\n" + e + " " + (data || '');
-}
-var audio_context;
-var recorder;
-function startUserMedia(stream) {
-    var input = audio_context.createMediaStreamSource(stream);
-    //__log('Media stream created.');
-    console.log('Media stream created.');
-    // Uncomment if you want the audio to feedback directly
-    //input.connect(audio_context.destination);
-    //__log('Input connected to audio context destination.');
-    
-    recorder = new Recorder(input);
-    __log('Recorder initialised.');
-}
-function startRecording(button) {
-    recorder && recorder.record();
-    button.disabled = true;
-    button.nextElementSibling.disabled = false;
-    __log('Recording...');
-}
-function stopRecording(button) {
-    recorder && recorder.stop();
-    button.disabled = true;
-    button.previousElementSibling.disabled = false;
-    __log('Stopped recording.');
-    
-    // create WAV download link using audio data blob
-    createDownloadLink();
-    
-    recorder.clear();
-}
-function createDownloadLink() {
-    recorder && recorder.exportWAV(function(blob) {
-        var url = URL.createObjectURL(blob);
-        var li = document.createElement('li');
-        var au = document.createElement('audio');
-        var hf = document.createElement('a');
-      
-        au.controls = true;
-        au.src = url;
-        hf.href = url;
-        hf.download = new Date().toISOString() + '.wav';
-        hf.innerHTML = hf.download;
-        li.appendChild(au);
-        li.appendChild(hf);
-        recordingslist.appendChild(li);
-    });
-}
-window.onload = function init() {
-    try {
-    // webkit shim
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-        window.URL = window.URL || window.webkitURL;
-      
-        audio_context = new AudioContext;
-        __log('Audio context set up.');
-        __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-    } catch (e) {
-        alert('No web audio support in this browser!');
-    }
-    
-    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-        __log('No live audio input: ' + e);
-    });
-};
-*/
-
-
 
 // using $ meteor add maxencecornet:audio-recorder
 // if ultimately not used, delete this code and run
@@ -103,7 +30,8 @@ RecordPage = React.createClass({
     //********* from here on - using record.js *********
     getInitialState () {
         return {
-            audioURL: null
+            audioURL: null,
+            recordingWords: ["youth in Asia", "euthanasia", "a mission", "omission", "emission"]
         }
     },
     
@@ -134,7 +62,8 @@ RecordPage = React.createClass({
         //button.disabled = true;
         //button.nextElementSibling.disabled = false;
         console.log('Recording...');
-        //__log('Recording...');
+        
+        document.getElementById('recWord-0').style.backgroundColor = 'yellow';
     },
     // ...so does this!
     stopRecording (button) {
@@ -143,11 +72,16 @@ RecordPage = React.createClass({
         //button.disabled = true;
         //button.previousElementSibling.disabled = false;
         console.log('Stopped recording.')
-        //__log('Stopped recording.');
+        
+        // reset background colours (highlighting)
+        for (i=0; i<5; i++) {
+            var id = 'recWord-' + i.toString();
+            document.getElementById(id).style.backgroundColor = 'white';
+        }
     
         // create WAV download link using audio data blob
-        // needs to be renamed! doesn't create a download link, creates a url as a src for the <audio />
-        this.createDownloadLink();
+        // create client-side URL for <audio /> to use as src
+        this.updateAudio();
     
         recorder.clear();
     },
@@ -159,16 +93,7 @@ RecordPage = React.createClass({
         });
     },
     
-    createDownloadLink() {
-        // When this.setState is inside recorder.exportWAV, then you get another error: this.setState is not a function.
-        // recorder.exportWAV doesn't have a problem understanding what 'blob' is, even though it's not defined elsewhere.
-        // I guess that the exportWAV method makes a blob, which is what it uses with the function (callback?) inside it,
-        // but when you tell it to do this.setState it might not be clear on where "this" is, and therefore not be able to do it.
-        // Before that, I tried using this.url to change <audio />'s src, but in order for it to update you need a re-render, 
-        // so I thought it might be better to use a state variable since that would force a re-render, and also because direct sub-objects
-        // like this.X rather than this.state.X or this.props.X seem to non-React-ish and perhaps slightly hacky.
-        // Another solution might be to use this.url after all and force a re-render when you record something.
-        
+    updateAudio() {
         recorder && recorder.exportWAV(this.makeUrl);
     },
     
@@ -199,19 +124,41 @@ RecordPage = React.createClass({
         });
     },
     
-    render() {        
+    render() {
+        // The buttons in the .map won't bind to this.startRecording, presumably because they can't see it.
+        // That's the rationale behind this function here - to mediate between those buttons and the this.startRecording method.
+        // They do bind to it, but the the startRecord function seems to be having trouble seeing this.startRecording as well.
+        // But the buttons in the first <div> bind!
+        // And binding with .map works in Arena!
+        // WTF! So I'm not sure what to do.
+        function startRecord() {
+            this.startRecording;
+            // The below prints 'undefined'.
+            console.log(this.startRecording);
+        }
+        
         return (
             <div id='record'>
-                <p>This is the record page</p>
-                <AudioRecorder />
+                <p>Here is your list of words to record.</p>
                 <div>
-                    <button type="button" onClick={this.handleRecord}>Record!</button>
-                    <button type="button" onClick={this.stopRecord}>Stop!</button>
+                    {/*The below binds.*/}
+                    <button type="button" onClick={this.startRecording}>Start recording</button>
+                    <button type="button" onClick={this.stopRecording}>Stop recording</button>
                 </div>
-                <div>
-                    <button type="button" onClick={this.startRecording}>Start recording with recorder.js</button>
-                    <button type="button" onClick={this.stopRecording}>Stop recording with recorder.js</button>
-                </div>
+                <ul>
+                    {this.state.recordingWords.map(function(c, index) {
+                        var recWordId = 'recWord-' + index.toString();
+                        return (
+                            <li id={recWordId} className='recWord' key={index}>
+                                <p style={{display: 'inline'}}>{c}</p>
+                                {/*The below binds, but when called, does not call this.startRecording inside startRecord.*/}
+                                <button type="button" onClick={startRecord}>Start recording</button>
+                                {/*The below does not bind.*/}
+                                <button type="button" onClick={this.stopRecording}>Stop recording</button>
+                            </li>
+                        );
+                    })}
+                </ul>
                 <audio id="rec-JS-audio" controls={true} muted={false} src={this.state.audioURL} />
                 <pre id="log"></pre>
             </div>
