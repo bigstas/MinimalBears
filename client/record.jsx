@@ -4,40 +4,15 @@ import { Link } from 'react-router';
 //import INTERPRETED from '../client/static/translations';
 import AudioRecorder from 'react-audio-recorder';
 
-
 // using $ meteor add maxencecornet:audio-recorder
-// if ultimately not used, delete this code and run
-// $ meteor remove maxencecornet:audio-recorder
 RecordPage = React.createClass({
-    //********* from here - using MaximeCornet audio recoder *********
-    handleRecord () {
-        // no initialisation, following Nav example of this.mouseIsDownOnDropdown
-        this.audioRecorder = new AudioRecorder();
-        this.audioRecorder.startRecording();
-    },
-    // at the moment this autodownloads, not what we want but perhaps we could modify it?
-    stopRecord () { 
-        if (this.audioRecorder) {
-            this.audioRecorder.stopRecording('wav', 'wavFile', this.recordCallback); 
-        }
-    },
-    
-    recordCallback () {
-        // populate this
-    },
-    
-    // --end
-    //********* from here on - using record.js *********
     getInitialState () {
         return {
             audioURL: null,
+            recording: false,
+            recordedUpTo: 0,
             recordingWords: ["youth in Asia", "euthanasia", "a mission", "omission", "emission"]
         }
-    },
-    
-    __log (e, data) {
-        // this is supposed to update a DOM <pre> element with id="log"
-        //log.innerHTML += "\n" + e + " " + (data || '');
     },
                                
     startUserMedia (stream) {
@@ -55,26 +30,29 @@ RecordPage = React.createClass({
         //__log('Recorder initialised.');
     },
     
-    // this definitely needs to be done differently!
-    startRecording (button) {
+    startRecording (e : Event) {
         recorder && recorder.record();
-        // Below two lines disabled *temporarily*. Need to get that working later, but first there are bigger fish to fry, like getting this actually record stuff.
-        //button.disabled = true;
-        //button.nextElementSibling.disabled = false;
+        this.setState({
+            recording: true
+        });
         console.log('Recording...');
         
-        document.getElementById('recWord-0').style.backgroundColor = 'yellow';
+        var highlightId = 'recWord-' + this.state.recordedUpTo.toString();
+        
+        document.getElementById(highlightId).style.backgroundColor = 'yellow';
+        //e.target.disabled = true; -- this is done in render using state
+        //e.target.nextElementSibling.nextElementSibling.disabled = true;
     },
-    // ...so does this!
-    stopRecording (button) {
+    
+    stopRecording (e : Event) {
         recorder && recorder.stop();
-        // Below two lines disabled *temporarily*. Need to get that working later, but first there are bigger fish to fry, like getting this actually record stuff.
-        //button.disabled = true;
-        //button.previousElementSibling.disabled = false;
         console.log('Stopped recording.')
+        this.setState({
+            recording: false
+        });
         
         // reset background colours (highlighting)
-        for (i=0; i<5; i++) {
+        for (i=0; i<(this.state.recordingWords.length); i++) {
             var id = 'recWord-' + i.toString();
             document.getElementById(id).style.backgroundColor = 'white';
         }
@@ -84,6 +62,21 @@ RecordPage = React.createClass({
         this.updateAudio();
     
         recorder.clear();
+    },
+    
+    nextRecording () {
+        console.log("hello!");
+        
+        // only need to increment this.state.recordedUpTo up to length of list
+        if (this.state.recordedUpTo < this.state.recordingWords.length -1) {
+            this.setState({
+                recordedUpTo: this.state.recordedUpTo +1
+            });
+        } else {
+            // otherwise, stop the recording as we've finished
+            // doesn't work...
+            this.stopRecording;
+        }
     },
     
     // function to be passed to exportWAV
@@ -125,39 +118,44 @@ RecordPage = React.createClass({
     },
     
     render() {
-        // The buttons in the .map won't bind to this.startRecording, presumably because they can't see it.
-        // That's the rationale behind this function here - to mediate between those buttons and the this.startRecording method.
-        // They do bind to it, but the the startRecord function seems to be having trouble seeing this.startRecording as well.
-        // But the buttons in the first <div> bind!
-        // And binding with .map works in Arena!
-        // WTF! So I'm not sure what to do.
-        function startRecord() {
-            this.startRecording;
-            // The below prints 'undefined'.
-            console.log(this.startRecording);
+        // var display = 'inline'; // this is the default value
+        var recordLabel;
+        if (this.state.recordedUpTo === 0 && this.state.recording === false) {
+            recordLabel = "Start recording";
+        } else if (this.state.recordedUpTo < this.state.recordingWords.length -1 && this.state.recording === false) {
+            recordLabel = "Continue recording";
+        } else if (this.state.recordedUpTo === this.state.recordingWords.length -1 && this.state.recording === true) {
+            recordLabel = "Done"; 
+        } else if (this.state.recordedUpTo === this.state.recordingWords.length -1 && this.state.recording === false) {
+            recordLabel = "Start again";
+        } else {
+            recordLabel = "Next";
         }
         
         return (
             <div id='record'>
                 <p>Here is your list of words to record.</p>
                 <div>
-                    {/*The below binds.*/}
-                    <button type="button" onClick={this.startRecording}>Start recording</button>
-                    <button type="button" onClick={this.stopRecording}>Stop recording</button>
+                    {/*Either the "start" button or the "next" button, depending on whether you are in the middle or recording or not.*/}
+                    <button type="button" disabled={false}
+                        onClick={this.state.recording ? this.nextRecording : this.startRecording}>
+                        {recordLabel}
+                        </button>
+                    <button type="button" disabled={!this.state.recording} onClick={this.stopRecording}>Stop recording</button>
                 </div>
                 <ul>
                     {this.state.recordingWords.map(function(c, index) {
                         var recWordId = 'recWord-' + index.toString();
+                        var backgroundColor = this.state.recording && index === this.state.recordedUpTo ? 'yellow' : 'white';
                         return (
-                            <li id={recWordId} className='recWord' key={index}>
+                            <li id={recWordId} className='recWord' key={index} style={{backgroundColor}}>
                                 <p style={{display: 'inline'}}>{c}</p>
-                                {/*The below binds, but when called, does not call this.startRecording inside startRecord.*/}
-                                <button type="button" onClick={startRecord}>Start recording</button>
-                                {/*The below does not bind.*/}
+                                <button type="button" onClick={this.startRecording}>Start recording</button>
                                 <button type="button" onClick={this.stopRecording}>Stop recording</button>
+                                <audio controls={false} muted={false} src={this.state.audioURL} />
                             </li>
                         );
-                    })}
+                    }, this)}
                 </ul>
                 <audio id="rec-JS-audio" controls={true} muted={false} src={this.state.audioURL} />
                 <pre id="log"></pre>
