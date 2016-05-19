@@ -1,15 +1,14 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
-import INTERPRETED from '../static/translations'; 
 
 Home = React.createClass({    
     render() {
         return (
             <div id='home'>
                 <div id='usermessage'>
-                    <h2>{INTERPRETED.welcome[this.props.interfaceLanguage]}</h2>
-                    <p><strong>Minimal Bears</strong>{INTERPRETED.hometext[this.props.interfaceLanguage]}</p>
+                    <h2>Welcome!</h2>
+                    <p><strong>Minimal Bears</strong> is an app that will help you learn new sounds in foreign languages.</p>
                     <div className='homebtn' id='guestbutton'><Link to="/train">Continue as Guest</Link></div>
                     <div className='homebtn' id='signinbutton'><Link to="/login" >Sign In</Link></div>
                     <div className='homebtn' id='registerbutton'><Link to="/register">Register</Link></div>
