@@ -10,7 +10,8 @@ RecordPage = React.createClass({
             audioURLs: [],
             recording: false,
             //recordedUpTo: -1, // '0' means that you *have* recorded the first one
-            reRecordIndex: -1,
+            active: -1,
+            //reRecordIndex: -1,
             recordingWords: ["youth in Asia", "euthanasia", "a mission", "omission", "emission"]
         }
     },
@@ -36,105 +37,80 @@ RecordPage = React.createClass({
     startRecording () {        
         this.setState({
             recording: true,
-            //recordedUpTo: 0,
-            audioURLs: [] // reset all audio URLs
+            active: 0
         });
         recorders[0].record();
         console.log('Recording...');
     },
     
-    cutRecording (active) {
-        recorders[active].stop();
-        console.log('Stopped recording with recorder number ' + active.toString());
-        
-        this.setState({
-            recording: false
-        });
+    cutRecording () {
+        recorders[this.state.active].stop();
+        console.log('Stopped recording with recorder number ' + this.state.active.toString());
         
         // create WAV download link using audio data blob
         // create client-side URL for <audio /> to use as src
-        this.updateAudio(active);
+        recorders[this.state.active].exportWAV(this.makeUrl.bind(this, this.state.active));
         
         // clear recorders
-        recorders[active].clear();
-        
-        /*
-        // if cutting from re-record
-        if (this.state.reRecordIndex !== -1) {
-            this.setState({
-                reRecordIndex: -1,
-                recording: false
-            });
-        }
-        */
-    },
-    
-    stopRecording () {
-        //recorder && recorder.stop();
-        // Below - if you want to save the recorded audio for the current word
-        //this.cutRecording(this.state.recordedUpTo);
-        this.cutRecording(this.state.audioURLs.length);
-        
-        console.log('Stopped all recordings.');
-        this.setState({
-            recording: false
-        });
-    },
-    
-    nextRecording () {
-        // cutRecording also saves the recording.
-        // We only need to call it if we're pressing 'next'.
-        // If we're pressing 'continue recording', this would have already been done for us with 'stop recording'.
-        if (this.state.recording) {
-            //this.cutRecording(this.state.recordedUpTo);
-            this.cutRecording(this.state.audioURLs.length);
-            this.setState({
-                // just to get a re-render!
-            });
-        } else {
-            this.setState({
-                recording: true
-            });
-        }
-        
-        //recorders[this.state.recordedUpTo +1].record();
-        console.log(this.state.audioURLs);
-        recorders[this.state.audioURLs.length].record();
-        
-        /*
-        // If this.state.recording === true, then we're pressing 'Next' during recording, meaning we should increment this.state.recordedUpTo.
-        // If false, then we want to continue from where we left off, and we want to set this.state.recording = true.
-        if (this.state.recording) {
-            this.setState({
-                recordedUpTo: this.state.recordedUpTo +1
-            });
-        } else {
-            this.setState({
-                recording: true
-            });
-        }
-        */
+        recorders[this.state.active].clear();
     },
     
     // function to be passed to exportWAV
-    makeUrl (blob) {
-        console.log("makeUrl says that this.state.reRecordIndex is equal to " + this.state.reRecordIndex.toString() );
-        if (this.state.reRecordIndex === -1) {
-            // if not re-recording, push to make array 1 longer
-            this.state.audioURLs.push(URL.createObjectURL(blob));
-        } else {
-            // if re-recording, replace element with re-recorded audio URL
-            this.state.audioURLs[this.state.reRecordIndex] = URL.createObjectURL(blob);
-        }
-        // we need the component to update, so don't remove this.setState!
+    makeUrl (index, blob) {
+        this.state.audioURLs[index] = URL.createObjectURL(blob);
+    },
+    
+    stopRecording () {
+        this.cutRecording();
+        
+        console.log('Stopped all recordings.');
         this.setState({
-            reRecordIndex: -1
+            recording: false,
+            active: this.state.active +1
         });
     },
     
-    updateAudio(active) {
-        //recorder && recorder.exportWAV(this.makeUrl);
-        recorders[active].exportWAV(this.makeUrl);
+    finishRecording() {
+        this.cutRecording();
+        
+        this.setState({
+            recording: false,
+            active: this.state.active +1
+        })
+    },
+    
+    nextRecording () {
+        this.cutRecording();
+        console.log(this.state.audioURLs);
+        recorders[this.state.active +1].record();
+        this.setState({
+            active: this.state.active +1
+        });
+    },
+    
+    continueRecording () {
+        recorders[this.state.active].record();
+        this.setState({
+            recording: true
+        })
+    },
+    
+    reRecord(index) {
+        this.setState({
+            active: index,
+            recording: 2
+        });
+        // no need to clear, as clear is done on cutRecording after it is recorded the first time
+        recorders[index].record();
+        console.log("Re-recording audio with index " + index.toString() + "...");
+    },
+    
+    stopReRecord () {
+        this.cutRecording();
+        this.setState({
+            active: this.state.audioURLs.length,
+            recording: false
+        })
     },
     
     playbackAll() {
@@ -144,14 +120,6 @@ RecordPage = React.createClass({
             var audioId = '#recWord-' + i.toString() + '-audio'; // querySelector uses CSS selectors, so '#' necessary to mark id
             document.querySelector(audioId).addEventListener("ended", this.playback(i+1), false);
         }
-        
-        /*
-        // below - plays all the audio at once!
-        for (i=0; i<=(this.state.recordedUpTo); i++) {
-            var audioId = 'recWord-' + i.toString() + '-audio';
-            document.getElementById(audioId).play();
-        }
-        */
     },
     
     playback(index) {
@@ -164,18 +132,6 @@ RecordPage = React.createClass({
         } else {
             console.log("audio URL out of range: " + index.toString());
         }
-    },
-    
-    reRecord(index) {
-        // re-record!!
-        //alert("This feature is yet to be implemented.");
-        this.setState({
-            reRecordIndex: index,
-            recording: true
-        });
-        // no need to clear, as clear is done on cutRecording after it is recorded the first time
-        recorders[index].record();
-        console.log("Re-recording audio with index " + index.toString() + "...");
     },
     
     submitAudio() {
@@ -207,32 +163,41 @@ RecordPage = React.createClass({
     },
     
     render() {
-        // var display = 'inline'; // this is the default value
+        // The following two variables define what the main "record" button will look like and do.
         var recordLabel;
         var recFunction;
-        //if (this.state.recordedUpTo === -1 && this.state.recording === false) {
-        if (this.state.audioURLs.length === 0 && this.state.recording === false) {
-            recordLabel = "Start recording";
-            recFunction = this.startRecording;
-        } // else if (this.state.recordedUpTo < this.state.recordingWords.length -1 && this.state.recording === false) {
-        else if (this.state.audioURLs.length < this.state.recordingWords.length && this.state.recording === false) {
-            recordLabel = "Continue recording";
-            recFunction = this.nextRecording; 
-        } // else if (this.state.recordedUpTo === this.state.recordingWords.length -1 && this.state.recording === true) {
-        else if (this.state.audioURLs.length === this.state.recordingWords.length -1 && this.state.recording === true) {
-            recordLabel = "Done";
-            recFunction = this.stopRecording;
-        } // else if (this.state.recordedUpTo === this.state.recordingWords.length -1 && this.state.recording === false) {
-        else if (this.state.audioURLs.length === this.state.recordingWords.length && this.state.recording === false) {
-            recordLabel = "Start again";
-            recFunction = this.startRecording;
-        } else {
-            recordLabel = "Next";
-            recFunction = this.nextRecording; 
+        var playButtonDisabled = false;
+
+        if (this.state.recording === false) {
+            if (this.state.active === -1) {
+                recordLabel = "Start recording";
+                recFunction = this.startRecording;
+            }
+            else if (this.state.active < this.state.recordingWords.length) {
+                recordLabel = "Continue recording";
+                recFunction = this.continueRecording; 
+            }
+            else {
+                recordLabel = "Re-record all";
+                recFunction = this.startRecording;
+            }
         }
-        
-        //var playAllDisabled = (this.state.recordedUpTo === -1 || this.state.recording) ? true : false;
-        //var submitDisabled = (this.state.recordedUpTo === this.state.recordingWords.length && !this.state.recording) ? false : true;
+        else if (this.state.recording === true) {
+            if (this.state.active === this.state.recordingWords.length) {
+                recordLabel = "Done";
+                recFunction = this.finishRecording;
+            }
+            else {
+                recordLabel = "Next";
+                recFunction = this.nextRecording; 
+            }
+        }
+        // this is when re-recording, and this.state.recording === 2
+        else {
+            playButtonDisabled = true;
+            recordLabel = '...';
+        }
+
         var playAllDisabled = (this.state.audioURLs.length === 0 || this.state.recording) ? true : false;
         var submitDisabled = (this.state.audioURLs.length === this.state.recordingWords.length && !this.state.recording) ? false : true;
         
@@ -241,7 +206,7 @@ RecordPage = React.createClass({
                 <p>Here is your list of words to record.</p>
                 <div>
                     {/*Either the "start" button or the "next" button, depending on whether you are in the middle or recording or not.*/}
-                    <button type="button" disabled={false}
+                    <button type="button" disabled={playButtonDisabled}
                         onClick={recFunction}>
                         {recordLabel}
                         </button>
@@ -255,19 +220,17 @@ RecordPage = React.createClass({
             
                         //var backgroundColor = this.state.recording && index === this.state.recordedUpTo ? 'yellow' : 'white';
                         //var localButtonDisabled = (index <= this.state.recordedUpTo && this.state.recording === false) ? false : true;
-                        var backgroundColor = (this.state.recording && ((index === this.state.audioURLs.length && this.state.reRecordIndex === -1) || index === this.state.reRecordIndex)) ? 'yellow' : 'white';
+                        var backgroundColor = this.state.recording && (index === this.state.active) ? 'yellow' : 'white';
             
-                        var playbackButtonDisabled = (index < this.state.audioURLs.length && this.state.recording === false) ? false : true;
+                        var playbackButtonDisabled = (index < this.state.active && this.state.recording === false) ? false : true;
+                        var reRecordButtonDisabled = (index < this.state.active && this.state.recording === false) || (this.state.recording === 2) ? false: true;
             
-                        var reRecordButtonDisabled = (index < this.state.audioURLs.length && this.state.recording === false) || (index === this.state.reRecordIndex && this.state.recording === true) ? false: true;
-                        var reRecordLabel = (index === this.state.reRecordIndex) ? 'Done re-recording' : 'Re-record';
-                        var reRecordFunc = this.state.reRecordIndex === -1 ? this.reRecord.bind(this, index) : this.cutRecording.bind(this, index);
+                        var reRecordLabel = (this.state.recording === 2 && index === this.state.active) ? 'Done re-recording' : 'Re-record';
+                        var reRecordFunc = this.state.recording === 2 ? this.stopReRecord : this.reRecord.bind(this, index);
             
                         return (
                             <li id={recWordIdLi} className='recWord' key={index} style={{backgroundColor}}>
                                 <p style={{display: 'inline'}}>{c}</p>
-                                {/*In my (Staś) editor, there is inconsistent colouring of 'this' and other variables. Why?*/}
-                                {/*It seems to be calling the function, rather than binding it...*/}
                                 <button type="button" disabled={playbackButtonDisabled} onClick={this.playback.bind(this, index)}>Play back</button>
                                 <button type="button" disabled={reRecordButtonDisabled} onClick={reRecordFunc}>{reRecordLabel}</button>
                                 <audio id={recWordIdAudio} controls={false} muted={false} src={this.state.audioURLs[index]} />
