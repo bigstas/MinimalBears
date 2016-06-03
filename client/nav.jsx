@@ -32,15 +32,16 @@ Nav = React.createClass({
     },
     
     pageClick: function (e) {
-        if (this.mouseIsDownOnCalendar) { return; } 
+        if (this.mouseIsDownOnDropdown) { return; } 
         else { this.setState({ dropdown: false }); }
     },
 
+    // it's funny because this.mouseIsDownOnDropdown is never initialised
     mouseDownHandler: function () {
-        this.mouseIsDownOnCalendar = true;
+        this.mouseIsDownOnDropdown = true;
     },
     mouseUpHandler: function () {
-        this.mouseIsDownOnCalendar = false;
+        this.mouseIsDownOnDropdown = false;
     },
     
     render() { 

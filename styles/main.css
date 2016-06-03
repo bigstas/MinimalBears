@@ -234,6 +234,19 @@ li a, li p {
 #record * {margin-left: 10px;}
 .fileNotReady {display: none;}
 
+.recWord {clear: left;}
+
+audio::-webkit-media-controls-timeline-container,
+audio::-webkit-media-controls-timeline,
+audio::-webkit-media-controls-mute-button,
+audio::-webkit-media-controls-time-remaining-display
+{
+    display: none;
+}
+
+audio {
+    width: 45px;
+}
 
 /* ================================== */
 /* ============ about.js ============ */
