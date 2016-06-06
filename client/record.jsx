@@ -2,6 +2,7 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
 import AudioRecorder from 'react-audio-recorder';
+import update from 'react-addons-update';
 
 // using $ meteor add maxencecornet:audio-recorder
 RecordPage = React.createClass({
@@ -57,7 +58,16 @@ RecordPage = React.createClass({
     
     // function to be passed to exportWAV
     makeUrl (index, blob) {
+        this.setState({
+            audioURLs: update(this.state.audioURLs, {[index]: {$set: URL.createObjectURL(blob) }})
+        });
+        
+        /*
         this.state.audioURLs[index] = URL.createObjectURL(blob);
+        this.setState({
+            // it's a ghost!
+        });
+        */
     },
     
     stopRecording () {
@@ -116,17 +126,27 @@ RecordPage = React.createClass({
     playbackAll() {
         // Below isn't working properly... still plays all the audio at once...
         //for (i=0; i<=(this.state.recordedUpTo); i++) {
+        
+        this.setState({
+            recording: "playback",
+            active: 0
+        });
+        
+        /*
         for (i=0; i<=(this.state.audioURLs.length); i++) {
             var audioId = '#recWord-' + i.toString() + '-audio'; // querySelector uses CSS selectors, so '#' necessary to mark id
             document.querySelector(audioId).addEventListener("ended", this.playback(i+1), false);
         }
+        */
     },
     
     playback(index) {
+        // Plays the audio element with a given index.
         if (this.state.audioURLs[index]) {
             // debug logs
             console.log(this.state.audioURLs);
             console.log("Index is " + index.toString());
+            // get element id and play audio
             var audioId = 'recWord-' + index.toString() + '-audio';
             document.getElementById(audioId).play();
         } else {
@@ -183,7 +203,7 @@ RecordPage = React.createClass({
             }
         }
         else if (this.state.recording === true) {
-            if (this.state.active === this.state.recordingWords.length) {
+            if (this.state.active === this.state.recordingWords.length -1) {
                 recordLabel = "Done";
                 recFunction = this.finishRecording;
             }
@@ -193,9 +213,28 @@ RecordPage = React.createClass({
             }
         }
         // this is when re-recording, and this.state.recording === 2
-        else {
+        else if (this.state.recording === 2) {
             playButtonDisabled = true;
             recordLabel = '...';
+        }
+        else if (this.state.recording === "playback") {
+            if (this.state.active < this.state.audioURLs.length) {
+                var audioId = 'recWord-' + this.state.active.toString() + '-audio';
+                var _this = this; // so we can access 'this' inside the function
+                document.getElementById(audioId).addEventListener("ended", function(){
+                    _this.setState({
+                        active: _this.state.active +1
+                    });
+                });
+                this.playback(this.state.active);
+            } else {
+                this.setState({
+                    recording: false
+                });
+            }
+        }
+        else {
+            throw ("this.state.recording is unrecognised, current value is: " + this.state.recording.toString())
         }
 
         var playAllDisabled = (this.state.audioURLs.length === 0 || this.state.recording) ? true : false;

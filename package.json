@@ -8,6 +8,7 @@
     "react": "^0.14.8",
     "react-addons-pure-render-mixin": "^0.14.8",
     "react-addons-test-utils": "^0.14.8",
+    "react-addons-update": "^15.1.0",
     "react-audio-recorder": "^0.1.0",
     "react-dom": "^0.14.8",
     "react-onclickoutside": "^4.9.0",
