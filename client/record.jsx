@@ -1,7 +1,7 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
-import AudioRecorder from 'react-audio-recorder';
+//import AudioRecorder from 'react-audio-recorder';
 import update from 'react-addons-update';
 
 // using $ meteor add maxencecornet:audio-recorder
@@ -28,7 +28,7 @@ RecordPage = React.createClass({
     
         recorders = [];
         for (i=0; i<(this.state.recordingWords.length); i++) {
-            var rec = new Recorder(input);
+            var rec = new Recorder(input);  // from maxencecornet:audio-recorder
             recorders.push(rec);
         }
         console.log('Recorders initialised.')

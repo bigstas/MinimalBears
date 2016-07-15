@@ -22,7 +22,7 @@ Picker.route('/audio/:_id', function(params, req, res, next) {
             res.end(err.message)  // (TODO: we might want to do something better than this...?)
         } else {
             // If the file was read successfully, return the data
-            res.end(data, null)
+            res.end(data, null)  // null encoding
         }
     })
     

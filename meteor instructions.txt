@@ -7,32 +7,25 @@ LOCAL POSTGRES INSTRUCTIONS
 4. run the app with (own app) APP$ ./run-app.sh
 
 
-DEMETEORIZE INSTRUCTIONS
-0. install demeteorizer: $ npm install -g demeteorizer
-1a. make sure you have the right Node version (v0.10.40 works): $ node --version
-1b. if you need to change versions, install nvm: $ npm install -g nvm
-1c. install the right version with nvm, e.g.: $ nvm install v0.10.40
-2. run the demeteorizer: MinimalBears$ demeteorizer
-3. change directory: $ cd ./.demeteorized/bundle/programs/server
-4. install packages: server$ npm install
-5. run app with environment variables (postgres path is essential): server$ POSTGRESQL_URL="postgres://127.0.0.1/minbears" PORT=8080 ROOT_URL=http://localhost:8080 npm start
-
-
 DEPLOYMENT TO GANDI INSTRUCTIONS
 (See also docs at https://wiki.gandi.net/en/simple/git)
 0*. create local directory for git (if not done so): $ mkdir {vhost} , i.e. $ mkdir www.minimalbears.com
 1. go to that directory: $ cd www.minimalbears.com
 2*. initialise git (if directory just created): $ git init
 3*. connect this directory to the remote directory (if not yet done so): $ git remote add origin ssh+git://639050@git.dc2.gpaas.net/default.git
+3+1/2*. pull the remote branch: $ git pull origin master
 4. add files to current commit (-A is "all") $ git add -A
 5. commit: $ git commit -m "Version 0.0.2" (this is the text about what you just did / are committing)
 6. push: $ git push origin master
 7. deploy: $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
+[On Windows, install ssh: https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH]
 
 
 BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 0. inside MinimalBears run $ meteor build ../MinimalBearsBuild/ --directory --architecture os.linux.x86_64
-1a. inside MinimalBearsBuild run $ git add .
+1a. inside MinimalBearsBuild run $ git add -A 
+["git add ." stages new files and modified files, but not deletions; "git add -A" stages all three]
+[make sure not to delete "main.js", which does not come directly from Meteor]
 1b. to check that things are added, run $ git status
 2. $ git commit -m "<your message here for future reference>"
 3. $ git push origin master
