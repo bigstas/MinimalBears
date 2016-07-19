@@ -1,6 +1,4 @@
-accounts-base@1.2.8
 allow-deny@1.0.5
-apollo@0.0.3
 autoupdate@1.2.11
 babel-compiler@6.8.5
 babel-runtime@0.1.9_1
@@ -18,7 +16,6 @@ coffeescript@1.1.4
 ddp@1.2.5
 ddp-client@1.2.9
 ddp-common@1.2.6
-ddp-rate-limiter@1.0.5
 ddp-server@1.2.10
 deps@1.0.12
 diff-sequence@1.0.6
@@ -37,7 +34,6 @@ insecure@1.0.7
 jquery@1.11.9
 launch-screen@1.0.12
 livedata@1.0.18
-localstorage@1.0.11
 logging@1.0.14
 maxencecornet:audio-recorder@0.0.4
 meteor@1.1.16
@@ -62,13 +58,12 @@ practicalmeteor:mocha-core@1.0.1
 practicalmeteor:sinon@1.14.1_2
 promise@0.7.3
 random@1.0.10
-rate-limit@1.0.5
+react-meteor-data@0.2.9
 reactive-dict@1.1.8
 reactive-var@1.0.10
 reload@1.1.10
 retry@1.0.8
 routepolicy@1.0.11
-service-configuration@1.0.10
 session@1.1.6
 spacebars@1.0.12
 spacebars-compiler@1.0.12
@@ -77,7 +72,7 @@ standard-minifier-js@1.0.8
 standard-minifiers@1.0.6
 templating@1.1.14
 templating-tools@1.0.4
-tmeasday:check-npm-versions@0.3.1
+tmeasday:check-npm-versions@0.2.0
 tmeasday:test-reporter-helpers@0.2.1
 tracker@1.0.15
 ui@1.0.11

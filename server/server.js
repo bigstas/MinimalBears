@@ -1,22 +1,14 @@
-//import { createApolloServer } from 'meteor/apollo';
+import { schema } from '/lib/schema';
 
-/*
-import { schema, resolvers } from '/imports/api/schema';
-
-createApolloServer({
-    graphiql: true,
-    pretty: true,
-    schema,
-    resolvers,
-});
-*/
-
-//createApolloServer({}, {path: 'http://localhost:3456'})
-
-/*
 import { apolloServer } from 'apollo-server';
+import express from 'express';
 
-var app = express();
+const GRAPHQL_PORT = 8080;
 
-app.use('http://localhost:3456', apolloServer({ schema: typeDefinitionArray, graphiql: true }));
-*/
+const graphQLServer = express();
+
+graphQLServer.use('/graphql', apolloServer({ schema: schema, graphiql: true }));
+
+graphQLServer.listen(GRAPHQL_PORT, () => console.log(
+    `GraphQL Server is now running on http://localhost:${GRAPHQL_PORT}/graphql`
+));

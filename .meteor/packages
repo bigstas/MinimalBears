@@ -39,13 +39,13 @@ maxencecornet:audio-recorder
 # * accounts-password@=1.1.2-rc.0 <- top level
 # * accounts-password@=1.1.6 <- top level
 
+react-meteor-data  # For creating containers to access data
 
-meteorhacks:picker
+meteorhacks:picker  # For server-side routing
 
 # from meteor-starter-kit
 #std:accounts-ui
 #std:accounts-basic
 #accounts-password
-#react-meteor-data
 #seba:minifiers-autoprefixer  # for fourseven:scss, instead of standard-minifier-css???
-apollo
+#apollo

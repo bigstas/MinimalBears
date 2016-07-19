@@ -12,6 +12,7 @@ import TrainPage from '../client/training/train'; // takes place of arena
 import ProfileContainer from '../client/profile';
 import About from '../client/static/about';
 import NotFound from '../client/static/notfound';
+import Dummy from '../client/dummy';
 
 
 export const renderRoutes = () => (
@@ -24,6 +25,7 @@ export const renderRoutes = () => (
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
             <Route path="profile" component={ProfileContainer} />
+            <Route path="dummy" component={Dummy} />
             <Route path="*" component={NotFound} />
         </Route>
     </Router>

@@ -65,11 +65,12 @@ Selector.propTypes = {
     //activeLanguageId: React.PropTypes.number
     // (above handled elsewhere)
 };
-/*
+
 export default createContainer(({params}) => {
     const { activeLanguageId } = params; // we're so ES6! Bring on the future
     // the above means
     // const activeLanguageId = params.activeLanguageId;
+    /*
     const languagesHandle = Meteor.subscribe('langdata');
     const contrastHandle = Meteor.subscribe('contrastdata');
     const loading = !languagesHandle.ready() && !contrastHandle.ready();
@@ -77,6 +78,10 @@ export default createContainer(({params}) => {
     const contrasts = Contrasts.where({
         language: activeLanguageId
     }).fetch(); // alternative syntax is }).select("*");
+    */
+    loading = false;
+    languages = [{id: 1, name: 'English'}];
+    contrasts = [{id: 1, name: 'ee/i'}];
     
     return {
         //activeLanguageId,
@@ -85,5 +90,3 @@ export default createContainer(({params}) => {
         contrasts
     };
 }, Selector);
-*/
-export default Selector;
