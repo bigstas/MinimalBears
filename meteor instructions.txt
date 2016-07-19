@@ -22,6 +22,7 @@ DEPLOYMENT TO GANDI INSTRUCTIONS
 
 
 BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
+-1. inside MinimalBearsBuild run $ git pull origin master
 0. inside MinimalBears run $ meteor build ../MinimalBearsBuild/ --directory --architecture os.linux.x86_64
 1a. inside MinimalBearsBuild run $ git add -A 
 ["git add ." stages new files and modified files, but not deletions; "git add -A" stages all three]
@@ -30,6 +31,7 @@ BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 2. $ git commit -m "<your message here for future reference>"
 3. $ git push origin master
 4. $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
+5. $ ssh 639050@console.dc2.gpaas.net 'npm install' ?
 
 
 NPM INSTRUCTIONS

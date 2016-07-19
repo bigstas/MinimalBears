@@ -1,3 +1,4 @@
+/*
 // Ideally we would DRY this but I don't know if Meteor allows that
 Meteor.publish('beardata', function() {
 	var cursor = Bears
@@ -25,6 +26,7 @@ Meteor.methods({
 	'getFerocity': function(age) {return "angry"},
 	'doNothing': function(nothing) {return null}
 });
+*/
 
 /* Meteor.publishTransformed('beardata', function() {
 	return Bears
@@ -38,6 +40,7 @@ Meteor.methods({
 		});
 }); */
 
+/*
 console.log(Bears.fetch()); 
 
 
@@ -57,3 +60,5 @@ Meteor.methods({
         console.log(bear.colour);
     }
 });
+
+*/

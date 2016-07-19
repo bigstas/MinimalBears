@@ -65,7 +65,7 @@ Selector.propTypes = {
     //activeLanguageId: React.PropTypes.number
     // (above handled elsewhere)
 };
-
+/*
 export default createContainer(({params}) => {
     const { activeLanguageId } = params; // we're so ES6! Bring on the future
     // the above means
@@ -85,3 +85,5 @@ export default createContainer(({params}) => {
         contrasts
     };
 }, Selector);
+*/
+export default Selector;

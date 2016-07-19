@@ -6,7 +6,7 @@
 
 meteor-base             # Packages every Meteor app needs to have
 mobile-experience       # Packages for a great mobile UX
-mongo                   # The database Meteor supports right now
+#mongo                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
 session                 # Client-side reactive dictionary for your app
 jquery                  # Helpful client-side library
@@ -19,10 +19,7 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 # autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
 
-# react                 # Now using npm packages instead
-react-meteor-data       # This is meteor-specific so belongs here, rather than with npm
-
-simple:pg
+# simple:pg #old
 # maximum:server-transform
 
 # testing
@@ -44,3 +41,11 @@ maxencecornet:audio-recorder
 
 
 meteorhacks:picker
+
+# from meteor-starter-kit
+#std:accounts-ui
+#std:accounts-basic
+#accounts-password
+#react-meteor-data
+#seba:minifiers-autoprefixer  # for fourseven:scss, instead of standard-minifier-css???
+apollo
