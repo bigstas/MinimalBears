@@ -1,14 +1,10 @@
-import { schema } from '/lib/schema';
+// Access the data under www.minimalbears.com/graphql
 
-import { apolloServer } from 'apollo-server';
-import express from 'express';
+import postgraphql from 'postgraphql';
 
-const GRAPHQL_PORT = 8080;
-
-const graphQLServer = express();
-
-graphQLServer.use('/graphql', apolloServer({ schema: schema, graphiql: true }));
-
-graphQLServer.listen(GRAPHQL_PORT, () => console.log(
-    `GraphQL Server is now running on http://localhost:${GRAPHQL_PORT}/graphql`
-));
+// PostGraphQL provides 'connect'-style middleware to process queries
+// We can add this using Meteor's WebApp.connectHandlers
+// See http://meteorpedia.com/read/REST_API#WebApp.connectHandlers%20and%20connect
+// Note that we can't use Picker here, because we only want this middleware for one route
+WebApp.connectHandlers
+    .use('/graphql', postgraphql('postgres://localhost:5432/postgres', options={development: false}))

@@ -6,9 +6,7 @@ import { renderRoutes } from '../client/routes';
 import React from 'react';
 
 import ApolloClient from 'apollo-client';
-//import { meteorClientConfig } from 'meteor/apollo';
 import { ApolloProvider } from 'react-apollo';
-
 const client = new ApolloClient();
 
 Meteor.startup(() => {
