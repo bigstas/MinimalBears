@@ -5,6 +5,25 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
+// new gql way of getting data...
+import { connect } from 'react-apollo';
+import gql from 'graphql-tag';
+
+function mapQueriesToProps({ ownProps, state }) {
+    return {
+        data: {
+            query: gql`{fakebearNodes {
+                nodes {
+                    foo
+                    bar
+                }
+            }}`
+        }
+    }
+};
+//...end
+
+
 // Progress bar
 var ProgressBar = React.createClass({
     render() {
@@ -145,6 +164,13 @@ Arena = React.createClass({
             contrastsToBeMapped = this.props.contrasts;
         }
         
+        var textList = ["placeholder", "more placeholder"];  
+        // If the data has been returned:
+        if (!this.props.data.loading) {
+            textList = [this.props.data.fakebearNodes.nodes[0].bar,
+                    this.props.data.fakebearNodes.nodes[0].bar]
+        }
+        
         return (
             <div id="arena">
                 <p id='arenaMessage' style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
@@ -156,6 +182,7 @@ Arena = React.createClass({
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
+                    {/*
                     {this.state.activePair.items.map(function(c) {
                         return <WordOption
                                 word={c.text}
@@ -163,10 +190,21 @@ Arena = React.createClass({
                                 callbackParent={this.onWordChosen}
                                 mode={this.state.mode} />
                     }, this)}
+                    */}
+                    {
+                        textList.map(function(c) {
+                            return <WordOption
+                                word={c}
+                                feedback={"Correct!"}
+                                callbackParent={this.onWordChosen}
+                                mode={this.state.mode} />
+                        }, this)
+                    }
                 </div>
             </div> 
         );
     }
 });
 
-export default createContainer(({params}) => {return {};}, Arena);
+//export default createContainer(({params}) => {return {};}, Arena);
+export default connect({mapQueriesToProps})(Arena)

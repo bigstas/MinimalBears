@@ -3,6 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Arena from '../training/arena';
 import Selector from '../training/selector';
 
+
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
 TrainPage = React.createClass({
     getInitialState() {
