@@ -14,3 +14,6 @@ localgandi.sql
 # asset locations
 private
 public
+
+# Apple internal automatic admin
+.DS_Store
