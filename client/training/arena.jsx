@@ -10,13 +10,20 @@ import { connect } from 'react-apollo';
 import gql from 'graphql-tag';
 
 function mapQueriesToProps({ ownProps, state }) {
+    var aNumber = 1;
+    var bNumber = 1;
+    
     return {
         data: {
-            query: gql`{fakebearNodes {
+            query: gql`{contrastNodes (language: ${aNumber + bNumber}) {
                 nodes {
-                    foo
-                    bar
+                    name
                 }
+            }}`
+        },
+        info: {
+            query: gql`{itemByRowId (rowId: 1) {
+                homophones
             }}`
         }
     }
@@ -131,7 +138,7 @@ Arena = React.createClass({
             mode: "ask",
             activePair: pair
         });
-        var snd = new Audio(pair.url);
+        var snd = new Audio("http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav");
         snd.play();
         // (If the file is blocked, the response header will have connection: close)
         this.reloadData(['pair'])
@@ -166,9 +173,9 @@ Arena = React.createClass({
         
         var textList = ["placeholder", "more placeholder"];  
         // If the data has been returned:
-        if (!this.props.data.loading) {
-            textList = [this.props.data.fakebearNodes.nodes[0].bar,
-                    this.props.data.fakebearNodes.nodes[0].bar]
+        if (!this.props.data.loading && !this.props.info.loading) {
+            textList = [this.props.data.contrastNodes.nodes[1].name,
+                    this.props.info.itemByRowId.homophones[0]]
         }
         
         return (
