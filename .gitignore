@@ -17,3 +17,6 @@ public
 
 # Apple internal automatic admin
 .DS_Store
+
+# gandi db dump for development
+mirror.sql
