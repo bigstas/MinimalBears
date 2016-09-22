@@ -14,10 +14,10 @@ function mapQueriesToProps({ ownProps, state }) {
     var bNumber = 1;
     
     return {
-        data: {
-            query: gql`{contrastNodes (language: ${aNumber + bNumber}) {
+        pairs: {
+            query: gql`{contrast_with_pairsNodes (id: ${aNumber + bNumber}) {
                 nodes {
-                    name
+                    pairs
                 }
             }}`
         },
@@ -173,9 +173,10 @@ Arena = React.createClass({
         
         var textList = ["placeholder", "more placeholder"];  
         // If the data has been returned:
-        if (!this.props.data.loading && !this.props.info.loading) {
-            textList = [this.props.data.contrastNodes.nodes[1].name,
-                    this.props.info.itemByRowId.homophones[0]]
+        if (!this.props.pairs.loading && !this.props.info.loading) {
+            //textList = [this.props.data.contrastNodes.nodes[1].name,
+            //        this.props.info.itemByRowId.homophones[0]]
+            textlist = this.props.pairs.contrast_with_pairsNodes.nodes[0];
         }
         
         return (

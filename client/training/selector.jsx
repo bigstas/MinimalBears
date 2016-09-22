@@ -2,6 +2,32 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 
+// new gql way of getting data...
+import { connect } from 'react-apollo';
+import gql from 'graphql-tag';
+
+function mapQueriesToProps({ ownProps, state }) {
+    var aNumber = 1;
+    var bNumber = 1;
+    
+    return {
+        data: {
+            query: gql`{languageNodes {
+                nodes {
+                    name
+                }
+            }}`
+        },
+        info: {
+            query: gql`{itemByRowId (rowId: 1) {
+                homophones
+            }}`
+        }
+    }
+};
+//...end
+
+
 Selector = React.createClass({    
     render() {
         // A lot of repeating code here, could be optimised in future
