@@ -9,17 +9,37 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { connect } from 'react-apollo';
 import gql from 'graphql-tag';
 
+/*
+IT WORKS LIKE THIS
+
+{
+  contrastWithPairsNodes(orderBy: ROW_ID) {
+    nodes {
+      language
+      rowId
+      name
+      pairs
+    }
+  }
+}
+
+*/
+
+
 function mapQueriesToProps({ ownProps, state }) {
     var aNumber = 1;
     var bNumber = 1;
     
     return {
         pairs: {
-            query: gql`{contrast_with_pairsNodes (id: ${aNumber + bNumber}) {
+            query: gql`{contrastNodes(orderBy: $orderBy) {
                 nodes {
-                    pairs
+                    language
                 }
-            }}`
+            }}`,
+            variables: {
+                orderBy: 'ROW_ID',
+            }
         },
         info: {
             query: gql`{itemByRowId (rowId: 1) {
@@ -176,7 +196,9 @@ Arena = React.createClass({
         if (!this.props.pairs.loading && !this.props.info.loading) {
             //textList = [this.props.data.contrastNodes.nodes[1].name,
             //        this.props.info.itemByRowId.homophones[0]]
-            textlist = this.props.pairs.contrast_with_pairsNodes.nodes[0];
+            var pair = this.props.pairs.contrastNodes.nodes[0].language;
+            textList = [pair, pair];
+            //textlist = [pair.first, pair.second];
         }
         
         return (

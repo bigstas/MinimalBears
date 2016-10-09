@@ -8,15 +8,8 @@ node_modules
 # Logs
 npm-debug.log
 
-# local database store
-localgandi.sql
-
-# asset locations
-private
-public
-
 # Apple internal automatic admin
 .DS_Store
 
-# gandi db dump for development
-mirror.sql
+# databases
+*.sql
