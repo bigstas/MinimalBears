@@ -9,46 +9,18 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { connect } from 'react-apollo';
 import gql from 'graphql-tag';
 
-/*
-IT WORKS LIKE THIS
-
-{
-  contrastWithPairsNodes(orderBy: ROW_ID) {
-    nodes {
-      language
-      rowId
-      name
-      pairs
-    }
-  }
+function parsePairs(pairString) {
+    /* Take a string of the form '{"(int,int)","(int,int)",...}'
+     * where each 'int' represents an integer,
+     * and return a list of lists of integers
+     */
+    // Split into strings of the form '(int,int)'
+    stringList = pairString.substring(2, pairString.length-2).split('","')
+    // Split these strings
+    pairList = stringList.map(x => x.substring(1,x.length-1).split(','))
+    // Convert to integers
+    return pairList.map(x => x.map(y => parseInt(y)))
 }
-
-*/
-
-
-function mapQueriesToProps({ ownProps, state }) {
-    var aNumber = 1;
-    var bNumber = 1;
-    
-    return {
-        pairs: {
-            query: gql`{contrastNodes(orderBy: $orderBy) {
-                nodes {
-                    language
-                }
-            }}`,
-            variables: {
-                orderBy: 'ROW_ID',
-            }
-        },
-        info: {
-            query: gql`{itemByRowId (rowId: 1) {
-                homophones
-            }}`
-        }
-    }
-};
-//...end
 
 
 // Progress bar
@@ -111,34 +83,14 @@ Arena = React.createClass({
     getInitialState() {
     //    this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
-            ferocity: 'ferocity not ready',
             mySound: 'sound not ready',
             selection: 0,
             counter: 0,
             maxRounds: 10,
             mode: "wait",
-            activeLanguageId: null,
-            activeContrast: null,
             activePair: {items: []},
             items: [],
         };
-    },
-    
-    // After the user chooses a language
-    handleLanguageChange() {
-        this.setState({
-            activeLanguageId: document.getElementById("chooseLanguage").value,
-            activeContrast: null    // need to reset contrasts when language changes
-        });
-        console.log("The current activeLanguageId is " + this.state.activeLanguageId + " , with a type of " + typeof this.state.activeLanguageId);
-    },
-    
-    // After the user chooses a contrast
-    handleContrastChange() {
-        this.setState({
-            activeContrast: document.getElementById("chooseContrast").value,
-            mode: 'feedback'
-        });
     },
     
     // After the user chooses an option during training
@@ -175,30 +127,11 @@ Arena = React.createClass({
         }
         */
         
-        console.log(this.props);
-        
-        // Turn this into a single function to be defined elsewhere, or keep it here as these two?
-        var languagesToBeMapped;
-        if (this.props.languages === undefined) {
-            languagesToBeMapped = ['loading...'];
-        } else {
-            languagesToBeMapped = this.props.languages;
-        }
-        var contrastsToBeMapped;
-        if (this.props.contrasts === undefined) {
-            contrastsToBeMapped = ['loading...'];
-        } else {
-            contrastsToBeMapped = this.props.contrasts;
-        }
-        
         var textList = ["placeholder", "more placeholder"];  
         // If the data has been returned:
         if (!this.props.pairs.loading && !this.props.info.loading) {
-            //textList = [this.props.data.contrastNodes.nodes[1].name,
-            //        this.props.info.itemByRowId.homophones[0]]
-            var pair = this.props.pairs.contrastNodes.nodes[0].language;
-            textList = [pair, pair];
-            //textlist = [pair.first, pair.second];
+            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[0].pairs;
+            textList = parsePairs(pairString)[0]
         }
         
         return (
@@ -216,6 +149,7 @@ Arena = React.createClass({
                     {this.state.activePair.items.map(function(c) {
                         return <WordOption
                                 word={c.text}
+                                key={c.text}
                                 feedback={c.correct ? "Correct!" : "Wrong!"}
                                 callbackParent={this.onWordChosen}
                                 mode={this.state.mode} />
@@ -236,5 +170,33 @@ Arena = React.createClass({
     }
 });
 
-//export default createContainer(({params}) => {return {};}, Arena);
+
+/* The 'connect' function will create a wrapper for a class,
+ * which makes queries to the database and passes the results as props.
+ * We must provide a function that defines the queries.
+ */
+
+function mapQueriesToProps({ ownProps, state }) {
+
+    return {
+        pairs: {
+            query: gql`query MyQuery($orderBy: ContrastWithPairsOrdering) {contrastWithPairsNodes(orderBy: $orderBy) {
+                nodes {
+                    language
+                    name
+                    pairs
+                }
+            }}`,
+            variables: {
+                orderBy: 'ROW_ID',
+            }
+        },
+        info: {
+            query: gql`{itemByRowId (rowId: 1) {
+                homophones
+            }}`
+        }
+    }
+};
+
 export default connect({mapQueriesToProps})(Arena)
