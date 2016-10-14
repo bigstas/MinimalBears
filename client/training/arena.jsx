@@ -129,9 +129,14 @@ Arena = React.createClass({
         
         var textList = ["placeholder", "more placeholder"];  
         // If the data has been returned:
-        if (!this.props.pairs.loading && !this.props.info.loading) {
+        if (!this.props.pairs.loading) {
             var pairString = this.props.pairs.contrastWithPairsNodes.nodes[0].pairs;
             textList = parsePairs(pairString)[0]
+        }
+        
+        var itemText = "another placeholder"
+        if (!this.props.items.loading) {
+            itemText = this.props.items.itemWithAudioNodes.nodes[1].audio
         }
         
         return (
@@ -142,6 +147,9 @@ Arena = React.createClass({
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
                 <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
+                
+                
+                <p>{itemText}</p>
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
@@ -188,13 +196,21 @@ function mapQueriesToProps({ ownProps, state }) {
                 }
             }}`,
             variables: {
-                orderBy: 'ROW_ID',
+                orderBy: 'ROW_ID'
             }
         },
-        info: {
-            query: gql`{itemByRowId (rowId: 1) {
-                homophones
-            }}`
+        items: {
+            query: gql`query MyQuery($orderBy: ItemWithAudioOrdering) {itemWithAudioNodes (orderBy: $orderBy) {
+                nodes {
+                	rowId
+                	language
+                	homophones
+                	audio
+                }
+            }}`,
+            variables: {
+        	    orderBy: 'ROW_ID'
+            }
         }
     }
 };
