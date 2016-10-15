@@ -1,118 +1,129 @@
 import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
-
-
-// new gql way of getting data...
 import { connect } from 'react-apollo';
 import gql from 'graphql-tag';
 
-function mapQueriesToProps({ ownProps, state }) {
-    var aNumber = 1;
-    var bNumber = 1;
-    
-    return {
-        data: {
-            query: gql`{languageNodes {
-                nodes {
-                    name
-                }
-            }}`
-        },
-        info: {
-            query: gql`{itemByRowId (rowId: 1) {
-                homophones
-            }}`
-        }
-    }
-};
-//...end
+const Selector = React.createClass({
+	/* A series of buttons from which the user can choose one
+	 * 
+	 * Required props:
+	 * selectionMessage - text to display at the top
+	 * options - list of objects, with 'text' and 'id' properties
+	 * callback - function to call when an option is chosen (takes 'id' as argument)
+	 * 
+	 * Optional props:
+	 * extraText - text to show on extra button
+	 * extraCallback - function for extra button (takes no arguments)
+	 */
+	render() {
+		return (
+	        <div id='selector'>
+		        <p>{this.props.selectionMessage}</p>
+		        {this.props.options.map(c =>
+		        	<div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
+		        		{c.text}
+	        		</div>)
+		        }
+		        
+		        {!!this.props.extraText ? 
+		            <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
+		        		{this.props.extraText}
+		        	</div> :
+		            <div>{/*empty div*/}</div> 
+		        }
+	        </div>
+	    )
+	}
+})
 
+const LanguageSelector = React.createClass({
+	/* Choose a language
+	 * 
+	 * Required props:
+	 * data - result of a query for all languages
+	 * callback - function based on the language ID
+	 */
+	render() {
+		let options
+		if (this.props.data.loading) {
+			options = []
+		} else {
+			options = this.props.data.languageNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+		}
+		
+		return (
+			<Selector
+				selectionMessage='Choose the language you want to train'
+				options={options}
+				callback={this.props.callback}
+			/>
+		)
+	}
+})
 
-Selector = React.createClass({    
-    render() {
-        // A lot of repeating code here, could be optimised in future
-        var selectionMessage;
-        // If there is no active language...
-        if (!this.props.params.activeLanguageId) {
-            selectionMessage = <p>Choose the language you want to train</p>;
-            // ...set up the language buttons...
-            var languagesToBeMapped, callbackLangId;
-            // ...but you may have to wait while the props load...
-            if (this.props.languages === undefined || this.props.callbackLangId === undefined) {
-                languagesToBeMapped = ['loading...'];
-                callbackLangId = function () {console.log('languages are loading...');}
-            // ...otherwise, go ahead and set them up
-            } else {
-                languagesToBeMapped = this.props.languages;
-                callbackLangId = this.props.callbackLangId;
-            }
-        // On the other hand, if there is an active language...
-        } else {
-            selectionMessage = <p>Choose which contrast you want to train</p>;
-            // ...set up the contrast buttons...
-            var contrastsToBeMapped, callbackContrastId;
-            // ...but you may have to wait for props to load...
-            if (this.props.contrasts === undefined || this.props.callbackContrastId === undefined) {
-                contrastsToBeMapped = ['loading...'];
-                callbackContrastId = function () {console.log('contrasts are loading...');}
-            // ...otherwise, go ahead and set them up
-            } else {
-                contrastsToBeMapped = this.props.contrasts;
-                callbackContrastId = this.props.callbackContrastId;
-            }
-        }
-            
-        return (
-            <div id='selector'>
-                {selectionMessage}
-                {!this.props.params.activeLanguageId ? 
-                    languagesToBeMapped.map(function(c) {
-                        return <div className='chooseLanguage' key={c.id} onClick={()=>callbackLangId(c.id)}>{c.name}</div>
-                    }) : contrastsToBeMapped.map(function(c) {
-                        return <div className='chooseContrast' key={c.id} onClick={()=>callbackContrastId(c.id)}>{c.name}</div>
-                    })
-                }
-                {!!this.props.params.activeLanguageId ? 
-                    <div className='chooseLanguage' id='changeLanguage' onClick={()=>this.props.callbackLangId(0)}>Change language</div> :
-                    <div></div> 
-                }
-                {/* empty div is equivalent to nothing at all - I want to have an "if" statement but must use ternary because we're inside render's return method */}
-            </div>
-        );
-    }
-});
+const ContrastSelector = React.createClass({
+	/* Choose a contrast for a language
+	 * 
+	 * Required props:
+	 * data - result of a query for all contrasts for a language
+	 * callback - function based on the contrast ID
+	 * extraCallback - function to return to choosing a language
+	 */
+	render() {
+		let options
+		if (this.props.data.loading) {
+			options = []
+		} else {
+			options = this.props.data.contrastNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+		}
+		
+		return (
+			<Selector
+				selectionMessage='Choose which contrast you want to train'
+				options={options}
+				callback={this.props.callback}
+				extraText='Change language'
+				extraCallback={this.props.extraCallback}
+			/>
+		)
+	}
+})
 
+function languageQueryToProps() {
+	// Fetches all languages
+	return {
+		data: {
+			query: gql`{
+				languageNodes {
+					nodes {
+						name
+						rowId
+					}
+				}
+			}`
+		}
+	}
+}
 
-// These are props to decide how the selector will render
-Selector.propTypes = {
-    loading: React.PropTypes.bool, // how do we use this?
-    languages: React.PropTypes.array,
-    contrasts: React.PropTypes.array,
-    //activeLanguageId: React.PropTypes.number
-    // (above handled elsewhere)
-};
+function contrastQueryToProps({ownProps}) {
+	// Fetches all contrasts for the language with id given by props.language
+	return {
+		data: {
+			query: gql`query ($language: Int) {
+				contrastNodes(language: $language) {
+					nodes {
+						name
+						rowId
+					}
+				}
+			}`,
+			variables: {
+				language: ownProps.activeLanguageId
+			}
+		}
+	}
+}
 
-export default createContainer(({params}) => {
-    const { activeLanguageId } = params; // we're so ES6! Bring on the future
-    // the above means
-    // const activeLanguageId = params.activeLanguageId;
-    /*
-    const languagesHandle = Meteor.subscribe('langdata');
-    const contrastHandle = Meteor.subscribe('contrastdata');
-    const loading = !languagesHandle.ready() && !contrastHandle.ready();
-    const languages = Languages.fetch();
-    const contrasts = Contrasts.where({
-        language: activeLanguageId
-    }).fetch(); // alternative syntax is }).select("*");
-    */
-    loading = false;
-    languages = [{id: 1, name: 'English'}];
-    contrasts = [{id: 1, name: 'ee/i'}];
-    
-    return {
-        //activeLanguageId,
-        loading,
-        languages,
-        contrasts
-    };
-}, Selector);
+const ConnectedLanguageSelector = connect({mapQueriesToProps: languageQueryToProps})(LanguageSelector)
+const ConnectedContrastSelector = connect({mapQueriesToProps: contrastQueryToProps})(ContrastSelector)
+
+export { Selector, ConnectedLanguageSelector, ConnectedContrastSelector }

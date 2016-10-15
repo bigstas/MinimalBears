@@ -194,26 +194,30 @@ function mapQueriesToProps({ ownProps, state }) {
 
     return {
         pairs: {
-            query: gql`query MyQuery($orderBy: ContrastWithPairsOrdering) {contrastWithPairsNodes(orderBy: $orderBy) {
-                nodes {
-                    language
-                    name
-                    pairs
-                }
-            }}`,
+            query: gql`query ($orderBy: ContrastWithPairsOrdering) {
+            	contrastWithPairsNodes(orderBy: $orderBy) {
+                	nodes {
+                    	language
+                    	name
+                    	pairs
+                	}
+            	}
+        	}`,
             variables: {
                 orderBy: 'ROW_ID'
             }
         },
         items: {
-            query: gql`query MyQuery($orderBy: ItemWithAudioOrdering) {itemWithAudioNodes (orderBy: $orderBy) {
-                nodes {
-                	rowId
-                	language
-                	homophones
-                	audio
-                }
-            }}`,
+            query: gql`query ($orderBy: ItemWithAudioOrdering) {
+	            itemWithAudioNodes (orderBy: $orderBy) {
+	                nodes {
+	                	rowId
+	                	language
+	                	homophones
+	                	audio
+	                }
+	            }
+        	}`,
             variables: {
         	    orderBy: 'ROW_ID'
             }

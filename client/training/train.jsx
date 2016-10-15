@@ -1,27 +1,14 @@
 import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
 import Arena from '../training/arena';
-import Selector from '../training/selector';
+import { ConnectedLanguageSelector, ConnectedContrastSelector } from '../training/selector';
 
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
 TrainPage = React.createClass({
     getInitialState() {
         return {
-            languageChosen: !!this.props.activeLanguageId,
-            activeContrastId: 0
+            activeContrastId: null
         }
-    },
-    
-    setLanguage(langId) {
-        var id_ok = false;
-        if (typeof langId === 'number' && langId > 0) {
-            id_ok = true;
-        }
-        this.setState ({
-            languageChosen: id_ok
-        });
-        this.props.callbackApp(langId);
     },
     
     setContrast(contrastId) {
@@ -31,12 +18,20 @@ TrainPage = React.createClass({
     },
     
     render() {
-        var activeComponent;
-        // If language and contrast are both specified, render the Arena, otherwise render the Selector
-        if (this.state.languageChosen && !!this.state.activeContrastId) {
-            activeComponent = <Arena activeLanguageId={this.props.activeLanguageId} activeContrastId={this.state.activeContrastId} />;
+    	let activeComponent
+        // If language and contrast are both specified, render the Arena, otherwise render the appropriate Selector
+        if (this.state.activeContrastId != null) {
+        	// Contrast has been chosen
+            activeComponent = <Arena activeLanguageId={this.props.activeLanguageId}
+            						 activeContrastId={this.state.activeContrastId} />
+        } else if (this.props.activeLanguageId != null) {
+        	// Contrast has not been chosen, but language has
+        	activeComponent = <ConnectedContrastSelector activeLanguageId={this.props.activeLanguageId}
+            											 callback={this.setContrast}
+            											 extraCallback={() => this.props.callbackLanguage(null)} />
         } else {
-            activeComponent = <Selector params={{activeLanguageId: this.props.activeLanguageId}} callbackLangId={this.setLanguage} callbackContrastId={this.setContrast} />;
+        	// Neither language nor contrast has been chosen 
+        	activeComponent = <ConnectedLanguageSelector callback={this.props.callbackLanguage} />
         }
         
         return (

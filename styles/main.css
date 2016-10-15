@@ -187,7 +187,7 @@ li a, li p {
     display: block;
 }
 
-.wordOption, .chooseLanguage, .chooseContrast, .homebtn {
+.wordOption, .chooseOption, .extraButton, .homebtn {
     display: inline-block;
     color: white;
     padding-top: 3%;
@@ -196,7 +196,7 @@ li a, li p {
     text-align: center;
     border-radius: 6px;
 }
-.wordOption, .chooseLanguage, .chooseContrast { 
+.wordOption, .chooseOption { 
     width: 30%;
     margin-left: 10%;
     margin-right: 10%;
@@ -206,10 +206,9 @@ li a, li p {
     margin-left: 5%;
     margin-right: 5%;
 }
-.wordOptionActive, .chooseLanguage, .chooseContrast, .homebtn { cursor: pointer; }
-.chooseLanguage, .chooseContrast, .homebtn { background-color: aqua; }
-#changeLanguage {
-    color: white;
+.wordOptionActive, .chooseOption, .extraButton, .homebtn { cursor: pointer; }
+.chooseOption, .homebtn { background-color: aqua; }
+.extraButton {
     background-color: gold;
     width: 50%;
     margin-left: 25%;
