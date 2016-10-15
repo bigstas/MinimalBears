@@ -22,6 +22,10 @@ function parsePairs(pairString) {
     return pairList.map(x => x.map(y => parseInt(y)))
 }
 
+function random(myArray) {
+    var rand = myArray[Math.floor(Math.random() * myArray.length)];
+    return rand;
+}
 
 // Progress bar
 var ProgressBar = React.createClass({
@@ -76,14 +80,12 @@ var WordOption = React.createClass({
     }
 });
 
-// The arena - where the action happens
-// currently in the process of ADAPTING this from Parse to Meteor
-//class Arena extends React.Component {    
+
+// The arena - where the action happens  
 Arena = React.createClass({
     getInitialState() {
     //    this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
-            mySound: 'sound not ready',
             counter: 0,
             maxRounds: 10,
             mode: "wait",
@@ -97,52 +99,46 @@ Arena = React.createClass({
     onWordChosen() {
         this.setState({
             mode: "feedback",
-            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
-            correctAnswer: Math.round(Math.random())
+            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
         });
     },
     
     // After the user wants move on to the next recording
     handleProgressClick() {
-        /* OLD
-        // Set the state, play the file, and issue a new query
-        var pair = JSON.parse(this.data.pair);
-        console.log(pair);
-        this.setState({
-            mode: "ask",
-            activePair: pair
-        });
-        var snd = new Audio("http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav");
-        snd.play();
-        // (If the file is blocked, the response header will have connection: close)
-        this.reloadData(['pair'])
-        */
-
         // If the data has been returned:
         if (!this.props.pairs.loading) {
             /* Get all the pairs for a given contrast. Select a pair randomly.
+             * Make sure that the chosen item has at least one corresponding audio file in the database.
              * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
              * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
             */
-            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[0].pairs;
-            var pairIds = parsePairs(pairString)[0]; // a list two-element lists of ids of items for the given pair
-            var randomPair = pairIds[Math.floor(Math.random() * pairIds.length)];  // a single pair (list) of two ids, corresponding to the items in the given pair
+            var correctAnswer = Math.round(Math.random()); // randomly either 0 or 1
+            var thereIsAudio = false;
+            while (thereIsAudio === false) {
+                // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
+                // fetch all the pairs
+                var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs;
+                // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
+                var pairIds = random(parsePairs(pairString));
+                
+                // check whether there is audio corresponding to the chosen item
+                if (this.props.items.itemWithAudioNodes.nodes[pairIds[correctAnswer]-1].audio.length > 0) {
+                    // break the loop; play the new sound
+                    thereIsAudio = true;
+                    var currentAudio = random(this.props.items.itemWithAudioNodes.nodes[pairIds[correctAnswer]-1].audio); 
+                    var snd = new Audio(currentAudio);
+                    snd.play();
+                }
+            }
             
-            // play the new sound
-            var currentAudio = this.props.items.itemWithAudioNodes.nodes[randomPair[this.state.correctAnswer]-1];
-            console.log("Here is pairIds: " + pairIds);
-            console.log(typeof pairIds);
-            console.log("Here is currentAudio: " + currentAudio);
-            var snd = new Audio(currentAudio);
-            snd.play();
-            
-            // in textList and currentAudio, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
+            var itemNodes = this.props.items.itemWithAudioNodes.nodes;
             this.setState({
                 mode: "ask",
                 currentAudio: currentAudio,
-                textList: [this.props.items.itemWithAudioNodes.nodes[randomPair[0]-1].homophones[0],
-                        this.props.items.itemWithAudioNodes.nodes[randomPair[1]-1].homophones[0]
-                        ]
+                textList: [random(itemNodes[pairIds[0]-1].homophones),
+                        random(itemNodes[pairIds[1]-1].homophones)
+                ],
+                correctAnswer: correctAnswer
             });
         }
         else {
@@ -151,14 +147,15 @@ Arena = React.createClass({
     },
     
     render() {
-        //var buttonDisabled = true; // <-- placeholder while below is commented out
         
         var buttonDisabled = ((this.state.mode!=="feedback" && this.state.mode!=="wait") || this.state.counter === this.state.maxRounds) ? true : false;
         var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
+        /* Trumpet at the end of training. To be fixed.
         if (this.state.counter === this.state.maxRounds) {
-            var snd = new Audio(this.data.tadaSound);
+            var snd = new Audio(this.data.tadaSound); // TO BE AMENDED - no more this.data
             snd.play()
         }
+        */
         
         return (
             <div id="arena">
@@ -171,16 +168,6 @@ Arena = React.createClass({
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
-                    {/*
-                    {this.state.activePair.items.map(function(c) {
-                        return <WordOption
-                                word={c.text}
-                                key={c.text}
-                                feedback={c.correct ? "Correct!" : "Wrong!"}
-                                callbackParent={this.onWordChosen}
-                                mode={this.state.mode} />
-                    }, this)}
-                    */}
                     {
                         this.state.textList.map(function(c,index) {
                             return <WordOption
