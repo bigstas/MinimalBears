@@ -21,8 +21,8 @@ const Selector = React.createClass({
 		        {this.props.options.map(c =>
 		        	<div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
 		        		{c.text}
-	        		</div>)
-		        }
+	        		</div>
+                )}
 		        
 		        {!!this.props.extraText ? 
 		            <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
@@ -61,7 +61,7 @@ const LanguageSelector = React.createClass({
 })
 
 const ContrastSelector = React.createClass({
-	/* Choose a contrast for a language
+	/* Choose a contrast for a language. Only contrasts which have at least one pair are displayed.
 	 * 
 	 * Required props:
 	 * data - result of a query for all contrasts for a language
@@ -75,7 +75,8 @@ const ContrastSelector = React.createClass({
 		} else {
 			options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		}
-		
+		console.log(options);
+        
 		return (
 			<Selector
 				selectionMessage='Choose which contrast you want to train'
@@ -120,7 +121,7 @@ function contrastQueryToProps({ownProps}) {
 				language: ownProps.activeLanguageId,
 				orderBy: 'NAME'
 			}
-		}
+        }
 	}
 }
 

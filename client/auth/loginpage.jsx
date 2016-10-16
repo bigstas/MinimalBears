@@ -5,7 +5,7 @@ import MenuOpenToggle from '../auth/menuopentoggle';
 AuthSignInPage = React.createClass({
     // This mixin is needed to get react-router's transitionTo function to work (see below).
     // However, ES6 does not support mixins, so this should be handled differently.
-    mixins: [Navigation],
+    //mixins: [Navigation],
     
     
     getInitialState() {
