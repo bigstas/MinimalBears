@@ -21,8 +21,8 @@ const Selector = React.createClass({
 		        {this.props.options.map(c =>
 		        	<div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
 		        		{c.text}
-	        		</div>)
-		        }
+	        		</div>
+                )}
 		        
 		        {!!this.props.extraText ? 
 		            <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
@@ -69,13 +69,25 @@ const ContrastSelector = React.createClass({
 	 * extraCallback - function to return to choosing a language
 	 */
 	render() {
-		let options
-		if (this.props.data.loading) {
-			options = []
-		} else {
-			options = this.props.data.contrastNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+		var options = [], trueOptions = [];
+		if (!this.props.data.loading && !this.props.pairs.loading) {
+            // a list of all the contrasts (as objects)
+            var potentialOptions = this.props.data.contrastNodes.nodes;
+            console.log(potentialOptions);
+            console.log(this.props.pairs.contrastWithPairsNodes.nodes);
+            // for each contrast, only add it to the "options" list if it contains at least one pair
+			for (i=0; i<potentialOptions.length; i++) {
+                // use (...).length > 2 as when we have an empty object, it is expressed as "{}" and so its length is 2
+                if (this.props.pairs.contrastWithPairsNodes.nodes[potentialOptions[i].rowId-1].pairs.length > 2) {
+                    trueOptions.push(potentialOptions[i]);
+                }
+            }
+            options = trueOptions.map(c => ({text:c.name, id:c.rowId}));
+            console.log(options);
+            //options = this.props.data.contrastNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		}
-		
+		console.log(options);
+        
 		return (
 			<Selector
 				selectionMessage='Choose which contrast you want to train'
@@ -119,6 +131,20 @@ function contrastQueryToProps({ownProps}) {
 			variables: {
 				language: ownProps.activeLanguageId
 			}
+        },
+        pairs: {
+            query: gql`query ($orderBy: ContrastWithPairsOrdering) {
+            	contrastWithPairsNodes(orderBy: $orderBy) {
+                	nodes {
+                    	language
+                    	name
+                    	pairs
+                	}
+            	}
+        	}`,
+            variables: {
+                orderBy: 'ROW_ID'
+            }
 		}
 	}
 }
