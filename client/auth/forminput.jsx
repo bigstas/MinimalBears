@@ -1,6 +1,8 @@
 import React from 'react';
 
 AuthFormInput = React.createClass({
+    /*
+     * PropTypes validation functions are deprecated, but this may be a useful list of props, as I don't see it elsewhere.
     propTypes: {
         hasError: React.PropTypes.bool,
         label: React.PropTypes.string,
@@ -8,7 +10,7 @@ AuthFormInput = React.createClass({
         type: React.PropTypes.string,
         name: React.PropTypes.string
     },
-    
+    */
     render() {
         let className = "input-symbol";
         if (this.props.hasError) {

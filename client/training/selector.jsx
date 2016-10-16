@@ -61,7 +61,7 @@ const LanguageSelector = React.createClass({
 })
 
 const ContrastSelector = React.createClass({
-	/* Choose a contrast for a language
+	/* Choose a contrast for a language. Only contrasts which have at least one pair are displayed.
 	 * 
 	 * Required props:
 	 * data - result of a query for all contrasts for a language
@@ -70,11 +70,10 @@ const ContrastSelector = React.createClass({
 	 */
 	render() {
 		var options = [], trueOptions = [];
-		if (!this.props.data.loading && !this.props.pairs.loading) {
+		if (!this.props.data.loading && !this.props.pairs.loading && !this.props.items.loading) {
             // a list of all the contrasts (as objects)
             var potentialOptions = this.props.data.contrastNodes.nodes;
             console.log(potentialOptions);
-            console.log(this.props.pairs.contrastWithPairsNodes.nodes);
             // for each contrast, only add it to the "options" list if it contains at least one pair
 			for (i=0; i<potentialOptions.length; i++) {
                 // use (...).length > 2 as when we have an empty object, it is expressed as "{}" and so its length is 2
@@ -84,7 +83,6 @@ const ContrastSelector = React.createClass({
             }
             options = trueOptions.map(c => ({text:c.name, id:c.rowId}));
             console.log(options);
-            //options = this.props.data.contrastNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		}
 		console.log(options);
         
@@ -145,7 +143,22 @@ function contrastQueryToProps({ownProps}) {
             variables: {
                 orderBy: 'ROW_ID'
             }
-		}
+		},
+        items: {
+            query: gql`query ($orderBy: ItemWithAudioOrdering) {
+	            itemWithAudioNodes (orderBy: $orderBy) {
+	                nodes {
+	                	rowId
+	                	language
+	                	homophones
+	                	audio
+	                }
+	            }
+        	}`,
+            variables: {
+        	    orderBy: 'ROW_ID'
+            }
+        }
 	}
 }
 
