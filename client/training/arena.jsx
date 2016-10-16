@@ -84,7 +84,6 @@ var WordOption = React.createClass({
 // The arena - where the action happens  
 Arena = React.createClass({
     getInitialState() {
-    //    this.data = {contrasts: []}; // For an empty dropdown list before a language is chosen
         return {
             counter: 0,
             maxRounds: 10,
@@ -106,38 +105,28 @@ Arena = React.createClass({
     // After the user wants move on to the next recording
     handleProgressClick() {
         // If the data has been returned:
-        if (!this.props.pairs.loading) {
+        if (!this.props.pairs.loading && !this.props.items.loading) {
             /* Get all the pairs for a given contrast. Select a pair randomly.
-             * Make sure that the chosen item has at least one corresponding audio file in the database.
              * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
              * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
-            */
+             */
             var correctAnswer = Math.round(Math.random()); // randomly either 0 or 1
-            var thereIsAudio = false;
-            while (thereIsAudio === false) {
-                // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
-                // fetch all the pairs
-                var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs;
-                // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
-                var pairIds = random(parsePairs(pairString));
-                
-                // check whether there is audio corresponding to the chosen item
-                if (this.props.items.itemWithAudioNodes.nodes[pairIds[correctAnswer]-1].audio.length > 0) {
-                    // break the loop; play the new sound
-                    thereIsAudio = true;
-                    var currentAudio = random(this.props.items.itemWithAudioNodes.nodes[pairIds[correctAnswer]-1].audio); 
-                    var snd = new Audio(currentAudio);
-                    snd.play();
-                }
-            }
+            // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
+            // fetch all the pairs
+            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs;
+            // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
+            var pairIds = random(parsePairs(pairString));
             
-            var itemNodes = this.props.items.itemWithAudioNodes.nodes;
+            var items = this.props.items.itemWithAudioNodes.nodes;
+            var currentAudio = random(items[pairIds[correctAnswer]-1].audio); 
+            var snd = new Audio(currentAudio);
+            snd.play();
+            
             this.setState({
                 mode: "ask",
                 currentAudio: currentAudio,
-                textList: [random(itemNodes[pairIds[0]-1].homophones),
-                        random(itemNodes[pairIds[1]-1].homophones)
-                ],
+                textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous)
+                           items[pairIds[1]-1].homophones[0]],
                 correctAnswer: correctAnswer
             });
         }

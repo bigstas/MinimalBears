@@ -73,7 +73,7 @@ const ContrastSelector = React.createClass({
 		if (this.props.data.loading) {
 			options = []
 		} else {
-			options = this.props.data.contrastNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+			options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		}
 		
 		return (
@@ -108,8 +108,8 @@ function contrastQueryToProps({ownProps}) {
 	// Fetches all contrasts for the language with id given by props.language
 	return {
 		data: {
-			query: gql`query ($language: Int) {
-				contrastNodes(language: $language) {
+			query: gql`query ($language: Int, $orderBy: ContrastNonemptyOrdering) {
+				contrastNonemptyNodes(language: $language, orderBy: $orderBy) {
 					nodes {
 						name
 						rowId
@@ -117,7 +117,8 @@ function contrastQueryToProps({ownProps}) {
 				}
 			}`,
 			variables: {
-				language: ownProps.activeLanguageId
+				language: ownProps.activeLanguageId,
+				orderBy: 'NAME'
 			}
 		}
 	}
