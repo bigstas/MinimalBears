@@ -2,10 +2,11 @@ import React from 'react';
 
 AppBody = React.createClass({    
     getInitialState() {
+        // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
         return {
             activeLanguageId: null,
             interfaceLanguage: "Polish",
-            user: "Guest"
+            user: false
         };
     },
     

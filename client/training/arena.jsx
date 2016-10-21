@@ -148,7 +148,9 @@ Arena = React.createClass({
         
         return (
             <div id="arena">
-                <p id='arenaMessage' style={{color: 'darkkhaki'}}>{(this.state.counter === this.state.maxRounds) ? "CONGRATULATIONS! You did it!" : "This is the arena."}</p>
+                {(this.state.counter === this.state.maxRounds) ? 
+                    <p id='arenaMessage'>CONGRATULATIONS! You did it!</p> : 
+                    <p>Guess the words.</p> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
@@ -157,7 +159,7 @@ Arena = React.createClass({
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
-                    {
+                    {(this.state.mode === "ask" || this.state.mode === "feedback") ?
                         this.state.textList.map(function(c,index) {
                             return <WordOption
                                 word={c}
@@ -165,7 +167,8 @@ Arena = React.createClass({
                                 feedback={index === this.state.correctAnswer ? "Correct!" : "Oops! Try again!"}
                                 callbackParent={this.onWordChosen}
                                 mode={this.state.mode} />
-                        }, this)
+                        }, this) :
+                        <div>{/*empty div*/}</div>
                     }
                 </div>
             </div> 

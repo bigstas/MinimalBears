@@ -7,7 +7,7 @@ Dropdown = React.createClass({
     render() {
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-                <div className='dropdownElement'><Link to="/profile" activeClassName="active">Profile</Link></div>
+                <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
                 <div className='dropdownElement'>Settings</div>
                 <div className='dropdownElement'>Something else</div>
                 <div className='dropdownElement'>Something more</div>
@@ -55,7 +55,7 @@ Nav = React.createClass({
                         <li><Link to="/record" activeClassName="active">Record</Link></li>
                         <li><Link to="/profile" activeClassName="active">Profile</Link></li>
                         <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
-                        <li style={{float: 'right'}}><p id="loggedInAs">{this.props.username}</p></li>
+                        <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile">{!!this.props.username ? this.props.username : "Guest"}</Link></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}

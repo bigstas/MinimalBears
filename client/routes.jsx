@@ -8,8 +8,8 @@ import AuthJoinPage from '../client/auth/joinpage';
 import AuthSignInPage from '../client/auth/loginpage';
 import RecordPage from '../client/record';
 import TrainPage from '../client/training/train'; // takes place of arena
-//import ArenaContainer from '../client/arena';
-import ProfileContainer from '../client/profile';
+//import ProfileContainer from '../client/profile';
+import Profile from '../client/profile';
 import About from '../client/static/about';
 import NotFound from '../client/static/notfound';
 import Dummy from '../client/dummy';
@@ -24,7 +24,7 @@ export const renderRoutes = () => (
             <Route path="record" component={RecordPage} />
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
-            <Route path="profile" component={ProfileContainer} />
+            <Route path="profile" component={Profile} />
             <Route path="dummy" component={Dummy} />
             <Route path="*" component={NotFound} />
         </Route>
