@@ -64,16 +64,36 @@ var WordOption = React.createClass({
     },
     
     render() {
-        var background = (this.props.mode === "feedback")
-            ? (this.props.feedback === "Correct!") ? "green" : "red"
-            : "#b0b0e0" ;
-        var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
-        var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption');
+        //var background = (this.props.mode === "feedback")
+            //? (this.props.correct) ? "green" : "white"
+            //: "#b0b0e0" ;
+        //var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
+        //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption');
+        var text = ""
+        var id = "";
+        var wordOptionClass = "wordOption";
+        if (this.props.mode === "feedback") {
+            if (this.props.chosen) {
+                if (this.props.correct) {
+                    text = "Correct!";
+                    id = "wordOptionCorrect";
+                } else {
+                    text = "Oops! Try again!"
+                    id = "wordOptionWrong";
+                }
+            } else {
+                id = "wordOptionNotChosen";
+            }
+        } else {
+            text = this.props.word;
+            wordOptionClass += " animated pulse";
+        }
         
         return (
-            <div className={wordOptionClass}
-            onClick={this.handleClick}
-            style={{backgroundColor: background}}>
+            <div 
+            id={id}
+            className={wordOptionClass}
+            onClick={this.handleClick}>
                 {text}
             </div>
         );
@@ -87,19 +107,30 @@ Arena = React.createClass({
         return {
             counter: 0,
             maxRounds: 10,
+            score: 0,
             mode: "wait",
             correctAnswer: Math.round(Math.random()),
+            chosenWord: null,
             currentAudio: null,
             textList: ["placeholder", "more placeholder"]
         };
     },
     
     // After the user chooses an option during training
-    onWordChosen() {
+    onWordChosen(chosenIndex) {
         this.setState({
             mode: "feedback",
+            chosenWord: chosenIndex,
+            score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
             counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
         });
+        if (chosenIndex === this.state.correctAnswer) {
+            var snd = new Audio("correct bell short.wav");
+            snd.play();
+        } else {
+            var snd = new Audio("quack wrong.wav");
+            snd.play();
+        }
     },
     
     // After the user wants move on to the next recording
@@ -125,7 +156,7 @@ Arena = React.createClass({
             this.setState({
                 mode: "ask",
                 currentAudio: currentAudio,
-                textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous)
+                textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
                            items[pairIds[1]-1].homophones[0]],
                 correctAnswer: correctAnswer
             });
@@ -150,7 +181,7 @@ Arena = React.createClass({
             <div id="arena">
                 {(this.state.counter === this.state.maxRounds) ? 
                     <p id='arenaMessage'>CONGRATULATIONS! You did it!</p> : 
-                    <p>Guess the words.</p> }
+                    <p>Guess the words. Score: {this.state.score}/{this.state.counter}</p> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
@@ -162,10 +193,11 @@ Arena = React.createClass({
                     {(this.state.mode === "ask" || this.state.mode === "feedback") ?
                         this.state.textList.map(function(c,index) {
                             return <WordOption
+                                correct={index===this.state.correctAnswer ? true : false}
+                                chosen={index===this.state.chosenWord ? true : false}
                                 word={c}
                                 key={index}
-                                feedback={index === this.state.correctAnswer ? "Correct!" : "Oops! Try again!"}
-                                callbackParent={this.onWordChosen}
+                                callbackParent={this.onWordChosen.bind(this, index)}
                                 mode={this.state.mode} />
                         }, this) :
                         <div>{/*empty div*/}</div>

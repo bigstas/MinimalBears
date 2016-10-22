@@ -210,24 +210,40 @@ li a, li p {
     margin-bottom: 2%;
     text-align: center;
     border-radius: 6px;
+    cursor: pointer;
 }
 .wordOption, .chooseOption { 
     width: 30%;
     margin-left: 10%;
     margin-right: 10%;
 }
+.wordOption:hover, .chooseOption:hover {
+    background-color: darkcyan;
+}
+#wordOptionCorrect, #wordOptionWrong, #wordOptionNotChosen, .disabledProgress { cursor: default }
+#wordOptionCorrect {
+    background-color: green;
+}
+#wordOptionWrong {
+    background-color: red;
+}
+#wordOptionNotChosen {
+    background-color: white;
+}
 .homebtn { 
     width: 20%;
     margin-left: 5%;
     margin-right: 5%;
 }
-.wordOptionActive, .chooseOption, .extraButton, .homebtn { cursor: pointer; }
-.chooseOption, .homebtn { background-color: aqua; }
+.wordOption, .chooseOption, .homebtn { background-color: aqua; }
 .extraButton {
     background-color: gold;
     width: 50%;
     margin-left: 25%;
     margin-right: 25%;
+}
+.extraButton:hover {
+    background-color: darkgoldenrod;
 }
 
 

@@ -79,7 +79,7 @@ const ContrastSelector = React.createClass({
         
 		return (
 			<Selector
-				selectionMessage='Choose which contrast you want to train'
+				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
 				options={options}
 				callback={this.props.callback}
 				extraText='Change language'
