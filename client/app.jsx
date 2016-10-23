@@ -16,6 +16,11 @@ AppBody = React.createClass({
         });
     },
     
+    submitAudio(msg) {
+        alert(`Your audio has not been submitted. Staś and Guy are yet to implement this feature.
+By the way, here is a special message: ` + msg);
+    },
+    
     render() {
         return (
             <div id="container" >
@@ -27,7 +32,9 @@ AppBody = React.createClass({
                         {activeLanguageId: this.state.activeLanguageId, 
                             interfaceLanguage: this.state.interfaceLanguage,
                             user: this.state.user,
-                            callbackLanguage: this.setLanguage}
+                            callbackLanguage: this.setLanguage,
+                            recordingWords: ["youth in Asia", "euthanasia", "a mission", "omission", "emission"],
+                            submitAudio: this.submitAudio}
                     )}
                 </div>
             </div>

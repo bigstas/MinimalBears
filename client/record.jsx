@@ -10,10 +10,7 @@ RecordPage = React.createClass({
         return {
             audioURLs: [],
             recording: false,
-            //recordedUpTo: -1, // '0' means that you *have* recorded the first one
-            active: -1,
-            //reRecordIndex: -1,
-            recordingWords: ["youth in Asia", "euthanasia", "a mission", "omission", "emission"]
+            active: -1
         }
     },
                                
@@ -22,12 +19,9 @@ RecordPage = React.createClass({
         // perhaps it's an environment variable
         var input = audio_context.createMediaStreamSource(stream);
         console.log('Media stream created.');
-        // Uncomment if you want the audio to feedback directly
-        //input.connect(audio_context.destination);
-        //__log('Input connected to audio context destination.');
     
         recorders = [];
-        for (i=0; i<(this.state.recordingWords.length); i++) {
+        for (i=0; i<(this.props.recordingWords.length); i++) {
             var rec = new Recorder(input);  // from maxencecornet:audio-recorder
             recorders.push(rec);
         }
@@ -154,10 +148,6 @@ RecordPage = React.createClass({
         }
     },
     
-    submitAudio() {
-        alert("Your audio has not been submitted. Staś and Guy are yet to implement this feature.");
-    },
-    
     // This is used instead of window.onload = function init () {...}.
     // Should we use componentWillMount() instead? It is slightly earlier. Normally called on both client and server (according to docs),
     // but given that this is in the Meteor /client dir then we should only have it happen on the client anyway.
@@ -193,7 +183,7 @@ RecordPage = React.createClass({
                 recordLabel = "Start recording";
                 recFunction = this.startRecording;
             }
-            else if (this.state.active < this.state.recordingWords.length) {
+            else if (this.state.active < this.props.recordingWords.length) {
                 recordLabel = "Continue recording";
                 recFunction = this.continueRecording; 
             }
@@ -203,7 +193,7 @@ RecordPage = React.createClass({
             }
         }
         else if (this.state.recording === true) {
-            if (this.state.active === this.state.recordingWords.length -1) {
+            if (this.state.active === this.props.recordingWords.length -1) {
                 recordLabel = "Done";
                 recFunction = this.finishRecording;
             }
@@ -238,7 +228,7 @@ RecordPage = React.createClass({
         }
 
         var playAllDisabled = (this.state.audioURLs.length === 0 || this.state.recording) ? true : false;
-        var submitDisabled = (this.state.audioURLs.length === this.state.recordingWords.length && !this.state.recording) ? false : true;
+        var submitDisabled = (this.state.audioURLs.length === this.props.recordingWords.length && !this.state.recording) ? false : true;
         
         return (
             <div id='record'>
@@ -252,13 +242,11 @@ RecordPage = React.createClass({
                     <button type="button" disabled={!this.state.recording} onClick={this.stopRecording}>Stop recording</button>
                 </div>
                 <ul>
-                    {this.state.recordingWords.map(function(c, index) {
+                    {this.props.recordingWords.map(function(c, index) {
                         var recWordId = 'recWord-' + index.toString();
                         var recWordIdLi = recWordId + '-li';
                         var recWordIdAudio = recWordId + '-audio';
             
-                        //var backgroundColor = this.state.recording && index === this.state.recordedUpTo ? 'yellow' : 'white';
-                        //var localButtonDisabled = (index <= this.state.recordedUpTo && this.state.recording === false) ? false : true;
                         var backgroundColor = this.state.recording && (index === this.state.active) ? 'yellow' : 'white';
             
                         var playbackButtonDisabled = (index < this.state.active && this.state.recording === false) ? false : true;
@@ -278,7 +266,7 @@ RecordPage = React.createClass({
                     }, this)}
                 </ul>
                 <button type="button" disabled={playAllDisabled} onClick={this.playbackAll}>Play all</button>
-                <button type="button" disabled={submitDisabled}  onClick={this.submitAudio}>Submit!</button> 
+                <button type="button" disabled={submitDisabled}  onClick={this.props.submitAudio.bind(this, "Hello")}>Submit!</button> 
                 {/*May want to make the Submit button type="submit"*/}
             </div>
         )
