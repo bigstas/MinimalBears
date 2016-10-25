@@ -7,4 +7,6 @@ import postgraphql from 'postgraphql';
 // See http://meteorpedia.com/read/REST_API#WebApp.connectHandlers%20and%20connect
 // Note that we can't use Picker here, because we only want this middleware for one route
 WebApp.connectHandlers
-    .use('/graphql', postgraphql('postgres://localhost:5432/postgres', options={development: false}))
+    .use('/graphql',
+         postgraphql('postgres://localhost:5432/postgres',
+                     options={jwtSecret: "mysupersecretstring"}))

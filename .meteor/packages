@@ -4,23 +4,16 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base@1.0.4             # Packages every Meteor app needs to have
-mobile-experience@1.0.4       # Packages for a great mobile UX
-#mongo                   # The database Meteor supports right now
-blaze-html-templates@1.0.4    # Compile .html files into Meteor Blaze views
-session@1.1.6                 # Client-side reactive dictionary for your app
-jquery@1.11.9                  # Helpful client-side library
-tracker@1.1.0                 # Meteor's client-side reactive programming library
+meteor-base             # Packages every Meteor app needs to have
+mobile-experience       # Packages for a great mobile UX
+blaze-html-templates    # Compile .html files into Meteor Blaze views
+session                 # Client-side reactive dictionary for your app
+jquery                  # Helpful client-side library
+tracker                 # Meteor's client-side reactive programming library
 
-standard-minifiers@1.0.6      # JS/CSS minifiers run for production mode
-es5-shim@4.6.14_1                # ECMAScript 5 compatibility for older browsers.
-ecmascript@0.5.8_1              # Enable ECMAScript2015+ syntax in app code
-
-# autopublish             # Publish all data to the clients (for prototyping)
-insecure@1.0.7                # Allow all DB writes from clients (for prototyping)
-
-# simple:pg #old
-# maximum:server-transform
+standard-minifiers      # JS/CSS minifiers run for production mode
+es5-shim                # ECMAScript 5 compatibility for older browsers.
+ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 # testing
 practicalmeteor:mocha
@@ -29,24 +22,8 @@ practicalmeteor:chai
 # audio recorder (might be replaced)
 maxencecornet:audio-recorder
 
-# accounts (added by hand):
-# accounts-password-pg-driver
-# accounts-password
-# currently gives an error:
-# While selecting package versions:
-# error: No version of accounts-password satisfies all constraints: @=1.1.2-rc.0, @=1.1.6
-# Constraints on package "accounts-password":
-# * accounts-password@=1.1.2-rc.0 <- top level
-# * accounts-password@=1.1.6 <- top level
-
 react-meteor-data  # For creating containers to access data
 
 meteorhacks:picker  # For server-side routing
 
-# from meteor-starter-kit
-#std:accounts-ui
-#std:accounts-basic
-#accounts-password
-#seba:minifiers-autoprefixer  # for fourseven:scss, instead of standard-minifier-css???
-#apollo
-shell-server
+shell-server  # For the `meteor shell` command

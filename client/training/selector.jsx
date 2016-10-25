@@ -75,7 +75,6 @@ const ContrastSelector = React.createClass({
 		} else {
 			options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		}
-		console.log(options);
         
 		return (
 			<Selector
