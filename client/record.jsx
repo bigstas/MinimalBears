@@ -1,120 +1,156 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
-//import AudioRecorder from 'react-audio-recorder';
 import update from 'react-addons-update';
+//import Recorder from 'recorderjs';  // !!!
 
-// using $ meteor add maxencecornet:audio-recorder
+// navigator.mediaDevices.getUserMedia compatibility with different browsers
+// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+
+// Older browsers might not implement mediaDevices at all, so we set an empty object first
+if (navigator.mediaDevices === undefined) {
+  navigator.mediaDevices = {};
+}
+
+// Some browsers partially implement mediaDevices. We can't just assign an object
+// with getUserMedia as it would overwrite existing properties.
+// Here, we will just add the getUserMedia property if it's missing.
+if (navigator.mediaDevices.getUserMedia === undefined) {
+  navigator.mediaDevices.getUserMedia = function(constraints) {
+
+    // First get hold of the legacy getUserMedia, if present
+    var getUserMedia = (navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia);
+
+    // Some browsers just don't implement it - return a rejected promise with an error
+    // to keep a consistent interface
+    if (!getUserMedia) {
+      return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+    }
+
+    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+    return new Promise(function(resolve, reject) {
+      getUserMedia.call(navigator, constraints, resolve, reject);
+    });
+  }
+}
+
+// Cross-browser AudioContext and URL
+// https://developer.mozilla.org/en/docs/Web/API/AudioContext
+// https://developer.mozilla.org/en/docs/Web/API/Window/URL
+
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const URL = window.URL || window.webkitURL
+
+
 RecordPage = React.createClass({
+	
     getInitialState () {
         return {
-            audioURLs: [],
+        	recorder: null,
+        	audioURLs: [],
             recording: false,
             active: -1
         }
     },
-                               
-    startUserMedia (stream) {
-        // audio_context comes predefined, somehow (?)
-        // perhaps it's an environment variable
-        var input = audio_context.createMediaStreamSource(stream);
-        console.log('Media stream created.');
     
-        recorders = [];
-        for (i=0; i<(this.props.recordingWords.length); i++) {
-            var rec = new Recorder(input);  // from maxencecornet:audio-recorder
-            recorders.push(rec);
-        }
-        console.log('Recorders initialised.')
-        console.log(recorders);
+    componentWillMount() {
+    	// Set up audio context (which contains audio nodes)
+        const audioContext = new AudioContext();
+        // Find the microphone (note, using a Promise)
+        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(
+    		stream => {
+    			// Create the audio node for the microphone
+    			const input = audioContext.createMediaStreamSource(stream);
+    			// Create the recorder node (connected to the audio node)
+    			const recorder = new Recorder(input)
+    			this.setState({
+    				recorder
+    			})
+    		})
     },
     
-    startRecording () {        
+    startRecording () {
+    	/* Start recording from the first item
+    	 */
         this.setState({
             recording: true,
             active: 0
         });
-        recorders[0].record();
+        this.state.recorder.record();
         console.log('Recording...');
     },
     
     cutRecording () {
-        recorders[this.state.active].stop();
-        console.log('Stopped recording with recorder number ' + this.state.active.toString());
-        
-        // create WAV download link using audio data blob
-        // create client-side URL for <audio /> to use as src
-        recorders[this.state.active].exportWAV(this.makeUrl.bind(this, this.state.active));
-        
-        // clear recorders
-        recorders[this.state.active].clear();
+    	/* Stop the recorder, save the data with a URL, clear the recorder
+    	 */
+        this.state.recorder.stop();
+        this.state.recorder.exportWAV(this.makeUrl.bind(this, this.state.active));
+        this.state.recorder.clear();
     },
     
-    // function to be passed to exportWAV
     makeUrl (index, blob) {
+    	/* Function passed to exportWav (above)
+    	 * Create a URL for the blob, and put it in this.state.audioURLs[index]
+    	 */
         this.setState({
             audioURLs: update(this.state.audioURLs, {[index]: {$set: URL.createObjectURL(blob) }})
         });
-        
-        /*
-        this.state.audioURLs[index] = URL.createObjectURL(blob);
-        this.setState({
-            // it's a ghost!
-        });
-        */
     },
     
     stopRecording () {
+    	/* Stop all recording
+    	 */
         this.cutRecording();
-        
-        console.log('Stopped all recordings.');
         this.setState({
             recording: false,
             active: this.state.active +1
         });
-    },
-    
-    finishRecording() {
-        this.cutRecording();
-        
-        this.setState({
-            recording: false,
-            active: this.state.active +1
-        })
+        console.log('Stopped all recordings.');
     },
     
     nextRecording () {
+    	/* Stop recording the current word, start recording the next word
+    	 */
         this.cutRecording();
-        console.log(this.state.audioURLs);
-        recorders[this.state.active +1].record();
+        this.state.recorder.record();
         this.setState({
             active: this.state.active +1
         });
+        console.log(this.state.audioURLs);
     },
     
     continueRecording () {
-        recorders[this.state.active].record();
+    	/* Start recording again (pick up where we left off)
+    	 */
+        this.state.recorder.record();
         this.setState({
             recording: true
         })
+        console.log('continuing');
     },
     
     reRecord(index) {
+    	/* Start recording an item again
+    	 */
+        this.state.recorder.record();
         this.setState({
             active: index,
-            recording: 2
+            recording: 'rerecord'
         });
-        // no need to clear, as clear is done on cutRecording after it is recorded the first time
-        recorders[index].record();
         console.log("Re-recording audio with index " + index.toString() + "...");
     },
     
     stopReRecord () {
+    	/* Finish recording the item again
+    	 */
         this.cutRecording();
         this.setState({
             active: this.state.audioURLs.length,
             recording: false
         })
+        console.log(this.state.audioURLs);
     },
     
     playbackAll() {
@@ -148,30 +184,6 @@ RecordPage = React.createClass({
         }
     },
     
-    // This is used instead of window.onload = function init () {...}.
-    // Should we use componentWillMount() instead? It is slightly earlier. Normally called on both client and server (according to docs),
-    // but given that this is in the Meteor /client dir then we should only have it happen on the client anyway.
-    componentDidMount () {
-        try {
-            // webkit shim
-            window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            // navigator isn't defined anywhere...(?)
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-            // this line of code (below) is unnecessary? I think it's only for downloading the file that you just recorded
-            window.URL = window.URL || window.webkitURL;
-      
-            audio_context = new AudioContext;
-            console.log('Audio context set up.');
-            console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-        } catch (e) {
-            alert('No web audio support in this browser!');
-        }
-        
-        navigator.getUserMedia({audio: true}, this.startUserMedia, function(e) {
-            console.log('No live audio input: ' + e);
-        });
-    },
-    
     render() {
         // The following two variables define what the main "record" button will look like and do.
         var recordLabel;
@@ -195,15 +207,15 @@ RecordPage = React.createClass({
         else if (this.state.recording === true) {
             if (this.state.active === this.props.recordingWords.length -1) {
                 recordLabel = "Done";
-                recFunction = this.finishRecording;
+                recFunction = this.stopRecording;
             }
             else {
                 recordLabel = "Next";
                 recFunction = this.nextRecording; 
             }
         }
-        // this is when re-recording, and this.state.recording === 2
-        else if (this.state.recording === 2) {
+        // this is when re-recording
+        else if (this.state.recording === 'rerecord') {
             playButtonDisabled = true;
             recordLabel = '...';
         }
@@ -250,10 +262,10 @@ RecordPage = React.createClass({
                         var backgroundColor = this.state.recording && (index === this.state.active) ? 'yellow' : 'white';
             
                         var playbackButtonDisabled = (index < this.state.active && this.state.recording === false) ? false : true;
-                        var reRecordButtonDisabled = (index < this.state.active && this.state.recording === false) || (this.state.recording === 2) ? false: true;
+                        var reRecordButtonDisabled = (index < this.state.active && this.state.recording === false) || (this.state.recording === 'rerecord') ? false: true;
             
-                        var reRecordLabel = (this.state.recording === 2 && index === this.state.active) ? 'Done re-recording' : 'Re-record';
-                        var reRecordFunc = this.state.recording === 2 ? this.stopReRecord : this.reRecord.bind(this, index);
+                        var reRecordLabel = (this.state.recording === 'rerecord' && index === this.state.active) ? 'Done re-recording' : 'Re-record';
+                        var reRecordFunc = this.state.recording === 'rerecord' ? this.stopReRecord : this.reRecord.bind(this, index);
             
                         return (
                             <li id={recWordIdLi} className='recWord' key={index} style={{backgroundColor}}>
