@@ -45,63 +45,63 @@ const URL = window.URL || window.webkitURL
 
 
 RecordPage = React.createClass({
-	
+    
     getInitialState () {
         return {
-        	recorder: null,
-        	audioURLs: [],
-            recording: false,
-            active: -1
+            audioURLs: [],  // List of the recorded audio
+            recording: false,  // Whether we are currently recording
+            active: -1  // Which item we are recording
         }
     },
     
     componentWillMount() {
-    	// Set up audio context (which contains audio nodes)
-        const audioContext = new AudioContext();
+        // Set up audio context (which contains audio nodes)
+        this.audioContext = new AudioContext()
         // Find the microphone (note, using a Promise)
         navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(
-    		stream => {
-    			// Create the audio node for the microphone
-    			const input = audioContext.createMediaStreamSource(stream);
-    			// Create the recorder node (connected to the audio node)
-    			const recorder = new Recorder(input)
-    			this.setState({
-    				recorder
-    			})
-    		})
+            stream => {
+                // Create the audio node for the microphone
+                this.source = this.audioContext.createMediaStreamSource(stream)
+                // Create the recorder node (connected to the audio node)
+                this.recorder = new Recorder(this.source)
+            })
     },
     
     startRecording () {
-    	/* Start recording from the first item
-    	 */
+        /* Start recording from the first item
+         */
         this.setState({
             recording: true,
             active: 0
         });
-        this.state.recorder.record();
+        this.recorder.record();
         console.log('Recording...');
     },
     
     cutRecording () {
-    	/* Stop the recorder, save the data with a URL, clear the recorder
-    	 */
-        this.state.recorder.stop();
-        this.state.recorder.exportWAV(this.makeUrl.bind(this, this.state.active));
-        this.state.recorder.clear();
+        /* Stop the recorder, save the data with a URL, clear the recorder
+         */
+        let currentIndex = this.state.active  // In case of asynchronous changes
+        this.recorder.stop();
+        this.recorder.exportWAV(blob => this.makeUrl(currentIndex, blob));
+        this.recorder.clear();
     },
     
     makeUrl (index, blob) {
-    	/* Function passed to exportWav (above)
-    	 * Create a URL for the blob, and put it in this.state.audioURLs[index]
-    	 */
+        /* Function passed to exportWav (above)
+         * Create a URL for the blob, and put it in this.state.audioURLs[index]
+         */
+        url = URL.createObjectURL(blob)
+        console.log('new url:')
+        console.log(url)
         this.setState({
-            audioURLs: update(this.state.audioURLs, {[index]: {$set: URL.createObjectURL(blob) }})
+            audioURLs: update(this.state.audioURLs, {[index]: {$set: url }})  // TODO 'update' is now a legacy function
         });
     },
     
     stopRecording () {
-    	/* Stop all recording
-    	 */
+        /* Stop all recording
+         */
         this.cutRecording();
         this.setState({
             recording: false,
@@ -111,10 +111,10 @@ RecordPage = React.createClass({
     },
     
     nextRecording () {
-    	/* Stop recording the current word, start recording the next word
-    	 */
+        /* Stop recording the current word, start recording the next word
+         */
         this.cutRecording();
-        this.state.recorder.record();
+        this.recorder.record();
         this.setState({
             active: this.state.active +1
         });
@@ -122,9 +122,9 @@ RecordPage = React.createClass({
     },
     
     continueRecording () {
-    	/* Start recording again (pick up where we left off)
-    	 */
-        this.state.recorder.record();
+        /* Start recording again (pick up where we left off)
+         */
+        this.recorder.record();
         this.setState({
             recording: true
         })
@@ -132,9 +132,9 @@ RecordPage = React.createClass({
     },
     
     reRecord(index) {
-    	/* Start recording an item again
-    	 */
-        this.state.recorder.record();
+        /* Start recording an item again
+         */
+        this.recorder.record();
         this.setState({
             active: index,
             recording: 'rerecord'
@@ -143,8 +143,8 @@ RecordPage = React.createClass({
     },
     
     stopReRecord () {
-    	/* Finish recording the item again
-    	 */
+        /* Finish recording the item again
+         */
         this.cutRecording();
         this.setState({
             active: this.state.audioURLs.length,
@@ -154,28 +154,23 @@ RecordPage = React.createClass({
     },
     
     playbackAll() {
-        // Below isn't working properly... still plays all the audio at once...
-        //for (i=0; i<=(this.state.recordedUpTo); i++) {
-        
+        /* Playback all recorded audio
+         */
         this.setState({
-            recording: "playback",
-            active: 0
+            recording: "playbackAll"
         });
         
-        /*
-        for (i=0; i<=(this.state.audioURLs.length); i++) {
-            var audioId = '#recWord-' + i.toString() + '-audio'; // querySelector uses CSS selectors, so '#' necessary to mark id
-            document.querySelector(audioId).addEventListener("ended", this.playback(i+1), false);
-        }
-        */
+        // Start playing the first audio file
+        // The state will make the event listeners play the rest
+        this.playback(0)
     },
     
     playback(index) {
         // Plays the audio element with a given index.
         if (this.state.audioURLs[index]) {
             // debug logs
-            console.log(this.state.audioURLs);
-            console.log("Index is " + index.toString());
+            console.log("playback index is " + index.toString());
+            console.log(this.state.audioURLs[index])
             // get element id and play audio
             var audioId = 'recWord-' + index.toString() + '-audio';
             document.getElementById(audioId).play();
@@ -214,26 +209,10 @@ RecordPage = React.createClass({
                 recFunction = this.nextRecording; 
             }
         }
-        // this is when re-recording
-        else if (this.state.recording === 'rerecord') {
+        // this is when re-recording a single file
+        else if (this.state.recording === 'rerecord' || this.state.recording === 'playbackAll') {
             playButtonDisabled = true;
             recordLabel = '...';
-        }
-        else if (this.state.recording === "playback") {
-            if (this.state.active < this.state.audioURLs.length) {
-                var audioId = 'recWord-' + this.state.active.toString() + '-audio';
-                var _this = this; // so we can access 'this' inside the function
-                document.getElementById(audioId).addEventListener("ended", function(){
-                    _this.setState({
-                        active: _this.state.active +1
-                    });
-                });
-                this.playback(this.state.active);
-            } else {
-                this.setState({
-                    recording: false
-                });
-            }
         }
         else {
             throw ("this.state.recording is unrecognised, current value is: " + this.state.recording.toString())
@@ -259,18 +238,18 @@ RecordPage = React.createClass({
                         var recWordIdLi = recWordId + '-li';
                         var recWordIdAudio = recWordId + '-audio';
             
-                        var backgroundColor = this.state.recording && (index === this.state.active) ? 'yellow' : 'white';
+                        var backgroundColor = (this.state.recording === true) && (index === this.state.active) ? 'yellow' : 'white';
             
                         var playbackButtonDisabled = (index < this.state.active && this.state.recording === false) ? false : true;
                         var reRecordButtonDisabled = (index < this.state.active && this.state.recording === false) || (this.state.recording === 'rerecord') ? false: true;
             
                         var reRecordLabel = (this.state.recording === 'rerecord' && index === this.state.active) ? 'Done re-recording' : 'Re-record';
-                        var reRecordFunc = this.state.recording === 'rerecord' ? this.stopReRecord : this.reRecord.bind(this, index);
+                        var reRecordFunc = this.state.recording === 'rerecord' ? this.stopReRecord : ()=>this.reRecord(index);
             
                         return (
                             <li id={recWordIdLi} className='recWord' key={index} style={{backgroundColor}}>
                                 <p style={{display: 'inline'}}>{c}</p>
-                                <button type="button" disabled={playbackButtonDisabled} onClick={this.playback.bind(this, index)}>Play back</button>
+                                <button type="button" disabled={playbackButtonDisabled} onClick={()=>this.playback(index)}>Play back</button>
                                 <button type="button" disabled={reRecordButtonDisabled} onClick={reRecordFunc}>{reRecordLabel}</button>
                                 <audio id={recWordIdAudio} controls={false} muted={false} src={this.state.audioURLs[index]} />
                             </li>
@@ -278,10 +257,32 @@ RecordPage = React.createClass({
                     }, this)}
                 </ul>
                 <button type="button" disabled={playAllDisabled} onClick={this.playbackAll}>Play all</button>
-                <button type="button" disabled={submitDisabled}  onClick={this.props.submitAudio.bind(this, "Hello")}>Submit!</button> 
+                <button type="button" disabled={submitDisabled}  onClick={()=>this.props.submitAudio("Hello")}>Submit!</button> 
                 {/*May want to make the Submit button type="submit"*/}
             </div>
         )
+    },
+    
+    componentDidMount() {
+        /* Make audio files carry on playing if we are in 'playbackAll' mode
+         */
+        for (i=0; i < this.props.recordingWords.length; i++) {
+            console.log('adding listener to index ' + i.toString())
+            let audioId = 'recWord-' + i.toString() + '-audio'
+            let nextIndex = i+1
+            document.getElementById(audioId).addEventListener("ended",  // trigger when playing ends
+                () => {
+                    console.log('inside handler')
+                    if (this.state.recording === 'playbackAll') {
+                        console.log('playbackAll')
+                        if (nextIndex < this.state.audioURLs.length) {
+                            this.playback(nextIndex)  // play the next file
+                        } else {
+                            this.setState({recording: false})  // reset the state
+                        }
+                    }
+                })
+        }
     }
 });
 
