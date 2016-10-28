@@ -19,11 +19,11 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 practicalmeteor:mocha
 practicalmeteor:chai
 
-# audio recorder (might be replaced)
+# audio recorder (like recorderJS, but compatible with Meteor)
 maxencecornet:audio-recorder
 
-react-meteor-data  # For creating containers to access data
+react-meteor-data       # For creating containers to access data
 
-meteorhacks:picker  # For server-side routing
+meteorhacks:picker      # For server-side routing
 
-shell-server  # For the `meteor shell` command
+shell-server            # For the `meteor shell` command

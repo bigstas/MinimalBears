@@ -2,7 +2,9 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
 import update from 'react-addons-update';
-//import Recorder from 'recorderjs';  // !!!
+
+// Note that we use 'meteor/maxencecornet:audio-recorder',
+// which defines window.Recorder for us
 
 // navigator.mediaDevices.getUserMedia compatibility with different browsers
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
