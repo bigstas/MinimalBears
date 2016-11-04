@@ -261,6 +261,17 @@ li a, li p {
 /* ============ record.js =========== */
 /* ================================== */
 
+.wordRow, .wordRowFocused {
+    display: list-item;
+    list-style: none;
+    border-radius: 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.wordRow:hover { background-color: darkseagreen; }
+.wordRowFocused { background-color: gold; }
+.wordRowFocused:hover { background-color: yellow; }
+
 #record * {margin-left: 10px;}
 .fileNotReady {display: none;}
 

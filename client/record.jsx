@@ -46,19 +46,236 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 const URL = window.URL || window.webkitURL
 
 
+StartButton = React.createClass({
+    /* The first button.
+    */
+    
+    render() {
+        // display props
+        let disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"));
+        let label = "Record"; // default value
+        
+        // callback arguments
+        let stop = (this.props.mode === "record");
+        let start = true;     // default value
+        let mode  = "record"; // default value
+        let next;
+        
+        if (this.props.mode === "wait") { 
+            // start recording or continue where we left off
+            next = this.props.next; 
+        } 
+        else if (this.props.mode === "record") {
+            // go on to the next item
+            next = this.props.next +1;
+            if (this.props.next === this.props.max) {
+                // we're already on the last item
+                start = false;
+                mode  = "done";
+                label = "Done";
+            } else {
+                // we're somewhere in the middle
+                label = "Next";
+            }
+        } 
+        else if (this.props.mode === "done") {
+            // we've finished recording, and now starting recording from scratch
+            next = 0;
+            label = "Re-record all";
+        }
+        
+        // for this button, focus and next are the same
+        let focus = next;
+        return (
+            <button type="button" 
+                disabled={disabled}
+                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
+                    {label}
+            </button> 
+        )
+    }
+});
+
+StopButton = React.createClass({
+    /* The second button.
+    */
+    
+    render() {
+        // display props
+        let disabled = (this.props.mode !== "record");
+        let label = "Stop";
+        
+        // callback arguments
+        let stop = true;
+        let start = false;
+        let mode  = "wait"; // default value
+        let next  = this.props.next +1;
+        let focus = next; // for this button, focus and next are the same
+        
+        if (this.props.next === this.props.max) {
+            mode = "done";
+        }
+        
+        return (
+            <button type="button" 
+                disabled={disabled}
+                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
+                    {label}
+            </button> 
+        )
+    }
+});
+
+PlayAllButton = React.createClass({
+    /* The third button.
+    */
+    
+    render() {
+        // display props
+        let disabled = (this.props.mode !== "done");
+        let label = "Playback All";
+        
+        // callback arguments
+        let stop = false;
+        let start = false;
+        let mode  = "playbackAll";
+        let next  = null;
+        let focus = next; // for this button, focus and next are the same
+        
+        return (
+            <button type="button" 
+                disabled={disabled}
+                onClick={this.props.playAllFunction}>
+                    {label}
+            </button> 
+        )
+    }
+});
+
+SubmitButton = React.createClass({
+    /* The fourth button.
+    */
+    render() {
+        return (
+            <button type="button" 
+                disabled={this.props.mode !== "done"}
+                onClick={this.props.submitAudio}>
+                    Submit!
+            </button> 
+        )
+    }
+});
+
+TopRow = React.createClass({
+    /* The top row of buttons.
+     * Includes: start, stop, play all, submit.
+    */
+    render() {
+        return (
+            <div>
+                <StartButton   mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
+                <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
+                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.callback} />
+                <SubmitButton  mode={this.props.mode} submitAudio={this.props.submitAudio} />
+            </div>
+        )
+    }
+});
+
+ReRecord = React.createClass({
+    /* Button for re-recording a single word.
+     * Available when there is no recording going on at the moment (wait mode or done mode) and this word has alreay been recorded (this.props.srcExists === true) or if the word in question is being re-recorded (active === true).
+     */
+    render() {
+        // the button is "active" if it is currently re-recording
+        let active = (this.props.mode === "reRecordSingle" && this.props.focused);
+        let disabled = !(this.props.srcExists && 
+                            (this.props.mode === "wait" || this.props.mode === "done" || active)
+                         );
+        let label = "Record"; // default value
+        
+        // callback arguments - default values, i.e. when not currently re-recording
+        let stop = false;
+        let start = true;
+        let mode = "reRecordSingle";
+        let focus = this.props.index;
+        let next = focus;
+        
+        // arguments when this row is being re-recorded
+        if (active) {
+            label = "Done";
+            stop  = true;
+            start = false;
+            mode  = "wait"; // TO DO: actually, this should sometimes go to "done", if the mode was "done" previously
+        }
+        
+        return (
+            <button type="button" 
+                disabled={disabled}
+                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
+                    {label}
+            </button> 
+        )
+    }
+});
+
+PlaybackOne = React.createClass({
+    /* Button for playing back a single word.
+     *
+     */
+    render() {
+        let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"));
+        
+        // callback arguments
+        let stop = false;
+        let start = false;
+        let mode = "playback";
+        let focus = this.props.index;
+        let next = focus;
+        
+        return (
+            <button type="button" 
+                disabled={disabled}
+                onClick={() => this.props.playbackFunction( this.props.index )}>
+                    Listen
+            </button> 
+        )
+    }
+});
+
+WordRow = React.createClass({
+    /* A row below the top row. There is the same number of these as there are words to record.
+     * Includes: re-record, playback, word. All inside a div that lights up on rollover, or when focused.
+     */
+    render() {
+        let rowClassName = "wordRow";
+        if (this.props.focused === true) { rowClassName = "wordRowFocused"}
+        
+        return (
+            <div className={rowClassName}>
+                <ReRecord    index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
+                <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
+                <p style={{display: "inline"}}>{this.props.word}</p>
+            </div>
+        )
+    }
+});
+
+
 RecordPage = React.createClass({
     
     getInitialState () {
         return {
             audioURLs: [],  // List of the recorded audio
-            recording: false,  // Whether we are currently recording
-            active: -1  // Which item we are recording
+            mode: "wait",   // wait, record, done, reRecordSingle, playback, playbackAll
+            focus: 0,  // which item is under focus
+            next: 0    // the first item that is not yet recorded
         }
     },
     
     componentWillMount() {
         // Set up audio context (which contains audio nodes)
-        this.audioContext = new AudioContext()
+        this.audioContext = new AudioContext();
         // Find the microphone (note, using a Promise)
         navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(
             stream => {
@@ -66,24 +283,13 @@ RecordPage = React.createClass({
                 this.source = this.audioContext.createMediaStreamSource(stream)
                 // Create the recorder node (connected to the audio node)
                 this.recorder = new Recorder(this.source)
-            })
-    },
-    
-    startRecording () {
-        /* Start recording from the first item
-         */
-        this.setState({
-            recording: true,
-            active: 0
-        });
-        this.recorder.record();
-        console.log('Recording...');
+            });
     },
     
     cutRecording () {
         /* Stop the recorder, save the data with a URL, clear the recorder
          */
-        let currentIndex = this.state.active  // In case of asynchronous changes
+        let currentIndex = this.state.focus  // In case of asynchronous changes
         this.recorder.stop();
         this.recorder.exportWAV(blob => this.makeUrl(currentIndex, blob));
         this.recorder.clear();
@@ -101,65 +307,33 @@ RecordPage = React.createClass({
         });
     },
     
-    stopRecording () {
-        /* Stop all recording
+    recordCallback (stop, start, mode, focus, next) {
+        /* This is a callback function for buttons that control recording.
+         * stop  : stop recording and save the recording
+         * start : start a new recording
+         * mode  : a new value for this.state.mode
+         * focus : a new value for this.state.active
+         * next  : a new value for this.state.next
          */
-        this.cutRecording();
-        this.setState({
-            recording: false,
-            active: this.state.active +1
-        });
-        console.log('Stopped all recordings.');
-    },
-    
-    nextRecording () {
-        /* Stop recording the current word, start recording the next word
-         */
-        this.cutRecording();
-        this.recorder.record();
-        this.setState({
-            active: this.state.active +1
-        });
-        console.log(this.state.audioURLs);
-    },
-    
-    continueRecording () {
-        /* Start recording again (pick up where we left off)
-         */
-        this.recorder.record();
-        this.setState({
-            recording: true
-        })
-        console.log('continuing');
-    },
-    
-    reRecord(index) {
-        /* Start recording an item again
-         */
-        this.recorder.record();
-        this.setState({
-            active: index,
-            recording: 'rerecord'
-        });
-        console.log("Re-recording audio with index " + index.toString() + "...");
-    },
-    
-    stopReRecord () {
-        /* Finish recording the item again
-         */
-        this.cutRecording();
-        this.setState({
-            active: this.state.audioURLs.length,
-            recording: false
-        })
-        console.log(this.state.audioURLs);
+        if (stop)  { this.cutRecording(); }
+        if (start) { this.recorder.record(); }
+        let stateUpdate = {};
+        if (mode  !== null) { stateUpdate.mode  = mode;  }
+        if (focus !== null) { stateUpdate.focus = focus; }
+        if (next  !== null) { stateUpdate.next  = next;  }
+        this.setState( stateUpdate );
+        console.log(`stop: ${stop}
+start: ${start}
+mode: ${mode}
+focus: ${focus}
+next: ${next}`);
     },
     
     playbackAll() {
         /* Playback all recorded audio
          */
         this.setState({
-            recording: "playbackAll"
+            mode: "playbackAll"
         });
         
         // Start playing the first audio file
@@ -173,118 +347,62 @@ RecordPage = React.createClass({
             // debug logs
             console.log("playback index is " + index.toString());
             console.log(this.state.audioURLs[index])
-            // get element id and play audio
-            var audioId = 'recWord-' + index.toString() + '-audio';
-            document.getElementById(audioId).play();
+            // play audio
+            this.audioElements[index].play();
         } else {
             console.log("audio URL out of range: " + index.toString());
         }
     },
     
+    submitAudio() {
+        alert("We're supposed to do something here!");
+    },
+    
     render() {
-        // The following two variables define what the main "record" button will look like and do.
-        var recordLabel;
-        var recFunction;
-        var playButtonDisabled = false;
-
-        if (this.state.recording === false) {
-            if (this.state.active === -1) {
-                recordLabel = "Start recording";
-                recFunction = this.startRecording;
-            }
-            else if (this.state.active < this.props.recordingWords.length) {
-                recordLabel = "Continue recording";
-                recFunction = this.continueRecording; 
-            }
-            else {
-                recordLabel = "Re-record all";
-                recFunction = this.startRecording;
-            }
-        }
-        else if (this.state.recording === true) {
-            if (this.state.active === this.props.recordingWords.length -1) {
-                recordLabel = "Done";
-                recFunction = this.stopRecording;
-            }
-            else {
-                recordLabel = "Next";
-                recFunction = this.nextRecording; 
-            }
-        }
-        // this is when re-recording a single file
-        else if (this.state.recording === 'rerecord' || this.state.recording === 'playbackAll') {
-            playButtonDisabled = true;
-            recordLabel = '...';
-        }
-        else {
-            throw ("this.state.recording is unrecognised, current value is: " + this.state.recording.toString())
-        }
-
-        var playAllDisabled = (this.state.audioURLs.length === 0 || this.state.recording) ? true : false;
-        var submitDisabled = (this.state.audioURLs.length === this.props.recordingWords.length && !this.state.recording) ? false : true;
-        
         return (
-            <div id='record'>
-                <p>Here is your list of words to record.</p>
-                <div>
-                    {/*Either the "start" button or the "next" button, depending on whether you are in the middle or recording or not.*/}
-                    <button type="button" disabled={playButtonDisabled}
-                        onClick={recFunction}>
-                        {recordLabel}
-                        </button>
-                    <button type="button" disabled={!this.state.recording} onClick={this.stopRecording}>Stop recording</button>
-                </div>
-                <ul>
-                    {this.props.recordingWords.map(function(c, index) {
-                        var recWordId = 'recWord-' + index.toString();
-                        var recWordIdLi = recWordId + '-li';
-                        var recWordIdAudio = recWordId + '-audio';
-            
-                        var backgroundColor = (this.state.recording === true) && (index === this.state.active) ? 'yellow' : 'white';
-            
-                        var playbackButtonDisabled = (index < this.state.active && this.state.recording === false) ? false : true;
-                        var reRecordButtonDisabled = (index < this.state.active && this.state.recording === false) || (this.state.recording === 'rerecord') ? false: true;
-            
-                        var reRecordLabel = (this.state.recording === 'rerecord' && index === this.state.active) ? 'Done re-recording' : 'Re-record';
-                        var reRecordFunc = this.state.recording === 'rerecord' ? this.stopReRecord : ()=>this.reRecord(index);
-            
-                        return (
-                            <li id={recWordIdLi} className='recWord' key={index} style={{backgroundColor}}>
-                                <p style={{display: 'inline'}}>{c}</p>
-                                <button type="button" disabled={playbackButtonDisabled} onClick={()=>this.playback(index)}>Play back</button>
-                                <button type="button" disabled={reRecordButtonDisabled} onClick={reRecordFunc}>{reRecordLabel}</button>
-                                <audio id={recWordIdAudio} controls={false} muted={false} src={this.state.audioURLs[index]} />
-                            </li>
-                        );
-                    }, this)}
-                </ul>
-                <button type="button" disabled={playAllDisabled} onClick={this.playbackAll}>Play all</button>
-                <button type="button" disabled={submitDisabled}  onClick={()=>this.props.submitAudio("Hello")}>Submit!</button> 
-                {/*May want to make the Submit button type="submit"*/}
+            <div id="record">
+                <TopRow next={this.state.next} max={this.props.recordingWords.length -1} mode={this.state.mode} callback={this.recordCallback} playbackAll={this.playbackAll} submitAudio={this.submitAudio} />
+                {this.props.recordingWords.map(
+                    function(c, index) {
+                        let audioRef = "audio" + index.toString();
+                        return(
+                            <div>
+                                <WordRow index={index} mode={this.state.mode} callback={this.recordCallback} playbackFunction={this.playback} word={c} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
+                                <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
+                            </div>
+                        )
+                    }, this)
+                }
             </div>
         )
     },
     
     componentDidMount() {
-        /* Make audio files carry on playing if we are in 'playbackAll' mode
+        /* add event listeners to all the <audio> elements
+         * they listen for when the audio finishes playing ("ended")
+         * we use this to make the audio carry on playing in playbackAll mode
+         * Also, create a list of <audio> elements for future reference
          */
-        for (i=0; i < this.props.recordingWords.length; i++) {
-            console.log('adding listener to index ' + i.toString())
-            let audioId = 'recWord-' + i.toString() + '-audio'
-            let nextIndex = i+1
-            document.getElementById(audioId).addEventListener("ended",  // trigger when playing ends
+        console.log(this.refs);
+        this.audioElements = this.props.recordingWords.map(function(c, index) {
+            let myRef = "audio" + index.toString();
+            let element = this.refs[myRef];
+            console.log('adding listener to index ' + index.toString());
+            let nextIndex = index +1;
+            element.addEventListener("ended",  // trigger when playing ends
                 () => {
                     console.log('inside handler')
-                    if (this.state.recording === 'playbackAll') {
+                    if (this.state.mode === 'playbackAll') {
                         console.log('playbackAll')
                         if (nextIndex < this.state.audioURLs.length) {
                             this.playback(nextIndex)  // play the next file
                         } else {
-                            this.setState({recording: false})  // reset the state
+                            this.setState({mode: "wait"})  // reset the state
                         }
                     }
-                })
-        }
+                });
+            return element;
+        }, this);
     }
 });
 
