@@ -47,8 +47,11 @@ const URL = window.URL || window.webkitURL
 
 
 StartButton = React.createClass({
-    /* The first button.
-    */
+    /* The main button.
+     * Press to start recording and go through all of the words. This puts the page in record mode.
+     * Press while recording to move on to the next word.
+     * On the final word, this button will end the recording of the words and place the page in done mode.
+     */
     
     render() {
         // display props
@@ -97,13 +100,14 @@ StartButton = React.createClass({
 });
 
 StopButton = React.createClass({
-    /* The second button.
-    */
+    /* Press this button to stop the recording at the current word.
+     * Currently configured so that the current word's recording *will* be saved, and focus will move on to the next word.
+     * Available in record mode. Sends page to wait mode or done mode (depending on whether everything has been recorded or not).
+     */
     
     render() {
         // display props
-        let disabled = (this.props.mode !== "record");
-        let label = "Stop";
+        let className = (this.props.mode !== "record" ? 'stopButton' : 'stopButton stopButtonEnabled');
         
         // callback arguments
         let stop = true;
@@ -117,17 +121,16 @@ StopButton = React.createClass({
         }
         
         return (
-            <button type="button" 
-                disabled={disabled}
-                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
-                    {label}
-            </button> 
+            <div className={className} onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                <img className="stopSymbol" src={"stop.png"} />
+	       	</div>
         )
     }
 });
 
 PlayAllButton = React.createClass({
-    /* The third button.
+    /* Press this button to play back all the audio.
+     * Available in done mode (i.e. when all the words have been recorded).
     */
     
     render() {
@@ -153,8 +156,10 @@ PlayAllButton = React.createClass({
 });
 
 SubmitButton = React.createClass({
-    /* The fourth button.
-    */
+    /* Press this button to submit the audio to the database. 
+     * Enabled when in done mode (i.e. when all the words have been recorded).
+     * TO DO: properly write the submitAudio function.
+     */
     render() {
         return (
             <button type="button" 
@@ -175,7 +180,7 @@ TopRow = React.createClass({
             <div>
                 <StartButton   mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
                 <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
-                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.callback} />
+                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} />
                 <SubmitButton  mode={this.props.mode} submitAudio={this.props.submitAudio} />
             </div>
         )
@@ -185,36 +190,44 @@ TopRow = React.createClass({
 ReRecord = React.createClass({
     /* Button for re-recording a single word.
      * Available when there is no recording going on at the moment (wait mode or done mode) and this word has alreay been recorded (this.props.srcExists === true) or if the word in question is being re-recorded (active === true).
+     * Returns to the mode we started from when you're done recording (i.e. either wait mode or done mode).
      */
     render() {
         // the button is "active" if it is currently re-recording
-        let active = (this.props.mode === "reRecordSingle" && this.props.focused);
+        let active = ((this.props.mode === "reRecordSingleToWait" || this.props.mode === "reRecordSingleToDone") && this.props.focused);
         let disabled = !(this.props.srcExists && 
                             (this.props.mode === "wait" || this.props.mode === "done" || active)
                          );
-        let label = "Record"; // default value
+        let icon = "record.png"; // icon: red circle - press to record
+        let className = (disabled ? 'reRecord' : 'reRecord reRecordEnabled')
         
         // callback arguments - default values, i.e. when not currently re-recording
         let stop = false;
         let start = true;
-        let mode = "reRecordSingle";
         let focus = this.props.index;
         let next = focus;
+        let mode = "reRecordSingleToWait";
+        if (this.props.mode === "done") { mode = "reRecordSingleToDone"; }
         
         // arguments when this row is being re-recorded
         if (active) {
-            label = "Done";
+            icon = "done.png"; // icon: green tick - press to finish the recording
             stop  = true;
             start = false;
-            mode  = "wait"; // TO DO: actually, this should sometimes go to "done", if the mode was "done" previously
+            className = 'reRecord reRecordActive';
+            // Go back to previous mode, either wait mode or done mode, as encoded in the prop
+            if      (this.props.mode === "reRecordSingleToWait") { mode = "wait"; }
+            else if (this.props.mode === "reRecordSingleToDone") { mode = "done"; }
+            else {
+                // throw an error! (better than this one)
+                console.log("incorrect mode passed: current mode is " + this.props.mode);
+            }
         }
         
         return (
-            <button type="button" 
-                disabled={disabled}
-                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
-                    {label}
-            </button> 
+            <div className={className} key={this.props.index} onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                <img className="recordSymbol" src={icon} />
+	       	</div>
         )
     }
 });
@@ -225,6 +238,7 @@ PlaybackOne = React.createClass({
      */
     render() {
         let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"));
+        let className = (disabled ? 'playbackOne' : 'playbackOne playbackOneEnabled');
         
         // callback arguments
         let stop = false;
@@ -234,11 +248,9 @@ PlaybackOne = React.createClass({
         let next = focus;
         
         return (
-            <button type="button" 
-                disabled={disabled}
-                onClick={() => this.props.playbackFunction( this.props.index )}>
-                    Listen
-            </button> 
+            <div className={className} key={this.props.index} onClick={()=>this.props.playbackFunction(this.props.index)}>
+                <img className="playSymbol" src="play.png" />
+	       	</div>
         )
     }
 });
@@ -267,7 +279,7 @@ RecordPage = React.createClass({
     getInitialState () {
         return {
             audioURLs: [],  // List of the recorded audio
-            mode: "wait",   // wait, record, done, reRecordSingle, playback, playbackAll
+            mode: "wait",   // wait, record, done, reRecordSingleToWait, reRecordSingleToDone, playback, playbackAll
             focus: 0,  // which item is under focus
             next: 0    // the first item that is not yet recorded
         }
@@ -397,7 +409,7 @@ next: ${next}`);
                         if (nextIndex < this.state.audioURLs.length) {
                             this.playback(nextIndex)  // play the next file
                         } else {
-                            this.setState({mode: "wait"})  // reset the state
+                            this.setState({mode: "done"})  // reset the state
                         }
                     }
                 });

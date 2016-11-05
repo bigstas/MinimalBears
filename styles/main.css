@@ -272,6 +272,31 @@ li a, li p {
 .wordRowFocused { background-color: gold; }
 .wordRowFocused:hover { background-color: yellow; }
 
+.playbackOne, .reRecord, .stopButton {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: darkgray;
+}
+.playbackOneEnabled, .reRecordEnabled, .stopButtonEnabled {
+    background-color: skyblue;
+    cursor: pointer;
+}
+.playbackOneEnabled:hover, .reRecordEnabled:hover, .stopButtonEnabled:hover { background-color: deepskyblue; }
+.playSymbol, .recordSymbol, .stopSymbol { 
+    margin-right: 10px; 
+    margin-top: 2px;
+}
+.reRecordActive {
+    background-color: coral;
+    cursor: pointer;
+}
+.reRecordActive:hover { background-color: black; }
+
 #record * {margin-left: 10px;}
 .fileNotReady {display: none;}
 
