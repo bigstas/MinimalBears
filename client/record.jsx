@@ -2,6 +2,9 @@ import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
 import update from 'react-addons-update';
+// For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
+import ReactTooltip from 'react-tooltip';
+
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -90,11 +93,18 @@ StartButton = React.createClass({
         // for this button, focus and next are the same
         let focus = next;
         return (
-            <button type="button" 
-                disabled={disabled}
-                onClick={() => this.props.callback( stop, start, mode, focus, next )}>
-                    {label}
-            </button> 
+            <div>
+                <button type="button" 
+                    className='startButton'
+                    data-tip data-for='startTooltip' data-delay-show='1000'
+                    disabled={disabled}
+                    onClick={() => this.props.callback( stop, start, mode, focus, next )}>
+                        {label}
+                </button> 
+                <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
+                    <p style={{textAlign:'center'}}>Record all the words,<br />one after the other.</p>
+                </ReactTooltip>
+            </div>
         )
     }
 });
@@ -121,9 +131,12 @@ StopButton = React.createClass({
         }
         
         return (
-            <div className={className} onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
-                <img className="stopSymbol" src={"stop.png"} />
-	       	</div>
+            <div>
+                <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                    <img className="stopSymbol" src={"stop.png"} />
+                </div>
+                <ReactTooltip place="bottom" type="light" effect="solid"/>
+            </div>
         )
     }
 });
@@ -146,11 +159,16 @@ PlayAllButton = React.createClass({
         let focus = next; // for this button, focus and next are the same
         
         return (
-            <button type="button" 
-                disabled={disabled}
-                onClick={this.props.playAllFunction}>
-                    {label}
-            </button> 
+            <div>
+                <button type="button" 
+                    className='playAllButton'
+                    data-tip='This plays all the audio.'
+                    disabled={disabled}
+                    onClick={this.props.playAllFunction}>
+                        {label}
+                </button> 
+                <ReactTooltip place="bottom" type="light" effect="solid"/>
+            </div>
         )
     }
 });
@@ -162,11 +180,16 @@ SubmitButton = React.createClass({
      */
     render() {
         return (
-            <button type="button" 
-                disabled={this.props.mode !== "done"}
-                onClick={this.props.submitAudio}>
-                    Submit!
-            </button> 
+            <div>
+                <button type="button" 
+                    className='submitButton'
+                    data-tip='If you are ready, send all the audio to the database.'
+                    disabled={this.props.mode !== "done"}
+                    onClick={this.props.submitAudio}>
+                        Submit!
+                </button>
+                <ReactTooltip place="bottom" type="light" effect="solid"/>
+            </div>
         )
     }
 });
@@ -177,7 +200,7 @@ TopRow = React.createClass({
     */
     render() {
         return (
-            <div>
+            <div id='topRow'>
                 <StartButton   mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
                 <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
                 <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} />
@@ -199,7 +222,8 @@ ReRecord = React.createClass({
                             (this.props.mode === "wait" || this.props.mode === "done" || active)
                          );
         let icon = "record.png"; // icon: red circle - press to record
-        let className = (disabled ? 'reRecord' : 'reRecord reRecordEnabled')
+        let className = (disabled ? 'reRecord' : 'reRecord reRecordEnabled');
+        let tooltip = "Re-record";
         
         // callback arguments - default values, i.e. when not currently re-recording
         let stop = false;
@@ -225,9 +249,12 @@ ReRecord = React.createClass({
         }
         
         return (
-            <div className={className} key={this.props.index} onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
-                <img className="recordSymbol" src={icon} />
-	       	</div>
+            <div style={{display: 'inline-block'}}>
+                <div className={className} key={this.props.index} data-tip={tooltip} data-delay-show='1000' onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                    <img className="recordSymbol" src={icon} />
+                </div>
+                <ReactTooltip place="bottom" type="light" effect="solid" />
+            </div>
         )
     }
 });
@@ -248,9 +275,12 @@ PlaybackOne = React.createClass({
         let next = focus;
         
         return (
-            <div className={className} key={this.props.index} onClick={()=>this.props.playbackFunction(this.props.index)}>
-                <img className="playSymbol" src="play.png" />
-	       	</div>
+            <div style={{display: 'inline-block'}}>
+                <div className={className} key={this.props.index} data-tip={'Play back'} data-delay-show='1000' onClick={()=>this.props.playbackFunction(this.props.index)}>
+                    <img className="playSymbol" src="play.png" />
+                </div>
+                <ReactTooltip place="bottom" type="light" effect="solid" />
+            </div>
         )
     }
 });
@@ -374,17 +404,19 @@ next: ${next}`);
         return (
             <div id="record">
                 <TopRow next={this.state.next} max={this.props.recordingWords.length -1} mode={this.state.mode} callback={this.recordCallback} playbackAll={this.playbackAll} submitAudio={this.submitAudio} />
-                {this.props.recordingWords.map(
-                    function(c, index) {
-                        let audioRef = "audio" + index.toString();
-                        return(
-                            <div>
-                                <WordRow index={index} mode={this.state.mode} callback={this.recordCallback} playbackFunction={this.playback} word={c} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
-                                <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
-                            </div>
-                        )
-                    }, this)
-                }
+                <div id="wordList">
+                    {this.props.recordingWords.map(
+                        function(c, index) {
+                            let audioRef = "audio" + index.toString();
+                            return(
+                                <div>
+                                    <WordRow index={index} mode={this.state.mode} callback={this.recordCallback} playbackFunction={this.playback} word={c} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
+                                    <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
+                                </div>
+                            )
+                        }, this)
+                    }
+                </div>
             </div>
         )
     },

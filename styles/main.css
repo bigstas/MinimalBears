@@ -261,6 +261,12 @@ li a, li p {
 /* ============ record.js =========== */
 /* ================================== */
 
+.startButton, .stopButton, .playAllButton, .submitButton {
+    float: left;
+}
+#wordList {
+    clear: left;
+}
 .wordRow, .wordRowFocused {
     display: list-item;
     list-style: none;
