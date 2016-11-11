@@ -1,6 +1,6 @@
-import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Link } from 'react-router';
+import React from 'react'
+import { createContainer } from 'meteor/react-meteor-data'
+import { Link } from 'react-router'
 
 Home = React.createClass({    
     render() {
@@ -17,6 +17,6 @@ Home = React.createClass({
             </div>
         )
     }
-});
+})
 
-export default Home;
+export default Home

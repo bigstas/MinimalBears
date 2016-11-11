@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 NotFound = React.createClass({
     render() {
@@ -7,8 +7,8 @@ NotFound = React.createClass({
                 <h2>Your webpage was not found.</h2>
                 <p>Sad bear face.</p>
             </div>
-        );
+        )
     }
-});
+})
 
-export default NotFound;
+export default NotFound

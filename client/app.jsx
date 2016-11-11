@@ -1,24 +1,24 @@
-import React from 'react';
+import React from 'react'
 
 AppBody = React.createClass({    
     getInitialState() {
-        // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
+        // this.state.user to be a string when there is a signed-in user otherwise, false (bool)
         return {
             activeLanguageId: null,
             interfaceLanguage: "English",
             user: false
-        };
+        }
     },
     
     setLanguage(langId) {
         this.setState({
             activeLanguageId: langId
-        });
+        })
     },
     
     submitAudio(msg) {
         alert(`Your audio has not been submitted. Staś and Guy are yet to implement this feature.
-By the way, here is a special message: ` + msg);
+By the way, here is a special message: ` + msg)
     },
     
     render() {
@@ -38,8 +38,8 @@ By the way, here is a special message: ` + msg);
                     )}
                 </div>
             </div>
-        );
+        )
     }
-});
+})
 
-export default AppBody;
+export default AppBody

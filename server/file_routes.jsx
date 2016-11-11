@@ -1,9 +1,9 @@
 // Make audio files accessible by a URL
 
 // The following packages are built into NodeJS
-import fs from 'fs';  // interact with the file system
-import path from 'path';  // manipulate file paths
-import process from 'process';  // get info about the running process
+import fs from 'fs'  // interact with the file system
+import path from 'path'  // manipulate file paths
+import process from 'process'  // get info about the running process
 
 // The Picker atmosphere package allows us to define server-side routes
 // :_id is passed to the function via params (the colon indicates it's a variable)
@@ -27,4 +27,4 @@ Picker.route('/audio/:_id', function(params, req, res, next) {
     })
     
     // (TODO: we might want to handle errors in the request...?)
-});
+})

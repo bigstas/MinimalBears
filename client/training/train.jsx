@@ -1,6 +1,6 @@
-import React from 'react';
-import Arena from '../training/arena';
-import { ConnectedLanguageSelector, ConnectedContrastSelector } from '../training/selector';
+import React from 'react'
+import Arena from '../training/arena'
+import { ConnectedLanguageSelector, ConnectedContrastSelector } from '../training/selector'
 
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
@@ -14,7 +14,7 @@ TrainPage = React.createClass({
     setContrast(contrastId) {
         this.setState({
             activeContrastId: contrastId
-        });
+        })
     },
     
     render() {
@@ -38,8 +38,8 @@ TrainPage = React.createClass({
             <div>
                 {activeComponent}
             </div>
-        );
+        )
     }
-});
+})
 
-export default TrainPage;
+export default TrainPage

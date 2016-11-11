@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-apollo';
-import gql from 'graphql-tag';
+import React from 'react'
+import { connect } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // A dummy class, that has one prop, "data".
 // The prop should be an object returned from PostGraphQL,
@@ -38,7 +38,7 @@ function mapQueriesToProps({ ownProps, state }) {
             }}`
         }
     }
-};
+}
 
 // Wrap the class according to the function
 export default connect({mapQueriesToProps})(MyClass)

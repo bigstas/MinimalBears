@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-apollo';
-import gql from 'graphql-tag';
+import React from 'react'
+import { connect } from 'react-apollo'
+import gql from 'graphql-tag'
 
 const Selector = React.createClass({
 	/* A series of buttons from which the user can choose one

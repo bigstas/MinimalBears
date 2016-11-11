@@ -1,6 +1,6 @@
 // Access the data under www.minimalbears.com/graphql
 
-import postgraphql from 'postgraphql';
+import postgraphql from 'postgraphql'
 
 // PostGraphQL provides 'connect'-style middleware to process queries
 // We can add this using Meteor's WebApp.connectHandlers

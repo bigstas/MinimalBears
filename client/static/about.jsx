@@ -1,7 +1,7 @@
 //'About' page
 
-import React from 'react';
-import YouTube from 'react-youtube';
+import React from 'react'
+import YouTube from 'react-youtube'
 
 About = React.createClass({
     render() {
@@ -11,7 +11,7 @@ About = React.createClass({
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 0
             }
-        };
+        }
         
         return (
             <div id='about'>
@@ -56,8 +56,8 @@ About = React.createClass({
                 Programming: Guy Emerson and Stanisław Pstrokoński <br/>
                 Graphics: Gergő Halász [hopefully!]</p>
             </div>
-        );
+        )
     }
-});
+})
 
-export default About;
+export default About

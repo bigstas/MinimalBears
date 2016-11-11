@@ -2,12 +2,12 @@
 // Star image by Yellowicon (licence: GNU/GPL)
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
-import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React from 'react'
+import { createContainer } from 'meteor/react-meteor-data'
 
 // new gql way of getting data...
-import { connect } from 'react-apollo';
-import gql from 'graphql-tag';
+import { connect } from 'react-apollo'
+import gql from 'graphql-tag'
 
 function parsePairs(pairString) {
     /* Take a string of the form '{"(int,int)","(int,int)",...}'
@@ -23,8 +23,8 @@ function parsePairs(pairString) {
 }
 
 function random(myArray) {
-    var rand = myArray[Math.floor(Math.random() * myArray.length)];
-    return rand;
+    var rand = myArray[Math.floor(Math.random() * myArray.length)]
+    return rand
 }
 
 // Progress bar
@@ -34,59 +34,59 @@ var ProgressBar = React.createClass({
             <div id="progress">
                 <div id="fill" style={this.props.style}></div>
             </div>
-        );
+        )
     }
-});
+})
 
 // Progress button
 var Button = React.createClass({
     render() {
         // Uses CSS animate.css library. Syntax is:
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
-        var btnClass = 'enabledProgress animated rubberBand';
-        var click = this.props.handle;
+        var btnClass = 'enabledProgress animated rubberBand'
+        var click = this.props.handle
         if (this.props.disabled) {
-            btnClass = 'disabledProgress';
-            click = function () {}; // click doesn't do anything when it's disabled
+            btnClass = 'disabledProgress'
+            click = function () {} // click doesn't do anything when it's disabled
         }
         return (
             <div id="button" className={btnClass} onClick={click}>Progress</div>
-        );
+        )
     }
-});
+})
 
 // Button for responding to a recording
 var WordOption = React.createClass({ 
     handleClick() {
         if (this.props.mode === "ask") {
-            this.props.callbackParent(); // you only want things to happen in 'ask' mode, as outside of that mode these buttons shouldn't do anything
+            this.props.callbackParent() // you only want things to happen in 'ask' mode, as outside of that mode these buttons shouldn't do anything
         }
     },
     
     render() {
         //var background = (this.props.mode === "feedback")
             //? (this.props.correct) ? "green" : "white"
-            //: "#b0b0e0" ;
-        //var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word;
-        //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption');
+            //: "#b0b0e0" 
+        //var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word
+        //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption')
         var text = ""
-        var id = "";
-        var wordOptionClass = "wordOption";
+        var id = ""
+        var wordOptionClass = "wordOption"
         if (this.props.mode === "feedback") {
             if (this.props.chosen) {
                 if (this.props.correct) {
-                    text = "Correct!";
-                    id = "wordOptionCorrect";
+                    text = "Correct!"
+                    id = "wordOptionCorrect"
                 } else {
                     text = "Oops! Try again!"
-                    id = "wordOptionWrong";
+                    id = "wordOptionWrong"
                 }
             } else {
-                id = "wordOptionNotChosen";
+                id = "wordOptionNotChosen"
             }
         } else {
-            text = this.props.word;
-            wordOptionClass += " animated pulse";
+            text = this.props.word
+            wordOptionClass += " animated pulse"
         }
         
         return (
@@ -96,9 +96,9 @@ var WordOption = React.createClass({
             onClick={this.handleClick}>
                 {text}
             </div>
-        );
+        )
     }
-});
+})
 
 
 // The arena - where the action happens  
@@ -113,7 +113,7 @@ Arena = React.createClass({
             chosenWord: null,
             currentAudio: null,
             textList: ["placeholder", "more placeholder"]
-        };
+        }
     },
     
     // After the user chooses an option during training
@@ -123,13 +123,13 @@ Arena = React.createClass({
             chosenWord: chosenIndex,
             score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
             counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
-        });
+        })
         if (chosenIndex === this.state.correctAnswer) {
-            var snd = new Audio("correct bell short.wav");
-            snd.play();
+            var snd = new Audio("correct bell short.wav")
+            snd.play()
         } else {
-            var snd = new Audio("quack wrong.wav");
-            snd.play();
+            var snd = new Audio("quack wrong.wav")
+            snd.play()
         }
     },
     
@@ -141,17 +141,17 @@ Arena = React.createClass({
              * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
              * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
              */
-            var correctAnswer = Math.round(Math.random()); // randomly either 0 or 1
+            var correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
             // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
             // fetch all the pairs
-            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs;
+            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs
             // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
-            var pairIds = random(parsePairs(pairString));
+            var pairIds = random(parsePairs(pairString))
             
-            var items = this.props.items.itemWithAudioNodes.nodes;
-            var currentAudio = random(items[pairIds[correctAnswer]-1].audio); 
-            var snd = new Audio(currentAudio);
-            snd.play();
+            var items = this.props.items.itemWithAudioNodes.nodes
+            var currentAudio = random(items[pairIds[correctAnswer]-1].audio) 
+            var snd = new Audio(currentAudio)
+            snd.play()
             
             this.setState({
                 mode: "ask",
@@ -159,7 +159,7 @@ Arena = React.createClass({
                 textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
                            items[pairIds[1]-1].homophones[0]],
                 correctAnswer: correctAnswer
-            });
+            })
         }
         else {
             // throw some sort of error...?
@@ -168,11 +168,11 @@ Arena = React.createClass({
     
     render() {
         
-        var buttonDisabled = ((this.state.mode!=="feedback" && this.state.mode!=="wait") || this.state.counter === this.state.maxRounds) ? true : false;
-        var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar';
+        var buttonDisabled = ((this.state.mode!=="feedback" && this.state.mode!=="wait") || this.state.counter === this.state.maxRounds) ? true : false
+        var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar'
         /* Trumpet at the end of training. To be fixed.
         if (this.state.counter === this.state.maxRounds) {
-            var snd = new Audio(this.data.tadaSound); // TO BE AMENDED - no more this.data
+            var snd = new Audio(this.data.tadaSound) // TO BE AMENDED - no more this.data
             snd.play()
         }
         */
@@ -204,9 +204,9 @@ Arena = React.createClass({
                     }
                 </div>
             </div> 
-        );
+        )
     }
-});
+})
 
 
 /* The 'connect' function will create a wrapper for a class,
@@ -247,6 +247,6 @@ function mapQueriesToProps({ ownProps, state }) {
             }
         }
     }
-};
+}
 
 export default connect({mapQueriesToProps})(Arena)

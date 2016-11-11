@@ -1,7 +1,7 @@
 // Navigation bar
 
-import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import React from 'react'
+import { Link, IndexLink } from 'react-router'
 
 Dropdown = React.createClass({
     render() {
@@ -12,9 +12,9 @@ Dropdown = React.createClass({
                 <div className='dropdownElement'>Something else</div>
                 <div className='dropdownElement'>Something more</div>
             </div>
-        );
+        )
     }
-});
+})
 
 Nav = React.createClass({
     getInitialState () {
@@ -24,24 +24,24 @@ Nav = React.createClass({
     },
     
     dropdownTrue () {
-        this.setState({ dropdown: true });
+        this.setState({ dropdown: true })
     },
     
     componentDidMount: function () {
-        window.addEventListener('mousedown', this.pageClick, false);
+        window.addEventListener('mousedown', this.pageClick, false)
     },
     
     pageClick: function (e) {
-        if (this.mouseIsDownOnDropdown) { return; } 
-        else { this.setState({ dropdown: false }); }
+        if (this.mouseIsDownOnDropdown) { return } 
+        else { this.setState({ dropdown: false }) }
     },
 
     // it's funny because this.mouseIsDownOnDropdown is never initialised
     mouseDownHandler: function () {
-        this.mouseIsDownOnDropdown = true;
+        this.mouseIsDownOnDropdown = true
     },
     mouseUpHandler: function () {
-        this.mouseIsDownOnDropdown = false;
+        this.mouseIsDownOnDropdown = false
     },
     
     render() { 
@@ -60,6 +60,6 @@ Nav = React.createClass({
                 </nav>
                 {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}
             </div>
-        );
+        )
     }
-});
+})

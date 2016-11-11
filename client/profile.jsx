@@ -1,8 +1,8 @@
 //'Profile' page
 // Medal images by Farm-Fresh Web (licence: Creative Commons Attribution Licence)
 
-import React from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React from 'react'
+import { createContainer } from 'meteor/react-meteor-data'
 
 // when there is no logged in user
 EmptyProfile = React.createClass({
@@ -17,9 +17,9 @@ EmptyProfile = React.createClass({
                     <li>Use Georgian bullet points</li>
                 </ul>
             </div>
-        );
+        )
     }
-});
+})
 
 // when there is a logged in user
 UserProfile = React.createClass({
@@ -47,7 +47,7 @@ UserProfile = React.createClass({
             </div>
         )
     }
-});
+})
 
 Profile = React.createClass({
     render() {
@@ -60,7 +60,7 @@ Profile = React.createClass({
             </div>
         )
     }
-});
+})
 
-//export default createContainer(({params}) => {return {};}, Profile);    // do we still need createContainer?
-export default Profile;
+//export default createContainer(({params}) => {return {}}, Profile)    // do we still need createContainer?
+export default Profile
