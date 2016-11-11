@@ -34,11 +34,7 @@ TrainPage = React.createClass({
         	activeComponent = <ConnectedLanguageSelector callback={this.props.callbackLanguage} />
         }
         
-        return (
-            <div>
-                {activeComponent}
-            </div>
-        )
+        return activeComponent
     }
 })
 

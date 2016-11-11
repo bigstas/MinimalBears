@@ -135,7 +135,7 @@ StopButton = React.createClass({
                 <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className="stopSymbol" src={"stop.png"} />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid"/>
+                <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
         )
     }
@@ -188,7 +188,7 @@ SubmitButton = React.createClass({
                     onClick={this.props.submitAudio}>
                         Submit!
                 </button>
-                <ReactTooltip place="bottom" type="light" effect="solid"/>
+                <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
         )
     }
@@ -396,14 +396,10 @@ next: ${next}`)
         }
     },
     
-    submitAudio() {
-        alert("We're supposed to do something here!")
-    },
-    
     render() {
         return (
             <div id="record">
-                <TopRow next={this.state.next} max={this.props.recordingWords.length -1} mode={this.state.mode} callback={this.recordCallback} playbackAll={this.playbackAll} submitAudio={this.submitAudio} />
+                <TopRow next={this.state.next} max={this.props.recordingWords.length -1} mode={this.state.mode} callback={this.recordCallback} playbackAll={this.playbackAll} submitAudio={this.props.submitAudio} />
                 <div id="wordList">
                     {this.props.recordingWords.map(
                         function(c, index) {
@@ -450,5 +446,13 @@ next: ${next}`)
     }
 })
 
-export default RecordPage
+
+WrappedRecordPage = React.createClass({
+    render() {
+        return <RecordPage recordingWords={["youth in Asia", "euthanasia", "a mission", "omission", "emission"]} submitAudio={() => alert("We're supposed to do something here!")} /> 
+    }
+})
+
+
+export default WrappedRecordPage
 
