@@ -59,6 +59,7 @@ StartButton = React.createClass({
     render() {
         // display props
         let disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
+        let className = (disabled ? 'startButton transparent' : 'startButton startButtonEnabled')
         let label = "Record" // default value
         
         // callback arguments
@@ -94,13 +95,11 @@ StartButton = React.createClass({
         let focus = next
         return (
             <div>
-                <button type="button" 
-                    className='startButton'
+                <div className={className}
                     data-tip data-for='startTooltip' data-delay-show='1000'
-                    disabled={disabled}
                     onClick={() => this.props.callback( stop, start, mode, focus, next )}>
                         {label}
-                </button> 
+                </div>
                 <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
                     <p style={{textAlign:'center'}}>Record all the words,<br />one after the other.</p>
                 </ReactTooltip>
@@ -117,7 +116,8 @@ StopButton = React.createClass({
     
     render() {
         // display props
-        let className = (this.props.mode !== "record" ? 'stopButton' : 'stopButton stopButtonEnabled')
+        let disabled = (this.props.mode !== "record")
+        let className = (disabled ? 'stopButton transparent' : 'stopButton stopButtonEnabled')
         
         // callback arguments
         let stop = true
@@ -132,7 +132,7 @@ StopButton = React.createClass({
         
         return (
             <div>
-                <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className="stopSymbol" src={"stop.png"} />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
@@ -148,25 +148,24 @@ PlayAllButton = React.createClass({
     
     render() {
         // display props
-        let disabled = (this.props.mode !== "done")
+        let disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
+        let className = (disabled ? 'playAllButton transparent' : 'playAllButton playAllButtonEnabled')
         let label = "Playback All"
         
-        // callback arguments
-        let stop = false
-        let start = false
-        let mode  = "playbackAll"
-        let next  = null
-        let focus = next // for this button, focus and next are the same
+        // callback arguments - ALL UNUSED at the moment
+        //let stop = false
+        //let start = false
+        //let mode  = "playbackAll"
+        //let next  = null
+        //let focus = next // for this button, focus and next are the same
         
         return (
             <div>
-                <button type="button" 
-                    className='playAllButton'
+                <div className={className}
                     data-tip='This plays all the audio.'
-                    disabled={disabled}
-                    onClick={this.props.playAllFunction}>
+                    onClick={disabled ? null : this.props.playAllFunction}>
                         {label}
-                </button> 
+                </div>
                 <ReactTooltip place="bottom" type="light" effect="solid"/>
             </div>
         )
@@ -179,15 +178,15 @@ SubmitButton = React.createClass({
      * TO DO: properly write the submitAudio function.
      */
     render() {
+        let disabled = !(this.props.mode === "done")
+        let className = (disabled ? 'submitButton transparent' : 'submitButton submitButtonEnabled')
         return (
             <div>
-                <button type="button" 
-                    className='submitButton'
+                <div className={className}
                     data-tip='If you are ready, send all the audio to the database.'
-                    disabled={this.props.mode !== "done"}
-                    onClick={this.props.submitAudio}>
+                    onClick={disabled ? null : this.props.submitAudio}>
                         Submit!
-                </button>
+                </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
         )
@@ -203,7 +202,7 @@ TopRow = React.createClass({
             <div id='topRow'>
                 <StartButton   mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
                 <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
-                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} />
+                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} recordedSoFar={this.props.recordedSoFar} />
                 <SubmitButton  mode={this.props.mode} submitAudio={this.props.submitAudio} />
             </div>
         )
@@ -222,7 +221,7 @@ ReRecord = React.createClass({
                             (this.props.mode === "wait" || this.props.mode === "done" || active)
                          )
         let icon = "record.png" // icon: red circle - press to record
-        let className = (disabled ? 'reRecord' : 'reRecord reRecordEnabled')
+        let className = (disabled ? 'reRecord transparent' : 'reRecord reRecordEnabled')
         let tooltip = "Re-record"
         
         // callback arguments - default values, i.e. when not currently re-recording
@@ -250,7 +249,7 @@ ReRecord = React.createClass({
         
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip={tooltip} data-delay-show='1000' onClick={()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className} key={this.props.index} data-tip={tooltip} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
                     <img className="recordSymbol" src={icon} />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
@@ -265,18 +264,18 @@ PlaybackOne = React.createClass({
      */
     render() {
         let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
-        let className = (disabled ? 'playbackOne' : 'playbackOne playbackOneEnabled')
+        let className = (disabled ? 'playbackOne transparent' : 'playbackOne playbackOneEnabled')
         
-        // callback arguments
-        let stop = false
-        let start = false
-        let mode = "playback"
-        let focus = this.props.index
-        let next = focus
+        // callback arguments - ALL UNUSED at the moment
+        //let stop = false  --- unused
+        //let start = false --- unused
+        //let mode = "playback" --- unused
+        //let focus = this.props.index  --- unused
+        //let next = focus  --- unused
         
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip={'Play back'} data-delay-show='1000' onClick={()=>this.props.playbackFunction(this.props.index)}>
+                <div className={className} key={this.props.index} data-tip={'Play back'} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
                     <img className="playSymbol" src="play.png" />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
@@ -374,23 +373,26 @@ next: ${next}`)
     playbackAll() {
         /* Playback all recorded audio
          */
-        this.setState({
-            mode: "playbackAll"
-        })
-        
         // Start playing the first audio file
         // The state will make the event listeners play the rest
-        this.playback(0)
+        this.playback(0, true)
     },
     
-    playback(index) {
+    playback(index, playAllAudio) {
         // Plays the audio element with a given index.
-        if (this.state.audioURLs[index]) {
+        if (this.state.audioURLs[index]) { 
+            this.setState({ focus: index })  // highlight the word currently playing
+            if (playAllAudio) {
+                this.setState({ mode: "playbackAll" })
+            } else {
+                this.setState({ mode: "playback"})
+            }
             // debug logs
             console.log("playback index is " + index.toString())
             console.log(this.state.audioURLs[index])
             // play audio
             this.audioElements[index].play()
+            this.playbackDone();
         } else {
             console.log("audio URL out of range: " + index.toString())
         }
@@ -399,7 +401,13 @@ next: ${next}`)
     render() {
         return (
             <div id="record">
-                <TopRow next={this.state.next} max={this.props.recordingWords.length -1} mode={this.state.mode} callback={this.recordCallback} playbackAll={this.playbackAll} submitAudio={this.props.submitAudio} />
+                <TopRow next={this.state.next} 
+                        max={this.props.recordingWords.length -1} 
+                        mode={this.state.mode} 
+                        callback={this.recordCallback} 
+                        playbackAll={this.playbackAll} 
+                        submitAudio={this.props.submitAudio} 
+                        recordedSoFar={this.state.audioURLs.length} />
                 <div id="wordList">
                     {this.props.recordingWords.map(
                         function(c, index) {
@@ -435,10 +443,17 @@ next: ${next}`)
                     if (this.state.mode === 'playbackAll') {
                         console.log('playbackAll')
                         if (nextIndex < this.state.audioURLs.length) {
-                            this.playback(nextIndex)  // play the next file
-                        } else {
-                            this.setState({mode: "done"})  // reset the state
+                            this.playback(nextIndex, true)  // play the next file
+                        } else { // reset the state
+                            if (this.state.audioURLs.length === this.props.recordingWords.length) {
+                                this.setState({mode: "done"})
+                            } else {
+                                this.setState({mode: "wait"})
+                            }
                         }
+                    }
+                    else {
+                        this.setState({ mode : "wait" })  // (or done) - set the mode back, but only after finished playing
                     }
                 })
             return element

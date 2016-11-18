@@ -2,6 +2,8 @@
 /* ========= all documents ========== */
 /* ================================== */
 
+.transparent { opacity: 0.1; }
+
 /* html {
     background: url(http://www.wildnatureimages.com/images%202/050612-100..jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
@@ -278,7 +280,7 @@ li a, li p {
 .wordRowFocused { background-color: gold; }
 .wordRowFocused:hover { background-color: yellow; }
 
-.playbackOne, .reRecord, .stopButton {
+.playbackOne, .reRecord, .startButton, .stopButton, .playAllButton, .submitButton {
     display: inline-block;
     vertical-align: middle;
     text-align: center;
@@ -288,7 +290,7 @@ li a, li p {
     border-radius: 6px;
     background-color: darkgray;
 }
-.playbackOneEnabled, .reRecordEnabled, .stopButtonEnabled {
+.playbackOneEnabled, .reRecordEnabled, .startButtonEnabled, .stopButtonEnabled, .playAllButtonEnabled, .submitButtonEnabled {
     background-color: skyblue;
     cursor: pointer;
 }
