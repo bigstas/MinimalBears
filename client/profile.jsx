@@ -3,13 +3,14 @@
 
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
+import { Link } from 'react-router'
 
 // when there is no logged in user
 EmptyProfile = React.createClass({
     render() {
         return (
             <div id='emptyProfile'>
-                <h2><a href="">Log in</a> or <a href="">sign up</a> to see your personal profile!</h2>
+                <h2><Link to="/login">Log in</Link> or <Link to="/register">sign up</Link> to see your personal profile!</h2>
                 <ul>
                     <li>View your progress with statistics and charts</li>
                     <li>Share your successes with your friends</li>

@@ -59,7 +59,7 @@ AuthJoinPage = React.createClass({
                     <div className="wrapper-auth">
                         <h1 className="title-auth">Join.</h1>
                         <p className="subtitle-auth">
-                            Joining allows you to keep track of your progress, and receive suggestions for what you should practise next.
+                            Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.
                         </p>
 
                         <form onSubmit={ this.onSubmit }>

@@ -97,7 +97,7 @@ StartButton = React.createClass({
             <div>
                 <div className={className}
                     data-tip data-for='startTooltip' data-delay-show='1000'
-                    onClick={() => this.props.callback( stop, start, mode, focus, next )}>
+                    onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next )}>
                         {label}
                 </div>
                 <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
@@ -296,7 +296,7 @@ WordRow = React.createClass({
             <div className={rowClassName}>
                 <ReRecord    index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
                 <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
-                <p style={{display: "inline"}}>{this.props.word}</p>
+                <p style={{display: "inline", cursor: "default"}}>{this.props.word}</p>
             </div>
         )
     }
@@ -392,7 +392,6 @@ next: ${next}`)
             console.log(this.state.audioURLs[index])
             // play audio
             this.audioElements[index].play()
-            this.playbackDone();
         } else {
             console.log("audio URL out of range: " + index.toString())
         }
@@ -445,15 +444,14 @@ next: ${next}`)
                         if (nextIndex < this.state.audioURLs.length) {
                             this.playback(nextIndex, true)  // play the next file
                         } else { // reset the state
-                            if (this.state.audioURLs.length === this.props.recordingWords.length) {
-                                this.setState({mode: "done"})
-                            } else {
-                                this.setState({mode: "wait"})
-                            }
+                            let done = (this.state.audioURLs.length === this.props.recordingWords.length)
+                            this.setState({mode: done ? "done" : "wait"})
                         }
                     }
                     else {
-                        this.setState({ mode : "wait" })  // (or done) - set the mode back, but only after finished playing
+                        // repeated code - could be structured better
+                        let done = (this.state.audioURLs.length === this.props.recordingWords.length)
+                        this.setState({mode: done ? "done" : "wait"})
                     }
                 })
             return element
