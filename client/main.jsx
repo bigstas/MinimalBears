@@ -2,7 +2,7 @@
 
 import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
-import { renderRoutes } from '../client/routes'
+import { renderRoutes } from './routes'
 import React from 'react'
 
 import ApolloClient from 'apollo-client'

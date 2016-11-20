@@ -1,6 +1,6 @@
 import React from 'react'
-import Arena from '../training/arena'
-import { ConnectedLanguageSelector, ConnectedContrastSelector } from '../training/selector'
+import Arena from './arena'
+import { ConnectedLanguageSelector, ConnectedContrastSelector } from './selector'
 
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)

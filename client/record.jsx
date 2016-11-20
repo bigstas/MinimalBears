@@ -166,7 +166,7 @@ PlayAllButton = React.createClass({
                     onClick={disabled ? null : this.props.playAllFunction}>
                         {label}
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid"/>
+                <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
         )
     }

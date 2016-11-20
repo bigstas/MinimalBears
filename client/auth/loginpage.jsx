@@ -1,6 +1,6 @@
 import { Navigation, Link } from 'react-router';
 import React from 'react';
-import MenuOpenToggle from '../auth/menuopentoggle';
+import MenuOpenToggle from './menuopentoggle';
 
 AuthSignInPage = React.createClass({
     // This mixin is needed to get react-router's transitionTo function to work (see below).
