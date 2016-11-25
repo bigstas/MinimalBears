@@ -204,7 +204,6 @@ Arena = React.createClass({
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
                 <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
-                <
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
