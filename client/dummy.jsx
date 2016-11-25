@@ -42,3 +42,4 @@ function mapQueriesToProps({ ownProps, state }) {
 
 // Wrap the class according to the function
 export default connect({mapQueriesToProps})(MyClass)
+// hello from Gergo
