@@ -39,18 +39,18 @@ var ProgressBar = React.createClass({
 })
 
 // Progress button
-var Button = React.createClass({
+var ProgressButton = React.createClass({
     render() {
         // Uses CSS animate.css library. Syntax is:
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
-        var btnClass = 'enabledProgress animated rubberBand'
-        var click = this.props.handle
-        if (this.props.disabled) {
-            btnClass = 'disabledProgress'
-            click = function () {} // click doesn't do anything when it's disabled
-        }
+        let btnClass = 'enabledProgress animated rubberBand' // could do styling depending on mode if we want
+        let label
+        if      (this.props.mode === "wait")     { label = "Begin" }
+        else if (this.props.mode === "ask")      { label = "Play Again" }
+        else if (this.props.mode === "feedback") { label = "Next" }
+        else if (this.props.mode === "done")     { label = "Go Again" }
         return (
-            <div id="button" className={btnClass} onClick={click}>Progress</div>
+            <div id="button" className={btnClass} onClick={this.props.handle}>{label}</div>
         )
     }
 })
@@ -106,9 +106,9 @@ Arena = React.createClass({
     getInitialState() {
         return {
             counter: 0,
-            maxRounds: 10,
+            maxRounds: 3,   // this number is set low during development - it should be increased for release
             score: 0,
-            mode: "wait",
+            mode: "wait",   // possible modes are "wait", "feedback", "ask", "done"
             correctAnswer: Math.round(Math.random()),
             chosenWord: null,
             currentAudio: null,
@@ -119,10 +119,10 @@ Arena = React.createClass({
     // After the user chooses an option during training
     onWordChosen(chosenIndex) {
         this.setState({
-            mode: "feedback",
+            mode: (this.state.counter < this.state.maxRounds -1) ? "feedback" : "done",
             chosenWord: chosenIndex,
             score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
-            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds
+            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
         })
         if (chosenIndex === this.state.correctAnswer) {
             var snd = new Audio("correct bell short.wav")
@@ -135,31 +135,50 @@ Arena = React.createClass({
     
     // After the user wants move on to the next recording
     handleProgressClick() {
-        // If the data has been returned:
-        if (!this.props.pairs.loading && !this.props.items.loading) {
-            /* Get all the pairs for a given contrast. Select a pair randomly.
-             * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
-             * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
-             */
-            var correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
-            // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
-            // fetch all the pairs
-            var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs
-            // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
-            var pairIds = random(parsePairs(pairString))
-            
-            var items = this.props.items.itemWithAudioNodes.nodes
-            var currentAudio = random(items[pairIds[correctAnswer]-1].audio) 
-            var snd = new Audio(currentAudio)
+        /* This method is what happens when the user presses the central "progress" button.
+         * It either moves on to a new pair and plays a new sound; or it replays the current sound; or it starts from the beginning, depending on the current state.
+         */
+        // In "feedback" and "wait" mode, pressing the button should load a new pair and play a new sound
+        if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "done") {
+            // If the data has been returned:
+            if (!this.props.pairs.loading && !this.props.items.loading) {
+                /* Get all the pairs for a given contrast. Select a pair randomly.
+                 * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
+                 * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
+                 */
+                var correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
+                // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
+                // fetch all the pairs
+                var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs
+                // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
+                var pairIds = random(parsePairs(pairString))
+
+                var items = this.props.items.itemWithAudioNodes.nodes
+                var currentAudio = random(items[pairIds[correctAnswer]-1].audio) 
+                var snd = new Audio(currentAudio)
+                snd.play()
+                
+                this.setState({
+                    mode: "ask",
+                    currentAudio: currentAudio,
+                    textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
+                               items[pairIds[1]-1].homophones[0]],
+                    correctAnswer: correctAnswer
+                })
+                
+                // if we're in "done" mode, we also need to reset some things
+                if (this.state.mode === "done") {
+                    this.setState({
+                        counter: 0,
+                        score: 0
+                    })
+                }
+            }
+        }
+        else if (this.state.mode === "ask") {
+            // replay the current sound
+            let snd = new Audio (this.state.currentAudio)
             snd.play()
-            
-            this.setState({
-                mode: "ask",
-                currentAudio: currentAudio,
-                textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
-                           items[pairIds[1]-1].homophones[0]],
-                correctAnswer: correctAnswer
-            })
         }
         else {
             // throw some sort of error...?
@@ -167,8 +186,6 @@ Arena = React.createClass({
     },
     
     render() {
-        
-        var buttonDisabled = ((this.state.mode!=="feedback" && this.state.mode!=="wait") || this.state.counter === this.state.maxRounds) ? true : false
         var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar'
         /* Trumpet at the end of training. To be fixed.
         if (this.state.counter === this.state.maxRounds) {
@@ -179,14 +196,15 @@ Arena = React.createClass({
         
         return (
             <div id="arena">
-                {(this.state.counter === this.state.maxRounds) ? 
+                {(this.state.mode === "done") ? 
                     <p id='arenaMessage'>CONGRATULATIONS! You did it!</p> : 
                     <p>Guess the words. Score: {this.state.score}/{this.state.counter}</p> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
-                <Button disabled={buttonDisabled} handle={this.handleProgressClick} />
+                <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
+                <
                 
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
