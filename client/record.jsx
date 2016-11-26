@@ -399,7 +399,7 @@ next: ${next}`)
     
     render() {
         return (
-            <div id="record">
+            <div className='panel' id='record'>
                 <TopRow next={this.state.next} 
                         max={this.props.recordingWords.length -1} 
                         mode={this.state.mode} 

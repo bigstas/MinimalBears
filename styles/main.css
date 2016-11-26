@@ -1,16 +1,20 @@
 /* ================================== */
-/* ========= all documents ========== */
+/* ====== general categories ======== */
 /* ================================== */
 
 .transparent { opacity: 0.1; }
-
-/* html {
-    background: url(http://www.wildnatureimages.com/images%202/050612-100..jpg) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-} */
+/* to replace the proliferation of button types, classes, and ids */
+.button { 
+    display: inline-block;
+    color: white;
+    padding-top: 3%;
+    padding-bottom: 5%;
+    margin-bottom: 2%;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.button:hover { background-color: darkcyan; }
 
 body {
     background-color: #e6e6e6;
@@ -19,13 +23,9 @@ body {
 
 * {font-family: Verdana, Geneva, sans-serif;}
 
-h1, h2, h3, h4, p {
-    color: black;
-}
+h1, h2, h3, h4, p { color: black; }
 
-h4 {
-    padding-left: 2%;
-}
+h4 { padding-left: 2%; }
 
 nav a {
     color: aliceblue;
@@ -92,9 +92,7 @@ nav ul {
     overflow: hidden;
 }
 
-li {
-    float: left;
-}
+li { float: left; }
 
 li a, li p {
     display: block;
@@ -104,11 +102,6 @@ li a, li p {
     border-radius: 5px;
 }
 
-/* not working - "inactive" no longer a className? */
-.inactive:hover {
-    background-color: #553388;
-}
-
 /* need to be so specific (with .container first) to lend "authority", otherwise the browser will automatically underline! */
 .container .active {
     background-color: aliceblue;
@@ -116,7 +109,8 @@ li a, li p {
     text-decoration: none;
 }
 
-#home, #selector, #arena, #record, #about, #profile, #emptyProfile, #register, #login, .page-auth {
+/* #home, #selector, #arena, #record, #about, #profile, #emptyProfile, .page-auth */
+.panel {
     position: absolute;
     z-index: -1;
     overflow: auto;
@@ -141,31 +135,6 @@ li a, li p {
 #arenaMessage {
     display: inline-block;
     padding-left: 10px;
-}
-
-.offStar {display: none}
-
-.onStar, offStar {
-    position: absolute;
-    right: 5%;
-    top: 8%;
-    /*-webkit-animation-name: example; /* Chrome, Safari, Opera 
-    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera 
-    -webkit-animation-iteration-count: infinite; */
-    animation-name: spin1;
-    animation-duration: 2.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
-/* Chrome, Safari, Opera */
-@-webkit-keyframes spin1 {
-    0%   {-webkit-transform: rotate(0deg);}
-    100% {-webkit-transform: rotate(180deg)}
-}
-/* Standard syntax */
-@keyframes spin1 {
-    0% {transform: rotate(0deg); transform-origin: center;}
-    100% {transform: rotate(360deg); transform-origin: center;}
 }
 
 #progress {
@@ -223,15 +192,11 @@ li a, li p {
     background-color: darkcyan;
 }
 #wordOptionCorrect, #wordOptionWrong, #wordOptionNotChosen, .disabledProgress { cursor: default }
-#wordOptionCorrect {
-    background-color: green;
-}
-#wordOptionWrong {
-    background-color: red;
-}
-#wordOptionNotChosen {
-    background-color: white;
-}
+
+#wordOptionCorrect   { background-color: green; }
+#wordOptionWrong     { background-color: red; }
+#wordOptionNotChosen { background-color: white; }
+
 .homebtn { 
     width: 20%;
     margin-left: 5%;
@@ -360,15 +325,3 @@ audio {
     margin-bottom: 10px;
     border: 1px solid black;
 }
-
-
-/* ================================== */
-/* ============ home.js ============= */
-/* ================================== */
-/*
-.homebtn {
-    width: 80px;
-    height: 30px;
-    background-color: orangered;
-}
-*/

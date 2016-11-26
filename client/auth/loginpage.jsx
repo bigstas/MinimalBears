@@ -48,7 +48,7 @@ AuthSignInPage = React.createClass({
   
     render() {
         return (
-            <div className="page-auth">
+            <div className='panel page-auth'>
         {/* This (below) is the way that react-todos was handling the Nav bar, we don't need it as we're doing it our own way */}
                 {/* <nav>
         <MenuOpenToggle />

@@ -195,7 +195,7 @@ Arena = React.createClass({
         */
         
         return (
-            <div id="arena">
+            <div className='panel' id='arena'>
                 {(this.state.mode === "done") ? 
                     <p id='arenaMessage'>CONGRATULATIONS! You did it!</p> : 
                     <p>Guess the words. Score: {this.state.score}/{this.state.counter}</p> }

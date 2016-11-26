@@ -9,7 +9,7 @@ import { Link } from 'react-router'
 EmptyProfile = React.createClass({
     render() {
         return (
-            <div id='emptyProfile'>
+            <div className='panel' id='emptyProfile'>
                 <h2><Link to="/login">Log in</Link> or <Link to="/register">sign up</Link> to see your personal profile!</h2>
                 <ul>
                     <li>View your progress with statistics and charts</li>
@@ -26,7 +26,7 @@ EmptyProfile = React.createClass({
 UserProfile = React.createClass({
     render() {
         return (
-            <div id='profile'>
+            <div className='panel' id='profile'>
                 <div id='topband'>
                     <div id='userpic'>
                         <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>

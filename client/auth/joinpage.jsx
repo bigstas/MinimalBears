@@ -50,7 +50,7 @@ AuthJoinPage = React.createClass({
     
     render() {
         return (
-            <div className="page-auth">
+            <div className='panel page-auth'>
         {/* <nav>
           <MenuOpenToggle />
         </nav> */}

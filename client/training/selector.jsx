@@ -16,7 +16,7 @@ const Selector = React.createClass({
 	 */
 	render() {
 		return (
-	        <div id='selector'>
+	        <div className='panel' id='selector'>
 		        <p>{this.props.selectionMessage}</p>
 		        {this.props.options.map(c =>
 		        	<div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>

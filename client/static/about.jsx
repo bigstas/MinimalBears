@@ -14,7 +14,7 @@ About = React.createClass({
         }
         
         return (
-            <div id='about'>
+            <div className='panel' id='about'>
                 <h1>Minimal Bears: the research-based web app that improves your accent.</h1>
                 <h2>What is Minimal Bears?</h2>
                 <p>Minimal Bears is a web app that uses a technique known as <strong>High Variability Phonetic Training</strong> (HVPT) to help people learn the sounds of a foreign language.</p>
