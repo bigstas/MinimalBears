@@ -9,6 +9,7 @@
     "apollo-server": "^0.1.5",
     "express": "^4.14.0",
     "graphql": "^0.6.1",
+    "keymaster": "^1.6.2",
     "pg": "^6.1.0",
     "postgraphql": "^1.8.2",
     "react": "^15.2.1",

@@ -4,10 +4,13 @@
 
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
+import key from 'keymaster'
 
 // new gql way of getting data...
 import { connect } from 'react-apollo'
 import gql from 'graphql-tag'
+    
+key('a', function(){ alert('you pressed a!') })
 
 function parsePairs(pairString) {
     /* Take a string of the form '{"(int,int)","(int,int)",...}'
@@ -40,6 +43,7 @@ var ProgressBar = React.createClass({
 
 // Progress button
 var ProgressButton = React.createClass({
+    
     render() {
         // Uses CSS animate.css library. Syntax is:
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
@@ -100,7 +104,6 @@ var WordOption = React.createClass({
     }
 })
 
-
 // The arena - where the action happens  
 Arena = React.createClass({
     getInitialState() {
@@ -118,22 +121,27 @@ Arena = React.createClass({
     
     // After the user chooses an option during training
     onWordChosen(chosenIndex) {
-        this.setState({
-            mode: (this.state.counter < this.state.maxRounds -1) ? "feedback" : "done",
-            chosenWord: chosenIndex,
-            score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
-            counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
-        })
-        if (chosenIndex === this.state.correctAnswer) {
-            var snd = new Audio("correct bell short.wav")
-            snd.play()
-        } else {
-            var snd = new Audio("quack wrong.wav")
-            snd.play()
+        /* Handle the event of somebody clicking on one of the word buttons.
+         * Add to the counter (and maybe score), visual feedback (button changes colour), auditory feedback (bell or quack).
+         */
+        // this event can only fire if you are asking for a response from the user
+        if (this.state.mode === 'ask') {
+            this.setState({
+                mode: (this.state.counter < this.state.maxRounds -1) ? "feedback" : "done",
+                chosenWord: chosenIndex,
+                score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
+                counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
+            })
+            if (chosenIndex === this.state.correctAnswer) {
+                var snd = new Audio("correct bell short.wav")
+                snd.play()
+            } else {
+                var snd = new Audio("quack wrong.wav")
+                snd.play()
+            }
         }
     },
     
-    // After the user wants move on to the next recording
     handleProgressClick() {
         /* This method is what happens when the user presses the central "progress" button.
          * It either moves on to a new pair and plays a new sound; or it replays the current sound; or it starts from the beginning, depending on the current state.
@@ -204,7 +212,7 @@ Arena = React.createClass({
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
                 <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
-                
+                          
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
                     {(this.state.mode === "ask" || this.state.mode === "feedback") ?
@@ -222,6 +230,17 @@ Arena = React.createClass({
                 </div>
             </div> 
         )
+    }, 
+        
+    componentDidMount() {
+        /* Keypress events:
+         * Space - press central "progress" button; 1 & 2 - Word Option buttons 0 & 1
+         * BUG: When you get to the end of training with the keyboard, then it doesn't set the score back down to 0. It does when you use mouse.
+         */
+        key('1', this.onWordChosen.bind(this, 0))
+        key('2', this.onWordChosen.bind(this, 1))
+        key('space', this.handleProgressClick)  // check bug in docstring
+        
     }
 })
 
