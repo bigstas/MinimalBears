@@ -1,10 +1,22 @@
 LOCAL POSTGRES INSTRUCTIONS
-0. correct permissions
-1. run database server with [anywhere]$ postgres -D usr/local/var/postgres
-2. create db using [anywhere]$ createdb NAME
-3A. [if there are migrations] migrate the database by running .sql file
-3B. [if creating from scratch] add tables as desired, making sure that every column has a column named 'id' with unique elements
-4. run the app with (own app) APP$ ./run-app.sh
+0. Install postgres (and pgAdmin, if desired)
+1. Edit pg_hba.conf so that local connections have method "trust"
+(on Windows: C:\Program Files\PostgreSQL\<version>\data\pg_hba.conf)
+2. Create "admin" and "guest" roles (both can login, admin has all privileges, guest has none)
+3. Create minimal_bears database ($ createdb minimal_bears)
+4. Run schema.sql and data.sql
+
+On Mac:
+Run database server with [anywhere]$ postgres -D usr/local/var/postgres
+(correct permissions if necessary)
+
+On Windows:
+If postgres is not running, check under services
+
+
+RUNNING THE APP
+On Windows (PowerShell): run-app.ps1
+On Unix: run-app.sh
 
 
 DEPLOYMENT TO GANDI INSTRUCTIONS

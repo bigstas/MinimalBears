@@ -6,8 +6,12 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
 --
--- Name: cached_pair; Type: TYPE; Schema: public; Owner: hosting-db
+-- Name: cached_pair; Type: TYPE; Schema: public; Owner: admin
 --
 
 CREATE TYPE cached_pair AS (
@@ -16,11 +20,11 @@ CREATE TYPE cached_pair AS (
 );
 
 
-ALTER TYPE public.cached_pair OWNER TO "hosting-db";
+ALTER TYPE public.cached_pair OWNER TO "admin";
 
 
 --
--- Name: language; Type: TABLE; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: language; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
 --
 
 CREATE TABLE language (
@@ -30,10 +34,10 @@ CREATE TABLE language (
 );
 
 
-ALTER TABLE public.language OWNER TO "hosting-db";
+ALTER TABLE public.language OWNER TO "admin";
 
 --
--- Name: contrast; Type: TABLE; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: contrast; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
 --
 
 CREATE TABLE contrast (
@@ -43,11 +47,11 @@ CREATE TABLE contrast (
 );
 
 
-ALTER TABLE public.contrast OWNER TO "hosting-db";
+ALTER TABLE public.contrast OWNER TO "admin";
 
 
 --
--- Name: item; Type: TABLE; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: item; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
 --
 
 CREATE TABLE item (
@@ -58,11 +62,11 @@ CREATE TABLE item (
 );
 
 
-ALTER TABLE public.item OWNER TO "hosting-db";
+ALTER TABLE public.item OWNER TO "admin";
 
 
 --
--- Name: audio; Type: TABLE; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: audio; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
 --
 
 CREATE TABLE audio (
@@ -73,11 +77,11 @@ CREATE TABLE audio (
 );
 
 
-ALTER TABLE public.audio OWNER TO "hosting-db";
+ALTER TABLE public.audio OWNER TO "admin";
 
 
 --
--- Name: pair; Type: TABLE; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: pair; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
 --
 
 CREATE TABLE pair (
@@ -88,17 +92,17 @@ CREATE TABLE pair (
 );
 
 
-ALTER TABLE public.pair OWNER TO "hosting-db";
+ALTER TABLE public.pair OWNER TO "admin";
 
 --
--- Name: TABLE pair; Type: COMMENT; Schema: public; Owner: hosting-db
+-- Name: TABLE pair; Type: COMMENT; Schema: public; Owner: admin
 --
 
 COMMENT ON TABLE pair IS 'At the moment, nothing enforces contrast.language, first.language, second.language to be identical (we could use a trigger for this).';
 
 
 --
--- Name: get_audio_list(integer); Type: FUNCTION; Schema: public; Owner: hosting-db
+-- Name: get_audio_list(integer); Type: FUNCTION; Schema: public; Owner: admin
 --
 
 CREATE FUNCTION get_audio_list(item_id integer) RETURNS text[]
@@ -106,10 +110,10 @@ CREATE FUNCTION get_audio_list(item_id integer) RETURNS text[]
     AS $$SELECT ARRAY(SELECT file FROM audio WHERE audio.item = item_id);$$;
 
 
-ALTER FUNCTION public.get_audio_list(item_id integer) OWNER TO "hosting-db";
+ALTER FUNCTION public.get_audio_list(item_id integer) OWNER TO "admin";
 
 --
--- Name: get_contrast_list(integer); Type: FUNCTION; Schema: public; Owner: hosting-db
+-- Name: get_contrast_list(integer); Type: FUNCTION; Schema: public; Owner: admin
 --
 
 CREATE FUNCTION get_contrast_list(language_id integer) RETURNS integer[]
@@ -117,15 +121,11 @@ CREATE FUNCTION get_contrast_list(language_id integer) RETURNS integer[]
     AS $$SELECT ARRAY(SELECT id FROM contrast WHERE contrast.language = language_id);$$;
 
 
-ALTER FUNCTION public.get_contrast_list(language_id integer) OWNER TO "hosting-db";
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
+ALTER FUNCTION public.get_contrast_list(language_id integer) OWNER TO "admin";
 
 
 --
--- Name: get_contrasts(integer); Type: FUNCTION; Schema: public; Owner: hosting-db
+-- Name: get_contrasts(integer); Type: FUNCTION; Schema: public; Owner: admin
 --
 
 CREATE FUNCTION get_contrasts(language_id integer) RETURNS SETOF contrast
@@ -133,10 +133,10 @@ CREATE FUNCTION get_contrasts(language_id integer) RETURNS SETOF contrast
     AS $$SELECT * FROM contrast WHERE contrast.language = language_id$$;
 
 
-ALTER FUNCTION public.get_contrasts(language_id integer) OWNER TO "hosting-db";
+ALTER FUNCTION public.get_contrasts(language_id integer) OWNER TO "admin";
 
 --
--- Name: get_items_from_homophone(text); Type: FUNCTION; Schema: public; Owner: hosting-db
+-- Name: get_items_from_homophone(text); Type: FUNCTION; Schema: public; Owner: admin
 --
 
 CREATE FUNCTION get_items_from_homophone(homophone text) RETURNS SETOF item
@@ -144,22 +144,22 @@ CREATE FUNCTION get_items_from_homophone(homophone text) RETURNS SETOF item
     AS $$SELECT * FROM item WHERE homophone = ANY(homophones)$$;
 
 
-ALTER FUNCTION public.get_items_from_homophone(homophone text) OWNER TO "hosting-db";
+ALTER FUNCTION public.get_items_from_homophone(homophone text) OWNER TO "admin";
 
 
 --
--- Name: item_with_audio; Type: MATERIALIZED VIEW; Schema: public; Owner: hosting-db
+-- Name: item_with_audio; Type: MATERIALIZED VIEW; Schema: public; Owner: admin
 --
 
 CREATE MATERIALIZED VIEW item_with_audio AS
     SELECT item.language, item.homophones, item.id, item.comment, get_audio_list(item.id) AS audio FROM item;
 
 
-ALTER TABLE public.item_with_audio OWNER TO "hosting-db";
+ALTER TABLE public.item_with_audio OWNER TO "admin";
 
 
 --
--- Name: get_pair_list(integer); Type: FUNCTION; Schema: public; Owner: hosting-db
+-- Name: get_pair_list(integer); Type: FUNCTION; Schema: public; Owner: admin
 --
 
 CREATE FUNCTION get_pair_list(contrast_id integer) RETURNS cached_pair[]
@@ -173,11 +173,11 @@ CREATE FUNCTION get_pair_list(contrast_id integer) RETURNS cached_pair[]
 );$$;
 
 
-ALTER FUNCTION public.get_pair_list(contrast_id integer) OWNER TO "hosting-db";
+ALTER FUNCTION public.get_pair_list(contrast_id integer) OWNER TO "admin";
 
 
 --
--- Name: Audio_id_seq; Type: SEQUENCE; Schema: public; Owner: hosting-db
+-- Name: Audio_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
 
 CREATE SEQUENCE "Audio_id_seq"
@@ -188,17 +188,17 @@ CREATE SEQUENCE "Audio_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Audio_id_seq" OWNER TO "hosting-db";
+ALTER TABLE public."Audio_id_seq" OWNER TO "admin";
 
 --
--- Name: Audio_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hosting-db
+-- Name: Audio_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
 
 ALTER SEQUENCE "Audio_id_seq" OWNED BY audio.id;
 
 
 --
--- Name: Contrasts_id_seq; Type: SEQUENCE; Schema: public; Owner: hosting-db
+-- Name: Contrasts_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
 
 CREATE SEQUENCE "Contrasts_id_seq"
@@ -209,17 +209,17 @@ CREATE SEQUENCE "Contrasts_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Contrasts_id_seq" OWNER TO "hosting-db";
+ALTER TABLE public."Contrasts_id_seq" OWNER TO "admin";
 
 --
--- Name: Contrasts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hosting-db
+-- Name: Contrasts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
 
 ALTER SEQUENCE "Contrasts_id_seq" OWNED BY contrast.id;
 
 
 --
--- Name: Items_id_seq; Type: SEQUENCE; Schema: public; Owner: hosting-db
+-- Name: Items_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
 
 CREATE SEQUENCE "Items_id_seq"
@@ -230,17 +230,17 @@ CREATE SEQUENCE "Items_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Items_id_seq" OWNER TO "hosting-db";
+ALTER TABLE public."Items_id_seq" OWNER TO "admin";
 
 --
--- Name: Items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hosting-db
+-- Name: Items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
 
 ALTER SEQUENCE "Items_id_seq" OWNED BY item.id;
 
 
 --
--- Name: Languages_id_seq; Type: SEQUENCE; Schema: public; Owner: hosting-db
+-- Name: Languages_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
 
 CREATE SEQUENCE "Languages_id_seq"
@@ -251,17 +251,17 @@ CREATE SEQUENCE "Languages_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Languages_id_seq" OWNER TO "hosting-db";
+ALTER TABLE public."Languages_id_seq" OWNER TO "admin";
 
 --
--- Name: Languages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hosting-db
+-- Name: Languages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
 
 ALTER SEQUENCE "Languages_id_seq" OWNED BY language.id;
 
 
 --
--- Name: Pairs_id_seq; Type: SEQUENCE; Schema: public; Owner: hosting-db
+-- Name: Pairs_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
 
 CREATE SEQUENCE "Pairs_id_seq"
@@ -272,74 +272,74 @@ CREATE SEQUENCE "Pairs_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Pairs_id_seq" OWNER TO "hosting-db";
+ALTER TABLE public."Pairs_id_seq" OWNER TO "admin";
 
 --
--- Name: Pairs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hosting-db
+-- Name: Pairs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
 
 ALTER SEQUENCE "Pairs_id_seq" OWNED BY pair.id;
 
 
 --
--- Name: contrast_with_pairs; Type: MATERIALIZED VIEW; Schema: public; Owner: hosting-db
+-- Name: contrast_with_pairs; Type: MATERIALIZED VIEW; Schema: public; Owner: admin
 --
 
 CREATE MATERIALIZED VIEW contrast_with_pairs AS
     SELECT contrast.language, contrast.name, contrast.id, get_pair_list(contrast.id) AS pairs FROM contrast;
 
 
-ALTER TABLE public.contrast_with_pairs OWNER TO "hosting-db";
+ALTER TABLE public.contrast_with_pairs OWNER TO "admin";
 
 
 --
--- Name: contrast_nonempty; Type: MATERIALIZED VIEW; Schema: public; Owner: hosting-db
+-- Name: contrast_nonempty; Type: MATERIALIZED VIEW; Schema: public; Owner: admin
 --
 
 CREATE MATERIALIZED VIEW contrast_nonempty AS
     SELECT contrast_with_pairs.language, contrast_with_pairs.name, contrast_with_pairs.id FROM contrast_with_pairs WHERE (contrast_with_pairs.pairs <> '{}'::cached_pair[]);
 
 
-ALTER TABLE public.contrast_nonempty OWNER TO "hosting-db";
+ALTER TABLE public.contrast_nonempty OWNER TO "admin";
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: hosting-db
+-- Name: id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY audio ALTER COLUMN id SET DEFAULT nextval('"Audio_id_seq"'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: hosting-db
+-- Name: id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY contrast ALTER COLUMN id SET DEFAULT nextval('"Contrasts_id_seq"'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: hosting-db
+-- Name: id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY item ALTER COLUMN id SET DEFAULT nextval('"Items_id_seq"'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: hosting-db
+-- Name: id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY language ALTER COLUMN id SET DEFAULT nextval('"Languages_id_seq"'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: hosting-db
+-- Name: id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY pair ALTER COLUMN id SET DEFAULT nextval('"Pairs_id_seq"'::regclass);
 
 
 --
--- Name: Audio_pkey; Type: CONSTRAINT; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: Audio_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
 --
 
 ALTER TABLE ONLY audio
@@ -347,7 +347,7 @@ ALTER TABLE ONLY audio
 
 
 --
--- Name: Contrasts_pkey; Type: CONSTRAINT; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: Contrasts_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
 --
 
 ALTER TABLE ONLY contrast
@@ -355,7 +355,7 @@ ALTER TABLE ONLY contrast
 
 
 --
--- Name: Items_pkey; Type: CONSTRAINT; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: Items_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
 --
 
 ALTER TABLE ONLY item
@@ -363,7 +363,7 @@ ALTER TABLE ONLY item
 
 
 --
--- Name: Languages_pkey; Type: CONSTRAINT; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: Languages_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
 --
 
 ALTER TABLE ONLY language
@@ -371,7 +371,7 @@ ALTER TABLE ONLY language
 
 
 --
--- Name: Pairs_pkey; Type: CONSTRAINT; Schema: public; Owner: hosting-db; Tablespace: 
+-- Name: Pairs_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
 --
 
 ALTER TABLE ONLY pair
@@ -379,7 +379,7 @@ ALTER TABLE ONLY pair
 
 
 --
--- Name: Audio_Items_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Audio_Items_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY audio
@@ -387,7 +387,7 @@ ALTER TABLE ONLY audio
 
 
 --
--- Name: Contrasts_Languages_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Contrasts_Languages_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY contrast
@@ -395,7 +395,7 @@ ALTER TABLE ONLY contrast
 
 
 --
--- Name: Items_Languages_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Items_Languages_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY item
@@ -403,7 +403,7 @@ ALTER TABLE ONLY item
 
 
 --
--- Name: Pairs_Constrasts_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Pairs_Constrasts_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY pair
@@ -411,7 +411,7 @@ ALTER TABLE ONLY pair
 
 
 --
--- Name: Pairs_Items_first_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Pairs_Items_first_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY pair
@@ -419,7 +419,7 @@ ALTER TABLE ONLY pair
 
 
 --
--- Name: Pairs_Items_second_fkey; Type: FK CONSTRAINT; Schema: public; Owner: hosting-db
+-- Name: Pairs_Items_second_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
 ALTER TABLE ONLY pair
@@ -427,10 +427,8 @@ ALTER TABLE ONLY pair
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: hosting-db
+-- Name: public; Type: ACL; Schema: -; Owner: admin
 --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM "hosting-db";
-GRANT ALL ON SCHEMA public TO "hosting-db";
-GRANT ALL ON SCHEMA public TO PUBLIC;
+GRANT ALL ON SCHEMA public TO "admin";

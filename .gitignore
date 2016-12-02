@@ -11,5 +11,8 @@ npm-debug.log
 # Apple internal automatic admin
 .DS_Store
 
-# databases
+# Databases
 *.sql
+
+# Security
+server/jwt_secret.jsx
