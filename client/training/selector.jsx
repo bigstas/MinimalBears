@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-apollo'
 import gql from 'graphql-tag'
+import LoadingPage from '../loading'
 
 const Selector = React.createClass({
 	/* A series of buttons from which the user can choose one
@@ -15,23 +16,26 @@ const Selector = React.createClass({
 	 * extraCallback - function for extra button (takes no arguments)
 	 */
 	render() {
-		return (
-	        <div className='panel' id='selector'>
-		        <p>{this.props.selectionMessage}</p>
-		        {this.props.options.map(c =>
-		        	<div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
-		        		{c.text}
-	        		</div>
-                )}
-		        
-		        {!!this.props.extraText ? 
-		            <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
-		        		{this.props.extraText}
-		        	</div> :
-		            <div>{/*empty div*/}</div> 
-		        }
-	        </div>
-	    )
+        if (this.props.loading) { return <LoadingPage /> }
+        else {
+            return (
+                <div className='panel' id='selector'>
+                    <p>{this.props.selectionMessage}</p>
+                    {this.props.options.map(c =>
+                        <div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
+                            {c.text}
+                        </div>
+                    )}
+
+                    {!!this.props.extraText ? 
+                        <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
+                            {this.props.extraText}
+                        </div> :
+                        <div>{/*empty div*/}</div> 
+                    }
+                </div>
+            )
+        }
 	}
 })
 
@@ -52,6 +56,7 @@ const LanguageSelector = React.createClass({
 		
 		return (
 			<Selector
+                loading={this.props.data.loading}
 				selectionMessage='Choose the language you want to train'
 				options={options}
 				callback={this.props.callback}
@@ -78,6 +83,7 @@ const ContrastSelector = React.createClass({
         
 		return (
 			<Selector
+                loading={this.props.data.loading}
 				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
 				options={options}
 				callback={this.props.callback}

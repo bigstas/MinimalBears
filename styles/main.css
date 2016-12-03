@@ -325,3 +325,26 @@ audio {
     margin-bottom: 10px;
     border: 1px solid black;
 }
+
+/* loading */
+.centred {
+    margin: auto;
+    display: block;
+}
+#loadingWheel {
+    /* centering */
+    margin-left: auto;
+    margin-right: auto;
+    /*-webkit-animation-name: example; /* Chrome, Safari, Opera 
+    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera 
+    -webkit-animation-iteration-count: infinite; */
+    animation-name: spin1;
+    animation-duration: 2.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes spin1 {
+    0%   {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg)}
+}

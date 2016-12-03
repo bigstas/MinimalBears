@@ -12,7 +12,10 @@ import TrainPage from './training/train' // takes place of arena
 import Profile from './profile'
 import About from './static/about'
 import NotFound from './static/notfound'
-import Dummy from './dummy'
+// For development / debugging purposes only - not for deployment!
+// This allows for easy viewing of the loading screen during development.
+//import LoadingPage from './loading'
+//import Dummy from './dummy'
 
 
 export const renderRoutes = () => (
@@ -25,7 +28,8 @@ export const renderRoutes = () => (
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
             <Route path="profile" component={Profile} />
-            <Route path="dummy" component={Dummy} />
+            {/*<Route path="dummy" component={Dummy} />
+            <Route path="loading" component={LoadingPage} />  -- for development / debugging purposes only */}
             <Route path="*" component={NotFound} />
         </Route>
     </Router>
