@@ -34,8 +34,8 @@ function random(myArray) {
 var ProgressBar = React.createClass({
     render() {
         return (
-            <div id="progress">
-                <div id="fill" style={this.props.style}></div>
+            <div id="progressBar">
+                <div id="progressBarFillFluid" style={this.props.style}></div>
             </div>
         )
     }

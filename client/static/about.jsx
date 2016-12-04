@@ -6,7 +6,8 @@ import YouTube from 'react-youtube'
 About = React.createClass({
     render() {
         const opts = {
-            height: '100%',
+            position: 'absolute',
+            height: '400px',
             width: '100%',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 0
@@ -23,7 +24,6 @@ About = React.createClass({
                 <p>HVPT has been <a href="https://www.researchgate.net/profile/Donald_Jamieson/publication/226533069_Training_non-native_speech_contrasts_in_adults_Acquisition_of_the_English_d-TH_contrast_by_francophones/links/5670c10708ae0d8b0cc0fe3d.pdf">known for some time</a> by researchers to be an effective way of getting people to improve their ability to distinguish similar sounds in a foreign language, and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3507383/">improve their accent as a result</a>. Minimal Bears is a <strong>free</strong>, <strong>open-source</strong> web app to allow language learners across the world to finally make use of this powerful yet little-known technique.</p>
                 <h2>Why might I want to use it?</h2>
                 <p>This video provides a humorous demonstration of the kinds of problems we are trying to solve.</p>
-            
                 {/* TO DO: this video does not fit dimensions neatly. Ideally, we want width to be 100%, and height to scale with width. */}
                 {/* For details and options, see https://github.com/troybetz/react-youtube */}
                 <YouTube
@@ -31,7 +31,6 @@ About = React.createClass({
                     opts={opts}
                     onReady={this._onReady}
                 />
-            
                 <h2>What results can I expect?</h2>
                 <p>Prior to training, learners often perform <a href="http://www.haskins.yale.edu/Reprints/HL0194.pdf">barely better than chance</a> at distinguishing similar sounds in a foreign language. Significant improvements have been verified <a href="https://www.researchgate.net/profile/Donald_Jamieson/publication/226533069_Training_non-native_speech_contrasts_in_adults_Acquisition_of_the_English_d-TH_contrast_by_francophones/links/5670c10708ae0d8b0cc0fe3d.pdf">within 90 minutes of training</a>, and may appear within as little as 20 minutes [citation??].</p>
                 <p>Researchers have found that people trained by this method have long-term improvements that only diminish very slightly over time. One team found that learners improved significantly during training, and then had <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518835/">only dropped 2% in performance when re-tested 3 months later</a>, and only 4.5% after 6 months.</p>

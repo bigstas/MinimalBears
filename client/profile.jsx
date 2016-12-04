@@ -15,7 +15,6 @@ EmptyProfile = React.createClass({
                     <li>View your progress with statistics and charts</li>
                     <li>Share your successes with your friends</li>
                     <li>Contribute to Minimal Bears by recording words in your native language</li>
-                    <li>Use Georgian bullet points</li>
                 </ul>
             </div>
         )

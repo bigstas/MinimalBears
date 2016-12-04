@@ -1,115 +1,22 @@
 /* ================================== */
+/* ========= entire document ======== */
+/* ================================== */
+
+body {
+    background-color: #e6e6e6;  /* that greyish colour behind everything */
+    margin: 0px;
+}
+p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
+h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
+li { float: left; }                 /* All list elements should keep to the left as much as they can throughout the site. */
+h4 { padding-left: 2%; }
+
+
+/* ================================== */
 /* ====== general categories ======== */
 /* ================================== */
 
-.transparent { opacity: 0.1; }
-/* to replace the proliferation of button types, classes, and ids */
-.button { 
-    display: inline-block;
-    color: white;
-    padding-top: 3%;
-    padding-bottom: 5%;
-    margin-bottom: 2%;
-    text-align: center;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.button:hover { background-color: darkcyan; }
-
-body {
-    background-color: #e6e6e6;
-    margin: 0px;
-}
-
-* {font-family: Verdana, Geneva, sans-serif;}
-
-h1, h2, h3, h4, p { color: black; }
-
-h4 { padding-left: 2%; }
-
-nav a {
-    color: aliceblue;
-    text-decoration: none;
-}
-nav a:hover {
-    text-decoration: none;
-    background-color: aliceblue;
-    color: #9977ff;
-}
-
-nav {
-    height: 42px;
-    text-align: center;
-    background-color: #9977ff;
-    margin-left: 19%;
-    margin-right: 19%;
-    margin-top: 10px;
-    width: 61%;
-    padding: 0.5%;
-    border-radius: 8px;
-    box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
-}
-#loggedInAs {
-    float: right;
-    color: indigo;
-    font-weight: bold;
-}
-#loggedInAs:hover {
-    background-color: aliceblue;
-    cursor: pointer; 
-}
-.dropdownDiv {
-    right: 0;
-    position: absolute;
-    margin-right: 20%;
-    background-color: white;
-    border-radius: 8px;
-    margin-top: 5px;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
-    padding: 5px;
-}
-.dropdownElement {
-    cursor: pointer;
-    clear: left;
-    border-radius: 5px;
-    text-align: right;
-}
-.dropdownElement:hover {
-    background-color: #9977ff;
-}
-.dropdownText {
-    text-decoration: none;
-    color: black;
-}
-
-ul {
-    list-style-type: georgian;
-}
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-li { float: left; }
-
-li a, li p {
-    display: block;
-    padding: 8px;
-    margin: 3px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-/* need to be so specific (with .container first) to lend "authority", otherwise the browser will automatically underline! */
-.container .active {
-    background-color: aliceblue;
-    color: #9977ff;
-    text-decoration: none;
-}
-
-/* #home, #selector, #arena, #record, #about, #profile, #emptyProfile, .page-auth */
+/* That white box that all the pages live in. */
 .panel {
     position: absolute;
     z-index: -1;
@@ -124,28 +31,130 @@ li a, li p {
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
     padding: 3%;
 }
-#arena {
-    height: 300px; /* Only the Arena needs a limited height - other pages can stretch more */
+
+/* For elements that are inactive (at the moment only used on the Record page) */
+.transparent { opacity: 0.1; }
+
+/* to replace the proliferation of button types, classes, and ids */
+.button { 
+    display: inline-block;
+    color: white;
+    padding-top: 3%;
+    padding-bottom: 5%;
+    margin-bottom: 2%;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.button:hover { background-color: darkcyan; }
+
+
+/* ================================== */
+/* ======== navigation bar ========== */
+/* ================================== */
+
+/* The navigation bar as a whole */
+nav {
+    height: 42px;
+    text-align: center;
+    background-color: #9977ff;
+    margin-left: 19%;
+    margin-right: 19%;
+    margin-top: 10px;
+    width: 61%;
+    padding: 0.5%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
+}
+/* The links within the navigation bar */
+nav a {
+    color: aliceblue;
+    text-decoration: none;
+}
+nav a:hover {
+    text-decoration: none;
+    background-color: aliceblue;
+    color: #9977ff;
+}
+
+/* The buttons within the nav bar are an unordered list (<ul>). */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+/* The styling of the buttons within the nav bar is done through their text (<a> and <p>). */
+nav ul li a, nav ul li p {
+    display: block;
+    padding: 8px;
+    margin: 3px;
+    text-decoration: none;  /* To get rid of underline beneath the text */
+    border-radius: 5px;
+}
+/* When you're on a specific page, the corresponding button in the navbar is styled as follows. */
+.activeNavbarElement {
+    background-color: aliceblue;
+    color: #9977ff;     /* refers to text colour */
+}
+
+/* The button on the nav bar that tells you your username, or otherwise says 'Guest'. */
+#loggedInAs {
+    float: right;
+    color: indigo;
+    font-weight: bold;
+}
+#loggedInAs:hover {
+    background-color: aliceblue;
+    cursor: pointer;    /* Turns the mouse's cursor from an arrow (default) to a hand, to show that you can click. */
+}
+/* The dropdown menu from the gear symbol. */
+.dropdownDiv {
+    right: 0;
+    position: absolute;
+    margin-right: 20%;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+}
+/* Options within the dropdown menu coming from the gear symbol. */
+.dropdownElement {
+    cursor: pointer;
+    clear: left;
+    border-radius: 5px;
+    text-align: right;
+}
+.dropdownElement:hover { background-color: #9977ff; }
+.dropdownText {
+    text-decoration: none;
+    color: black;
 }
 
 /* ================================== */
 /* ============ arena.js ============ */
 /* ================================== */
 
+#arena {
+    height: 300px; /* Only the Arena panel needs a limited height - other pages can stretch more */
+}
+
+/* The text at the top of the arena page, that says 'guess the words' or else 'congratulations!'.  */
 #arenaMessage {
     display: inline-block;
     padding-left: 10px;
 }
 
-#progress {
+#progressBar {
     height: 25px;
     border: thick solid gold;
     border-radius: 20px;
     margin-left: 20px;
     margin-right: 20px;
 }
-
-#fill {
+/* The green 'fluid' inside the progress bar. */
+#progressBarFillFluid {
     height: 25px;
     background-color: greenyellow;
 }
@@ -228,15 +237,16 @@ li a, li p {
 /* ============ record.js =========== */
 /* ================================== */
 
-.startButton, .stopButton, .playAllButton, .submitButton {
-    float: left;
-}
-#wordList {
-    clear: left;
-}
+#record * {margin-left: 10px;}
+
+/* The top row's buttons start from the left and go rightwards. */
+.topRowButton { float: left; }
+/* This is required to get the central body (the words and their buttons) to make a new line after the top row, rather than continuing horizontally from the top row. */
+#wordList { clear: left; }
+
 .wordRow, .wordRowFocused {
-    display: list-item;
-    list-style: none;
+    display: list-item; /* puts each wordRow beneath the last, as a list */
+    list-style: none;   /* stops there being any numbering for said list */
     border-radius: 6px;
     margin-top: 4px;
     margin-bottom: 4px;
@@ -245,7 +255,7 @@ li a, li p {
 .wordRowFocused { background-color: gold; }
 .wordRowFocused:hover { background-color: yellow; }
 
-.playbackOne, .reRecord, .startButton, .stopButton, .playAllButton, .submitButton {
+.wordRowButton, .topRowButton {
     display: inline-block;
     vertical-align: middle;
     text-align: center;
@@ -255,37 +265,24 @@ li a, li p {
     border-radius: 6px;
     background-color: darkgray;
 }
-.playbackOneEnabled, .reRecordEnabled, .startButtonEnabled, .stopButtonEnabled, .playAllButtonEnabled, .submitButtonEnabled {
+.wordRowButtonEnabled, .topRowButtonEnabled {
     background-color: skyblue;
     cursor: pointer;
 }
-.playbackOneEnabled:hover, .reRecordEnabled:hover, .stopButtonEnabled:hover { background-color: deepskyblue; }
-.playSymbol, .recordSymbol, .stopSymbol { 
+.wordRowButtonEnabled:hover, .topRowButtonEnabled:hover { background-color: deepskyblue; }
+
+/* The play (>), record (o), and stop symbols on buttons */
+.buttonIcon { 
     margin-right: 10px; 
     margin-top: 2px;
 }
+/* When the re-record single word buttons are currently re-recording */
 .reRecordActive {
     background-color: coral;
     cursor: pointer;
 }
 .reRecordActive:hover { background-color: black; }
 
-#record * {margin-left: 10px;}
-.fileNotReady {display: none;}
-
-.recWord {clear: left;}
-
-audio::-webkit-media-controls-timeline-container,
-audio::-webkit-media-controls-timeline,
-audio::-webkit-media-controls-mute-button,
-audio::-webkit-media-controls-time-remaining-display
-{
-    display: none;
-}
-
-audio {
-    width: 45px;
-}
 
 /* ================================== */
 /* ============ about.js ============ */
@@ -297,7 +294,6 @@ audio {
     padding-left: 2%;
     padding-right: 2%;
 }
-
 
 /* ================================== */
 /* =========== profile.js =========== */
@@ -326,7 +322,7 @@ audio {
     border: 1px solid black;
 }
 
-/* loading */
+/* Loading page's wheel */
 .centred {
     margin: auto;
     display: block;

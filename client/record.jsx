@@ -61,7 +61,7 @@ StartButton = React.createClass({
     render() {
         // display props
         let disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
-        let className = (disabled ? 'startButton transparent' : 'startButton startButtonEnabled')
+        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         let label = "Record" // default value
         
         // callback arguments
@@ -122,7 +122,7 @@ StopButton = React.createClass({
     render() {
         // display props
         let disabled = (this.props.mode !== "record")
-        let className = (disabled ? 'stopButton transparent' : 'stopButton stopButtonEnabled')
+        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         
         // callback arguments
         let stop = true     // always
@@ -138,7 +138,7 @@ StopButton = React.createClass({
         return (
             <div>
                 <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
-                    <img className="stopSymbol" src={"stop.png"} />
+                    <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
@@ -155,7 +155,7 @@ PlayAllButton = React.createClass({
     render() {
         // display props
         let disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
-        let className = (disabled ? 'playAllButton transparent' : 'playAllButton playAllButtonEnabled')
+        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         let label = "Playback All"
         
         return (
@@ -179,7 +179,7 @@ SubmitButton = React.createClass({
      */
     render() {
         let disabled = !(this.props.mode === "done")
-        let className = (disabled ? 'submitButton transparent' : 'submitButton submitButtonEnabled animated rubberBand')
+        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
         return (
             <div>
                 <div className={className}
@@ -224,7 +224,7 @@ ReRecord = React.createClass({
                             (this.props.mode === "wait" || this.props.mode === "done" || active)
                          )
         let icon = "record.png" // icon: red circle - press to record
-        let className = (disabled ? 'reRecord transparent' : 'reRecord reRecordEnabled')
+        let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
         let tooltip = "Re-record this word"
         
         // callback arguments - default values, i.e. when not currently re-recording
@@ -241,7 +241,7 @@ ReRecord = React.createClass({
             stop  = true
             start = false
             focus = this.props.next
-            className = 'reRecord reRecordActive'
+            className = 'wordRowButton reRecordActive'
             // Go back to previous mode, either wait mode or done mode, as encoded in the prop
             if      (this.props.mode === "reRecordSingleToWait") { mode = "wait" }
             else if (this.props.mode === "reRecordSingleToDone") { mode = "done" }
@@ -254,7 +254,7 @@ ReRecord = React.createClass({
         return (
             <div style={{display: 'inline-block'}}>
                 <div className={className} key={this.props.index} data-tip={tooltip} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
-                    <img className="recordSymbol" src={icon} />
+                    <img className='buttonIcon' id='recordIcon' src={icon} />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>
@@ -268,12 +268,12 @@ PlaybackOne = React.createClass({
      */
     render() {
         let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
-        let className = (disabled ? 'playbackOne transparent' : 'playbackOne playbackOneEnabled')
+        let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
         
         return (
             <div style={{display: 'inline-block'}}>
                 <div className={className} key={this.props.index} data-tip={'Play back'} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
-                    <img className="playSymbol" src="play.png" />
+                    <img className='buttonIcon' id='playIcon' src='play.png' />
                 </div>
                 <ReactTooltip place="bottom" type="light" effect="solid" />
             </div>

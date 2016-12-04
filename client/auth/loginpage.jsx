@@ -45,7 +45,7 @@ AuthSignInPage = React.createClass({
             this.transitionTo('root');
         });
     },
-  
+    
     render() {
         return (
             <div className='panel page-auth'>
