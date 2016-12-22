@@ -1,104 +1,81 @@
-import { Navigation, Link } from 'react-router';
-import React from 'react';
+import { Navigation, Link } from 'react-router'
+import React from 'react'
+
+function validateEmail(email) {
+    /* A regexp to check that an email address is in the form anyString@anyString.anyString
+     */
+    const re = /\S+@\S+\.\S+/
+    return re.test(email)
+}
 
 AuthJoinPage = React.createClass({
-    //mixins: [Navigation],     // is this still a thing in Meteor 1.3? See comment on loginpage
     getInitialState() {
         return {
-            errors: {}
-        };
+            emailValue: "type your email address here",
+            passwordValue: "***",
+            confirmPassword: "###",
+            emailError: false,
+            passwordError: false
+        }
     },
-    onSubmit(event) {
-        event.preventDefault();
-
-        // email, password, and password confirmation are all supplied by the user
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        const confirm = event.target.confirm.value;
-
-        // error if there's no email or password entered, or if the confirmation password does not match the first password
-        const errors = {};
-        if (! email) { errors.email = 'Email required'; }
-        if (! password) { errors.password = 'Password required'; }
-        if (confirm !== password) { errors.confirm = 'Please confirm your password'; }
-
+    
+    handleChange(event) {
+        let field = event.target.name
+        //console.log("event.target.name : " + event.target.name)   // for debugging
+        if      (field === "email")    { this.setState({emailValue:    event.target.value}) }
+        else if (field === "password") { this.setState({passwordValue: event.target.value}) }
+        else if (field === "confirmPassword") { this.setState({confirmPassword: event.target.value}) }
+        else {alert ("something is wrong")}
+    },
+    
+    handleSubmit(event) {
+        /* If the email is not a valid expression (according to regexp above), shows an error in red text on the page.
+         * If password does not match confirmed password, shows a similar error.
+         * Otherwise, do something with the email and password values.
+         */
+        event.preventDefault()  // stops the page from reloading
+        let errors = {passwordClash: this.state.passwordValue !== this.state.confirmPassword,
+                     emailFail: !validateEmail(this.state.emailValue)}
         this.setState({
-            errors: errors
-        });
-        
-        // Don't continue if there are errors (shouldn't this be this.state.errors?)
-        if (! _.isEmpty(errors)) { return; }
-
-        // If there haven't been any errors, we can create the user
-        Accounts.createUser({
-            email: email,
-            password: password
-        }, (error) => {
-        // above - ES6 syntax for function(error) { ... }
-            if (error) {
-                this.setState({
-                    // I don't understand what this "errors.none" thing is supposed to be
-                    errors: { 'none': error.reason }
-                });
-                // if there's an error at this stage, return so that we don't transitionTo('root')
-                return;
-            }
-
-            this.transitionTo('root');
-        });
+            emailError: errors.emailFail,
+            passwordError: errors.passwordClash
+        })
+        if (!errors.passwordClash && !errors.emailFail) {
+            alert('A name was submitted: ' + this.state.emailValue + " - and this too - " + this.state.passwordValue + " - but also this - " + this.state.confirmPassword)
+        }
     },
     
     render() {
         return (
             <div className='panel page-auth'>
-        {/* <nav>
-          <MenuOpenToggle />
-        </nav> */}
-
-                <div className="content-scrollable">
-                    <div className="wrapper-auth">
-                        <h1 className="title-auth">Join.</h1>
-                        <p className="subtitle-auth">
+                <div>
+                    <div>
+                        <h1>Join.</h1>
+                        <p>
                             Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.
                         </p>
 
                         <form onSubmit={ this.onSubmit }>
-                            <AuthErrors errors={this.state.errors} />
-
-                            <AuthFormInput
-                                hasError={!!this.state.errors.email}
-                                type="email"
-                                name="email"
-                                label="Your Email"
-                                iconClass="icon-email" />
-
-                            <AuthFormInput
-                                hasError={!!this.state.errors.password}
-                                type="password"
-                                name="password"
-                                label="Password"
-                                iconClass="icon-lock" />
-
-                            <AuthFormInput
-                                hasError={!!this.state.errors.confirm}
-                                type="password"
-                                name="confirm"
-                                label="Confirm Password"
-                                iconClass="icon-lock" />
-
-                            <button type="submit" className="btn-primary">
+                            <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}>Please provide a valid email address.</p>
+                            Email: <input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /> <br/>
+                            <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}>Your password must be the same in both fields.</p>
+                            Password: <input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /> <br/>
+                            Confirm password: <input type="text" name="confirmPassword" value={this.state.confirmPasswordValue} onChange={this.handleChange} /> <br/>
+            
+                            <button onClick={this.handleSubmit} >
                                 Join Now
                             </button>
                         </form>
                     </div>
 
-                    <Link to="login" className="link-auth-alt">
+                    <Link to="login" >
                         Have an account? Sign in.
                     </Link>
                 </div>
             </div>
-        );
+        )
     }
-});
+})
 
-export default AuthJoinPage;
+
+export default AuthJoinPage

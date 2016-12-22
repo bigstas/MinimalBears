@@ -34,6 +34,8 @@ h4 { padding-left: 2%; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
 .transparent { opacity: 0.1; }
+/* For elements that are not shown at all. (They may be shown when this class is removed from them.) */
+.noDisplay { display: none; }
 
 /* to replace the proliferation of button types, classes, and ids */
 .button { 
@@ -224,12 +226,12 @@ nav ul li a, nav ul li p {
 
 
 /* ================================== */
-/* ============= gate.js ============ */
+/* ========= authentication ========= */
 /* ================================== */
 
-#gate h1, #gate h2, #gate p, #gate input {
-    margin-left: 2%;
-    margin-right: 2%;
+.authErrorMsg {
+    color: red;
+    margin-bottom: 0; /* so that it hugs the text below */
 }
 
 
