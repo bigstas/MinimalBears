@@ -22,13 +22,13 @@ const Selector = React.createClass({
                 <div className='panel' id='selector'>
                     <p>{this.props.selectionMessage}</p>
                     {this.props.options.map(c =>
-                        <div className='chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
+                        <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                             {c.text}
                         </div>
                     )}
 
                     {!!this.props.extraText ? 
-                        <div className='extraButton' id={this.props.extraText} onClick={this.props.extraCallback}>
+                        <div className='button' id='extraButton' onClick={this.props.extraCallback}>
                             {this.props.extraText}
                         </div> :
                         <div>{/*empty div*/}</div> 

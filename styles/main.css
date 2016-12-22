@@ -36,11 +36,24 @@ h4 { padding-left: 2%; }
 .transparent { opacity: 0.1; }
 /* For elements that are not shown at all. (They may be shown when this class is removed from them.) */
 .noDisplay { display: none; }
+/* For elements which have a default cursor (not a hand) - to indicate that they are not clickable at the moment. */
+.defaultCursor { cursor: default }
+/* For centering an <img> element in a <div>. Relevant to the loading wheel. */
+.centred {
+    margin: auto;
+    display: block;
+}
 
-/* to replace the proliferation of button types, classes, and ids */
+
+/* ================================= */
+/* =========== buttons ============= */
+/* ================================= */
+
+/* general button */
 .button { 
     display: inline-block;
     color: white;
+    background-color: aqua;
     padding-top: 3%;
     padding-bottom: 5%;
     margin-bottom: 2%;
@@ -49,6 +62,75 @@ h4 { padding-left: 2%; }
     cursor: pointer;
 }
 .button:hover { background-color: darkcyan; }
+
+/* Buttons that need to fill out a lot of space, so they have extra width and lots of margin. */
+.wordOption, .chooseOption { 
+    width: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#progressButton {
+    color: black;
+    text-align: center;
+    background-color: goldenrod;
+    width: 30%;
+    margin-top: 50px;
+    margin-left: 35%;
+    padding-top: 3px;
+    padding-bottom: 5px;
+}
+#progressButton:hover { background-color: antiquewhite; }
+
+/* Buttons on the Home page. */
+.homebtn { 
+    width: 20%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+/* <Link> elements inside buttons need no text decoration, and white font. (For homebtn buttons.) */
+.btnLink {
+    color: white;
+    text-decoration: none; 
+}
+
+/* Button at the bottom of the selector. Fills out most of the width of the page. */
+#extraButton {
+    background-color: gold;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+#extraButton:hover { background-color: darkgoldenrod; }
+
+/* Record page buttons. */
+.wordRowButton, .topRowButton {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin: 3px;
+    border-radius: 6px;
+    background-color: darkgray;
+}
+.wordRowButtonEnabled, .topRowButtonEnabled {
+    background-color: skyblue;
+    cursor: pointer;
+}
+.wordRowButtonEnabled:hover, .topRowButtonEnabled:hover { background-color: deepskyblue; }
+
+/* The play (>), record (o), and stop symbols on buttons */
+.buttonIcon { 
+    margin-right: 10px; 
+    margin-top: 2px;
+}
+/* When the re-record single word buttons are currently re-recording */
+.reRecordActive {
+    background-color: coral;
+    cursor: pointer;
+}
+.reRecordActive:hover { background-color: black; }
 
 
 /* ================================== */
@@ -134,13 +216,12 @@ nav ul li a, nav ul li p {
     color: black;
 }
 
+
 /* ================================== */
 /* ============ arena.js ============ */
 /* ================================== */
 
-#arena {
-    height: 300px; /* Only the Arena panel needs a limited height - other pages can stretch more */
-}
+#arena { height: 300px; } /* Only the Arena panel needs a limited height - other pages can stretch more */
 
 /* The text at the top of the arena page, that says 'guess the words' or else 'congratulations!'.  */
 #arenaMessage {
@@ -161,22 +242,6 @@ nav ul li a, nav ul li p {
     background-color: greenyellow;
 }
 
-.enabledProgress, .disabledProgress {
-    margin-top: 50px;
-    margin-left: 35%;
-    width: 30%;
-    text-align: center;
-    border-radius: 5px;
-    padding-top: 3px;
-    padding-bottom: 5px;
-}
-.enabledProgress {
-    cursor: pointer;
-    background-color: goldenrod;
-}
-.enabledProgress:hover {background-color: antiquewhite;}
-.disabledProgress {background-color: lightgray;}
-
 #optionContainer {
     margin-top: 20px;
     padding-left: 40px;
@@ -184,51 +249,17 @@ nav ul li a, nav ul li p {
     display: block;
 }
 
-.wordOption, .chooseOption, .extraButton, .homebtn {
-    display: inline-block;
-    color: white;
-    padding-top: 3%;
-    padding-bottom: 5%;
-    margin-bottom: 2%;
-    text-align: center;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.wordOption, .chooseOption { 
-    width: 30%;
-    margin-left: 10%;
-    margin-right: 10%;
-}
-.wordOption:hover, .chooseOption:hover {
-    background-color: darkcyan;
-}
-#wordOptionCorrect, #wordOptionWrong, #wordOptionNotChosen, .disabledProgress { cursor: default }
-
+/* The buttons change colour depending on whether they were selected or not, and whether the user was right or not. */
 #wordOptionCorrect   { background-color: green; }
 #wordOptionWrong     { background-color: red; }
 #wordOptionNotChosen { background-color: white; }
-
-.homebtn { 
-    width: 20%;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-.wordOption, .chooseOption, .homebtn { background-color: aqua; }
-.extraButton {
-    background-color: gold;
-    width: 50%;
-    margin-left: 25%;
-    margin-right: 25%;
-}
-.extraButton:hover {
-    background-color: darkgoldenrod;
-}
 
 
 /* ================================== */
 /* ========= authentication ========= */
 /* ================================== */
 
+/* The error messages when you type in a username or password incorrectly. */
 .authErrorMsg {
     color: red;
     margin-bottom: 0; /* so that it hugs the text below */
@@ -239,6 +270,7 @@ nav ul li a, nav ul li p {
 /* ============ record.js =========== */
 /* ================================== */
 
+/* This is a bit hacky...! Should try not to do things this way! */
 #record * {margin-left: 10px;}
 
 /* The top row's buttons start from the left and go rightwards. */
@@ -256,34 +288,6 @@ nav ul li a, nav ul li p {
 .wordRow:hover { background-color: darkseagreen; }
 .wordRowFocused { background-color: gold; }
 .wordRowFocused:hover { background-color: yellow; }
-
-.wordRowButton, .topRowButton {
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin: 3px;
-    border-radius: 6px;
-    background-color: darkgray;
-}
-.wordRowButtonEnabled, .topRowButtonEnabled {
-    background-color: skyblue;
-    cursor: pointer;
-}
-.wordRowButtonEnabled:hover, .topRowButtonEnabled:hover { background-color: deepskyblue; }
-
-/* The play (>), record (o), and stop symbols on buttons */
-.buttonIcon { 
-    margin-right: 10px; 
-    margin-top: 2px;
-}
-/* When the re-record single word buttons are currently re-recording */
-.reRecordActive {
-    background-color: coral;
-    cursor: pointer;
-}
-.reRecordActive:hover { background-color: black; }
 
 
 /* ================================== */
@@ -324,11 +328,11 @@ nav ul li a, nav ul li p {
     border: 1px solid black;
 }
 
-/* Loading page's wheel */
-.centred {
-    margin: auto;
-    display: block;
-}
+
+/* ================================== */
+/* =========== loading.jsx ========== */
+/* ================================== */
+
 #loadingWheel {
     /* centering */
     margin-left: auto;

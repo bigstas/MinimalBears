@@ -47,14 +47,14 @@ var ProgressButton = React.createClass({
     render() {
         // Uses CSS animate.css library. Syntax is:
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
-        let btnClass = 'enabledProgress animated rubberBand' // could do styling depending on mode if we want
+        let btnClass = 'button animated rubberBand' // could do styling depending on mode if we want
         let label
         if      (this.props.mode === "wait")     { label = "Begin" }
         else if (this.props.mode === "ask")      { label = "Play Again" }
         else if (this.props.mode === "feedback") { label = "Next" }
         else if (this.props.mode === "done")     { label = "Go Again" }
         return (
-            <div id="button" className={btnClass} onClick={this.props.handle}>{label}</div>
+            <div id='progressButton' className={btnClass} onClick={this.props.handle}>{label}</div>
         )
     }
 })
@@ -75,8 +75,9 @@ var WordOption = React.createClass({
         //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption')
         var text = ""
         var id = ""
-        var wordOptionClass = "wordOption"
+        var wordOptionClass = "button wordOption"
         if (this.props.mode === "feedback") {
+            wordOptionClass += " defaultCursor"
             if (this.props.chosen) {
                 if (this.props.correct) {
                     text = "Correct!"
