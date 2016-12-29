@@ -10,7 +10,7 @@ p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set 
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
 li { float: left; }                 /* All list elements should keep to the left as much as they can throughout the site. */
 h4 { padding-left: 2%; }
-
+.bulletpoints { clear: left; } /* We want bullet points to stack one on top of the other. */
 
 /* ================================== */
 /* ====== general categories ======== */

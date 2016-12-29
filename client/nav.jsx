@@ -8,9 +8,9 @@ Dropdown = React.createClass({
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
                 <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
-                <div className='dropdownElement'>Settings</div>
-                <div className='dropdownElement'>Something else</div>
-                <div className='dropdownElement'>Something more</div>
+                <div className='dropdownElement'>...</div>
+            {/*    <div className='dropdownElement'>Something else</div>
+                <div className='dropdownElement'>Something more</div>*/}
             </div>
         )
     }

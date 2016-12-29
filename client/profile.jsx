@@ -12,9 +12,9 @@ EmptyProfile = React.createClass({
             <div className='panel' id='emptyProfile'>
                 <h2><Link to="/login">Log in</Link> or <Link to="/register">sign up</Link> to see your personal profile!</h2>
                 <ul>
-                    <li>View your progress with statistics and charts</li>
-                    <li>Share your successes with your friends</li>
-                    <li>Contribute to Minimal Bears by recording words in your native language</li>
+                    <li className='bulletpoints'>View your progress</li>
+                    <li className='bulletpoints'>Share your successes with friends</li>
+                    <li className='bulletpoints'>Contribute to Minimal Bears by recording words in your native language</li>
                 </ul>
             </div>
         )

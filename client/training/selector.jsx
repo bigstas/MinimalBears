@@ -19,9 +19,9 @@ const Selector = React.createClass({
         if (this.props.loading) { return <LoadingPage /> }
         else {
             return (
-                <div className='panel' id='selector'>
+                <div className='panel animated fadeIn' id='selector'>
                     <p>{this.props.selectionMessage}</p>
-                    {this.props.options.map(c =>
+                    {this.props.options.map((c, index) =>
                         <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                             {c.text}
                         </div>
