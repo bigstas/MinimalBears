@@ -83,7 +83,7 @@ var WordOption = React.createClass({
                     text = "Correct!"
                     id = "wordOptionCorrect"
                 } else {
-                    text = "Oops! Try again!"
+                    text = "Oops!"
                     id = "wordOptionWrong"
                 }
             } else {
@@ -206,8 +206,8 @@ Arena = React.createClass({
         return (
             <div className='panel animated fadeIn' id='arena'>
                 {(this.state.mode === "done") ? 
-                    <p id='arenaMessage'>CONGRATULATIONS! You did it!</p> : 
-                    <p>Guess the words. Score: {this.state.score}/{this.state.counter}</p> }
+                    <h1 id='arenaMessage'>Bravo!</h1> : 
+                    <div><h1 className='score'>Score:</h1><h1 className='score' id='scoreValue'>{this.state.score}</h1><h1 className='score'>/{this.state.counter}</h1></div> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />

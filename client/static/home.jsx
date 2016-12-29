@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 Home = React.createClass({    
     render() {
         return (
-            <div className='panel' id='home'>
+            <div className='panel animated fadeIn' id='home'>
                 <div id='usermessage'>
                     <h2>Welcome!</h2>
                     <p><strong>Minimal Bears</strong> is an app that will help you learn new sounds in foreign languages.</p>

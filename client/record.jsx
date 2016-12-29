@@ -403,7 +403,7 @@ next: ${next}`)
     
     render() {
         return (
-            <div className='panel' id='record'>
+            <div className='panel animated fadeIn' id='record'>
                 <TopRow next={this.state.next} 
                         max={this.props.recordingWords.length -1} 
                         mode={this.state.mode} 
