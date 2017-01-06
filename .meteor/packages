@@ -27,3 +27,4 @@ react-meteor-data       # For creating containers to access data
 meteorhacks:picker      # For server-side routing
 
 shell-server            # For the `meteor shell` command
+tap:i18n

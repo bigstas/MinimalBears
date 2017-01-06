@@ -3,14 +3,30 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
 
+// function in place of strings
+const translations = (key) => TAPi18n.__(`navbar.${key}`)
+    
 Dropdown = React.createClass({
+    setLanguage(lang) {
+        /* Set the language for the internationalisation library to whatever what chosen.
+         */
+        TAPi18n.setLanguage(lang)
+        
+        // debug console log
+        const currentLanguage = TAPi18n.getLanguage()
+        console.log(currentLanguage)
+        // force a re-render
+        this.forceUpdate()
+    },
+    
     render() {
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
                 <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
-                <div className='dropdownElement'>...</div>
-            {/*    <div className='dropdownElement'>Something else</div>
-                <div className='dropdownElement'>Something more</div>*/}
+                <hr />
+                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'en')}>English</div>
+                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'pl')}>Polski</div>
+                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'zh')}>中文</div>
             </div>
         )
     }
@@ -45,17 +61,18 @@ Nav = React.createClass({
     },
     
     render() { 
+        const guest = translations('guest')
         return (
             <div className="container">
                 <nav>
                     <ul>
-                        <li><IndexLink to="/" activeClassName="activeNavbarElement">Home</IndexLink></li>
-                        <li><Link to="/about" activeClassName="activeNavbarElement">About</Link></li>
-                        <li><Link to="/train" activeClassName="activeNavbarElement">Train</Link></li>
-                        <li><Link to="/record" activeClassName="activeNavbarElement">Record</Link></li>
-            {/*<li><Link to="/profile" activeClassName="active">Profile</Link></li>*/}
+                        <li><IndexLink to="/" activeClassName="activeNavbarElement">{translations('home')}</IndexLink></li>
+                        <li><Link to="/about" activeClassName="activeNavbarElement">{translations('about')}</Link></li>
+                        <li><Link to="/train" activeClassName="activeNavbarElement">{translations('train')}</Link></li>
+                        <li><Link to="/record" activeClassName="activeNavbarElement">{translations('record')}</Link></li>
+
                         <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
-                        <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile" activeClassName="activeNavbarElement">{!!this.props.username ? this.props.username : "Guest"}</Link></li>
+                        <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile" activeClassName="activeNavbarElement">{!!this.props.username ? this.props.username : guest}</Link></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}

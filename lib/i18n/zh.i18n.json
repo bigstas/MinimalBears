@@ -1,0 +1,26 @@
+{
+    "navbar": {
+        "home": "主页",
+        "about": "说明",
+        "train": "炼狱",
+        "record": "录音",
+        "guest": "客人",
+        "profile": "用户资料",
+        "settings": "设置"
+    },
+
+    "home": {
+        "welcome": "欢迎光临!",
+        "intro": " 是一件让你学习外语的发音的软件。",
+        "continue": "当客人继续",
+        "signIn": "签到",
+        "register": "注册"
+    },
+    
+    "train": {
+        "chooseLanguage": "你想练习哪个语言？",
+        "chooseContrast": "你想练习哪个发音区别？",
+        "changeLanguage": "改变语言",
+        "score": "得分"
+    }
+}
