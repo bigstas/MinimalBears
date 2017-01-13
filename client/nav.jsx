@@ -15,8 +15,6 @@ Dropdown = React.createClass({
         // debug console log
         const currentLanguage = TAPi18n.getLanguage()
         console.log(currentLanguage)
-        // force a re-render
-        this.forceUpdate()
     },
     
     render() {
