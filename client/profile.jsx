@@ -5,6 +5,18 @@ import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 
+AlphaProfile = React.createClass({
+    render() {
+        return(
+            <div className='panel animated fadeIn' id='alphaProfile'>
+                <h2>Oops!</h2>
+                <p>Personal profiles are not available in Minimal Bears Alpha release.</p>
+                <p>See you in Beta!</p>
+            </div>
+        )
+    }
+})
+    
 // when there is no logged in user
 EmptyProfile = React.createClass({
     render() {
@@ -53,10 +65,13 @@ Profile = React.createClass({
     render() {
         return(
             <div>
+                <AlphaProfile />
+            {/*
                 {!!this.props.user ?
                     <UserProfile user={this.props.user} /> :
                     <EmptyProfile />
                 }
+                */}
             </div>
         )
     }

@@ -20,11 +20,12 @@ Dropdown = React.createClass({
     render() {
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-                <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
+                <div className='dropdownElement'><em>Settings coming soon in Beta</em></div>
+                {/*<div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
                 <hr />
                 <div className='dropdownElement' onClick={this.setLanguage.bind(this,'en')}>English</div>
                 <div className='dropdownElement' onClick={this.setLanguage.bind(this,'pl')}>Polski</div>
-                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'zh')}>中文</div>
+                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'zh')}>中文</div> */}
             </div>
         )
     }
