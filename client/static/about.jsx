@@ -48,12 +48,12 @@ About = React.createClass({
                 <p>The importance of quick, unambiguous feedback for learning is one of behavioural science's most well-supported findings. However, in a social environment, small errors in pronouncing or distinguishing foreign sounds are rarely corrected in the moment. HVPT allows the learner to immediately perceive any errors, resulting in rapid progress.</p>
                 <h2>Is there a way I can contribute?</h2>
                 <p>The audio for Minimal Bears is crowd-sourced, like Wikipedia. In order to expand the range of content (different contrasts from different languages, spoken by different people), we rely on words recorded by volunteers. If you'd like to contribute, go to the Record page and get talking!</p>
-                <br/>
+            {/* <br/>
                 <hr/>
                 <p><strong>Credits</strong> <br/>
                 Concept: Guy Emerson <br/>
                 Programming: Guy Emerson and Stanisław Pstrokoński <br/>
-                Graphics: Gergő Halász [hopefully!]</p>
+                Graphics: Gergő Halász</p> */}
             </div>
         )
     }

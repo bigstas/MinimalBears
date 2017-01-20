@@ -110,7 +110,7 @@ Arena = React.createClass({
     getInitialState() {
         return {
             counter: 0,
-            maxRounds: 3,   // this number is set low during development - it should be increased for release
+            maxRounds: 10,   // this number is set low during development - it should be increased for release
             score: 0,
             mode: "wait",   // possible modes are "wait", "feedback", "ask", "done"
             correctAnswer: Math.round(Math.random()),
@@ -206,7 +206,7 @@ Arena = React.createClass({
         return (
             <div className='panel animated fadeIn' id='arena'>
                 {(this.state.mode === "done") ? 
-                    <h1 id='arenaMessage'>Bravo!</h1> : 
+                    <h1 id='arenaMessage'>Bravo! You scored {this.state.score} out of 10!</h1> : 
                     <div><h1 className='score'>Score:</h1><h1 className='score' id='scoreValue'>{this.state.score}</h1><h1 className='score'>/{this.state.counter}</h1></div> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 

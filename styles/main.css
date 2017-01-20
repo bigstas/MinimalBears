@@ -33,7 +33,7 @@ h4 { padding-left: 2%; }
 }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
-.transparent { opacity: 0.1; }
+.transparent { opacity: 0.2; }
 /* For elements that are not shown at all. (They may be shown when this class is removed from them.) */
 .noDisplay { display: none; }
 /* For elements which have a default cursor (not a hand) - to indicate that they are not clickable at the moment. */
