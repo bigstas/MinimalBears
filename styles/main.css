@@ -3,9 +3,34 @@
 /* ================================== */
 
 body {
-    background-color: #e6e6e6;  /* that greyish colour behind everything */
+    background-image:url("http://i.imgur.com/XW9Qblo.jpg");  
+    background-size:cover;
     margin: 0px;
-}
+    }
+#usermessage {
+    text-align: center;
+    }
+
+#bottom1 {
+    height: 50px;
+    text-align: center;
+    background-color:saddlebrown;
+    margin-left: 19%;
+    margin-right: 19%;
+    margin-top: 10px;
+    width: 61%;
+    padding: 0.5%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    z-index:-1;
+    position:absolute;
+    bottom:0px;
+    color:beige;
+    font-family: Verdana, Geneva, sans-serif;
+    padding-top:2%;
+    }
+
+
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
 li { float: left; }                 /* All list elements should keep to the left as much as they can throughout the site. */
@@ -28,8 +53,9 @@ h4 { padding-left: 2%; }
     margin-bottom: 40px;
     width: 56%;
     margin-top: 3%;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
     padding: 3%;
+    opacity: 90%;
 }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
@@ -52,16 +78,17 @@ h4 { padding-left: 2%; }
 /* general button */
 .button { 
     display: inline-block;
-    color: white;
-    background-color: aqua;
-    padding-top: 3%;
-    padding-bottom: 5%;
-    margin-bottom: 2%;
-    text-align: center;
-    border-radius: 6px;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
     cursor: pointer;
-}
-.button:hover { background-color: darkcyan; }
+    padding-top: 3%;
+    padding-bottom: 3%;
+    background-color:indianred;
+    color:floralwhite;
+    text-align:center;
+    border-radius: 8px;
+   
+        }
 
 /* Buttons that need to fill out a lot of space, so they have extra width and lots of margin. */
 .wordOption, .chooseOption { 
@@ -71,7 +98,7 @@ h4 { padding-left: 2%; }
 }
 
 #progressButton {
-    color: black;
+    color: floralwhite;
     text-align: center;
     background-color: goldenrod;
     width: 30%;
@@ -80,6 +107,28 @@ h4 { padding-left: 2%; }
     padding-top: 3px;
     padding-bottom: 5px;
 }
+
+.button:hover{
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.button {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button:after {
+  content: 
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
 #progressButton:hover { background-color: antiquewhite; }
 
 /* Buttons on the Home page. */
@@ -88,9 +137,12 @@ h4 { padding-left: 2%; }
     margin-left: 5%;
     margin-right: 5%;
 }
+
+
 /* <Link> elements inside buttons need no text decoration, and white font. (For homebtn buttons.) */
 .btnLink {
-    color: white;
+    color: antiquewhite;
+    font-size:22px;
     text-decoration: none; 
 }
 
@@ -141,7 +193,7 @@ h4 { padding-left: 2%; }
 nav {
     height: 42px;
     text-align: center;
-    background-color: #9977ff;
+    background-color: indianred;
     margin-left: 19%;
     margin-right: 19%;
     margin-top: 10px;
@@ -152,14 +204,20 @@ nav {
 }
 /* The links within the navigation bar */
 nav a {
-    color: aliceblue;
+    color:darkred;
     text-decoration: none;
+    white-space: nowrap;
+    display: inline-block;
 }
 nav a:hover {
     text-decoration: none;
-    background-color: aliceblue;
-    color: #9977ff;
+    color: lightyellow;
+    transition: height .5s ease, background-color .5s ease;
+    background-color: lightcoral;
 }
+
+
+
 
 /* The buttons within the nav bar are an unordered list (<ul>). */
 nav ul {
@@ -178,20 +236,21 @@ nav ul li a, nav ul li p {
 }
 /* When you're on a specific page, the corresponding button in the navbar is styled as follows. */
 .activeNavbarElement {
-    background-color: aliceblue;
-    color: #9977ff;     /* refers to text colour */
+    background-color:lightcoral;
+    color: lightyellow;     /* refers to text colour */
 }
 
 /* The button on the nav bar that tells you your username, or otherwise says 'Guest'. */
 #loggedInAs {
     float: right;
-    color: indigo;
+    color: darkred;
     font-weight: bold;
 }
 #loggedInAs:hover {
-    background-color: aliceblue;
+    
+    color: darkred;
     cursor: pointer;    /* Turns the mouse's cursor from an arrow (default) to a hand, to show that you can click. */
-}
+    }
 /* The dropdown menu from the gear symbol. */
 .dropdownDiv {
     right: 0;
@@ -210,7 +269,7 @@ nav ul li a, nav ul li p {
     border-radius: 5px;
     text-align: right;
 }
-.dropdownElement:hover { background-color: #9977ff; }
+.dropdownElement:hover { background-color: lightsalmon; }
 .dropdownText {
     text-decoration: none;
     color: black;
