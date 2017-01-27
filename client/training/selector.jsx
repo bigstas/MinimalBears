@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../loading'
+import Translate from 'react-translate-component'
 
 const Selector = React.createClass({
 	/* A series of buttons from which the user can choose one
@@ -20,16 +21,19 @@ const Selector = React.createClass({
         else {
             return (
                 <div className='panel animated fadeIn' id='selector'>
-                    <p>{this.props.selectionMessage}</p>
+                    <Translate content={this.props.selectionMessage} component="p" />
                     {this.props.options.map((c, index) =>
                         <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
-                            {c.text}
+                            {this.props.choosingLanguage ? 
+                                <Translate content={"train.language." + c.text} /> :
+                                c.text 
+                            }
                         </div>
                     )}
 
                     {!!this.props.extraText ? 
                         <div className='button' id='extraButton' onClick={this.props.extraCallback}>
-                            {this.props.extraText}
+                            <Translate content={this.props.extraText} />
                         </div> :
                         <div>{/*empty div*/}</div> 
                     }
@@ -57,7 +61,8 @@ const LanguageSelector = React.createClass({
 		return (
 			<Selector
                 loading={this.props.data.loading}
-				selectionMessage='Choose the language you want to train'
+                choosingLanguage={true}
+				selectionMessage="train.chooseLanguage"
 				options={options}
 				callback={this.props.callback}
 			/>
@@ -84,10 +89,11 @@ const ContrastSelector = React.createClass({
 		return (
 			<Selector
                 loading={this.props.data.loading}
-				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
+                choosingLanguage={false}
+				selectionMessage={options.length === 0 ? "train.sorryNoContrasts" : "train.chooseContrast" }
 				options={options}
 				callback={this.props.callback}
-				extraText='Change language'
+				extraText='train.changeLanguage'
 				extraCallback={this.props.extraCallback}
 			/>
 		)

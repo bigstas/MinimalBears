@@ -5,6 +5,7 @@
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import key from 'keymaster'
+import Translate from 'react-translate-component'
 
 // new gql way of getting data...
 import { connect } from 'react-apollo'
@@ -49,12 +50,12 @@ var ProgressButton = React.createClass({
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
         let btnClass = 'button animated rubberBand' // could do styling depending on mode if we want
         let label
-        if      (this.props.mode === "wait")     { label = "Begin" }
-        else if (this.props.mode === "ask")      { label = "Play Again" }
-        else if (this.props.mode === "feedback") { label = "Next" }
-        else if (this.props.mode === "done")     { label = "Go Again" }
+        if      (this.props.mode === "wait")     { label = "train.label.begin" }
+        else if (this.props.mode === "ask")      { label = "train.label.playAgain" }
+        else if (this.props.mode === "feedback") { label = "train.label.next" }
+        else if (this.props.mode === "done")     { label = "train.label.goAgain" }
         return (
-            <div id='progressButton' className={btnClass} onClick={this.props.handle}>{label}</div>
+            <div id='progressButton' className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
         )
     }
 })
@@ -207,7 +208,7 @@ Arena = React.createClass({
             <div className='panel animated fadeIn' id='arena'>
                 {(this.state.mode === "done") ? 
                     <h1 id='arenaMessage'>Bravo! You scored {this.state.score} out of 10!</h1> : 
-                    <div><h1 className='score'>Score:</h1><h1 className='score' id='scoreValue'>{this.state.score}</h1><h1 className='score'>/{this.state.counter}</h1></div> }
+                    <div><h1 className='score'><Translate content="train.score" /></h1><h1 className='score' id='scoreValue'>{this.state.score}</h1><h1 className='score'>/{this.state.counter}</h1></div> }
                 {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />

@@ -7,9 +7,11 @@
   "dependencies": {
     "apollo-client": "^0.4.4",
     "apollo-server": "^0.1.5",
+    "counterpart": "^0.17.6",
     "express": "^4.14.0",
     "graphql": "^0.6.1",
     "keymaster": "^1.6.2",
+    "meteor-node-stubs": "^0.2.5",
     "pg": "^6.1.0",
     "postgraphql": "^1.8.2",
     "react": "^15.4.1",
@@ -18,9 +20,11 @@
     "react-addons-update": "^15.1.0",
     "react-apollo": "^0.3.19",
     "react-dom": "^15.4.1",
+    "react-interpolate-component": "^0.10.0",
     "react-onclickoutside": "^5.3.2",
     "react-router": "^2.0.1",
     "react-tooltip": "^3.2.1",
+    "react-translate-component": "^0.13.2",
     "react-youtube": "^7.2.0"
   }
 }

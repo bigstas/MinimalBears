@@ -3,29 +3,25 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
 
-// function in place of strings
-const translations = (key) => TAPi18n.__(`navbar.${key}`)
+import counterpart from 'counterpart'
+import Translate from 'react-translate-component'    
     
 Dropdown = React.createClass({
-    setLanguage(lang) {
-        /* Set the language for the internationalisation library to whatever what chosen.
-         */
-        TAPi18n.setLanguage(lang)
-        
-        // debug console log
-        const currentLanguage = TAPi18n.getLanguage()
-        console.log(currentLanguage)
+    handleClick (newLocale) {
+        counterpart.setLocale(newLocale)
     },
     
     render() {
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-                <div className='dropdownElement'><em>Settings coming soon in Beta</em></div>
-                {/*<div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
-                <hr />
-                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'en')}>English</div>
-                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'pl')}>Polski</div>
-                <div className='dropdownElement' onClick={this.setLanguage.bind(this,'zh')}>中文</div> */}
+            {/*<div className='dropdownElement'><em>Settings coming soon in Beta</em></div>
+                <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
+                <hr />*/}
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'eng')}>English</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'chm')}>中文</div>
             </div>
         )
     }
@@ -60,18 +56,17 @@ Nav = React.createClass({
     },
     
     render() { 
-        const guest = translations('guest')
         return (
             <div className="container">
                 <nav>
                     <ul>
-                        <li><IndexLink to="/" activeClassName="activeNavbarElement">{translations('home')}</IndexLink></li>
-                        <li><Link to="/about" activeClassName="activeNavbarElement">{translations('about')}</Link></li>
-                        <li><Link to="/train" activeClassName="activeNavbarElement">{translations('train')}</Link></li>
-                        <li><Link to="/record" activeClassName="activeNavbarElement">{translations('record')}</Link></li>
+                        <li><IndexLink to="/" activeClassName="activeNavbarElement"><Translate content="nav.home" /></IndexLink></li>
+                        <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
+                        <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
+                        <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>
 
                         <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
-                        <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile" activeClassName="activeNavbarElement">{!!this.props.username ? this.props.username : guest}</Link></li>
+                        <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile" activeClassName="activeNavbarElement">{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</Link></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}
