@@ -15,8 +15,8 @@ If postgres is not running, check under services
 
 
 RUNNING THE APP
-On Windows (PowerShell): run-app.ps1
-On Unix: run-app.sh
+On Windows (PowerShell): .\run-app.ps1
+On Unix: ./run-app.sh
 
 
 DEPLOYMENT TO GANDI INSTRUCTIONS
@@ -50,8 +50,14 @@ BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 
 NPM INSTRUCTIONS
 (Installing npm modules, rather than Meteor Atmosphere modules)
-0. run $ npm install --save react react-dom react-addons-pure-render-mixin
-(Perhaps we can put these in dependencies (in package.json?) and then npm can sort it all out...)
+("meteor npm install" uses the Meteor version of npm, while "npm install" uses the sytem version)
+1. $ meteor npm install (this installs everything required in package.json)
+2. $ meteor npm install --save <packagename> (this installs a new package)
+
+RESET INSTRUCTIONS
+1. $ meteor reset (optional - this clears all of Meteor's cached files)
+2a. Delete everything in ./node_modules
+2b. Re-install $ meteor npm install
 
 
 GIVE YOURSELF PERMISSION TO EXECUTE FILE

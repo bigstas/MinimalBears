@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import key from 'keymaster'
 
 // new gql way of getting data...
-import { connect } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
     
 key('a', function(){ alert('you pressed a!') })
@@ -246,44 +246,51 @@ Arena = React.createClass({
 })
 
 
-/* The 'connect' function will create a wrapper for a class,
+/* The 'graphql' function will create a wrapper for a class,
  * which makes queries to the database and passes the results as props.
  * We must provide a function that defines the queries.
  */
 
-function mapQueriesToProps({ ownProps, state }) {
+const pairQuery = gql`query ($orderBy: ContrastWithPairsOrdering) {
+	contrastWithPairsNodes(orderBy: $orderBy) {
+    	nodes {
+        	language
+        	name
+        	pairs
+    	}
+	}
+}`
 
-    return {
-        pairs: {
-            query: gql`query ($orderBy: ContrastWithPairsOrdering) {
-            	contrastWithPairsNodes(orderBy: $orderBy) {
-                	nodes {
-                    	language
-                    	name
-                    	pairs
-                	}
-            	}
-        	}`,
-            variables: {
-                orderBy: 'ROW_ID'
-            }
-        },
-        items: {
-            query: gql`query ($orderBy: ItemWithAudioOrdering) {
-	            itemWithAudioNodes (orderBy: $orderBy) {
-	                nodes {
-	                	rowId
-	                	language
-	                	homophones
-	                	audio
-	                }
-	            }
-        	}`,
-            variables: {
-        	    orderBy: 'ROW_ID'
-            }
+const pairQueryConfig = {
+    name: 'pairs',
+    options: {
+        variables: {
+            orderBy: 'ROW_ID'
         }
     }
 }
 
-export default connect({mapQueriesToProps})(Arena)
+const itemQuery = gql`query ($orderBy: ItemWithAudioOrdering) {
+    itemWithAudioNodes (orderBy: $orderBy) {
+        nodes {
+        	rowId
+        	language
+        	homophones
+        	audio
+        }
+    }
+}`
+
+const itemQueryConfig = {
+    name: 'items',
+    options: {
+        variables: {
+    	    orderBy: 'ROW_ID'
+        }
+    }
+}
+
+export default compose(
+    graphql(pairQuery, pairQueryConfig),
+    graphql(itemQuery, itemQueryConfig)
+)(Arena)

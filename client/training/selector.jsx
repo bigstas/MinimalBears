@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../loading'
 
@@ -94,43 +94,35 @@ const ContrastSelector = React.createClass({
 	}
 })
 
-function languageQueryToProps() {
-	// Fetches all languages
-	return {
-		data: {
-			query: gql`{
-				languageNodes {
-					nodes {
-						name
-						rowId
-					}
-				}
-			}`
+const languageQuery = gql`query {
+	languageNodes {
+		nodes {
+			name
+			rowId
 		}
 	}
-}
+}`
 
-function contrastQueryToProps({ownProps}) {
-	// Fetches all contrasts for the language with id given by props.language
-	return {
-		data: {
-			query: gql`query ($language: Int, $orderBy: ContrastNonemptyOrdering) {
-				contrastNonemptyNodes(language: $language, orderBy: $orderBy) {
-					nodes {
-						name
-						rowId
-					}
-				}
-			}`,
-			variables: {
-				language: ownProps.activeLanguageId,
-				orderBy: 'NAME'
-			}
-        }
+
+const contrastQuery = gql`query ($language: Int, $orderBy: ContrastNonemptyOrdering) {
+	contrastNonemptyNodes(language: $language, orderBy: $orderBy) {
+		nodes {
+			name
+			rowId
+		}
 	}
+}`
+
+const contrastQueryConfig = {
+    options: (ownProps) => ({
+        variables: {
+            language: ownProps.activeLanguageId,
+            orderBy: 'NAME'
+        }
+    })
 }
 
-const ConnectedLanguageSelector = connect({mapQueriesToProps: languageQueryToProps})(LanguageSelector)
-const ConnectedContrastSelector = connect({mapQueriesToProps: contrastQueryToProps})(ContrastSelector)
+const ConnectedLanguageSelector = graphql(languageQuery)(LanguageSelector)
+const ConnectedContrastSelector = graphql(contrastQuery, contrastQueryConfig)(ContrastSelector)
 
 export { Selector, ConnectedLanguageSelector, ConnectedContrastSelector }
