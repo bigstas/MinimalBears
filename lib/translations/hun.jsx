@@ -13,6 +13,10 @@ counterpart.registerTranslations('hun', {
         profile: "Profile",
         settings: "Settings"
     },
+    notfound: {
+        title: "Your webpage was not found.",
+        text: "Sad bear face. Check you input the URL correctly."
+    },
     home: {
         welcome: "Üdvövlöm!",
         intro: " egy programma, ami segít az akcent tanulásával.",

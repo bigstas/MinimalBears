@@ -13,6 +13,10 @@ counterpart.registerTranslations('chm', {
         profile: "用户资料",
         settings: "设置"
     },
+    notfound: {
+        title: "Your webpage was not found.",
+        text: "Sad bear face. Check you input the URL correctly."
+    },
     home: {
         welcome: "欢迎光临!",
         intro: " 是一件让你学习外语的发音的软件。",

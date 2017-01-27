@@ -1,37 +1,32 @@
 import counterpart from 'counterpart'
 
-// Set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
-// This will run once on startup and not run again.
-// For future - maybe try to get their locale first?
-counterpart.setLocale('eng')
-
-counterpart.registerTranslations('eng', {
+counterpart.registerTranslations('geo', {
     example: {
         greeting: 'Hello %(name)s! How are you today?'
+    },
+    nav: {
+        home: "მტავარი გვერდი",
+        about: "About",
+        train: "სასწავლო",
+        record: "Record",
+        guest: "სტუმარი",
+        profile: "პროფილი",
+        settings: "Settings"
     },
     notfound: {
         title: "Your webpage was not found.",
         text: "Sad bear face. Check you input the URL correctly."
     },
-    nav: {
-        home: "Home",
-        about: "About",
-        train: "Train",
-        record: "Record",
-        guest: "Guest",
-        profile: "Profile",
-        settings: "Settings"
-    },
     home: {
-        welcome: "Welcome!",
+        welcome: "მისასალმები!",
         intro: " is an app that will help you learn new sounds in foreign languages.",
         continue: "Continue as guest",
         signIn: "Sign In",
-        register: "Register"
+        register: "რეგისტრირება"
     },
     about: {
         title: 'Minimal Bears: The research-based web app that improves your accent.',
-        whatIs: 'What is Minimal Bears?',
+        whatIs: 'Minimal Bears რა არის?',
         p1: {
             line1: 'Minimal Bears is a web app that uses a technique known as ',
             HVPT: 'High Variability Phonetic Training',
@@ -39,15 +34,15 @@ counterpart.registerTranslations('eng', {
         }
     },
     train: {
-        chooseLanguage: "Choose the language you want to train",
+        chooseLanguage: "რომელი ენის პრაქტიკა გინდა?",
         chooseContrast: "Choose which contrast you want to train",
-        changeLanguage: "Change language",
+        changeLanguage: "მე მინდა განსხავებული ენა",
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "English",
-            Polish: "Polish",
-            German: "German"
+            English: "ინგლისური",
+            Polish: "პოლინური",
+            German: "გერმანური"
         },
         label: {
             begin: "Begin",

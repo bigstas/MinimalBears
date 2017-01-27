@@ -1,37 +1,32 @@
 import counterpart from 'counterpart'
 
-// Set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
-// This will run once on startup and not run again.
-// For future - maybe try to get their locale first?
-counterpart.setLocale('eng')
-
-counterpart.registerTranslations('eng', {
+counterpart.registerTranslations('far', {
     example: {
         greeting: 'Hello %(name)s! How are you today?'
+    },
+    nav: {
+        home: "صفحه نخست",
+        about: "در باره این برنامه",
+        train: "مشق",
+        record: "ضبط",
+        guest: "مهمان",
+        profile: "Profile",
+        settings: "Settings"
     },
     notfound: {
         title: "Your webpage was not found.",
         text: "Sad bear face. Check you input the URL correctly."
     },
-    nav: {
-        home: "Home",
-        about: "About",
-        train: "Train",
-        record: "Record",
-        guest: "Guest",
-        profile: "Profile",
-        settings: "Settings"
-    },
     home: {
-        welcome: "Welcome!",
-        intro: " is an app that will help you learn new sounds in foreign languages.",
+        welcome: "!خوش آمدید",
+        intro: ".یک برنامه است که مردان را کمک می کند که صداها زبان خارجی را یاد بگیرند ",
         continue: "Continue as guest",
         signIn: "Sign In",
         register: "Register"
     },
     about: {
         title: 'Minimal Bears: The research-based web app that improves your accent.',
-        whatIs: 'What is Minimal Bears?',
+        whatIs: 'چیست؟ Minimal Bears?',
         p1: {
             line1: 'Minimal Bears is a web app that uses a technique known as ',
             HVPT: 'High Variability Phonetic Training',
@@ -39,15 +34,15 @@ counterpart.registerTranslations('eng', {
         }
     },
     train: {
-        chooseLanguage: "Choose the language you want to train",
+        chooseLanguage: "لتفا زبان را امتحان کن",
         chooseContrast: "Choose which contrast you want to train",
-        changeLanguage: "Change language",
+        changeLanguage: "زبان را تغییر کن",
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "English",
-            Polish: "Polish",
-            German: "German"
+            English: "اینگلیسی",
+            Polish: "لخستانی",
+            German: "آلمانی"
         },
         label: {
             begin: "Begin",

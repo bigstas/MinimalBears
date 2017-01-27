@@ -4,6 +4,10 @@ counterpart.registerTranslations('pol', {
     example: {
         greeting: 'Cześć %(name)s! Jak życie płynie?'
     },
+    notfound: {
+        title: "Nie znaleziono tej strony.",
+        text: "Niestety. Sprawdź, czy dobrze wpisano URL."
+    },
     nav: {
         home: "Strona Główna",
         about: "O tej stronie",

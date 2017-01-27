@@ -22,6 +22,9 @@ Dropdown = React.createClass({
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'chm')}>中文</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'rus')}>Русский</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'far')}>فارسی</div>
+                <div className='dropdownElement' onClick={this.handleClick.bind(this,'geo')}>ქართული</div>
             </div>
         )
     }

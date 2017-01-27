@@ -12,7 +12,11 @@ counterpart.registerTranslations('deu', {
         guest: "Herr Guest",
         profile: "Profil",
         settings: "Settingen"
-    },   
+    },  
+    notfound: {
+        title: "Your webpage was not found.",
+        text: "Sad bear face. Check you input the URL correctly."
+    },
     home: {
         welcome: "Wilkommen!",
         intro: " ist ein gut program.",
