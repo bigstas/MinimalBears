@@ -3,7 +3,7 @@ import counterpart from 'counterpart'
 // Set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
 // This will run once on startup and not run again.
 // For future - maybe try to get their locale first?
-counterpart.setLocale('eng')
+//counterpart.setLocale('eng')
 
 counterpart.registerTranslations('eng', {
     example: {
@@ -49,11 +49,30 @@ counterpart.registerTranslations('eng', {
             Polish: "Polish",
             German: "German"
         },
-        label: {
+        progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",
             next: "Next",
             goAgain: "Play again"
-        }
+        },
+        correct: "Correct!",
+        wrong: "Oops!"
+    },
+    record: {
+        startLabel: {
+            record: "Record",
+            done: "Done",
+            next: "Next",
+            reRecordAll: "Re-record All",
+            tooltip1: "Record all the words,",
+            tooltip2: "one after the other."
+        },
+        stopTooltip: "Click here to stop recording.",
+        playbackAll: "Playback All",
+        playbackAllTooltip: "Play all the audio.",
+        submit: "Sumbit",
+        submitTooltip: "If you are ready, send all the audio to the database.",
+        reRecordTooltip: "Re-record this word",
+        playbackTooltip: "Play back"
     }
 })

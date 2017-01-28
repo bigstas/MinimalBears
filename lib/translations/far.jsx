@@ -44,11 +44,30 @@ counterpart.registerTranslations('far', {
             Polish: "لخستانی",
             German: "آلمانی"
         },
-        label: {
+        progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",
             next: "Next",
             goAgain: "Play again"
-        }
+        },
+        correct: "!درست است",
+        wrong: "!اشتباه"
+    },
+    record: {
+        startLabel: {
+            record: "Record",
+            done: "Done",
+            next: "Next",
+            reRecordAll: "Re-record All",
+            tooltip1: "Record all the words,",
+            tooltip2: "one after the other."
+        },
+        stopTooltip: "Click here to stop recording.",
+        playbackAll: "Playback All",
+        playbackAllTooltip: "Play all the audio.",
+        submit: "Sumbit",
+        submitTooltip: "If you are ready, send all the audio to the database.",
+        reRecordTooltip: "Re-record this word",
+        playbackTooltip: "Play back"
     }
 })

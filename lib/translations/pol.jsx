@@ -45,11 +45,30 @@ counterpart.registerTranslations('pol', {
             Polish: "Polski",
             German: "Niemiecki"
         },
-        label: {
+        progressLabel: {
             begin: "Zacznij",
             playAgain: "Usłysz znowu",
             next: "Następne",
             goAgain: "Zagraj jeszcze raz"
-        }
+        },
+        correct: "Dobrze!",
+        wrong: "Źle!"
+    },
+    record: {
+        startLabel: {
+            record: "Nagraj",
+            done: "Gotowe",
+            next: "Następny",
+            reRecordAll: "Nagraj wszystkie od nowa",
+            tooltip1: "Nagraj wszystkie słowa",
+            tooltip2: "jedne po drugim."
+        },
+        stopTooltip: "Kliknij tutaj aby przestać nagrywanie.",
+        playbackAll: "Odegraj wszystko",
+        playbackAllTooltip: "Odegraj wszystkie nagrania.",
+        submit: "Wyślij",
+        submitTooltip: "Gdy jesteś gotowy/a, wyślij wszystkie nagrania do bazy danych.",
+        reRecordTooltip: "Nagraj to słowo od nowa",
+        playbackTooltip: "Odegraj słowo"
     }
 })

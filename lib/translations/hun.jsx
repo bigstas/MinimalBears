@@ -39,11 +39,30 @@ counterpart.registerTranslations('hun', {
             Polish: "Lengyel",
             German: "Német"
         },
-        label: {
+        progressLabel: {
             begin: "Begin",
             playAgain: "Play Again",
             next: "Next",
             goAgain: "Go Again"
-        }
+        },
+        correct: "Correct!",
+        wrong: "Oops!"
+    },
+    record: {
+        startLabel: {
+            record: "Record",
+            done: "Done",
+            next: "Next",
+            reRecordAll: "Re-record All",
+            tooltip1: "Record all the words,",
+            tooltip2: "one after the other."
+        },
+        stopTooltip: "Click here to stop recording.",
+        playbackAll: "Playback All",
+        playbackAllTooltip: "Play all the audio.",
+        submit: "Sumbit",
+        submitTooltip: "If you are ready, send all the audio to the database.",
+        reRecordTooltip: "Re-record this word",
+        playbackTooltip: "Play back"
     }
 })

@@ -50,10 +50,10 @@ var ProgressButton = React.createClass({
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
         let btnClass = 'button animated rubberBand' // could do styling depending on mode if we want
         let label
-        if      (this.props.mode === "wait")     { label = "train.label.begin" }
-        else if (this.props.mode === "ask")      { label = "train.label.playAgain" }
-        else if (this.props.mode === "feedback") { label = "train.label.next" }
-        else if (this.props.mode === "done")     { label = "train.label.goAgain" }
+        if      (this.props.mode === "wait")     { label = "train.progressLabel.begin" }
+        else if (this.props.mode === "ask")      { label = "train.progressLabel.playAgain" }
+        else if (this.props.mode === "feedback") { label = "train.progressLabel.next" }
+        else if (this.props.mode === "done")     { label = "train.progressLabel.goAgain" }
         return (
             <div id='progressButton' className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
         )
@@ -76,21 +76,23 @@ var WordOption = React.createClass({
         //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption')
         var text = ""
         var id = ""
+        var useTranslate = true
         var wordOptionClass = "button wordOption"
         if (this.props.mode === "feedback") {
             wordOptionClass += " defaultCursor"
             if (this.props.chosen) {
                 if (this.props.correct) {
-                    text = "Correct!"
+                    text = "train.correct"
                     id = "wordOptionCorrect"
                 } else {
-                    text = "Oops!"
+                    text = "train.wrong"
                     id = "wordOptionWrong"
                 }
             } else {
                 id = "wordOptionNotChosen"
             }
         } else {
+            useTranslate = false
             text = this.props.word
             wordOptionClass += " animated pulse"
         }
@@ -100,7 +102,10 @@ var WordOption = React.createClass({
             id={id}
             className={wordOptionClass}
             onClick={this.handleClick}>
-                {text}
+                {useTranslate ? 
+                    <Translate content={text} /> :
+                    text
+                }
             </div>
         )
     }
@@ -238,6 +243,7 @@ Arena = React.createClass({
         /* Keypress events:
          * Space - press central "progress" button; 1 & 2 - Word Option buttons 0 & 1
          * BUG: When you get to the end of training with the keyboard, then it doesn't set the score back down to 0. It does when you use mouse.
+         * 2nd BUG: Two sounds play at the same time when you press space. Very strange.
          */
         key('1', this.onWordChosen.bind(this, 0))
         key('2', this.onWordChosen.bind(this, 1))

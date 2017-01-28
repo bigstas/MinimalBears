@@ -14,8 +14,8 @@ counterpart.registerTranslations('chm', {
         settings: "设置"
     },
     notfound: {
-        title: "Your webpage was not found.",
-        text: "Sad bear face. Check you input the URL correctly."
+        title: "没有这个网站。",
+        text: "不好意思。请查看网址。"
     },
     home: {
         welcome: "欢迎光临!",
@@ -40,11 +40,30 @@ counterpart.registerTranslations('chm', {
             Polish: "波语",
             German: "德语"
         },
-        label: {
+        progressLabel: {
             begin: "开始",
             playAgain: "再次听",
             next: "下词",
             goAgain: "再次玩"
-        }
+        },
+        correct: "对啊!",
+        wrong: "错啦!"
+    },
+    record: {
+        startLabel: {
+            record: "录音",
+            done: "完了",
+            next: "下一个",
+            reRecordAll: "所有重新录音",
+            tooltip1: "把一切词语录音",
+            tooltip2: "按照下面表示的顺序"
+        },
+        stopTooltip: "停止录音",
+        playbackAll: "听",
+        playbackAllTooltip: "听所有的录音",
+        submit: "发到数据库",
+        submitTooltip: "当你已经录完了，把所有录音发到数据库。",
+        reRecordTooltip: "重新录音这个词语",
+        playbackTooltip: "听这个词语"
     }
 })
