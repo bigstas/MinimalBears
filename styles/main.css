@@ -3,9 +3,11 @@
 /* ================================== */
 
 body {
-    background-image:url("http://i.imgur.com/XW9Qblo.jpg");  
-    background-size:cover;
+    background-image:url("http://i.imgur.com/yaxFdxj.png") /*bgcolor="E4E4E4"*/;  
+    background-size:;
     margin: 0px;
+    background-attachment: fixed;
+    background-position:center;
     }
 #usermessage {
     text-align: center;
@@ -83,7 +85,7 @@ h4 { padding-left: 2%; }
     cursor: pointer;
     padding-top: 3%;
     padding-bottom: 3%;
-    background-color:indianred;
+    background-color:#FFA22E;
     color:floralwhite;
     text-align:center;
     border-radius: 8px;
@@ -141,7 +143,7 @@ h4 { padding-left: 2%; }
 
 /* <Link> elements inside buttons need no text decoration, and white font. (For homebtn buttons.) */
 .btnLink {
-    color: antiquewhite;
+    color: lightyellow;
     font-size:22px;
     text-decoration: none; 
 }
@@ -193,18 +195,17 @@ h4 { padding-left: 2%; }
 nav {
     height: 42px;
     text-align: center;
-    background-color: indianred;
-    margin-left: 19%;
-    margin-right: 19%;
+    background-color: #DE8312;
+    
     margin-top: 10px;
-    width: 61%;
+    width: cover;
     padding: 0.5%;
-    border-radius: 8px;
+    
     box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
 }
 /* The links within the navigation bar */
 nav a {
-    color:darkred;
+    color:#5E3808;
     text-decoration: none;
     white-space: nowrap;
     display: inline-block;
@@ -213,7 +214,7 @@ nav a:hover {
     text-decoration: none;
     color: lightyellow;
     transition: height .5s ease, background-color .5s ease;
-    background-color: lightcoral;
+    background-color: #AB650E;
 }
 
 
@@ -223,7 +224,7 @@ nav a:hover {
 nav ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding-left: 18%;
     overflow: hidden;
 }
 /* The styling of the buttons within the nav bar is done through their text (<a> and <p>). */
@@ -236,19 +237,20 @@ nav ul li a, nav ul li p {
 }
 /* When you're on a specific page, the corresponding button in the navbar is styled as follows. */
 .activeNavbarElement {
-    background-color:lightcoral;
+    background-color:#AB650E;
     color: lightyellow;     /* refers to text colour */
 }
 
 /* The button on the nav bar that tells you your username, or otherwise says 'Guest'. */
 #loggedInAs {
     float: right;
-    color: darkred;
+    color: #5E3808;
     font-weight: bold;
+    
 }
 #loggedInAs:hover {
     
-    color: darkred;
+    color: lightyellow;
     cursor: pointer;    /* Turns the mouse's cursor from an arrow (default) to a hand, to show that you can click. */
     }
 /* The dropdown menu from the gear symbol. */
