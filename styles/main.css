@@ -86,7 +86,7 @@ h4 { padding-left: 2%; }
     padding-top: 3%;
     padding-bottom: 3%;
     background-color:#FFA22E;
-    color:floralwhite;
+    color:lightyellow;
     text-align:center;
     border-radius: 8px;
    
@@ -194,10 +194,8 @@ h4 { padding-left: 2%; }
 /* The navigation bar as a whole */
 nav {
     height: 42px;
-    text-align: center;
+    text-align:center;
     background-color: #DE8312;
-    
-    margin-top: 10px;
     width: cover;
     padding: 0.5%;
     
@@ -209,12 +207,13 @@ nav a {
     text-decoration: none;
     white-space: nowrap;
     display: inline-block;
+    vertical-align:middle;
 }
 nav a:hover {
     text-decoration: none;
-    color: lightyellow;
+    color: lightgoldenrodyellow;
     transition: height .5s ease, background-color .5s ease;
-    background-color: #AB650E;
+    background-color: #E3A557;
 }
 
 
@@ -230,14 +229,18 @@ nav ul {
 /* The styling of the buttons within the nav bar is done through their text (<a> and <p>). */
 nav ul li a, nav ul li p {
     display: block;
-    padding: 8px;
-    margin: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top:12px;
+    padding-bottom:12px;
+    margin-left: 5px;
+    margin-right: 5px;
     text-decoration: none;  /* To get rid of underline beneath the text */
-    border-radius: 5px;
+    border-radius: 3px;
 }
 /* When you're on a specific page, the corresponding button in the navbar is styled as follows. */
 .activeNavbarElement {
-    background-color:#AB650E;
+    background-color:#E3A557;
     color: lightyellow;     /* refers to text colour */
 }
 
@@ -271,7 +274,7 @@ nav ul li a, nav ul li p {
     border-radius: 5px;
     text-align: right;
 }
-.dropdownElement:hover { background-color: lightsalmon; }
+.dropdownElement:hover { background-color: #DE8312; }
 .dropdownText {
     text-decoration: none;
     color: black;

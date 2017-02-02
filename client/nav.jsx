@@ -70,7 +70,7 @@ Nav = React.createClass({
                         <li><Link to="/train" activeClassName="activeNavbarElement">{translations('train')}</Link></li>
                         <li><Link to="/record" activeClassName="activeNavbarElement">{translations('record')}</Link></li>
 
-                        <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="gears-original.png" style={{height: '40px'}} /></li>
+                        <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="cogwheels.png" style={{height: '40px'}} /></li>
                         <li style={{float: 'right'}}><Link id="loggedInAs" to="/profile" activeClassName="activeNavbarElement">{!!this.props.username ? this.props.username : guest}</Link></li>
                     </ul>
                 </nav>
