@@ -16,26 +16,23 @@ const Selector = React.createClass({
 	 * extraCallback - function for extra button (takes no arguments)
 	 */
 	render() {
-        if (this.props.loading) { return <LoadingPage /> }
-        else {
-            return (
-                <div className='panel animated fadeIn' id='selector'>
-                    <p>{this.props.selectionMessage}</p>
-                    {this.props.options.map((c, index) =>
-                        <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
-                            {c.text}
-                        </div>
-                    )}
+        return (
+            <div className='panel animated fadeIn' id='selector'>
+                <p>{this.props.selectionMessage}</p>
+                {this.props.options.map((c, index) =>
+                    <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
+                        {c.text}
+                    </div>
+                )}
 
-                    {!!this.props.extraText ? 
-                        <div className='button' id='extraButton' onClick={this.props.extraCallback}>
-                            {this.props.extraText}
-                        </div> :
-                        <div>{/*empty div*/}</div> 
-                    }
-                </div>
-            )
-        }
+                {!!this.props.extraText ? 
+                    <div className='button' id='extraButton' onClick={this.props.extraCallback}>
+                        {this.props.extraText}
+                    </div> :
+                    <div>{/*empty div*/}</div> 
+                }
+            </div>
+        )
 	}
 })
 
@@ -47,16 +44,12 @@ const LanguageSelector = React.createClass({
 	 * callback - function based on the language ID
 	 */
 	render() {
-		let options
-		if (this.props.data.loading) {
-			options = []
-		} else {
-			options = this.props.data.languageNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
-		}
+		if (this.props.data.loading) { return <LoadingPage /> }
+        	
+        const options = this.props.data.languageNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		
 		return (
 			<Selector
-                loading={this.props.data.loading}
 				selectionMessage='Choose the language you want to train'
 				options={options}
 				callback={this.props.callback}
@@ -74,16 +67,12 @@ const ContrastSelector = React.createClass({
 	 * extraCallback - function to return to choosing a language
 	 */
 	render() {
-		let options
-		if (this.props.data.loading) {
-			options = []
-		} else {
-			options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
-		}
+		if (this.props.data.loading) { return <LoadingPage /> }
+        
+        const options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
         
 		return (
 			<Selector
-                loading={this.props.data.loading}
 				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
 				options={options}
 				callback={this.props.callback}

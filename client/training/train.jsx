@@ -1,7 +1,6 @@
 import React from 'react'
 import Arena from './arena'
 import { ConnectedLanguageSelector, ConnectedContrastSelector } from './selector'
-import LoadingPage from '../loading'
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
 TrainPage = React.createClass({

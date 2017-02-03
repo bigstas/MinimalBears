@@ -4,7 +4,11 @@ import { Link } from 'react-router'
 import update from 'react-addons-update'
 // For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
 import ReactTooltip from 'react-tooltip'
-
+// data mutations and queries
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
+    
+import LoadingPage from './loading'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -472,9 +476,44 @@ next: ${next}`)
 
 WrappedRecordPage = React.createClass({
     render() {
-        return <RecordPage recordingWords={["youth in Asia", "euthanasia", "a mission", "omission", "emission"]} submitAudio={() => alert("We're supposed to do something here!")} /> 
+        console.log(this.props.items)
+        if (this.props.items.loading) { return <LoadingPage /> }
+        
+        // JSON is built-in
+        // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
+        let nodes = JSON.parse(JSON.stringify(this.props.items.itemWithAudioNodes.nodes))
+        nodes.sort( (a, b) => a.audio.length - b.audio.length)
+        console.log(nodes)
+        let firstNodes = nodes.slice(0,10)
+        firstNodes = firstNodes.map( (item) => item.homophones[0] )
+        
+        // TO DO: make firstNodes a list of words *and ids* so that the ids can be submitted with the words when we do a mutation
+        // make a dummy function that takes the recordings and the word ids (this will be needed when we do a mutation)
+        // this dummy function calls this.props.submitAudio once for each thing in the list
+        // it should also take the name of the user. Ask for this on client side (e.g. text box, dialogue box)
+        return <RecordPage recordingWords={firstNodes} submitAudio={() => alert("We're supposed to do something here!")} /> 
     }
 })
 
+const itemQuery = gql`query ($orderBy: ItemWithAudioOrdering, $language: Int) {
+    itemWithAudioNodes (orderBy: $orderBy, language: $language) {
+        nodes {
+        	rowId
+        	language
+        	homophones
+        	audio
+        }
+    }
+}`
 
-export default WrappedRecordPage
+const itemQueryConfig = {
+    name: 'items',
+    options: {
+        variables: {
+    	    orderBy: 'ROW_ID',
+            language: 1
+        }
+    }
+}
+
+export default graphql(itemQuery, itemQueryConfig)(WrappedRecordPage)

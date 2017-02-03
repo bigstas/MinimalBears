@@ -10,7 +10,7 @@ import key from 'keymaster'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
     
-key('a', function(){ alert('you pressed a!') })
+//key('a', function(){ alert('you pressed a!') })
 
 function parsePairs(pairString) {
     /* Take a string of the form '{"(int,int)","(int,int)",...}'
