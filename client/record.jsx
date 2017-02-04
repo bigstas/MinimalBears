@@ -405,6 +405,23 @@ next: ${next}`)
         }
     },
     
+    dispatchAudio () {
+        // as yet unintegrated, this is a "dummy" function for now
+        let name = prompt("Please enter your name", "Harry Potter")
+        if (name) {
+            if (this.props.recordingWords.length !== this.props.audioURLs.length) {
+                // error message
+                console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.props.audioURLs (which is " + this.props.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
+            } else {
+                // Should we be using the URLs? Is there anything else we need?
+                let blobPacket = _.zip(this.props.recordingWords, this.props.audioURLs)
+                blobPacket.map( function(c, index) {
+                    this.props.submitAudio(c)
+                }, this)
+            }
+        }
+    },
+    
     render() {
         return (
             <div className='panel animated fadeIn' id='record'>
@@ -421,7 +438,7 @@ next: ${next}`)
                             let audioRef = "audio" + index.toString()
                             return(
                                 <div>
-                                    <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
+                                    <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c[0]} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
                                     <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
                                 </div>
                             )
@@ -485,13 +502,12 @@ WrappedRecordPage = React.createClass({
         nodes.sort( (a, b) => a.audio.length - b.audio.length)
         console.log(nodes)
         let firstNodes = nodes.slice(0,10)
-        firstNodes = firstNodes.map( (item) => item.homophones[0] )
+        firstNodes = firstNodes.map( function(item) {
+            return [item.homophones[0], item.rowId]
+        })
+        console.log(firstNodes)
         
-        // TO DO: make firstNodes a list of words *and ids* so that the ids can be submitted with the words when we do a mutation
-        // make a dummy function that takes the recordings and the word ids (this will be needed when we do a mutation)
-        // this dummy function calls this.props.submitAudio once for each thing in the list
-        // it should also take the name of the user. Ask for this on client side (e.g. text box, dialogue box)
-        return <RecordPage recordingWords={firstNodes} submitAudio={() => alert("We're supposed to do something here!")} /> 
+        return <RecordPage recordingWords={firstNodes} submitAudio={() => console.log("We're supposed to do something here!")} /> 
     }
 })
 
