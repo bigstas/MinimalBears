@@ -52,6 +52,10 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const URL = window.URL || window.webkitURL
 
+// Reading blobs as binary strings
+
+const Reader = new FileReader()
+
 
 StartButton = React.createClass({
     /* The main button.
@@ -313,7 +317,8 @@ RecordPage = React.createClass({
     
     getInitialState () {
         return {
-            audioURLs: [],  // List of the recorded audio
+            audioURLs: [],  // List of the recorded audio (as object URLs)
+            audioBlobs: [],  // List of the recorded audio (as blobs)
             mode: "wait",   // wait, record, done, reRecordSingleToWait, reRecordSingleToDone, playback, playbackAll
             focus: 0,  // which item is under focus
             next: 0    // the first item that is not yet recorded
@@ -350,7 +355,8 @@ RecordPage = React.createClass({
         console.log('new url:')
         console.log(url)
         this.setState({
-            audioURLs: update(this.state.audioURLs, {[index]: {$set: url }})  // TODO 'update' is now a legacy function
+            audioURLs: update(this.state.audioURLs, {[index]: {$set: url }}),  // TODO 'update' is now a legacy function
+            audioBlobs: update(this.state.audioBlobs, {[index]: {$set: blob }})
         })
     },
     
@@ -369,7 +375,13 @@ RecordPage = React.createClass({
         if (mode  !== null) { stateUpdate.mode  = mode  }
         if (focus !== null) { stateUpdate.focus = focus }
         if (next  !== null) { stateUpdate.next  = next  }
-        if (clearAll)       { stateUpdate.audioURLs = [] }
+        if (clearAll)       {
+            stateUpdate.audioURLs = []
+            stateUpdate.audioBlobs = []
+            for (i = 0 ; i < audioURLs.length ; i ++ ) {
+                URL.revokeObjectURL(this.state.audioURLs[i])
+            }
+        }
         this.setState( stateUpdate )
         console.log(`stop: ${stop}
 start: ${start}
@@ -390,7 +402,7 @@ next: ${next}`)
         // Plays the audio element with a given index.
         if (this.state.audioURLs[index]) { 
             this.setState({ focus: index })  // highlight the word currently playing
-            if (playAllAudio) {
+            if (playAllAudio) {  // TODO this seems unnecessary
                 this.setState({ mode: "playbackAll" })
             } else {
                 this.setState({ mode: "playback"})
@@ -407,16 +419,21 @@ next: ${next}`)
     
     dispatchAudio () {
         // as yet unintegrated, this is a "dummy" function for now
-        let name = prompt("Please enter your name", "Harry Potter")
-        if (name) {
-            if (this.props.recordingWords.length !== this.props.audioURLs.length) {
+        let speaker = prompt("Please enter your name", "Harry Potter")
+        if (speaker) {
+            if (this.props.recordingWords.length !== this.state.audioURLs.length) {
                 // error message
-                console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.props.audioURLs (which is " + this.props.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
+                console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
             } else {
                 // Should we be using the URLs? Is there anything else we need?
-                let blobPacket = _.zip(this.props.recordingWords, this.props.audioURLs)
+                let blobPacket = _.zip(this.props.recordingWords, this.state.audioBlobs)
                 blobPacket.map( function(c, index) {
-                    this.props.submitAudio(c)
+                    item = c[0][1]  // id of the word
+                    file = Reader.readAsBinaryString(c[1])  // blob, converted to a string
+                    // TODO server-side PostGraphQL error when receiving this mutation
+                    // readAsText also gives an error
+                    // just defining file="foo" also gives an error
+                    this.props.submitAudio({ file, speaker, item })
                 }, this)
             }
         }
@@ -430,7 +447,7 @@ next: ${next}`)
                         mode={this.state.mode} 
                         callback={this.recordCallback} 
                         playbackAll={this.playbackAll} 
-                        submitAudio={this.props.submitAudio} 
+                        submitAudio={this.dispatchAudio} 
                         recordedSoFar={this.state.audioURLs.length} />
                 <div id="wordList">
                     {this.props.recordingWords.map(
@@ -477,7 +494,7 @@ next: ${next}`)
                         }
                     }
                     else {
-                        // repeated code - could be structured better
+                        // TODO repeated code - could be structured better
                         let done = (this.state.audioURLs.length === this.props.recordingWords.length)
                         this.setState({
                             mode:  done ? "done" : "wait",
@@ -507,7 +524,7 @@ WrappedRecordPage = React.createClass({
         })
         console.log(firstNodes)
         
-        return <RecordPage recordingWords={firstNodes} submitAudio={() => console.log("We're supposed to do something here!")} /> 
+        return <RecordPage recordingWords={firstNodes} submitAudio={this.props.audioMutation} /> 
     }
 })
 
@@ -532,4 +549,20 @@ const itemQueryConfig = {
     }
 }
 
-export default graphql(itemQuery, itemQueryConfig)(WrappedRecordPage)
+const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
+    submitAudio (input: $input) {
+        output
+    }
+}` // 
+
+const audioMutationConfig = {
+    name: 'audioMutation',
+    options: (input) => ({
+        variables: { input }
+    })
+}
+
+export default compose(
+    graphql(itemQuery, itemQueryConfig),
+    graphql(audioMutation, audioMutationConfig))
+(WrappedRecordPage)
