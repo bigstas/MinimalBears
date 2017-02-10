@@ -22,6 +22,7 @@ const Selector = React.createClass({
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                         {c.text}
+                                            <a></a>                 
                     </div>
                 )}
 

@@ -80,7 +80,6 @@ h4 { padding-left: 2%; }
 /* general button */
 .button { 
     display: inline-block;
-    -webkit-transition-duration: 0.4s; 
     transition-duration: 0.4s;
     cursor: pointer;
     padding-top: 3%;
@@ -89,14 +88,44 @@ h4 { padding-left: 2%; }
     color:lightyellow;
     text-align:center;
     border-radius: 8px;
-   
-        }
+    margin:10px;
+    
+}
 
 /* Buttons that need to fill out a lot of space, so they have extra width and lots of margin. */
 .wordOption, .chooseOption { 
     width: 30%;
     margin-left: 10%;
     margin-right: 10%;
+}
+
+.chooseOption a{
+    position:relative;
+    display:inline-block;
+    transition:0.5s;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+.chooseOption:hover a{
+    color:lightyellow;
+    padding-right:15%;
+       
+}
+
+.chooseOption a:after {
+    content:" example";
+    opacity: 0;
+    position:relative;
+    right:-20px;
+    transition:0.5s;
+    
+    vertical-align:middle;
+}
+
+.chooseOption:hover a:after {
+  opacity: 1;
+  right: 0;
 }
 
 #progressButton {
@@ -111,25 +140,9 @@ h4 { padding-left: 2%; }
 }
 
 .button:hover{
-  padding-top: 2%;
-  padding-bottom: 2%;
+  background-color: #FFC32E;
 }
 
-.button {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
-}
-
-.button:after {
-  content: 
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
-}
 
 #progressButton:hover { background-color: antiquewhite; }
 
