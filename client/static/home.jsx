@@ -11,8 +11,8 @@ Home = React.createClass({
                     <h2>Welcome!</h2>
                     <p><strong>Minimal Bears</strong> is an app that will help you learn new sounds in foreign languages.</p>
                     <div className='button homebtn' id='guestbutton'><Link className='btnLink' to="/train">Continue as guest</Link></div>
-                    <div className='button homebtn transparent' id='signinbutton'><Link className='btnLink' to="/login">Sign In</Link></div>
-                    <div className='button homebtn transparent' id='registerbutton'><Link className='btnLink' to="/register">Sign Up</Link></div>
+                    <div className='button homebtn transparent' id='signinbutton'>{/*<Link className='btnLink' to="/login">Sign In</Link>*/}Sign In</div>
+                    <div className='button homebtn transparent' id='registerbutton'>{/*<Link className='btnLink' to="/register">Sign Up</Link>*/}Sign Up</div>
                 </div>
                 
             </div>
