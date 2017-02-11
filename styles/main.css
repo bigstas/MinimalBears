@@ -9,27 +9,44 @@ body {
     background-attachment: fixed;
     background-position:center;
     }
+
+#social {
+    background-image:url("http://i.imgur.com/K4bwW6P.png");
+    height:40px;
+    width:40px;
+    z-index:-1;
+    position:absolute;
+    right:10%;
+    margin:5%;
+    margin-right:10%;
+    bottom:0px;
+    display:block;
+    
+}
+
+#social:hover {
+    background-image:url("http://i.imgur.com/6L8JxtL.png");
+}
+
 #usermessage {
     text-align: center;
     }
 
 #bottom1 {
-    height: 50px;
+    height: 20px;
     text-align: center;
-    background-color:saddlebrown;
     margin-left: 19%;
     margin-right: 19%;
     margin-top: 10px;
     width: 61%;
     padding: 0.5%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     z-index:-1;
     position:absolute;
     bottom:0px;
-    color:beige;
+    color:#5E3808;
     font-family: Verdana, Geneva, sans-serif;
-    padding-top:2%;
+    padding-top:1%;
+    padding-bottom: 1%;
     }
 
 
