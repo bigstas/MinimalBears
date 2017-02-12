@@ -290,7 +290,7 @@ nav ul li a, nav ul li p {
 .dropdownDiv {
     right: 0;
     position: absolute;
-    margin-right: 20%;
+    margin-right: 5px;
     background-color: white;
     border-radius: 8px;
     margin-top: 5px;
