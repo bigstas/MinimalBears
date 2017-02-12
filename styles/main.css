@@ -2,52 +2,51 @@
 /* ========= entire document ======== */
 /* ================================== */
 
+html, #content, #app-container {
+    position: relative;
+    height: 100%;
+}
+    
 body {
     background-image:url("http://i.imgur.com/yaxFdxj.png") /*bgcolor="E4E4E4"*/;  
-    background-size:;
-    margin: 0px;
+    margin: 0 0 0;
     background-attachment: fixed;
     background-position:center;
-    }
+    height: 100%;
+}
 
-#social {
+#nav-arena-wrapper {
+    /* The purpose of this class is to take up all the space of the app, and position the footer below it. 
+    That's what the negative bottom margin is for. */
+    min-height: 100%;
+    margin-bottom: -50px;
+}
+
+.footer {
+    clear: left;    /* On the About page, this keeps the footer below the panel. */
+    height: 50px;
+    background-color: orange;
+    text-align: center;
+}
+.quote {
+    color: #5E3808;
+    display: inline-block;
+    margin: 15px 0 0 0;
+}
+.social {
     background-image:url("http://i.imgur.com/K4bwW6P.png");
+    float: right;
     height:40px;
     width:40px;
-    z-index:-1;
-    position:absolute;
-    right:10%;
-    margin:5%;
-    margin-right:10%;
-    bottom:0px;
-    display:block;
-    
+    margin-right: 30px;
+    right: 30px;
+    display: inline-block;
+    margin-top: 5px;
 }
 
-#social:hover {
+.social:hover {
     background-image:url("http://i.imgur.com/6L8JxtL.png");
 }
-
-#usermessage {
-    text-align: center;
-    }
-
-#bottom1 {
-    height: 20px;
-    text-align: center;
-    margin-left: 19%;
-    margin-right: 19%;
-    margin-top: 10px;
-    width: 61%;
-    padding: 0.5%;
-    z-index:-1;
-    position:absolute;
-    bottom:0px;
-    color:#5E3808;
-    font-family: Verdana, Geneva, sans-serif;
-    padding-top:1%;
-    padding-bottom: 1%;
-    }
 
 
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
@@ -62,7 +61,8 @@ h4 { padding-left: 2%; }
 
 /* That white box that all the pages live in. */
 .panel {
-    position: absolute;
+    /*position: absolute;*/
+    float: left;
     z-index: -1;
     overflow: auto;
     background-color: white;
@@ -76,6 +76,7 @@ h4 { padding-left: 2%; }
     padding: 3%;
     opacity: 90%;
 }
+#home { text-align: center; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
 .transparent { opacity: 0.2; }
@@ -174,7 +175,7 @@ h4 { padding-left: 2%; }
 /* <Link> elements inside buttons need no text decoration, and white font. (For homebtn buttons.) */
 .btnLink {
     color: lightyellow;
-    font-size:22px;
+    font-size: 22px;
     text-decoration: none; 
 }
 
@@ -227,8 +228,9 @@ nav {
     text-align:center;
     background-color: #DE8312;
     width: cover;
-    padding: 0.5%;
-    
+    padding: 7px; /*This should be a number of pixels, not %, to keep consistent as the window is re-sized.
+    Otherwise, the nav bar hugs the buttons more and more closely as the page is narrowed.
+    For reference, the old value was 0.5%, in case you want to compare this and change the pixel number. */
     box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
 }
 /* The links within the navigation bar */

@@ -18,8 +18,9 @@ AppBody = React.createClass({
     
     render() {
         return (
-            <div id="container" >
-                <div id="content-container">
+            <div id="app-container" >
+                {/* The nav-arena-wrapper is used to allow us to have a footer correctly positioned at the bottom of the page. */}
+                <div id="nav-arena-wrapper" >
                     <Nav username={this.state.user} />
                     {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props */}
                     {React.cloneElement(
@@ -29,6 +30,10 @@ AppBody = React.createClass({
                             user: this.state.user,
                             callbackLanguage: this.setLanguage}
                     )}
+                </div>
+                <div className="footer">
+                    <p className="quote">'The noblest pleasure is the joy of understanding.'- Leonardo da Vinci</p>
+                    <div className="social" ></div>
                 </div>
             </div>
         )
