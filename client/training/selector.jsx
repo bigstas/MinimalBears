@@ -22,7 +22,7 @@ const Selector = React.createClass({
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                         {c.text}
-                                            <a></a>                 
+                                            <a className="selectorExample">{this.props.exampleArray[index]}</a>                 
                     </div>
                 )}
 
@@ -49,11 +49,14 @@ const LanguageSelector = React.createClass({
         	
         const options = this.props.data.languageNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
 		
+        let exampleArray = [ "mouse/mouth", "aal/all", "ścieka/szczeka" ]
+        
 		return (
 			<Selector
 				selectionMessage='Choose the language you want to train'
 				options={options}
 				callback={this.props.callback}
+                exampleArray={exampleArray /* TODO: in future, will use a db lookup */}
 			/>
 		)
 	}
@@ -71,12 +74,15 @@ const ContrastSelector = React.createClass({
 		if (this.props.data.loading) { return <LoadingPage /> }
         
         const options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
-        
+
+        let exampleArray = [ "Will", "be", "ready", "soon" ]
+    
 		return (
 			<Selector
 				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
 				options={options}
 				callback={this.props.callback}
+                exampleArray={exampleArray /* TODO: in future, will use a db lookup */}
 				extraText='Change language'
 				extraCallback={this.props.extraCallback}
 			/>
