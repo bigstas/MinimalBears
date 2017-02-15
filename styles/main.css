@@ -15,38 +15,6 @@ body {
     height: 100%;
 }
 
-#nav-arena-wrapper {
-    /* The purpose of this class is to take up all the space of the app, and position the footer below it. 
-    That's what the negative bottom margin is for. */
-    min-height: 100%;
-    margin-bottom: -50px;
-}
-
-.footer {
-    clear: left;    /* On the About page, this keeps the footer below the panel. */
-    height: 50px;
-    text-align: center;
-}
-.quote {
-    color: #5E3808;
-    display: inline-block;
-    margin: 15px 0 0 0;
-}
-.social {
-    background-image:url("http://i.imgur.com/K4bwW6P.png");
-    float: right;
-    height:40px;
-    width:40px;
-    margin-right: 30px;
-    right: 30px;
-    display: inline-block;
-    margin-top: 5px;
-}
-
-.social:hover {
-    background-image:url("http://i.imgur.com/6L8JxtL.png");
-}
-
 
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
