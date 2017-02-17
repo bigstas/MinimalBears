@@ -52,10 +52,6 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const URL = window.URL || window.webkitURL
 
-// Reading blobs as binary strings
-
-const Reader = new FileReader()
-
 
 StartButton = React.createClass({
     /* The main button.
@@ -378,7 +374,7 @@ RecordPage = React.createClass({
         if (clearAll)       {
             stateUpdate.audioURLs = []
             stateUpdate.audioBlobs = []
-            for (i = 0 ; i < audioURLs.length ; i ++ ) {
+            for (i = 0 ; i < this.state.audioURLs.length ; i ++ ) {
                 URL.revokeObjectURL(this.state.audioURLs[i])
             }
         }
@@ -418,7 +414,6 @@ next: ${next}`)
     },
     
     dispatchAudio () {
-        // as yet unintegrated, this is a "dummy" function for now
         let speaker = prompt("Please enter your name", "Harry Potter")
         if (speaker) {
             if (this.props.recordingWords.length !== this.state.audioURLs.length) {
@@ -429,11 +424,20 @@ next: ${next}`)
                 let blobPacket = _.zip(this.props.recordingWords, this.state.audioBlobs)
                 blobPacket.map( function(c, index) {
                     item = c[0][1]  // id of the word
-                    file = Reader.readAsBinaryString(c[1])  // blob, converted to a string
-                    // TODO server-side PostGraphQL error when receiving this mutation
-                    // readAsText also gives an error
-                    // just defining file="foo" also gives an error
-                    this.props.submitAudio({ file, speaker, item })
+                    // Asynchronously read the file
+                    const reader = new FileReader()
+                    // the "loadend" event will trigger once readAsText is complete
+                    const _this = this  // to use inside function...
+                    reader.addEventListener("loadend", function() {
+                        // reader.result contains the contents of blob as a string
+                        let blobString = btoa(reader.result)
+                        console.log(blobString.length)
+                        _this.props.submitAudio({variables: {input: { file: blobString, speaker, item }}})
+	                    // It seems like we need to limit the size of the mutation...
+	                    // error "request entity too large" from express-graphql
+	                    // This also seems to happen if we don't convert to base-64...?
+                    });
+                    reader.readAsBinaryString(c[1]) // convert blob to string
                 }, this)
             }
         }
@@ -518,7 +522,7 @@ WrappedRecordPage = React.createClass({
         let nodes = JSON.parse(JSON.stringify(this.props.items.itemWithAudioNodes.nodes))
         nodes.sort( (a, b) => a.audio.length - b.audio.length)
         console.log(nodes)
-        let firstNodes = nodes.slice(0,10)
+        let firstNodes = nodes.slice(0,1)
         firstNodes = firstNodes.map( function(item) {
             return [item.homophones[0], item.rowId]
         })
@@ -555,11 +559,9 @@ const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
     }
 }` // 
 
+// Variables must be defined when the function is called
 const audioMutationConfig = {
-    name: 'audioMutation',
-    options: (input) => ({
-        variables: { input }
-    })
+    name: 'audioMutation'
 }
 
 export default compose(
