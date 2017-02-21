@@ -8,7 +8,7 @@ html, #content, #app-container {
 }
     
 body {
-    background-image:url("http://i.imgur.com/yaxFdxj.png") /*bgcolor="E4E4E4"*/;  
+    background-image:url("/hatter2.png") /*bgcolor="E4E4E4"*/;  
     margin: 0 0 0;
     background-attachment: fixed;
     background-position:center;

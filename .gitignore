@@ -11,6 +11,9 @@ npm-debug.log
 # Apple internal automatic admin
 .DS_Store
 
+# Windows thumbnail cache
+public/Thumbs.db
+
 # Databases
 *.sql
 
