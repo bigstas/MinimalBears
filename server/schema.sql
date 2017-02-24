@@ -107,6 +107,7 @@ COMMENT ON TABLE pair IS 'At the moment, nothing enforces contrast.language, fir
 
 CREATE FUNCTION get_audio_list(item_id integer) RETURNS text[]
     LANGUAGE sql
+    STABLE
     AS $$SELECT ARRAY(SELECT file FROM audio WHERE audio.item = item_id);$$;
 
 
@@ -118,6 +119,7 @@ ALTER FUNCTION public.get_audio_list(item_id integer) OWNER TO "admin";
 
 CREATE FUNCTION get_contrast_list(language_id integer) RETURNS integer[]
     LANGUAGE sql
+    STABLE
     AS $$SELECT ARRAY(SELECT id FROM contrast WHERE contrast.language = language_id);$$;
 
 
@@ -130,6 +132,7 @@ ALTER FUNCTION public.get_contrast_list(language_id integer) OWNER TO "admin";
 
 CREATE FUNCTION get_contrasts(language_id integer) RETURNS SETOF contrast
     LANGUAGE sql
+    STABLE
     AS $$SELECT * FROM contrast WHERE contrast.language = language_id$$;
 
 
@@ -141,6 +144,7 @@ ALTER FUNCTION public.get_contrasts(language_id integer) OWNER TO "admin";
 
 CREATE FUNCTION get_items_from_homophone(homophone text) RETURNS SETOF item
     LANGUAGE sql
+    STABLE
     AS $$SELECT * FROM item WHERE homophone = ANY(homophones)$$;
 
 
@@ -152,7 +156,7 @@ ALTER FUNCTION public.get_items_from_homophone(homophone text) OWNER TO "admin";
 --
 
 CREATE MATERIALIZED VIEW item_with_audio AS
-    SELECT item.language, item.homophones, item.id, item.comment, get_audio_list(item.id) AS audio FROM item;
+    SELECT item.language, item.homophones, item.id, item.comment, get_audio_list(item.id) AS audio_list FROM item;
 
 
 ALTER TABLE public.item_with_audio OWNER TO "admin";
@@ -164,6 +168,7 @@ ALTER TABLE public.item_with_audio OWNER TO "admin";
 
 CREATE FUNCTION get_pair_list(contrast_id integer) RETURNS cached_pair[]
     LANGUAGE sql
+    STABLE
     AS $$SELECT ARRAY(  -- return as an array, not as a table
   SELECT (pair.first, pair.second)::cached_pair  -- return a pair, of type cached_pair
   FROM pair

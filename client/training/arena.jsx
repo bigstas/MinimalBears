@@ -9,21 +9,7 @@ import key from 'keymaster'
 // new gql way of getting data...
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-    
-//key('a', function(){ alert('you pressed a!') })
 
-function parsePairs(pairString) {
-    /* Take a string of the form '{"(int,int)","(int,int)",...}'
-     * where each 'int' represents an integer,
-     * and return a list of lists of integers
-     */
-    // Split into strings of the form '(int,int)'
-    stringList = pairString.substring(2, pairString.length-2).split('","')
-    // Split these strings
-    pairList = stringList.map(x => x.substring(1,x.length-1).split(','))
-    // Convert to integers
-    return pairList.map(x => x.map(y => parseInt(y)))
-}
 
 function random(myArray) {
     var rand = myArray[Math.floor(Math.random() * myArray.length)]
@@ -155,23 +141,24 @@ Arena = React.createClass({
                  * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
                  * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
                  */
-                var correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
+                const correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
+                const correctProperty = correctAnswer ? "second" : "first"
                 // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
                 // fetch all the pairs
-                var pairString = this.props.pairs.contrastWithPairsNodes.nodes[this.props.activeContrastId-1].pairs
+                const pairArray = this.props.pairs.allContrastWithPairs.nodes[this.props.activeContrastId-1].pairs
                 // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
-                var pairIds = random(parsePairs(pairString))
+                const pair = random(pairArray)
 
-                var items = this.props.items.itemWithAudioNodes.nodes
-                var currentAudio = random(items[pairIds[correctAnswer]-1].audio) 
-                var snd = new Audio(currentAudio)
+                const items = this.props.items.allItemWithAudios.nodes
+                const currentAudio = random(items[pair[correctProperty]-1].audioList) 
+                const snd = new Audio(currentAudio)
                 snd.play()
                 
                 this.setState({
                     mode: "ask",
                     currentAudio: currentAudio,
-                    textList: [items[pairIds[0]-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
-                               items[pairIds[1]-1].homophones[0]],
+                    textList: [items[pair.first-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
+                               items[pair.second-1].homophones[0]],
                     correctAnswer: correctAnswer
                 })
                 
@@ -251,12 +238,15 @@ Arena = React.createClass({
  * We must provide a function that defines the queries.
  */
 
-const pairQuery = gql`query ($orderBy: ContrastWithPairsOrdering) {
-	contrastWithPairsNodes(orderBy: $orderBy) {
+const pairQuery = gql`query ($orderBy: ContrastWithPairsOrderBy) {
+	allContrastWithPairs(orderBy: $orderBy) {
     	nodes {
         	language
         	name
-        	pairs
+        	pairs {
+                first
+                second
+        	}
     	}
 	}
 }`
@@ -265,18 +255,18 @@ const pairQueryConfig = {
     name: 'pairs',
     options: {
         variables: {
-            orderBy: 'ROW_ID'
+            orderBy: 'ID_ASC'
         }
     }
 }
 
-const itemQuery = gql`query ($orderBy: ItemWithAudioOrdering) {
-    itemWithAudioNodes (orderBy: $orderBy) {
+const itemQuery = gql`query ($orderBy: ItemWithAudiosOrderBy) {
+    allItemWithAudios (orderBy: $orderBy) {
         nodes {
-        	rowId
+        	id
         	language
         	homophones
-        	audio
+        	audioList
         }
     }
 }`
@@ -285,7 +275,7 @@ const itemQueryConfig = {
     name: 'items',
     options: {
         variables: {
-    	    orderBy: 'ROW_ID'
+    	    orderBy: 'ID_ASC'
         }
     }
 }

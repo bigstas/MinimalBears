@@ -12,7 +12,7 @@
     "graphql-tag": "^1.2.1",
     "keymaster": "^1.6.2",
     "meteor-node-stubs": "~0.2.0",
-    "postgraphql": "^1.9.3",
+    "postgraphql": "^3.0.1",
     "react": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.4.2",
     "react-addons-update": "^15.4.2",

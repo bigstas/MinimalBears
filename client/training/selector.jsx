@@ -47,7 +47,7 @@ const LanguageSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         	
-        const options = this.props.data.languageNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+        const options = this.props.data.allLanguages.nodes.map(c => ({text:c.name, id:c.id}))
 		
 		return (
 			<Selector
@@ -70,7 +70,7 @@ const ContrastSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         
-        const options = this.props.data.contrastNonemptyNodes.nodes.map(c => ({text:c.name, id:c.rowId}))
+        const options = this.props.data.allContrastNonempties.nodes.map(c => ({text:c.name, id:c.id}))
         
 		return (
 			<Selector
@@ -85,20 +85,20 @@ const ContrastSelector = React.createClass({
 })
 
 const languageQuery = gql`query {
-	languageNodes {
+	allLanguages {
 		nodes {
 			name
-			rowId
+			id
 		}
 	}
 }`
 
 
-const contrastQuery = gql`query ($language: Int, $orderBy: ContrastNonemptyOrdering) {
-	contrastNonemptyNodes(language: $language, orderBy: $orderBy) {
+const contrastQuery = gql`query ($language: Int, $orderBy: ContrastNonemptiesOrderBy) {
+	allContrastNonempties(condition: {language: $language}, orderBy: $orderBy) {
 		nodes {
 			name
-			rowId
+			id
 		}
 	}
 }`
@@ -107,7 +107,7 @@ const contrastQueryConfig = {
     options: (ownProps) => ({
         variables: {
             language: ownProps.activeLanguageId,
-            orderBy: 'NAME'
+            orderBy: 'NAME_ASC'
         }
     })
 }
