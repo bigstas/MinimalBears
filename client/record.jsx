@@ -519,12 +519,12 @@ WrappedRecordPage = React.createClass({
         
         // JSON is built-in
         // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
-        let nodes = JSON.parse(JSON.stringify(this.props.items.itemWithAudioNodes.nodes))
-        nodes.sort( (a, b) => a.audio.length - b.audio.length)
+        let nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
+        nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
         console.log(nodes)
         let firstNodes = nodes.slice(0,1)
         firstNodes = firstNodes.map( function(item) {
-            return [item.homophones[0], item.rowId]
+            return [item.homophones[0], item.id]
         })
         console.log(firstNodes)
         
@@ -532,13 +532,13 @@ WrappedRecordPage = React.createClass({
     }
 })
 
-const itemQuery = gql`query ($orderBy: ItemWithAudioOrdering, $language: Int) {
-    itemWithAudioNodes (orderBy: $orderBy, language: $language) {
+const itemQuery = gql`query ($orderBy: ItemWithAudiosOrderBy, $language: Int) {
+    allItemWithAudios (orderBy: $orderBy, condition: {language: $language}) {
         nodes {
-        	rowId
+        	id
         	language
         	homophones
-        	audio
+        	audioList
         }
     }
 }`
@@ -547,7 +547,7 @@ const itemQueryConfig = {
     name: 'items',
     options: {
         variables: {
-    	    orderBy: 'ROW_ID',
+    	    orderBy: 'ID_ASC',
             language: 1
         }
     }
@@ -555,9 +555,9 @@ const itemQueryConfig = {
 
 const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
     submitAudio (input: $input) {
-        output
+        integer
     }
-}` // 
+}` // "integer" is the id of the new row
 
 // Variables must be defined when the function is called
 const audioMutationConfig = {
