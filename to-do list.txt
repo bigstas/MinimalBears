@@ -10,12 +10,17 @@ For Beta:
     - started as Edit page
 6. expansion into further languages (Staś and Guy)
 7. any further styling - esp. Record page and authentication pages (mostly Gergő)
-8. any images to be added, incl. probably a logo (Gergő)
+8. any images to be added (Gergő)
+    - a logo
+    - a placeholder image for the profile page? (tbd)
+    - any changes to the favicon?
 9. potentially connections to social media (probably Staś and Guy)
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
 11. new/better sounds for feedback (Gergő)
 12. improvement in user experience on Arena page (mostly Gergő)
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
 14. use of more efficient and better-scaling db calls (Guy)
-15. possibly some sort of profile with user data? like statistics? (mostly Staś)
-16. Clean up all the warnings appearing when the app runs (Staś and Guy)
+15. possibly some sort of profile with user data, like statistics (mostly Staś)
+    - started charts on profile page
+    - will need to arrange for data about users' activity to be logged in the db for this to be useful
+16. Clean up all the warnings appearing when the app runs (Staś with Guy's help)

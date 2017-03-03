@@ -6,7 +6,7 @@ AppBody = React.createClass({
         return {
             activeLanguageId: null,
             interfaceLanguage: "English",
-            user: false
+            user: "Overlord" /* This is currently not the normal setting of false, as I want to be able to access the profile page to prepare graphs etc */
         }
     },
     
