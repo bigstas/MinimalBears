@@ -1,0 +1,21 @@
+For Beta:
+1. authentication / user accounts (mostly Guy)
+2. finalised text on About page (Staś and Guy)
+3. internationalisation (mostly Staś)
+    - mostly done structurally
+    - About page needs to be sorted before we get the translations ready for that
+    - need translations into various languages
+4. examples on selector buttons (mostly Staś)
+5. some sort of interface for admins to approve audio (probably Staś and Guy)
+    - started as Edit page
+6. expansion into further languages (Staś and Guy)
+7. any further styling - esp. Record page and authentication pages (mostly Gergő)
+8. any images to be added, incl. probably a logo (Gergő)
+9. potentially connections to social media (probably Staś and Guy)
+10. anything fed back from the user tests (Guy, Staś, and Gergő)
+11. new/better sounds for feedback (Gergő)
+12. improvement in user experience on Arena page (mostly Gergő)
+13. testing code (code that checks everything is working correctly) (Guy and Staś)
+14. use of more efficient and better-scaling db calls (Guy)
+15. possibly some sort of profile with user data? like statistics? (mostly Staś)
+16. Clean up all the warnings appearing when the app runs (Staś and Guy)
