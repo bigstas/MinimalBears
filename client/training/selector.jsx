@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../loading'
+import Translate from 'react-translate-component'
 
 const Selector = React.createClass({
 	/* A series of buttons from which the user can choose one
@@ -14,21 +15,23 @@ const Selector = React.createClass({
 	 * Optional props:
 	 * extraText - text to show on extra button
 	 * extraCallback - function for extra button (takes no arguments)
+	 *
+	 * Note that selectionMessage, options text, and extraText will be passed
+	 * as the content of Translate components 
 	 */
 	render() {
         return (
             <div className='panel animated fadeIn' id='selector'>
-                <p>{this.props.selectionMessage}</p>
+                <Translate content={this.props.selectionMessage} component="p" />
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
-                        {c.text}
-                                            <a></a>                 
+                        <Translate content={c.text} />
                     </div>
                 )}
 
                 {!!this.props.extraText ? 
                     <div className='button' id='extraButton' onClick={this.props.extraCallback}>
-                        {this.props.extraText}
+                        <Translate content={this.props.extraText} />
                     </div> :
                     <div>{/*empty div*/}</div> 
                 }
@@ -47,11 +50,11 @@ const LanguageSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         	
-        const options = this.props.data.allLanguages.nodes.map(c => ({text:c.name, id:c.id}))
+        const options = this.props.data.allLanguages.nodes.map(c => ({text:"train.language."+c.id.toString(), id:c.id}))
 		
 		return (
 			<Selector
-				selectionMessage='Choose the language you want to train'
+				selectionMessage="train.chooseLanguage"
 				options={options}
 				callback={this.props.callback}
 			/>
@@ -70,14 +73,14 @@ const ContrastSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         
-        const options = this.props.data.allContrastNonempties.nodes.map(c => ({text:c.name, id:c.id}))
+        const options = this.props.data.allContrastNonempties.nodes.map(c => ({text:"train.contrast."+c.id.toString(), id:c.id}))
         
 		return (
 			<Selector
-				selectionMessage={options.length === 0 ? "Sorry, we don't have enough audio ready for this language. We're working on it!" : 'Choose which contrast you want to train'}
+				selectionMessage={options.length === 0 ? "train.sorryNoContrasts" : "train.chooseContrast" }
 				options={options}
 				callback={this.props.callback}
-				extraText='Change language'
+				extraText='train.changeLanguage'
 				extraCallback={this.props.extraCallback}
 			/>
 		)

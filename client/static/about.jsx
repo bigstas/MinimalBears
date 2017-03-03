@@ -3,6 +3,9 @@
 import React from 'react'
 import YouTube from 'react-youtube'
 
+import counterpart from 'counterpart'
+import Translate from 'react-translate-component'
+    
 About = React.createClass({
     render() {
         const opts = {
@@ -16,9 +19,9 @@ About = React.createClass({
         
         return (
             <div className='panel animated fadeIn' id='about'>
-                <h1>Minimal Bears: the research-based web app that improves your accent.</h1>
-                <h2>What is Minimal Bears?</h2>
-                <p>Minimal Bears is a web app that uses a technique known as <strong>High Variability Phonetic Training</strong> (HVPT) to help people learn the sounds of a foreign language.</p>
+                <Translate content="about.title" component='h1' />
+                <Translate content="about.whatIs" component='h2' />
+                <p><Translate content="about.p1.line1" /><strong><Translate content="about.p1.HVPT" /></strong><Translate content="about.p1.line2" /></p>
                 <p>It's <strong>simple</strong>, it's <strong>quick</strong>, and it's <strong>scientifically proven</strong> to be effective.</p>
                 <p>You may have noticed that adult learners of a foreign language don't seem to improve their accent over time. This can be a barrier to communication, and often makes them seem less fluent than they really are.</p>
                 <p>HVPT has been <a href="https://www.researchgate.net/profile/Donald_Jamieson/publication/226533069_Training_non-native_speech_contrasts_in_adults_Acquisition_of_the_English_d-TH_contrast_by_francophones/links/5670c10708ae0d8b0cc0fe3d.pdf">known for some time</a> by researchers to be an effective way of getting people to improve their ability to distinguish similar sounds in a foreign language, and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3507383/">improve their accent as a result</a>. Minimal Bears is a <strong>free</strong>, <strong>open-source</strong> web app to allow language learners across the world to finally make use of this powerful yet little-known technique.</p>

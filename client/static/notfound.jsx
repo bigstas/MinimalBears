@@ -1,11 +1,12 @@
 import React from 'react'
-
+import Translate from 'react-translate-component'
+    
 NotFound = React.createClass({
     render() {
         return(
             <div className='panel'>
-                <h2>Your webpage was not found.</h2>
-                <p>Sad bear face.</p>
+                <Translate content="notfound.title" component="h2" />
+                <Translate content="notfound.text" component="p" />
             </div>
         )
     }

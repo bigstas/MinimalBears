@@ -7,8 +7,8 @@ import ReactTooltip from 'react-tooltip'
 // data mutations and queries
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-    
 import LoadingPage from './loading'
+import Translate from 'react-translate-component'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -66,7 +66,7 @@ StartButton = React.createClass({
         // display props
         let disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
         let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
-        let label = "Record" // default value
+        let label = "record.startLabel.record" // default value
         
         // callback arguments
         let stop = (this.props.mode === "record")
@@ -86,16 +86,16 @@ StartButton = React.createClass({
                 // we're already on the last item
                 start = false
                 mode  = "done"
-                label = "Done"
+                label = "record.startLabel.done"
             } else {
                 // we're somewhere in the middle
-                label = "Next"
+                label = "record.startLabel.next"
             }
         } 
         else if (this.props.mode === "done") {
             // we've finished recording, and now starting recording from scratch
             next = 0
-            label = "Re-record all"
+            label = "record.startLabel.reRecordAll"
             clearAll = true
         }
         
@@ -104,12 +104,12 @@ StartButton = React.createClass({
         return (
             <div>
                 <div className={className}
-                    data-tip data-for='startTooltip' data-delay-show='1000'
+                    data-tip data-for='startTooltip' data-delay-show='500'
                     onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next, clearAll )}>
-                        {label}
+                        <Translate content={label} />
                 </div>
                 <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
-                    <p style={{textAlign:'center'}}>Record all the words,<br />one after the other.</p>
+                    <p style={{textAlign:'center'}}><Translate content="record.startLabel.tooltip1" /><br /><Translate content="record.startLabel.tooltip2" /></p>
                 </ReactTooltip>
             </div>
         )
@@ -141,10 +141,12 @@ StopButton = React.createClass({
         
         return (
             <div>
-                <div className={className} data-tip='Click here to stop recording.' data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className} data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid" />
+                <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
+                    <Translate content="record.stopTooltip" component="p" />
+                </ReactTooltip>
             </div>
         )
     }
@@ -160,16 +162,17 @@ PlayAllButton = React.createClass({
         // display props
         let disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
         let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
-        let label = "Playback All"
         
         return (
             <div>
                 <div className={className}
-                    data-tip='This plays all the audio.'
+                    data-tip data-for='playAllTooltip' data-delay-show='500'
                     onClick={disabled ? null : this.props.playAllFunction}>
-                        {label}
+                        <Translate content="record.playbackAll" />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid" />
+                <ReactTooltip id='playAllTooltip' place="bottom" type="light" effect="solid">
+                    <Translate content="record.playbackAllTooltip" component="p" />
+                </ReactTooltip>
             </div>
         )
     }
@@ -187,11 +190,13 @@ SubmitButton = React.createClass({
         return (
             <div>
                 <div className={className}
-                    data-tip='If you are ready, send all the audio to the database.'
+                    data-tip data-for='submitTooltip' data-delay-show='500'
                     onClick={disabled ? null : this.props.submitAudio}>
-                        Submit!
+                        <Translate content="record.submit" />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid" />
+                <ReactTooltip id='submitTooltip' place="bottom" type="light" effect="solid">
+                    <Translate content="record.submitTooltip" component="p" />
+                </ReactTooltip>
             </div>
         )
     }
@@ -229,7 +234,7 @@ ReRecord = React.createClass({
                          )
         let icon = "record.png" // icon: red circle - press to record
         let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
-        let tooltip = "Re-record this word"
+        let tooltipId = 'rerecordTooltip' + this.props.index.toString()
         
         // callback arguments - default values, i.e. when not currently re-recording
         let stop  = false
@@ -257,10 +262,12 @@ ReRecord = React.createClass({
         
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip={tooltip} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
+                <div className={className} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
                     <img className='buttonIcon' id='recordIcon' src={icon} />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid" />
+                <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
+                    <Translate content="record.reRecordTooltip" component="p" />
+                </ReactTooltip>
             </div>
         )
     }
@@ -273,13 +280,16 @@ PlaybackOne = React.createClass({
     render() {
         let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
         let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
+        let tooltipId = 'playbackTooltip' + this.props.index.toString()
         
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip={'Play back'} data-delay-show='1000' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
+                <div className={className} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
                     <img className='buttonIcon' id='playIcon' src='play.png' />
                 </div>
-                <ReactTooltip place="bottom" type="light" effect="solid" />
+                <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
+                    <Translate content="record.playbackTooltip" component="p" />
+                </ReactTooltip>
             </div>
         )
     }
