@@ -522,7 +522,7 @@ WrappedRecordPage = React.createClass({
         let nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
         nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
         console.log(nodes)
-        let firstNodes = nodes.slice(0,1)
+        let firstNodes = nodes.slice(0,10)
         firstNodes = firstNodes.map( function(item) {
             return [item.homophones[0], item.id]
         })

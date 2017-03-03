@@ -98,21 +98,6 @@ h4 { padding-left: 2%; }
        
 }
 
-.chooseOption a:after {
-    content:" example";
-    opacity: 0;
-    position:relative;
-    right:-20px;
-    transition:0.5s;
-    
-    vertical-align:middle;
-}
-
-.chooseOption:hover a:after {
-  opacity: 1;
-  right: 0;
-}
-
 #progressButton {
     color: floralwhite;
     text-align: center;
