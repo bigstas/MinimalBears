@@ -52,14 +52,13 @@ const LanguageSelector = React.createClass({
 		if (this.props.data.loading) { return <LoadingPage /> }
         
         const exampleArray = [ "mouse/mouth", "aal/all", "ścieka/szczeka" ]	 // To be replaced...?
-        const options = this.props.data.allLanguages.nodes.map(c, index => ({text:"train.language."+c.id.toString(), id:c.id, example:exampleArray[index]}))
+        const options = this.props.data.allLanguages.nodes.map((c, index) => ({text:"train.language."+c.id.toString(), id:c.id, example:exampleArray[index]}))
         
 		return (
 			<Selector
 				selectionMessage="train.chooseLanguage"
 				options={options}
 				callback={this.props.callback}
-                exampleArray={exampleArray /* TODO: in future, will use a db lookup */}
 			/>
 		)
 	}
@@ -76,7 +75,7 @@ const ContrastSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         const exampleArray = [ "Will", "be", "ready", "soon" ]
-        const options = this.props.data.allContrastNonempties.nodes.map(c, index => ({text:"train.contrast."+c.id.toString(), id:c.id, example:exampleArray[index]}))
+        const options = this.props.data.allContrastNonempties.nodes.map((c, index) => ({text:"train.contrast."+c.id.toString(), id:c.id, example:exampleArray[index]}))
         
 		return (
 			<Selector
