@@ -29,6 +29,9 @@ counterpart.registerTranslations('deu', {
         whatIs: "Was ist Minimal Bearen?",
         HVPT: "HVPT"
     },
+    loading: {
+        loading: '请稍等一下...'
+    },
     train: {
         chooseLanguage: "Sprache?",
         chooseContrast: "Gut gut contrasten gut?",

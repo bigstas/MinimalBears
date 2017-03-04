@@ -29,6 +29,9 @@ counterpart.registerTranslations('chm', {
         whatIs: "Minimal Bears 是什么？",
         HVPT: "HVPT"
     },
+    loading: {
+        loading: '请稍等一下...'
+    },
     train: {
         chooseLanguage: "你想练习哪种语言？",
         chooseContrast: "你想练习哪种发音区别？",

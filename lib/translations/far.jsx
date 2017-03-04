@@ -33,6 +33,9 @@ counterpart.registerTranslations('far', {
             line2: ' (HVPT) to help people learn the sounds of a foreign language.'
         }
     },
+    loading: {
+        loading: '...لتفا صبر کنید'
+    },
     train: {
         chooseLanguage: "لتفا زبان را امتحان کن",
         chooseContrast: "Choose which contrast you want to train",

@@ -1,6 +1,7 @@
 For Beta:
 1. authentication / user accounts (mostly Guy)
 2. finalised text on About page (Staś and Guy)
+    - second draft to be reviewed
 3. internationalisation (mostly Staś)
     - mostly done structurally
     - About page needs to be sorted before we get the translations ready for that
@@ -16,6 +17,8 @@ For Beta:
     - any changes to the favicon?
 9. potentially connections to social media (probably Staś and Guy)
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
+    - Arena needs options other than "Go Again" once the user has finished (e.g. "Main Menu")
+    - the Arena panel appears to have a slider on the side in Chrome, as if the contents don't fit. To be removed.
 11. new/better sounds for feedback (Gergő)
 12. improvement in user experience on Arena page (mostly Gergő)
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
@@ -24,6 +27,8 @@ For Beta:
     - started charts on profile page
     - will need to arrange for data about users' activity to be logged in the db for this to be useful
 16. Clean up all the warnings appearing when the app runs (Staś with Guy's help)
-17. Different pages depending on whether the user is logged in or not
+17. Different pages depending on whether the user is logged in or not (Staś)
     - home page - changes started
     - record page - should only be accessible to logged-in users
+    
+Do we have sheath vs sheaf?

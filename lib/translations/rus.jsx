@@ -33,6 +33,9 @@ counterpart.registerTranslations('rus', {
             line2: ' (HVPT) to help people learn the sounds of a foreign language.'
         }
     },
+    loading: {
+        loading: 'Пожалуйста, подождите...'
+    },
     train: {
         chooseLanguage: "Choose the language you want to train",
         chooseContrast: "Choose which contrast you want to train",

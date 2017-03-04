@@ -28,6 +28,9 @@ counterpart.registerTranslations('hun', {
         title: 'Minimal Bears: The research-based web app that improves your accent.',
         whatIs: 'Mi a Minimal Bears?'
     },
+    loading: {
+        loading: 'გთხოვთ მოიცადოთ...'
+    },
     train: {
         chooseLanguage: "Choose the language you want to train",
         chooseContrast: "Choose which contrast you want to train",

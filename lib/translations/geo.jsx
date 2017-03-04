@@ -33,6 +33,9 @@ counterpart.registerTranslations('geo', {
             line2: ' (HVPT) to help people learn the sounds of a foreign language.'
         }
     },
+    loading: {
+        loading: 'გთხოვთ მოიცადოთ...'
+    },
     train: {
         chooseLanguage: "რომელი ენის პრაქტიკა გინდა?",
         chooseContrast: "Choose which contrast you want to train",
