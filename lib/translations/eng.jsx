@@ -1,10 +1,5 @@
 import counterpart from 'counterpart'
 
-// Set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
-// This will run once on startup and not run again.
-// For future - maybe try to get their locale first?
-//counterpart.setLocale('eng')
-
 counterpart.registerTranslations('eng', {
     example: {
         greeting: 'Hello %(name)s! How are you today?'

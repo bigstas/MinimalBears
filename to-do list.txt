@@ -24,6 +24,7 @@ For Beta:
 11. new/better sounds for feedback (Gergő)
 12. improvement in user experience on Arena page (mostly Gergő)
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
+    - considering use of Jest (Facebook-supported React testing suite)
 14. use of more efficient and better-scaling db calls (Guy)
 15. profile with user data, like statistics (mostly Staś)
     - started charts on profile page

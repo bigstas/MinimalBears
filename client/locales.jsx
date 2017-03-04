@@ -92,7 +92,7 @@ Object.keys(localeMapper).forEach(function(key,index) {
     // index: the ordinal position of the key within the object 
 })
 
-//Set language according to locale.
+// Set language according to locale.
 // If no locale is found, set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
 if (threeLetterLocale) {
     counterpart.setLocale(threeLetterLocale)
