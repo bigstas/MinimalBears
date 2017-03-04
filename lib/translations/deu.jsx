@@ -18,7 +18,7 @@ counterpart.registerTranslations('deu', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
-        welcome: "Wilkommen!",
+        welcome: "Wilkommen",
         intro: " ist ein gut program.",
         continue: "geContinue",
         signIn: "geSignIn",
@@ -36,9 +36,9 @@ counterpart.registerTranslations('deu', {
         sorryNoContrasts: "Nein nein nein nein contrast ist schlecht",
         score: "Punkten",
         language: {
-            English: "Anglisch",
-            Polish: "Polnisch",
-            German: "Deutsch"
+            1: "Anglisch",
+            2: "Deutsch",
+            3: "Polnisch"
         },
         progressLabel: {
             begin: "GeBegin",

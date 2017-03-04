@@ -18,7 +18,7 @@ counterpart.registerTranslations('hun', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
-        welcome: "Üdvövlöm!",
+        welcome: "Üdvözlöm",
         intro: " egy programma, ami segít az akcent tanulásával.",
         continue: "Continue as guest",
         signIn: "Sign In",
@@ -35,9 +35,9 @@ counterpart.registerTranslations('hun', {
         sorryNoContrasts: "Sajnos nincs ez a nyelv hangfájlák. Dolgozunk rajta!",
         score: "Score",
         language: {
-            English: "Angol",
-            Polish: "Lengyel",
-            German: "Német"
+            1: "Angol",
+            2: "Német",
+            3: "Lengyel"
         },
         progressLabel: {
             begin: "Begin",

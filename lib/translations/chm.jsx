@@ -18,7 +18,7 @@ counterpart.registerTranslations('chm', {
         text: "不好意思。请查看网址。"
     },
     home: {
-        welcome: "欢迎光临!",
+        welcome: "欢迎光临",
         intro: " 是一件让你学习外语的发音的软件。",
         continue: "当客人继续",
         signIn: "签到",
@@ -36,9 +36,9 @@ counterpart.registerTranslations('chm', {
         sorryNoContrasts: "可惜我们还没有这种语言的音频文件。我们正在解决这个问题！",
         score: "得分",
         language: {
-            English: "英语",
-            Polish: "波语",
-            German: "德语"
+            1: "英语",
+            2: "德语",
+            3: "波语"
         },
         progressLabel: {
             begin: "开始",

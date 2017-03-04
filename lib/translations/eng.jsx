@@ -23,7 +23,7 @@ counterpart.registerTranslations('eng', {
         settings: "Settings"
     },
     home: {
-        welcome: "Welcome!",
+        welcome: "Welcome",
         intro: " is an app that will help you learn new sounds in foreign languages.",
         continue: "Continue as guest",
         signIn: "Sign In",
@@ -45,9 +45,9 @@ counterpart.registerTranslations('eng', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "English",
-            Polish: "Polish",
-            German: "German"
+            1: "English",
+            2: "German",
+            3: "Polish"
         },
         progressLabel: {
             begin: "Begin",

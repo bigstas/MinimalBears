@@ -18,7 +18,7 @@ counterpart.registerTranslations('far', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
-        welcome: "!خوش آمدید",
+        welcome: "خوش آمدید",
         intro: ".یک برنامه است که مردان را کمک می کند که صداها زبان خارجی را یاد بگیرند ",
         continue: "Continue as guest",
         signIn: "Sign In",
@@ -40,9 +40,9 @@ counterpart.registerTranslations('far', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "اینگلیسی",
-            Polish: "لخستانی",
-            German: "آلمانی"
+            1: "اینگلیسی",
+            2: "آلمانی",
+            3: "لخستانی"
         },
         progressLabel: {
             begin: "Begin",

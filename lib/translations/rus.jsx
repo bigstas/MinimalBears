@@ -18,7 +18,7 @@ counterpart.registerTranslations('rus', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
-        welcome: "Добро пожаловать!",
+        welcome: "Добро пожаловать",
         intro: " это программа, которая Вам поможиет учиться звуки иностранных языков.",
         continue: "Продолжать гостьом",
         signIn: "Sign In",
@@ -40,9 +40,9 @@ counterpart.registerTranslations('rus', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "Английский",
-            Polish: "Полский",
-            German: "Немецкий"
+            1: "Английский",
+            2: "Немецкий",
+            3: "Польский"
         },
         progressLabel: {
             begin: "Начинать",

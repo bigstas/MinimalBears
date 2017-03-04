@@ -18,7 +18,7 @@ counterpart.registerTranslations('geo', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
-        welcome: "მისასალმები!",
+        welcome: "მისასალმები",
         intro: " is an app that will help you learn new sounds in foreign languages.",
         continue: "Continue as guest",
         signIn: "Sign In",
@@ -40,9 +40,9 @@ counterpart.registerTranslations('geo', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            English: "ინგლისური",
-            Polish: "პოლინური",
-            German: "გერმანური"
+            1: "ინგლისური",
+            2: "გერმანური",
+            3: "პოლინური"
         },
         progressLabel: {
             begin: "Begin",

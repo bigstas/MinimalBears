@@ -24,3 +24,6 @@ For Beta:
     - started charts on profile page
     - will need to arrange for data about users' activity to be logged in the db for this to be useful
 16. Clean up all the warnings appearing when the app runs (Staś with Guy's help)
+17. Different pages depending on whether the user is logged in or not
+    - home page - changes started
+    - record page - should only be accessible to logged-in users

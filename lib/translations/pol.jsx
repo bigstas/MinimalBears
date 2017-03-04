@@ -18,7 +18,7 @@ counterpart.registerTranslations('pol', {
         settings: "Ustawienia"
     },
     home: {
-        welcome: "Witaj!",
+        welcome: "Witaj",
         intro: " to aplikacja, która Ci pozwoli ćwiczyć brzmienia z obcych języków.",
         continue: "Kontynuuj jako gość",
         signIn: "Wloguj",
@@ -41,9 +41,9 @@ counterpart.registerTranslations('pol', {
         sorryNoContrasts: "Niestety nie mamy jeszcze przygotowanych plików audio dla tego języka. Pracujemy nad tym!",
         score: "Wynik",
         language: {
-            English: "Angielski",
-            Polish: "Polski",
-            German: "Niemiecki"
+            1: "Angielski",
+            2: "Niemiecki",
+            3: "Polski"
         },
         progressLabel: {
             begin: "Zacznij",

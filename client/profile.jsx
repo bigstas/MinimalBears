@@ -123,7 +123,7 @@ UserProfile = React.createClass({
         return (
             <div className='panel animated fadeIn' id='profile'>
                 <div id='topband'>
-                    <div id='userpic'>
+                    <div className='userpic' id='userpicProfile'>
                         <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
                     </div>
                     <div id='overview'>

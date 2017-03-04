@@ -43,7 +43,7 @@ h4 { padding-left: 2%; }
     padding: 3%;
     opacity: 90%;
 }
-#home { text-align: center; }
+#guestHome, #userHome { text-align: center; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
 .transparent { opacity: 0.2; }
@@ -200,9 +200,6 @@ nav a:hover {
     background-color: #E3A557;
 }
 
-
-
-
 /* The buttons within the nav bar are an unordered list (<ul>). */
 nav ul {
     list-style-type: none;
@@ -236,7 +233,6 @@ nav ul li a, nav ul li p {
     
 }
 #loggedInAs:hover {
-    
     color: lightyellow;
     cursor: pointer;    /* Turns the mouse's cursor from an arrow (default) to a hand, to show that you can click. */
     }
@@ -353,6 +349,17 @@ nav ul li a, nav ul li p {
 
 
 /* ================================== */
+/* ============ home.js ============ */
+/* ================================== */
+
+#userpicHome { 
+    float: left;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+#homeStats { text-align: left; }
+
+/* ================================== */
 /* ============ about.js ============ */
 /* ================================== */
 
@@ -367,7 +374,7 @@ nav ul li a, nav ul li p {
 /* =========== profile.js =========== */
 /* ================================== */
 
-#userpic {
+.userpic {
     display: inline-block;
     text-align: center;
     width: 90px;
