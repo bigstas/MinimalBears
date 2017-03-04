@@ -10,19 +10,19 @@ counterpart.registerTranslations('far', {
         train: "مشق",
         record: "ضبط",
         guest: "مهمان",
-        profile: "Profile",
-        settings: "Settings"
+        profile: "پروفایل",
+        settings: "تنظیمات"
     },
     notfound: {
-        title: "Your webpage was not found.",
+        title: "صفحه وب کشف نشد",
         text: "Sad bear face. Check you input the URL correctly."
     },
     home: {
         welcome: "خوش آمدید",
         intro: ".یک برنامه است که مردان را کمک می کند که صداها زبان خارجی را یاد بگیرند ",
         continue: "Continue as guest",
-        signIn: "Sign In",
-        register: "Register"
+        signIn: "ورود",
+        register: "ثبت نام"
     },
     about: {
         title: 'Minimal Bears: The research-based web app that improves your accent.',
@@ -41,17 +41,17 @@ counterpart.registerTranslations('far', {
         chooseContrast: "Choose which contrast you want to train",
         changeLanguage: "زبان را تغییر کن",
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
-        score: "Score",
+        score: "نمره",
         language: {
             1: "اینگلیسی",
             2: "آلمانی",
             3: "لخستانی"
         },
         progressLabel: {
-            begin: "Begin",
-            playAgain: "Listen again",
-            next: "Next",
-            goAgain: "Play again"
+            begin: "شروع کن",
+            playAgain: "دوباره کوش کن",
+            next: "بعد",
+            goAgain: "دوباره تمرین کن"
         },
         correct: "!درست است",
         wrong: "!اشتباه"
@@ -60,7 +60,7 @@ counterpart.registerTranslations('far', {
         startLabel: {
             record: "Record",
             done: "Done",
-            next: "Next",
+            next: "بعد",
             reRecordAll: "Re-record All",
             tooltip1: "Record all the words,",
             tooltip2: "one after the other."

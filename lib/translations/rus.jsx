@@ -14,8 +14,8 @@ counterpart.registerTranslations('rus', {
         settings: "Настройки"
     },
     notfound: {
-        title: "Your webpage was not found.",
-        text: "Sad bear face. Check you input the URL correctly."
+        title: "Веб-страница не найдена.",
+        text: "Проверийте, что адрес правильно введен."
     },
     home: {
         welcome: "Добро пожаловать",
@@ -41,7 +41,7 @@ counterpart.registerTranslations('rus', {
         chooseContrast: "Choose which contrast you want to train",
         changeLanguage: "Изменить язык",
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
-        score: "Score",
+        score: "Счот",
         language: {
             1: "Английский",
             2: "Немецкий",
@@ -59,8 +59,8 @@ counterpart.registerTranslations('rus', {
     record: {
         startLabel: {
             record: "Record",
-            done: "Done",
-            next: "Next",
+            done: "Все",
+            next: "Следующий",
             reRecordAll: "Re-record All",
             tooltip1: "Record all the words,",
             tooltip2: "one after the other."
