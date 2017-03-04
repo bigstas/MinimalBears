@@ -15,7 +15,7 @@ For Beta:
     - a logo
     - a placeholder image for the profile page? (tbd)
     - any changes to the favicon?
-9. potentially connections to social media (probably Staś and Guy)
+9. connections to social media (Staś and Gergő)
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
     - Arena needs options other than "Go Again" once the user has finished (e.g. "Main Menu")
     - the Arena panel appears to have a slider on the side in Chrome, as if the contents don't fit. To be removed.
@@ -30,5 +30,6 @@ For Beta:
 17. Different pages depending on whether the user is logged in or not (Staś)
     - home page - changes started
     - record page - should only be accessible to logged-in users
+18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
     
 Do we have sheath vs sheaf?

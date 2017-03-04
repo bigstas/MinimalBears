@@ -5,6 +5,7 @@ import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 import { Line, Bar, Radar } from 'react-chartjs' // Charts
+import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 
 AlphaProfile = React.createClass({
@@ -116,9 +117,10 @@ UserProfile = React.createClass({
                 }
             ]
         }
-        
-        const chartOptions = {
-        }
+        // this object is required, but it can be empty...
+        const chartOptions = {}
+        // for social media buttons
+        const url = "http://www.minimalbears.com/"
         
         return (
             <div className='panel animated fadeIn' id='profile'>
@@ -139,6 +141,9 @@ UserProfile = React.createClass({
                     <Bar data={barChartData} options={chartOptions} />
                     <h4>Relative ease of contrasts</h4>
                     <Radar data={radarChartData} options={chartOptions} />
+                    <TwitterButton className="button" id="twitterButton" element="div" url={url}>
+                        {" Share us on Twitter"}
+                    </TwitterButton>
                 </div>
             </div>
         )
