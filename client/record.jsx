@@ -1,7 +1,7 @@
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
-import update from 'react-addons-update'
+import update from 'immutability-helper'
 // For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
 import ReactTooltip from 'react-tooltip'
 // data mutations and queries
@@ -64,12 +64,12 @@ StartButton = React.createClass({
     
     render() {
         // display props
-        let disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
-        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+        const disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
+        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         let label = "record.startLabel.record" // default value
         
         // callback arguments
-        let stop = (this.props.mode === "record")
+        const stop = (this.props.mode === "record")
         let start = true     // default value
         let mode  = "record" // default value
         let next
@@ -100,7 +100,7 @@ StartButton = React.createClass({
         }
         
         // for this button, focus and next are the same
-        let focus = next
+        const focus = next
         return (
             <div>
                 <div className={className}
@@ -125,15 +125,15 @@ StopButton = React.createClass({
     
     render() {
         // display props
-        let disabled = (this.props.mode !== "record")
-        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+        const disabled = (this.props.mode !== "record")
+        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         
         // callback arguments
-        let stop = true     // always
-        let start = false   // always
+        const stop = true     // always
+        const start = false   // always
         let mode  = "wait"  // default value
-        let next  = this.props.next +1
-        let focus = next // for this button, focus and next are the same
+        const next  = this.props.next +1
+        const focus = next // for this button, focus and next are the same
         
         if (this.props.next === this.props.max) {
             mode = "done"
@@ -160,8 +160,8 @@ PlayAllButton = React.createClass({
     
     render() {
         // display props
-        let disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
-        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+        const disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
+        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
         
         return (
             <div>
@@ -182,11 +182,10 @@ SubmitButton = React.createClass({
     /* Press this button to submit the audio to the database. 
      * Enabled when in done mode (i.e. when all the words have been recorded).
      * props: mode, submitAudio
-     * TO DO: properly write the submitAudio function.
      */
     render() {
-        let disabled = !(this.props.mode === "done")
-        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
+        const disabled = !(this.props.mode === "done")
+        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
         return (
             <div>
                 <div className={className}
@@ -278,9 +277,9 @@ PlaybackOne = React.createClass({
      * props: srcExists, mode, index
      */
     render() {
-        let disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
-        let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
-        let tooltipId = 'playbackTooltip' + this.props.index.toString()
+        const disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
+        const className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
+        const tooltipId = 'playbackTooltip' + this.props.index.toString()
         
         return (
             <div style={{display: 'inline-block'}}>
@@ -301,8 +300,7 @@ WordRow = React.createClass({
      * props: focused, index, mode, next, srcExists, callback, playbackFunction, word
      */
     render() {
-        let rowClassName = "wordRow"
-        if (this.props.focused === true) { rowClassName = "wordRowFocused"}
+        const rowClassName = this.props.focused === true ? "wordRowFocused" : "wordRow"
         
         return (
             <div className={rowClassName}>
@@ -318,7 +316,6 @@ WordRow = React.createClass({
 RecordPage = React.createClass({
     /* A React element for the entire page body (below the Nav).
      * props: recordingWords, submitAudio
-     * TO DO: should make a proper submitAudio function. Probably shouldn't be put in as a prop?
      */
     
     getInitialState () {
@@ -347,7 +344,7 @@ RecordPage = React.createClass({
     cutRecording () {
         /* Stop the recorder, save the data with a URL, clear the recorder
          */
-        let currentIndex = this.state.focus  // In case of asynchronous changes
+        const currentIndex = this.state.focus  // In case of asynchronous changes
         this.recorder.stop()
         this.recorder.exportWAV(blob => this.makeUrl(currentIndex, blob))
         this.recorder.clear()
@@ -361,7 +358,7 @@ RecordPage = React.createClass({
         console.log('new url:')
         console.log(url)
         this.setState({
-            audioURLs: update(this.state.audioURLs, {[index]: {$set: url }}),  // TODO 'update' is now a legacy function
+            audioURLs: update(this.state.audioURLs, {[index]: {$set: url }}),
             audioBlobs: update(this.state.audioBlobs, {[index]: {$set: blob }})
         })
     },
@@ -377,7 +374,7 @@ RecordPage = React.createClass({
          */
         if (stop)  { this.cutRecording() }
         if (start) { this.recorder.record() }
-        let stateUpdate = {}
+        const stateUpdate = {}
         if (mode  !== null) { stateUpdate.mode  = mode  }
         if (focus !== null) { stateUpdate.focus = focus }
         if (next  !== null) { stateUpdate.next  = next  }
@@ -401,18 +398,14 @@ next: ${next}`)
          */
         // Start playing the first audio file
         // The state will make the event listeners play the rest
-        this.playback(0, true)
+        this.setState({ mode: 'playbackAll' })
+        this.playback(0)
     },
     
-    playback(index, playAllAudio) {
+    playback(index) {
         // Plays the audio element with a given index.
         if (this.state.audioURLs[index]) { 
             this.setState({ focus: index })  // highlight the word currently playing
-            if (playAllAudio) {  // TODO this seems unnecessary
-                this.setState({ mode: "playbackAll" })
-            } else {
-                this.setState({ mode: "playback"})
-            }
             // debug logs
             console.log("playback index is " + index.toString())
             console.log(this.state.audioURLs[index])
@@ -424,23 +417,23 @@ next: ${next}`)
     },
     
     dispatchAudio () {
-        let speaker = prompt("Please enter your name", "Harry Potter")
+        const speaker = prompt("Please enter your name", "Harry Potter")
         if (speaker) {
             if (this.props.recordingWords.length !== this.state.audioURLs.length) {
                 // error message
                 console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
             } else {
                 // Should we be using the URLs? Is there anything else we need?
-                let blobPacket = _.zip(this.props.recordingWords, this.state.audioBlobs)
-                blobPacket.map( function(c, index) {
-                    item = c[0][1]  // id of the word
+                const blobPacket = _.zip(this.props.recordingWords, this.state.audioBlobs)
+                blobPacket.map( function(c) {
+                    const item = c[0][1]  // id of the word
                     // Asynchronously read the file
                     const reader = new FileReader()
                     // the "loadend" event will trigger once readAsText is complete
                     const _this = this  // to use inside function...
                     reader.addEventListener("loadend", function() {
                         // reader.result contains the contents of blob as a string
-                        let blobString = btoa(reader.result)
+                        const blobString = btoa(reader.result)
                         console.log(blobString.length)
                         _this.props.submitAudio({variables: {input: { file: blobString, speaker, item }}})
 	                    // It seems like we need to limit the size of the mutation...
@@ -466,9 +459,9 @@ next: ${next}`)
                 <div id="wordList">
                     {this.props.recordingWords.map(
                         function(c, index) {
-                            let audioRef = "audio" + index.toString()
+                            const audioRef = "audio" + index.toString()
                             return(
-                                <div>
+                                <div key={index}>
                                     <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c[0]} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
                                     <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
                                 </div>
@@ -481,35 +474,27 @@ next: ${next}`)
     },
     
     componentDidMount() {
-        /* add event listeners to all the <audio> elements
-         * they listen for when the audio finishes playing ("ended")
-         * we use this to make the audio carry on playing in playbackAll mode
-         * Also, create a list of <audio> elements for future reference
+        /* Add event listeners to all the <audio> elements.
+         * They listen for when the audio finishes playing ("ended").
+         * We use this to make the audio carry on playing in playbackAll mode.
+         * Also, create a list of <audio> elements for future reference.
          */
         console.log(this.refs)
         this.audioElements = this.props.recordingWords.map(function(c, index) {
-            let myRef = "audio" + index.toString()
-            let element = this.refs[myRef]
+            const myRef = "audio" + index.toString()
+            const element = this.refs[myRef]
             console.log('adding listener to index ' + index.toString())
-            let nextIndex = index +1
+            const nextIndex = index +1
             element.addEventListener("ended",  // trigger when playing ends
                 () => {
                     console.log('inside handler')
-                    if (this.state.mode === 'playbackAll') {
-                        console.log('playbackAll')
-                        if (nextIndex < this.state.audioURLs.length) {
-                            this.playback(nextIndex, true)  // play the next file
-                        } else { // reset the state
-                            let done = (this.state.audioURLs.length === this.props.recordingWords.length)
-                            this.setState({
-                                mode:  done ? "done" : "wait",
-                                focus: this.state.next
-                            })
-                        }
-                    }
-                    else {
-                        // TODO repeated code - could be structured better
-                        let done = (this.state.audioURLs.length === this.props.recordingWords.length)
+                    if (this.state.mode === 'playbackAll' && nextIndex < this.state.audioURLs.length) {
+                        // If we're playing back all, and there are more files to come 
+                        console.log('playbackAll, playing next file')
+                        this.playback(nextIndex)  // play the next file
+                    } else {
+                        // Reset the state
+                        const done = (this.state.audioURLs.length === this.props.recordingWords.length)
                         this.setState({
                             mode:  done ? "done" : "wait",
                             focus: this.state.next
@@ -529,16 +514,16 @@ WrappedRecordPage = React.createClass({
         
         // JSON is built-in
         // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
-        let nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
+        const nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
         nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
         console.log(nodes)
-        let firstNodes = nodes.slice(0,10)
-        firstNodes = firstNodes.map( function(item) {
+        const firstNodes = nodes.slice(0,10)
+        const firstWords = firstNodes.map( function(item) {
             return [item.homophones[0], item.id]
         })
         console.log(firstNodes)
         
-        return <RecordPage recordingWords={firstNodes} submitAudio={this.props.audioMutation} /> 
+        return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
     }
 })
 
