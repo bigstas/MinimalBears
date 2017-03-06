@@ -2,6 +2,10 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
+function sum(a,b) {
+    return a + b
+}
+    
 // A dummy class for testing during development
 
 MyClass = React.createClass({
@@ -50,3 +54,5 @@ const audioMutationConfig = {
 
 // Wrap the class according to the function
 export default graphql(audioMutation, audioMutationConfig)(MyClass)
+
+export { sum }

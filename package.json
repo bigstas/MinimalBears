@@ -1,7 +1,7 @@
 {
   "name": "minimal-bears",
   "description": "Application for phonetic training",
-  "author": "Guy Emerson and Stanislaw Pstrokonski",
+  "author": "Guy Emerson, Stanislaw Pstrokonski, and Gergő Halász",
   "license": "AGPL-3.0",
   "repository": "https://github.com/bigstas/MinimalBears",
   "dependencies": {
@@ -28,5 +28,29 @@
     "react-translate-component": "^0.13.2",
     "react-youtube": "^7.3.0",
     "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "jest": "^19.0.2",
+    "regenerator-runtime": "^0.10.3"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
+    "roots": [
+      "lib/tests"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ]
   }
 }
