@@ -21,6 +21,11 @@ For Beta:
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
     - Arena needs options other than "Go Again" once the user has finished (e.g. "Main Menu")
     - the Arena panel appears to have a slider on the side in Chrome, as if the contents don't fit. To be removed.
+    - the Progress button in the Arena should be placed to the bottom-right to suggest more strongly that that's what is to be pressed next
+    - more instructions on the Record page (tutorial?)
+    - Rare words can be offputting (e.g. remembering how to pronounce "bough") - maybe it could be worth adding an option to remove an item.  In this particular case, we have another homophone which is orthographically ambiguous ("bow"), so an alternative would be to show all homophones and add the comment for the item.
+    - stronger colour contrast on some of the buttons
+    - get SSL certificate so that Record page will work in security-conscious Chrome
 11. new/better sounds for feedback (Gergő)
 12. improvement in user experience on Arena page (mostly Gergő)
 13. testing code (code that checks everything is working correctly) (Guy and Staś)

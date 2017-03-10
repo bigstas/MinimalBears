@@ -1,10 +1,10 @@
 import React from 'react'
     
-EditingPage = React.createClass({
+ModerationPage = React.createClass({
     getInitialState() {
+        // TODO: change to props in future
         return {
-            words: ['words', 'stuff', 'more words'],
-            checked: []
+            words: ['words', 'stuff', 'more words']
         }
     },
     
@@ -12,10 +12,10 @@ EditingPage = React.createClass({
         alert("This doesn't do anything yet.")
     },
     
-    handleCheck(event) {
+    handleCheck(event, accept) {
         /* When ticking a box, add that index to the array this.state.checked.
          * When unticking a box, remove that index from the array this.state.checked.
-         */
+        
         console.log(event.target.checked ? "Checkbox on" : "Checkbox off")
         let id = event.target.id.substring(4)   // id of the checkbox
         console.log(id)
@@ -31,7 +31,9 @@ EditingPage = React.createClass({
             this.setState({
                 checked: this.state.checked.filter((_, i) => i !== index)
             })
-        }
+        } */
+        let id = event.target.id.substring(6)
+        console.log(id)
     },
     
     deleteAudio() {
@@ -41,10 +43,9 @@ EditingPage = React.createClass({
             checked: []
         })
     },
-    
-    submitAudio() {
-        alert("This is supposed to submit something.")
-        this.deleteAudio()
+   
+    confirmSelection() {
+        alert("lkjsdlfkjsdlfkj")
     },
     
     loadMoreWords() {
@@ -56,17 +57,19 @@ EditingPage = React.createClass({
         
         return(
             <div className='panel' id='loading'>
-                <h2>Minimal Bears audio editing page</h2>
+                <h2>Minimal Bears audio moderation page</h2>
                 {this.state.words.map((c, index) => (
                     <div key={c}>
-                        <input type="checkbox" id={"cbox" + index.toString()} onChange={this.handleCheck} />
-                        <label htmlFor={"cbox" + index.toString()}>{c}</label>
-                        <button type='button' onClick={this.playAudio}>Play</button>
+                        <form action="">
+                            <input type="radio" id={"accept" + (2*index)  .toString()} name="decision" onChange={this.handleCheck} />
+                            <input type="radio" id={"reject" + (2*index+1).toString()} name="decision" onChange={this.handleCheck} />
+                            <p style={{display: "inline"}}>{c}</p>
+                            <button type='button' onClick={this.playAudio}>Play</button>
+                        </form>
                     </div>
                 )
                 )}
-                <button type='button' onClick={this.deleteAudio}>Delete selected</button>
-                <button type='button' onClick={this.submitAudio}>Submit selected</button>
+                <button type='button' onClick={this.confirmSelection}>Confirm Selection</button>
                 <button type='button' onClick={this.loadMoreWords} disabled={!!this.state.words.length}>Load more words</button>
                 <p>{displaying}</p>
             </div>
@@ -74,4 +77,4 @@ EditingPage = React.createClass({
     }
 })
 
-export default EditingPage
+export default ModerationPage
