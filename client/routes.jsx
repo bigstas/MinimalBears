@@ -6,18 +6,18 @@ import AppBody from './app'
 import Home from './static/home'
 import AuthJoinPage from './auth/joinpage'
 import AuthSignInPage from './auth/loginpage'
-import RecordPage from './record'
+import RecordPage from './audio/record'
 import TrainPage from './training/train' // takes place of arena
 //import ProfileContainer from './profile'
-import Profile from './profile'
+import Profile from './auth/profile'
 import About from './static/about'
-import ModerationPage from './moderation'
-import EditingPage from './edit'
+import ModerationPage from './audio/moderation'
+import EditingPage from './audio/edit'
 import NotFound from './static/notfound'
 // For development / debugging purposes only - not for deployment!
 // This allows for easy viewing of the loading screen during development.
-//import LoadingPage from './loading'
-//import Dummy from './dummy'
+//import LoadingPage from './aux/loading'
+//import Dummy from './aux/dummy'
 
 
 export const renderRoutes = () => (

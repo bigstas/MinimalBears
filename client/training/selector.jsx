@@ -1,7 +1,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import LoadingPage from '../loading'
+import LoadingPage from '../aux/loading'
 import Translate from 'react-translate-component'
 
 const Selector = React.createClass({

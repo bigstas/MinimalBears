@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip'
 // data mutations and queries
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-import LoadingPage from './loading'
+import LoadingPage from '../aux/loading'
 import Translate from 'react-translate-component'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
