@@ -131,7 +131,6 @@ UserProfile = React.createClass({
                     <div id='overview'>
                         <h2 className="animated bounce">{this.props.user}</h2>
                         <p style={{display: 'inline-block'}}>Member since 123 CE</p>
-                    {/* <img src={this.data.bronzeMedalImage} alt='bronze' style={{display: 'inline-block'}} /> */}
                     </div>
                 </div>
                 <div id='graphsDiv'>

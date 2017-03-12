@@ -389,14 +389,6 @@ nav ul li a, nav ul li p {
     margin-left: 10px;
 }
 
-.graph {
-    width: 80px;
-    height: 80px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    border: 1px solid black;
-}
-
 
 /* ================================== */
 /* =========== loading.jsx ========== */
