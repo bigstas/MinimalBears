@@ -58,15 +58,27 @@ counterpart.registerTranslations('eng', {
             },
             3: {
                 name: "i/e",
-                example: "hill/hell",  /* "rid/red", "middle/meddle"] */
+                examples: {
+                    0: "hill/hell",
+                    1: "rid/red",
+                    2: "middle/meddle"
+                }
             },
             11: {
                 name: "l/r", 
-                example: "law/raw",  /* "late/rate", "light/right"] */
+                examples: {
+                    0: "law/raw",
+                    1: "late/rate",
+                    2: "light/right"
+                }
             },
             2: {
                 name: "s/th",
-                example: "mouse/mouth",  /* "sum/thumb", "sing/thing"] */
+                examples: {
+                    0: "mouse/mouth",
+                    1: "sum/thumb",
+                    2: "sing/thing"
+                }
             }
         },
         progressLabel: {

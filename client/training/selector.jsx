@@ -26,6 +26,7 @@ const Selector = React.createClass({
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                         <Translate content={c.text} />
+                        <br/>
                         {c.example ? <a className="selectorExample"><Translate content={c.example} /></a> : <span></span>}
                     </div>
                 )}
@@ -84,7 +85,7 @@ const ContrastSelector = React.createClass({
     
     componentDidMount() {
         // timed switch of example value
-        const startTimer = setInterval(this.switchExample, 1500)
+        const startTimer = setInterval(this.switchExample, 2000)
     },
     
 	render() {

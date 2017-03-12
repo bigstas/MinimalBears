@@ -11,10 +11,14 @@ ModerationPage = React.createClass({
     },
     
     playAudio() {
+        /* Play the audio file.
+         */
         alert("This doesn't do anything yet.")
     },
     
     handleCheck(index, accept) {
+        /* When a radiobutton is presseed, change the state to reflect the choice made.
+         */
         console.log(index.toString())
         this.setState({
             radiobuttonStatus: update(this.state.radiobuttonStatus, {[index]: {$set: accept }})
@@ -22,6 +26,9 @@ ModerationPage = React.createClass({
     },
    
     confirmSelection() {
+        /* Submitting choices.
+         * First, check whether all radiobutton pairs have a choice (i.e. not left blank).
+         */
         let message
         if (this.state.radiobuttonStatus.indexOf(null) === -1) { message = "Here are the things you chose: " + this.state.radiobuttonStatus.toString() } 
         else { message = "Please ensure you have made a decision about every word before submitting." }
@@ -29,6 +36,8 @@ ModerationPage = React.createClass({
     },
     
     loadMoreWords() {
+        /* Bring up more words after finishing moderation for those currently on the page. 
+         */
         alert("This is supposed to load more words.")
     },
     

@@ -8,7 +8,7 @@ For Beta:
     - need translations into various languages
 4. examples on selector buttons (mostly Staś)
 5. some sort of interface for admins to approve audio (probably Staś and Guy)
-    - started as Edit page
+    - Moderation page exists client side, need server-side connections to make work
 6. expansion into further languages (Staś and Guy)
 7. any further styling - esp. Record page and authentication pages (mostly Gergő)
 8. any images to be added (Gergő)
@@ -43,5 +43,7 @@ For Beta:
     - home page - changes started
     - record page - should only be accessible to logged-in users
 18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
+19. An interface for audio editing (Staś)
+    - started Edit page using BBC's peaks.js
     
 Do we have sheath vs sheaf?

@@ -83,18 +83,16 @@ h4 { padding-left: 2%; }
     margin-right: 10%;
 }
 
-.chooseOption a{
+.chooseOption a {
     position: relative;
     display: inline-block;
     opacity: 0;
-    transition: 0.5s;
-    padding-left: 10px;
 }
 
-.chooseOption:hover a{
+.chooseOption:hover a {
     opacity: 1;
     color: lightyellow;
-    padding-right: 15%;
+    /*padding-right: 15%;*/
     transition: 0.5s;
 }
 

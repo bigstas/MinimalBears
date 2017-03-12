@@ -15,6 +15,7 @@
     "immutability-helper": "^2.1.2",
     "keymaster": "^1.6.2",
     "meteor-node-stubs": "^0.2.5",
+    "peaks.js": "^0.6.0",
     "postgraphql": "^3.0.1",
     "react": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.4.2",
