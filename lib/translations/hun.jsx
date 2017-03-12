@@ -42,6 +42,12 @@ counterpart.registerTranslations('hun', {
             2: "Német",
             3: "Lengyel"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "Begin",
             playAgain: "Play Again",

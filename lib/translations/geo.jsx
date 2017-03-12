@@ -47,6 +47,12 @@ counterpart.registerTranslations('geo', {
             2: "გერმანური",
             3: "პოლინური"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",

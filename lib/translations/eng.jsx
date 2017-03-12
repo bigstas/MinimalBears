@@ -47,6 +47,28 @@ counterpart.registerTranslations('eng', {
             2: "German",
             3: "Polish"
         },
+        contrast: {
+            1: {
+                name: "ee/i",
+                examples: {
+                    0: "sheep/ship",
+                    1: "read/rid",
+                    2: "feast/fist"
+                }
+            },
+            3: {
+                name: "i/e",
+                example: "hill/hell",  /* "rid/red", "middle/meddle"] */
+            },
+            11: {
+                name: "l/r", 
+                example: "law/raw",  /* "late/rate", "light/right"] */
+            },
+            2: {
+                name: "s/th",
+                example: "mouse/mouth",  /* "sum/thumb", "sing/thing"] */
+            }
+        },
         progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",

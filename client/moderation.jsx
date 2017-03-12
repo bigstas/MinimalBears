@@ -1,10 +1,12 @@
 import React from 'react'
+import update from 'immutability-helper'
     
 ModerationPage = React.createClass({
     getInitialState() {
-        // TODO: change to props in future
+        // TODO: change words to props in future
         return {
-            words: ['words', 'stuff', 'more words']
+            words: ['words', 'stuff', 'more words'],    // words to moderate
+            radiobuttonStatus: [null, null, null]       // accepted - true; rejected - false; no decision - null
         }
     },
     
@@ -12,40 +14,18 @@ ModerationPage = React.createClass({
         alert("This doesn't do anything yet.")
     },
     
-    handleCheck(event, accept) {
-        /* When ticking a box, add that index to the array this.state.checked.
-         * When unticking a box, remove that index from the array this.state.checked.
-        
-        console.log(event.target.checked ? "Checkbox on" : "Checkbox off")
-        let id = event.target.id.substring(4)   // id of the checkbox
-        console.log(id)
-        id = parseInt(id) // turns to an int
-        
-        if (event.target.checked) {
-            this.setState((prevState) => ({
-                checked: prevState.checked.concat([id])
-            }))
-        }
-        else {
-            const index = this.state.checked.indexOf(id)
-            this.setState({
-                checked: this.state.checked.filter((_, i) => i !== index)
-            })
-        } */
-        let id = event.target.id.substring(6)
-        console.log(id)
-    },
-    
-    deleteAudio() {
-        const checklist = this.state.checked
+    handleCheck(index, accept) {
+        console.log(index.toString())
         this.setState({
-            words: this.state.words.filter((_, i) => checklist.indexOf(i) === -1 ),
-            checked: []
+            radiobuttonStatus: update(this.state.radiobuttonStatus, {[index]: {$set: accept }})
         })
     },
    
     confirmSelection() {
-        alert("lkjsdlfkjsdlfkj")
+        let message
+        if (this.state.radiobuttonStatus.indexOf(null) === -1) { message = "Here are the things you chose: " + this.state.radiobuttonStatus.toString() } 
+        else { message = "Please ensure you have made a decision about every word before submitting." }
+        alert(message)
     },
     
     loadMoreWords() {
@@ -61,8 +41,8 @@ ModerationPage = React.createClass({
                 {this.state.words.map((c, index) => (
                     <div key={c}>
                         <form action="">
-                            <input type="radio" id={"accept" + (2*index)  .toString()} name="decision" onChange={this.handleCheck} />
-                            <input type="radio" id={"reject" + (2*index+1).toString()} name="decision" onChange={this.handleCheck} />
+                            <input type="radio" id={"accept" + (2*index)  .toString()} name="decision" onChange={this.handleCheck.bind(this, index, true)} />
+                            <input type="radio" id={"reject" + (2*index+1).toString()} name="decision" onChange={this.handleCheck.bind(this, index, false)} />
                             <p style={{display: "inline"}}>{c}</p>
                             <button type='button' onClick={this.playAudio}>Play</button>
                         </form>

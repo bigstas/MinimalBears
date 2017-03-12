@@ -47,6 +47,12 @@ counterpart.registerTranslations('lit', {
             2: "Vokiečių",
             3: "Lenkų"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "Pradėti",
             playAgain: "Paklausyti dar kartą",

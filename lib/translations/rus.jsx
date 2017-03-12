@@ -47,6 +47,12 @@ counterpart.registerTranslations('rus', {
             2: "Немецкий",
             3: "Польский"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "Начинать",
             playAgain: "Послушать снова",

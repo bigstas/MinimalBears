@@ -47,6 +47,12 @@ counterpart.registerTranslations('far', {
             2: "آلمانی",
             3: "لخستانی"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "شروع کن",
             playAgain: "دوباره کوش کن",

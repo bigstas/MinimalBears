@@ -26,7 +26,7 @@ const Selector = React.createClass({
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
                         <Translate content={c.text} />
-                        <a className="selectorExample">{c.example}</a>
+                        {c.example ? <a className="selectorExample"><Translate content={c.example} /></a> : <span></span>}
                     </div>
                 )}
 
@@ -51,8 +51,8 @@ const LanguageSelector = React.createClass({
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
         
-        const exampleArray = [ "mouse/mouth", "aal/all", "ścieka/szczeka" ]	 // To be replaced...?
-        const options = this.props.data.allLanguages.nodes.map((c, index) => ({text:"train.language."+c.id.toString(), id:c.id, example:exampleArray[index]}))
+        //const exampleArray = [ "mouse/mouth", "aal/all", "ścieka/szczeka" ]	 // To be replaced...?
+        const options = this.props.data.allLanguages.nodes.map((c, index) => ({text:"train.language."+c.id.toString(), id:c.id, example:false}))
         
 		return (
 			<Selector
@@ -72,10 +72,25 @@ const ContrastSelector = React.createClass({
 	 * callback - function based on the contrast ID
 	 * extraCallback - function to return to choosing a language
 	 */
+    getInitialState() {
+        return { exampleCounter: 0 }
+    },
+    
+    switchExample() {
+        let newCounter = this.state.exampleCounter+1
+        if (newCounter > 2) { newCounter = 0 }
+        this.setState({ exampleCounter: newCounter })
+    },
+    
+    componentDidMount() {
+        // timed switch of example value
+        const startTimer = setInterval(this.switchExample, 1500)
+    },
+    
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
-        const exampleArray = [ "Will", "be", "ready", "soon" ]
-        const options = this.props.data.allContrastNonempties.nodes.map((c, index) => ({text:"train.contrast."+c.id.toString(), id:c.id, example:exampleArray[index]}))
+        //const exampleArray = [ "Will", "be", "ready", "soon" ]
+        const options = this.props.data.allContrastNonempties.nodes.map((c, index) => ({text:"train.contrast."+c.id.toString()+".name", id:c.id, example:"train.contrast."+c.id.toString()+".examples."+this.state.exampleCounter}))
         
 		return (
 			<Selector

@@ -43,6 +43,12 @@ counterpart.registerTranslations('deu', {
             2: "Deutsch",
             3: "Polnisch"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "GeBegin",
             playAgain: "Play Again",

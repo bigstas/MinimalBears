@@ -43,6 +43,12 @@ counterpart.registerTranslations('chm', {
             2: "德语",
             3: "波语"
         },
+        contrast: {
+            1: "ee/i",
+            3: "i/e",
+            11: "l/r", 
+            2: "s/th"
+        },
         progressLabel: {
             begin: "开始",
             playAgain: "再次听",
