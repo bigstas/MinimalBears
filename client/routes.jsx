@@ -16,8 +16,8 @@ import EditingPage from './audio/edit'
 import NotFound from './static/notfound'
 // For development / debugging purposes only - not for deployment!
 // This allows for easy viewing of the loading screen during development.
-//import LoadingPage from './aux/loading'
-//import Dummy from './aux/dummy'
+//import LoadingPage from './auxiliary/loading'
+//import Dummy from './auxiliary/dummy'
 
 
 export const renderRoutes = () => (
