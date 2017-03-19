@@ -4,13 +4,15 @@ import Peaks from '../../node_modules/peaks.js/peaks.js'
 
 const myAudioContext = new AudioContext()
 
-EditingPage = React.createClass({                       
+EditingPage = React.createClass({
+    getInitialState() { return ({ lies: "false" }) },
+    
     render() {
         return(
             <div className='panel' id='edit'>
                 <p>Hello world</p>
                 <div id='audioContainer' ref='audioContainer'>
-                    <audio ref={'mainAudio'} src={"bukk bukk.wav"} />
+                    <audio id={this.state.lies} ref={'mainAudio'} src={"bukk bukk.wav"} controls />
                 </div>
             </div>
         )
@@ -21,13 +23,16 @@ EditingPage = React.createClass({
             container: this.refs['audioContainer'],
             mediaElement: this.refs['mainAudio'],
             audioContext: myAudioContext,
-            keyboard: true
+            keyboard: true,
+            logger: console.error.bind(console)
         })
 
         p.on('segments.ready', function(){
             // do something when segments are ready to be displayed
             console.log("everything is ready")
         })
+        
+        this.setState({ lies: "true" })
     }
 })
 

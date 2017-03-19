@@ -7,6 +7,8 @@ For Beta:
     - About page needs to be sorted before we get the translations ready for that
     - need translations into various languages
 4. examples on selector buttons (mostly Staś)
+    - client-side mostly implemented
+    - TO DO: make the switching between examples happen according to the time of hover, not globally on the page
 5. some sort of interface for admins to approve audio (probably Staś and Guy)
     - Moderation page exists client side, need server-side connections to make work
 6. expansion into further languages (Staś and Guy)
@@ -45,5 +47,6 @@ For Beta:
 18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
 19. An interface for audio editing (Staś)
     - started Edit page using BBC's peaks.js
+    - email Thomas Parisot at irfs@bbc.co.uk (this is the project website)
     
 Do we have sheath vs sheaf?

@@ -22,6 +22,15 @@ li { float: left; }                 /* All list elements should keep to the left
 h4 { padding-left: 2%; }
 .bulletpoints { clear: left; } /* We want bullet points to stack one on top of the other. */
 
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
 /* ================================== */
 /* ====== general categories ======== */
 /* ================================== */
