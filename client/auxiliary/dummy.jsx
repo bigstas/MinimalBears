@@ -8,7 +8,7 @@ function sum(a,b) {
     
 // A dummy class for testing during development
 
-MyClass = React.createClass({
+const MyClass = React.createClass({
     
     doStuff() {
         const thing = {file: "1", speaker: "Guido", item: 16}
