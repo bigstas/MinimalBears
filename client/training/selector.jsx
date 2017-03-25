@@ -15,6 +15,8 @@ const Selector = React.createClass({
 	 * Optional props:
 	 * extraText - text to show on extra button
 	 * extraCallback - function for extra button (takes no arguments)
+     * mouseEnter - function when user rolls over buttons (starts timer for changing examples)
+     * mouseLeave - function when user moves mouse out of buttons (stops timer)
 	 *
 	 * Note that selectionMessage, options text, and extraText will be passed
 	 * as the content of Translate components 
@@ -24,7 +26,10 @@ const Selector = React.createClass({
             <div className='panel animated fadeIn' id='selector'>
                 <Translate content={this.props.selectionMessage} component="p" />
                 {this.props.options.map((c, index) =>
-                    <div className='button chooseOption' key={c.id} onClick={()=>this.props.callback(c.id)}>
+                    <div className='button chooseOption' key={c.id} 
+                        onMouseEnter={!!this.props.mouseEnter ? this.props.mouseEnter : null} 
+                        onMouseLeave={!!this.props.mouseLeave ? this.props.mouseLeave : null} 
+                        onClick={()=>this.props.callback(c.id)}>
                         <Translate content={c.text} />
                         <br/>
                         {c.example ? <a className="selectorExample"><Translate content={c.example} /></a> : <span></span>}
@@ -76,17 +81,25 @@ const ContrastSelector = React.createClass({
     getInitialState() {
         return { exampleCounter: 0 }
     },
-    
+
     switchExample() {
         let newCounter = this.state.exampleCounter+1
         if (newCounter > 2) { newCounter = 0 }
         this.setState({ exampleCounter: newCounter })
     },
-    
+        
+    handleMouseEnter() {
+        this.timerID = setInterval(this.switchExample, 1500)
+    },
+        
+    handleMouseLeave() {
+        clearInterval(this.timerID)
+    },
+    /*
     componentDidMount() {
         // timed switch of example value
         const startTimer = setInterval(this.switchExample, 2000)
-    },
+    },*/
     
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }
@@ -100,6 +113,7 @@ const ContrastSelector = React.createClass({
 				callback={this.props.callback}
 				extraText='train.changeLanguage'
 				extraCallback={this.props.extraCallback}
+                mouseEnter={this.handleMouseEnter} mouseLeave={this.handleMouseLeave}
 			/>
 		)
 	}

@@ -2,13 +2,15 @@ For Beta:
 1. authentication / user accounts (mostly Guy)
 2. finalised text on About page (Staś and Guy)
     - second draft to be reviewed
+    - get links to link to PDFs rather than websites - this is surprisingly hard and poorly documented with React Router
 3. internationalisation (mostly Staś)
     - mostly done structurally
     - About page needs to be sorted before we get the translations ready for that
     - need translations into various languages
 4. examples on selector buttons (mostly Staś)
     - client-side mostly implemented
-    - TO DO: make the switching between examples happen according to the time of hover, not globally on the page
+    - make the switching between examples happen according to the time of hover, not globally on the page -- DONE
+    - TODO: server-side bringing up the examples to feed to the buttons (once we've done that then we're done on this point)
 5. some sort of interface for admins to approve audio (probably Staś and Guy)
     - Moderation page exists client side, need server-side connections to make work
 6. expansion into further languages (Staś and Guy)
@@ -31,11 +33,8 @@ For Beta:
 11. new/better sounds for feedback (Gergő)
 12. improvement in user experience on Arena page (mostly Gergő)
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
-    - started using Jest in dummy.test.js, fails with the following error when running in command line:
-    >>> npm test  (that's the command)
-    >>> ...[a bunch of error stuff]
-    >>> SyntaxError: Unexpected token import
-    It doesn't like the import statement. Having trouble getting around this.
+    - Jest is online with dummy.test.js
+    - need to put in testing code for other files
 14. use of more efficient and better-scaling db calls (Guy)
 15. profile with user data, like statistics (mostly Staś)
     - started charts on profile page
@@ -47,6 +46,6 @@ For Beta:
 18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
 19. An interface for audio editing (Staś)
     - started Edit page using BBC's peaks.js
-    - email Thomas Parisot at irfs@bbc.co.uk (this is the project website)
+    - email Thomas Parisot at irfs@bbc.co.uk (this is the project website) -- SENT, waiting for reply
     
 Do we have sheath vs sheaf?
