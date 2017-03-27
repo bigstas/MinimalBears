@@ -8,7 +8,7 @@ function validateEmail(email) {
     return re.test(email)
 }
 
-AuthSignInPage = React.createClass({
+const AuthSignInPage = React.createClass({
     getInitialState() {
         return {
             emailValue: "type your email address here",

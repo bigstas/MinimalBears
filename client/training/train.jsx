@@ -3,7 +3,7 @@ import Arena from './arena'
 import { ConnectedLanguageSelector, ConnectedContrastSelector } from './selector'
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
-TrainPage = React.createClass({
+const TrainPage = React.createClass({
     getInitialState() {
         return { activeContrastId: null }
     },

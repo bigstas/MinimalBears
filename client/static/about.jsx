@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'
     
-About = React.createClass({
+const About = React.createClass({
     render() {
         const opts = {
             position: 'absolute',

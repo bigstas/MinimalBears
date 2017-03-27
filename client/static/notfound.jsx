@@ -1,7 +1,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
     
-NotFound = React.createClass({
+const NotFound = React.createClass({
     render() {
         return(
             <div className='panel'>

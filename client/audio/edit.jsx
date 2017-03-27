@@ -4,7 +4,7 @@ import Peaks from '../../node_modules/peaks.js/peaks.js'
 
 const myAudioContext = new AudioContext()
 
-EditingPage = React.createClass({
+const EditingPage = React.createClass({
     getInitialState() { return ({ lies: "false" }) },
     
     render() {

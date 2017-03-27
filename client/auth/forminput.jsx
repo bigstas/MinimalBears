@@ -1,6 +1,6 @@
 import React from 'react';
 
-AuthFormInput = React.createClass({
+const AuthFormInput = React.createClass({
     /*
      * PropTypes validation functions are deprecated, but this may be a useful list of props, as I don't see it elsewhere.
     propTypes: {

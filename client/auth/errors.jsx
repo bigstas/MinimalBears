@@ -1,7 +1,7 @@
 import React from 'react';
 
 // The component which tells you what errors have cropped up
-AuthErrors = React.createClass({
+const AuthErrors = React.createClass({
     render() {
         // it only renders if there are errors
         // what it renders is a sequence of one or more divs which contain error messages (no. divs === no. errors) using .map

@@ -53,7 +53,7 @@ const AudioContext = window.AudioContext || window.webkitAudioContext
 const URL = window.URL || window.webkitURL
 
 
-StartButton = React.createClass({
+const StartButton = React.createClass({
     /* The main button.
      * Press to start recording and go through all of the words. This puts the page in record mode.
      * Press while recording to move on to the next word.
@@ -116,7 +116,7 @@ StartButton = React.createClass({
     }
 })
 
-StopButton = React.createClass({
+const StopButton = React.createClass({
     /* Press this button to stop the recording at the current word.
      * Currently configured so that the current word's recording *will* be saved, and focus will move on to the next word.
      * Available in record mode. Sends page to wait mode or done mode (depending on whether everything has been recorded or not).
@@ -152,7 +152,7 @@ StopButton = React.createClass({
     }
 })
 
-PlayAllButton = React.createClass({
+const PlayAllButton = React.createClass({
     /* Press this button to play back all the audio.
      * Available in done mode (i.e. when all the words have been recorded).
      * props: recordedSoFar, mode, playAllFunction
@@ -178,7 +178,7 @@ PlayAllButton = React.createClass({
     }
 })
 
-SubmitButton = React.createClass({
+const SubmitButton = React.createClass({
     /* Press this button to submit the audio to the database. 
      * Enabled when in done mode (i.e. when all the words have been recorded).
      * props: mode, submitAudio
@@ -201,7 +201,7 @@ SubmitButton = React.createClass({
     }
 })
 
-TopRow = React.createClass({
+const TopRow = React.createClass({
     /* The top row of buttons.
      * Includes: start, stop, play all, submit.
      * props: mode, callback, next, max, playbackAll, recordedSoFar, submitAudio
@@ -218,7 +218,7 @@ TopRow = React.createClass({
     }
 })
 
-ReRecord = React.createClass({
+const ReRecord = React.createClass({
     /* Button for re-recording a single word.
      * Available when there is no recording going on at the moment (wait mode or done mode) and this word has alreay been recorded (this.props.srcExists === true);
      * or if the word in question is being re-recorded (active === true), in which case you press this button to stop the re-recording.
@@ -272,7 +272,7 @@ ReRecord = React.createClass({
     }
 })
 
-PlaybackOne = React.createClass({
+const PlaybackOne = React.createClass({
     /* Button for playing back a single word. Can only use this if there is audio available for this index (this.props.srcExists === true).
      * props: srcExists, mode, index
      */
@@ -294,7 +294,7 @@ PlaybackOne = React.createClass({
     }
 })
 
-WordRow = React.createClass({
+const WordRow = React.createClass({
     /* A row below the top row. There is the same number of these as there are words to record.
      * Includes: re-record, playback, word. All inside a div that lights up on rollover, or when focused.
      * props: focused, index, mode, next, srcExists, callback, playbackFunction, word
@@ -313,7 +313,7 @@ WordRow = React.createClass({
 })
 
 
-RecordPage = React.createClass({
+const RecordPage = React.createClass({
     /* A React element for the entire page body (below the Nav).
      * props: recordingWords, submitAudio
      */
@@ -507,7 +507,7 @@ next: ${next}`)
 })
 
 
-WrappedRecordPage = React.createClass({
+const WrappedRecordPage = React.createClass({
     render() {
         console.log(this.props.items)
         if (this.props.items.loading) { return <LoadingPage /> }

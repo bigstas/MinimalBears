@@ -1,7 +1,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'  
     
-LoadingPage = React.createClass({                       
+const LoadingPage = React.createClass({                       
     render() {
         return(
             <div className='panel' id='loading'>

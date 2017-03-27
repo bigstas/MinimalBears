@@ -8,7 +8,7 @@ import { Line, Bar, Radar } from 'react-chartjs' // Charts
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 
-AlphaProfile = React.createClass({
+const AlphaProfile = React.createClass({
     render() {
         return(
             <div className='panel animated fadeIn' id='alphaProfile'>
@@ -21,7 +21,7 @@ AlphaProfile = React.createClass({
 })
     
 // when there is no logged in user
-EmptyProfile = React.createClass({
+const EmptyProfile = React.createClass({
     render() {
         return (
             <div className='panel animated fadeIn' id='emptyProfile'>
@@ -37,7 +37,7 @@ EmptyProfile = React.createClass({
 })
 
 // when there is a logged in user
-UserProfile = React.createClass({
+const UserProfile = React.createClass({
     render() {
         const lineChartData = {
             labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -149,7 +149,7 @@ UserProfile = React.createClass({
     }
 })
 
-Profile = React.createClass({
+const Profile = React.createClass({
     render() {
         return(
             <div>

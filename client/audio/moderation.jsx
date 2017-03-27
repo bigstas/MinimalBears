@@ -1,7 +1,7 @@
 import React from 'react'
 import update from 'immutability-helper'
     
-ModerationPage = React.createClass({
+const ModerationPage = React.createClass({
     getInitialState() {
         // TODO: change words to props in future
         return {

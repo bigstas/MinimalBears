@@ -1,6 +1,8 @@
 import React from 'react'
+
+import Nav from './auxiliary/nav'
     
-AppBody = React.createClass({    
+const AppBody = React.createClass({    
     getInitialState() {
         // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
         return {

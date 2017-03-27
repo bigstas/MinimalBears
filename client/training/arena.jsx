@@ -18,7 +18,7 @@ function random(myArray) {
 }
 
 // Progress bar
-var ProgressBar = React.createClass({
+const ProgressBar = React.createClass({
     render() {
         return (
             <div id="progressBar">
@@ -29,7 +29,7 @@ var ProgressBar = React.createClass({
 })
 
 // Progress button
-var ProgressButton = React.createClass({
+const ProgressButton = React.createClass({
     
     render() {
         // Uses CSS animate.css library. Syntax is:
@@ -47,7 +47,7 @@ var ProgressButton = React.createClass({
 })
 
 // Button for responding to a recording
-var WordOption = React.createClass({ 
+const WordOption = React.createClass({ 
     handleClick() {
         if (this.props.mode === "ask") {
             this.props.callbackParent() // you only want things to happen in 'ask' mode, as outside of that mode these buttons shouldn't do anything
@@ -98,7 +98,7 @@ var WordOption = React.createClass({
 })
 
 // The arena - where the action happens  
-Arena = React.createClass({
+const Arena = React.createClass({
     getInitialState() {
         return {
             counter: 0,

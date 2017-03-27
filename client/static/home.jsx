@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import Translate from 'react-translate-component'
     
 
-UserHome = React.createClass({
+const UserHome = React.createClass({
     render() {
         return (
             <div className='panel animated fadeIn' id='userHome'>
@@ -20,7 +20,7 @@ UserHome = React.createClass({
     }
 })
     
-GuestHome = React.createClass({    
+const GuestHome = React.createClass({    
     render() {
         return (
             <div className='panel animated fadeIn' id='guestHome'>
@@ -36,7 +36,7 @@ GuestHome = React.createClass({
     }
 })
 
-Home = React.createClass({
+const Home = React.createClass({
     render() {
         return ( !!this.props.user ? <UserHome username={this.props.user} /> : <GuestHome /> )
     }

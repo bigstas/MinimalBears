@@ -6,7 +6,7 @@ import { Link, IndexLink } from 'react-router'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
-Dropdown = React.createClass({
+const Dropdown = React.createClass({
     handleClick (newLocale) {
         counterpart.setLocale(newLocale)
     },
@@ -32,7 +32,7 @@ Dropdown = React.createClass({
     }
 })
 
-Nav = React.createClass({
+const Nav = React.createClass({
     getInitialState () {
         return {
             dropdown: false
@@ -78,3 +78,5 @@ Nav = React.createClass({
         )
     }
 })
+
+export default Nav
