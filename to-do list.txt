@@ -39,11 +39,11 @@ For Beta:
 15. profile with user data, like statistics (mostly Staś)
     - started charts on profile page
     - will need to arrange for data about users' activity to be logged in the db for this to be useful
-16. clean up all the warnings appearing when the app runs (Staś with Guy's help)
+16. clean up all the warnings appearing when the app runs (Staś with Guy's help) -- DONE as these no longer appear
 17. different pages depending on whether the user is logged in or not (Staś)
     - home page - changes started
     - record page - should only be accessible to logged-in users
-18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
+18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy) -- DONE it appears on Google search
 19. An interface for audio editing (Staś)
     - started Edit page using BBC's peaks.js
     - email Thomas Parisot at irfs@bbc.co.uk (this is the project website) -- SENT, waiting for reply
