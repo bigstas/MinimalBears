@@ -28,3 +28,18 @@ Picker.route('/audio/:_id', function(params, req, res, next) {
     
     // (TODO: we might want to handle errors in the request...?)
 })
+
+
+// Picker for PDF files -- documentation same as above. There is only one difference - 'articles' instead of 'audio' in two places.
+Picker.route('/articles/:_id', function(params, req, res, next) {
+    const filepath = path.join(process.cwd(), '../../../articles', path.basename(params._id))
+    
+    fs.readFile(filepath, function(err, data) {
+        if (err) {
+            console.log(err.message)
+            res.end(err.message)
+        } else {
+            res.end(data, null)
+        }
+    })
+})
