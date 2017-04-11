@@ -46,6 +46,16 @@ const ProgressButton = React.createClass({
     }
 })
 
+const NextButton = React.createClass({
+    render() {
+        let btnClass = 'button'
+        /* if (!this.props.enabled) { btnClass += ' transparent' } */
+        return (
+            <div id='nextButton' className={btnClass} onClick={this.props.handleClick}>Next</div>
+        )
+    }
+})
+
 // Button for responding to a recording
 const WordOption = React.createClass({ 
     handleClick() {
@@ -135,9 +145,9 @@ const Arena = React.createClass({
         }
     },
     
-    handleProgressClick() {
-        /* This method is what happens when the user presses the central "progress" button.
-         * It either moves on to a new pair and plays a new sound; or it replays the current sound; or it starts from the beginning, depending on the current state.
+    handleNextClick() {
+        /* This method is what happens when the user presses the central "next" button.
+         * It moves on to a new pair and plays a new sound, or it starts from the beginning, depending on the current state.
          */
         // In "feedback" and "wait" mode, pressing the button should load a new pair and play a new sound
         if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "done") {
@@ -147,6 +157,7 @@ const Arena = React.createClass({
                  * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
                  * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
                  */
+                console.log("hello world")
                 const correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
                 const correctProperty = correctAnswer ? "second" : "first"
                 // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
@@ -177,13 +188,18 @@ const Arena = React.createClass({
                 }
             }
         }
-        else if (this.state.mode === "ask") {
+    },
+                                
+    handleReplayClick() {
+        /* This replays the current sound.
+         */
+        if (this.state.mode === "")
+        if (this.state.mode === "ask") {
             // replay the current sound
             let snd = new Audio (this.state.currentAudio)
             snd.play()
-        }
-        else {
-            // throw some sort of error...?
+        } else {
+            // ... nothing happens ...
         }
     },
     
@@ -205,7 +221,7 @@ const Arena = React.createClass({
                 
                 <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
 
-                <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
+                <ProgressButton  mode={this.state.mode} handle={this.handleReplayClick} />
                           
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
@@ -222,6 +238,7 @@ const Arena = React.createClass({
                         <div>{/*empty div*/}</div>
                     }
                 </div>
+                <NextButton handleClick={this.handleNextClick} enabled={this.state.mode==="feedback" || this.state.mode==="wait"} />
             </div> 
         )
     }, 

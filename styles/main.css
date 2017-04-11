@@ -120,8 +120,13 @@ audio:not([controls]) {
   background-color: #FFC32E;
 }
 
-
 #progressButton:hover { background-color: antiquewhite; }
+
+#nextButton {
+    background-color: cornflowerblue;
+    color: aliceblue;
+    border-radius: 100%;
+}
 
 /* Buttons on the Home page. */
 .homebtn { 
