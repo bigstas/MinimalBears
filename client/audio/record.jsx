@@ -9,6 +9,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
+import Tour from 'react-user-tour'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -103,7 +104,7 @@ const StartButton = React.createClass({
         const focus = next
         return (
             <div>
-                <div className={className}
+                <div className={className} id='startButton'
                     data-tip data-for='startTooltip' data-delay-show='500'
                     onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next, clearAll )}>
                         <Translate content={label} />
@@ -141,7 +142,7 @@ const StopButton = React.createClass({
         
         return (
             <div>
-                <div className={className} data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className} id="stopButton" data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
                 </div>
                 <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
@@ -320,6 +321,8 @@ const RecordPage = React.createClass({
     
     getInitialState () {
         return {
+            isTourActive: true,     // tutorial active or not
+            tourStep: 1,            // which step of the tutorial are we on
             audioURLs: [],  // List of the recorded audio (as object URLs)
             audioBlobs: [],  // List of the recorded audio (as blobs)
             mode: "wait",   // wait, record, done, reRecordSingleToWait, reRecordSingleToDone, playback, playbackAll
@@ -449,6 +452,29 @@ next: ${next}`)
     render() {
         return (
             <div className='panel animated fadeIn' id='record'>
+                <Tour 
+                    active={this.state.isTourActive}
+                    step={this.state.tourStep}
+                    onNext={(step) => this.setState({tourStep: step})}
+                    onBack={(step) => this.setState({tourStep: step})}
+                    onCancel={() => this.setState({isTourActive: false})}
+                    steps={[
+                        {
+                            step: 1,
+                            selector: '#startButton',
+                            position: 'bottom',
+                            title: <div style={{color: "blue"}}>The Start Button</div>,
+                            body: <div>You click here to start recording.</div>
+                        },
+                        {
+                            step: 2,
+                            selector: '#stopButton',
+                            position: 'right',
+                            title: <div style={{color: "red"}}>The Stop Button</div>,
+                            body: <div>You click here to stop recording.</div>
+                        }
+                    ]}
+                />
                 <TopRow next={this.state.next} 
                         max={this.props.recordingWords.length -1} 
                         mode={this.state.mode} 
