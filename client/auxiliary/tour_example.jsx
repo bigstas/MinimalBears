@@ -1,43 +1,52 @@
 import React, { Component } from 'react'
-import Tour from 'react-user-tour'
+import Tour from 'react-tourist'
     
-export default class UserTour extends Component {
-	constructor() {
-		super()
-		this.state = {
-			isTourActive: true,
-			tourStep: 1
-		}
-	}
+
+const Demo = React.createClass({
+    getInitialState() {
+        return {
+            completed: false
+        }
+    },
     
-	render() {
-		return (
-			<div>
-				<Tour
-					active={this.state.isTourActive}
-					step={this.state.tourStep}
-					onNext={(step) => this.setState({tourStep: step})}
-					onBack={(step) => this.setState({tourStep: step})}
-					onCancel={() => this.setState({isTourActive: false})}
-					steps={[
-						{
-							step: 1,
-							selector: ".my-fun-website",
-                            position: "bottom",
-							title: <div style={{color: "blue"}}>My Web</div>,
-							body: <div style={{color: "green"}}>Site</div>
-						},
-						{
-							step: 2,
-							selector: ".my-website-is-amazing",
-							title: <div style={{color: "blue"}}>Wow</div>,
-							body: <div style={{color: "yellow"}}>so good</div>
-						}
-					]}
-				/>
-                <div className="my-fun-website">My Fun Website</div>
-                <div style={{width: '100px'}} className="my-website-is-amazing">My Website Is Amazing</div>
-			</div>
-		)
-	}
-}
+    startTour() {
+        this.myTour.reset()
+        this.myTour.start({cb: this.setComplete.bind(this, true)})
+        this.setComplete(false)
+    },
+    
+    setComplete (complete){
+        this.setState({completed: complete})
+    },
+    
+    render() {
+        const style = {}
+        if (this.state.completed){
+            style.background = '#3498db';
+        }
+
+        return (
+            <div>
+                <div className='header' style={style}>
+                    <h3>Using React Tourist</h3>
+                    <p>This example page contains a simple article to guide you with using the library. The example tour uses elements in the article.</p>
+                    <button onClick={this.startTour}>
+                        {this.state.completed ? 'Restart Tour' : 'Start Tour'}
+                    </button>
+                    <p ref='step1'>This is the first step</p>
+                </div>
+                { this.props.children }
+            </div>
+        )
+    },
+    
+    componentDidMount() {
+        const tourItems = [
+            { component: 'ExampleDiv1', ref: 'header', content: 'Hello World!' },
+            { component: 'ExampleDiv2', ref: 'footer', content: 'Bye World!' }
+        ]
+        this.myTour = new Tour(tourItems)
+    }
+})
+
+export default Demo
