@@ -19,3 +19,6 @@ public/Thumbs.db
 
 # Security
 server/jwt_secret.jsx
+
+# articles for About page
+lib/articles
