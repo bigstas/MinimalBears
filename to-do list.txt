@@ -14,6 +14,7 @@ For Beta:
 5. some sort of interface for admins to approve audio (probably Staś and Guy)
     - Moderation page exists client side, need server-side connections to make work
 6. expansion into further languages (Staś and Guy)
+    - add options for moderators on moderation page
 7. any further styling - esp. Record page and authentication pages (mostly Gergő)
 8. any images to be added (Gergő)
     - a logo
