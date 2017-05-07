@@ -1,5 +1,6 @@
 import React from 'react'
 import Translate from 'react-translate-component'
+import WrappedRecordPage from './record'
 
 const RecordTutorial = React.createClass({
     getInitialState() {
@@ -40,6 +41,7 @@ const RecordTutorial = React.createClass({
         ]
         const stage = tutorialContent[this.state.tutorialStage]
         const imageName = "tutorial" + this.state.tutorialStage.toString() + ".png"
+        const nextButton = this.state.tutorialStage >= tutorialContent.length -1 ? <div className="button" onClick={this.props.finishedWatching}>Great!</div> : <div className="button" onClick={this.changeStage.bind(this, "next")}>Next</div> 
         
         if (this.state.tutorialStage >= tutorialContent.length) {
             // This should now move you from the tutorial to the ordinary record page
@@ -49,14 +51,17 @@ const RecordTutorial = React.createClass({
         return (
             <div className='tutorialPanel'>
                 <div className='tutorialText'>
-                    <h1>{stage.heading}</h1>
+                    <div className='headerLine'>
+                        <h1 style={{display: 'inline-block'}}>{stage.heading}</h1>
+                        <p style={{float:'right'}}>{(this.state.tutorialStage+1).toString()}/{tutorialContent.length.toString()}</p>
+                    </div>
                     <img src={imageName} />
                     <p>{stage.p1}</p>
                     <p>{stage.p2}</p>
                 </div>
                 {/* Only allow "previous" button after stage 1 */}
                 {this.state.tutorialStage > 0 ? <div className="button" onClick={this.changeStage.bind(this, "previous")}>Previous</div> : <span></span>}
-                <div className="button" onClick={this.changeStage.bind(this, "next")}>{this.state.tutorialStage >= tutorialContent.length -1 ? "Great!" : "Next"}</div>
+                {nextButton}
             </div>
         )
     },
@@ -72,4 +77,20 @@ const RecordTutorial = React.createClass({
     }
 })
 
-export default RecordTutorial
+// Decide which thing to render
+const Result = React.createClass({
+    getInitialState() {
+        return { watched: false } // TODO: We want to have this based on whether a user has seen the tutorial before
+    },
+    
+    finishedWatching() {
+        this.setState({ watched: true })
+    },
+    
+    render() {
+        if (this.state.watched) { return <WrappedRecordPage /> }
+        else { return <RecordTutorial finishedWatching={this.finishedWatching} /> }
+    }
+})
+
+export default Result

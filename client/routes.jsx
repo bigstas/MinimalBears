@@ -6,7 +6,7 @@ import AppBody from './app'
 import Home from './static/home'
 import AuthJoinPage from './auth/joinpage'
 import AuthSignInPage from './auth/loginpage'
-import RecordPage from './audio/record'
+import RecordPage from './audio/recordtutorial'
 import TrainPage from './training/train' // takes place of arena
 //import ProfileContainer from './profile'
 import Profile from './auth/profile'
