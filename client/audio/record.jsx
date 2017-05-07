@@ -104,7 +104,7 @@ const StartButton = React.createClass({
         return (
             <div>
                 <div className={className}
-                    data-tip data-for='startTooltip' data-delay-show='500'
+                    data-tip data-for='startTooltip' data-delay-show='1000'
                     onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next, clearAll )}>
                         <Translate content={label} />
                 </div>
@@ -354,7 +354,7 @@ const RecordPage = React.createClass({
         /* Function passed to exportWav (above)
          * Create a URL for the blob, and put it in this.state.audioURLs[index]
          */
-        url = URL.createObjectURL(blob)
+        const url = URL.createObjectURL(blob)
         console.log('new url:')
         console.log(url)
         this.setState({

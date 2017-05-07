@@ -8,13 +8,12 @@ html, #content, #app-container {
 }
     
 body {
-    background-image:url("/hatter2.png") /*bgcolor="E4E4E4"*/;  
+    background: url("/hatter2.png") /*bgcolor="E4E4E4"*/;  
     margin: 0 0 0;
     background-attachment: fixed;
     background-position:center;
     height: 100%;
 }
-
 
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
@@ -22,14 +21,6 @@ li { float: left; }                 /* All list elements should keep to the left
 h4 { padding-left: 2%; }
 .bulletpoints { clear: left; } /* We want bullet points to stack one on top of the other. */
 
-/**
- * Prevent modern browsers from displaying `audio` without controls.
- * Remove excess height in iOS 5 devices.
- */
-audio:not([controls]) {
-  display: none;
-  height: 0;
-}
 
 /* ================================== */
 /* ====== general categories ======== */
@@ -52,6 +43,12 @@ audio:not([controls]) {
     padding: 3%;
     opacity: 90%;
 }
+.tutorialPanel {
+    background-color: white;
+    margin: 3% 10% 20px 10%; /* top right bottom left */
+    padding: 1px 20px 5px 20px;
+    height: 75%;
+}
 #guestHome, #userHome { text-align: center; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
@@ -65,6 +62,7 @@ audio:not([controls]) {
     margin: auto;
     display: block;
 }
+
 
 /* ================================= */
 /* =========== buttons ============= */
