@@ -354,7 +354,7 @@ const RecordPage = React.createClass({
         /* Function passed to exportWav (above)
          * Create a URL for the blob, and put it in this.state.audioURLs[index]
          */
-        url = URL.createObjectURL(blob)
+        const url = URL.createObjectURL(blob)
         console.log('new url:')
         console.log(url)
         this.setState({
