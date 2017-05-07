@@ -8,9 +8,13 @@ const RecordTutorial = React.createClass({
         }
     },
     
-    handleNextClick() {
+    changeStage(direction) {
+        let toAdd
+        if (direction === "next") {toAdd = 1}
+        else if (direction === "previous") {toAdd = -1}
+        else { console.log("Improper argument: changeStage has been given an argument other than 'next' or 'previous'.")}
         this.setState({
-            tutorialStage: this.state.tutorialStage +1
+            tutorialStage: this.state.tutorialStage + toAdd
         })
     },
     
@@ -34,7 +38,8 @@ const RecordTutorial = React.createClass({
                 p2: "Thanks so much for contributing to our accent training adventure!"
             }
         ]
-        let stage = tutorialContent[this.state.tutorialStage]
+        const stage = tutorialContent[this.state.tutorialStage]
+        const imageName = "tutorial" + this.state.tutorialStage.toString() + ".png"
         
         if (this.state.tutorialStage >= tutorialContent.length) {
             // This should now move you from the tutorial to the ordinary record page
@@ -45,10 +50,13 @@ const RecordTutorial = React.createClass({
             <div className='tutorialPanel'>
                 <div className='tutorialText'>
                     <h1>{stage.heading}</h1>
+                    <img src={imageName} />
                     <p>{stage.p1}</p>
                     <p>{stage.p2}</p>
                 </div>
-                <div className="button cornerbutton" onClick={this.handleNextClick}>Next</div>
+                {/* Only allow "previous" button after stage 1 */}
+                {this.state.tutorialStage > 0 ? <div className="button" onClick={this.changeStage.bind(this, "previous")}>Previous</div> : <span></span>}
+                <div className="button" onClick={this.changeStage.bind(this, "next")}>{this.state.tutorialStage >= tutorialContent.length -1 ? "Great!" : "Next"}</div>
             </div>
         )
     },
