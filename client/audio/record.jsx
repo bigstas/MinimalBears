@@ -8,6 +8,7 @@ import ReactTooltip from 'react-tooltip'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
+import RecordTutorial from './recordtutorial'
 import Translate from 'react-translate-component'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
@@ -523,6 +524,8 @@ const WrappedRecordPage = React.createClass({
         })
         console.log(firstNodes)
         
+        // For the moment - in future this will depend on whether it's the user's first time or not
+        if (true) { return <RecordTutorial /> }
         return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
     }
 })
