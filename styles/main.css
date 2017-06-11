@@ -32,7 +32,7 @@ h4 { padding-left: 2%; }
     float: left;
     z-index: -1;
     overflow: auto;
-    background-color: white;
+    background-color:#EAE5E1;
     border-radius: 8px;
     margin-left: 19%;
     margin-right: 19%;
@@ -365,13 +365,11 @@ nav ul li a, nav ul li p {
 #record * {margin-left: 1px;}
 
 #record {
-    background-image:url("recordPage.png");
     background-position:center;
     background-repeat: no-repeat;
     background-size:cover;
     opacity: 0.8;
-    padding:5%;
-    background-color: #C4BA99;
+    padding:5%;    
 }
 
 /* The top row's buttons start from the left and go rightwards. */
