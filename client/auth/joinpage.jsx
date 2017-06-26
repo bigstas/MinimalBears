@@ -1,5 +1,7 @@
 import { Navigation, Link } from 'react-router'
 import React from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
@@ -41,7 +43,22 @@ const AuthJoinPage = React.createClass({
             passwordError: errors.passwordClash
         })
         if (!errors.passwordClash && !errors.emailFail) {
-            alert('A name was submitted: ' + this.state.emailValue + " - and this too - " + this.state.passwordValue + " - but also this - " + this.state.confirmPassword)
+            // Connect to the server to create a new account
+            this.props.signup({variables: {input: {email: this.state.emailValue, password: this.state.passwordValue}}}).then((response) => {
+                const newUserId = response.data.signup.integer
+                console.log(newUserId)
+                // TODO log in and change page
+                alert('New user created with id ' + newUserId)
+            }).catch((error) => {
+                // TODO translate these messages
+                if (error.networkError) {
+                    alert('We cannot connect to the server! Sadbearface.')
+                } else {
+                    // Apart from network errors, the only error we would expect is a duplicate email address
+                    alert('Have you already registered this email address? Please log in!')  // TODO add link
+                    // The human-readable Postgres error message will be under error.graphQLErrors[0].message
+                }
+            })
         }
     },
     
@@ -69,7 +86,7 @@ const AuthJoinPage = React.createClass({
                     </div>
 
                     <Link to="login" >
-                        Have an account? Sign in.
+                        Have an account? Log in.
                     </Link>
                 </div>
             </div>
@@ -77,5 +94,15 @@ const AuthJoinPage = React.createClass({
     }
 })
 
+const signup = gql`mutation ($input: SignupInput!) {
+    signup(input:$input) {
+        integer
+    }
+}` // "integer" is the id of the new row
 
-export default AuthJoinPage
+// Variables must be defined when the function is called
+const signupConfig = {
+    name: 'signup'
+}
+
+export default graphql(signup, signupConfig)(AuthJoinPage)
