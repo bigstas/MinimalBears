@@ -14,11 +14,11 @@ WebApp.connectHandlers.use(//'/graphql',
         graphqlRoute: '/graphql',
         graphiqlRoute: '/graphiql',
         bodySizeLimit: '5MB',
-        //jwtSecret: secret,  // This will be used to verify tokens in the Authorization header, and signing JWT tokens you return in procedures.
-        //jwtPgTypeIdentifier: 'jwt_token',  // Postgres type identifier for the compound type which will be signed as a JWT token if ever found as the return type of a procedure. Can be of the form: my_schema.my_type. You may use quotes as needed: "my-special-schema".my_type.
-        //pgDefaultRole: 'guest',  // If no role was provided in a provided JWT token, this role will be used
+        jwtSecret: secret,  // This will be used to verify tokens in the Authorization header, and signing JWT tokens you return in procedures.
+        jwtPgTypeIdentifier: 'public.json_web_token',  // Postgres type identifier for the compound type which will be signed as a JWT token if ever found as the return type of a procedure. Can be of the form: my_schema.my_type. You may use quotes as needed: "my-special-schema".my_type.
+        pgDefaultRole: 'guest',  // If no role was provided in a provided JWT token, this role will be used
         //dynamicJson: true,  // Setting this to true enables dynamic JSON which will allow you to use any JSON as input and get any arbitrary JSON as output. By default JSON types are just a JSON string
-        //disableDefaultMutations: true,
+        disableDefaultMutations: true,
         //disableQueryLog: true
     })
 )

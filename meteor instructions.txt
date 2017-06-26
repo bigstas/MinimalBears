@@ -19,22 +19,17 @@ On Windows (PowerShell): .\run-app.ps1
 On Unix: ./run-app.sh
 
 
-DEPLOYMENT TO GANDI INSTRUCTIONS
+FIRST-TIME DEPLOYMENT TO GANDI INSTRUCTIONS
 (See also docs at https://wiki.gandi.net/en/simple/git)
-0. create local directory for git (if not done so): $ mkdir GandiBuild
-1. go to that directory: $ cd GandiBuild
-2. initialise git (if directory just created): $ git init
-3. connect this directory to the remote directory (if not yet done so): $ git remote add origin ssh+git://1075702@git.dc2.gpaas.net/default.git
-4. pull the remote branch: $ git pull origin master
-5. add files to current commit (-A is "all") $ git add -A
-6. commit: $ git commit -m "Version 0.0.2" (this is the text about what you just did / are committing)
-7. push: $ git push origin master
-8. deploy: $ ssh 639050@git.dc2.gpaas.net 'deploy default.git'
+1. create local directory: $ mkdir GandiBuild
+2. initialise git: $ git init
+3. connect this directory to the remote directory: $ git remote add origin ssh+git://1075702@git.dc2.gpaas.net/default.git
 [On Windows, install ssh: https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH]
 
 
 BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 0. GandiBuild $ git pull origin master
+0b. delete bundle
     $ cd ../MinimalBears
 1. MinimalBears $ meteor build ../GandiBuild/ --directory --architecture os.linux.x86_64
     $ cd ../GandiBuild
@@ -45,8 +40,10 @@ BUILD IT, ADD IT, COMMIT IT, PUSH IT (... deploy it)
 3b. to check that things are added, run $ git status
 4. $ git commit -m "<your message here for future reference>"
 5. $ git push origin master
-6. $ ssh 1075702@git.dc2.gpaas.net 'deploy default.git'
-7. $ ssh 1075702@git.dc2.gpaas.net 'clean default.git'
+6. $ ssh 1075702@git.dc2.gpaas.net 'clean default.git'
+   (If this doesn't work, delete node_modules and bundle on the server)
+   (under /srv/data/web/vhosts/default)
+7. $ ssh 1075702@git.dc2.gpaas.net 'deploy default.git <branch>' (branch optional)
 
 
 NPM INSTRUCTIONS
