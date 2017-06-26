@@ -1,5 +1,7 @@
 For Beta:
 1. authentication / user accounts (mostly Guy)
+    - rationalise behaviour: Make the appropriate options available or unavailable according to whether somebody is logged in or not (e.g. log in / register / record page availabilities)
+    - are the home page and the username button going to point to the same page? Currently they don't. There is an argument for making them both point either to the home page or to a single profile-and-stats page, depending on whether the user is logged in or not.
 2. finalised text on About page (Staś and Guy)
     - second draft to be reviewed
     - get links to link to PDFs rather than websites - this is surprisingly hard and poorly documented with React Router

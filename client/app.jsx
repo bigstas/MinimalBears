@@ -17,7 +17,7 @@ const AppBody = React.createClass({
             activeLanguageId: langId
         })
     },
-    
+    // TO DO: The props below are old, some (most? all?) not necessary. Revise.
     render() {
         return (
             <div id="app-container" >

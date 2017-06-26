@@ -10,13 +10,29 @@ const Dropdown = React.createClass({
     handleClick (newLocale) {
         counterpart.setLocale(newLocale)
     },
+    logout() {
+        // TO DO: this is supposed to actually do something!
+        // Both log you out AND set the state so that the button turns into a login button
+        alert("You are logging out :)")
+    },
     
     render() {
+        const loggedIn = true // replace with some condition
+        let authElement
+        if (loggedIn) {
+            authElement = <div className='dropdownElement' onClick={this.logout}>Log out</div>
+        } else {
+            // TO DO: this link should not be available if you are currently on the login page!
+            authElement = <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
+        }
+        
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
             {/*<div className='dropdownElement'><em>Settings coming soon in Beta</em></div>
                 <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
                 <hr />*/}
+                {authElement}
+                <hr />
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'eng')}>English</div>
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'esp')}>Español</div>
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>

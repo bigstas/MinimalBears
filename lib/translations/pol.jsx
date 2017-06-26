@@ -28,13 +28,36 @@ counterpart.registerTranslations('pol', {
         title: 'Minimal Bears: aplikacja, która pozwoli Ci udoskonalić wymowę głosek w obcych językach.',
         whatIs: 'Co to jest Minimal Bears?',
         p1: {
-            line1: 'Minimal Bears to aplikacja internetowa która stosuje technikę zwaną ',
+            line1: 'Minimal Bears to aplikacja internetowa stosująca technikę zwaną ',
             HVPT: 'Trening Fonetyczny o Wysokiej Zmienności',
-            line2: ' (HVPT) aby pomóc ludziom nauczyć się brzmienia głosek pochodzących z języków obcych.'
+            line2: ' (po angielsku High Variability Phonetic Training, czyli HVPT) aby pomóc ludziom nauczyć się brzmienia głosek pochodzących z języków obcych.'
         }
     },
     loading: {
         loading: 'Trwa ładowanie strony...'
+    },
+    auth: {
+        email: "Email:",
+        username: "Nazwa użytownika:",
+        password: "Hasło:",
+        confirmPassword: "Potwierdź hasło:",
+        register: {
+            joinTitle: "Załącz się.",
+            joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
+            emailError: "Please provide a valid email address.",
+            usernameError: "Ta nazwa użytownika jest już w użytku. Proszę wybrać inną.",
+            passwordError: "Twoje hasło musi być takie same w obu polach.",
+            joinButtonLabel: "Załącz się",
+            loginLink: "Masz już konto? Zaloguj."
+        },
+        login: {
+            loginTitle: "Zaloguj.",
+            loggingIn: "Zalogowanie pozwala Ci zachować i śledzić Twój progres.",
+            emailError: "Proszę wprowadź adres email.",
+            passwordError: "O jej! Błędny adres email lub hasło.",
+            loginButtonLabel: "Zaloguj się",
+            joinLink: "Potrzebujesz konto? Załącz się."
+        }
     },
     train: {
         chooseLanguage: "Wybierz który język chcesz poćwiczyć",

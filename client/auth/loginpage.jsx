@@ -2,7 +2,10 @@ import { Navigation, Link } from 'react-router'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import Translate from 'react-translate-component'
 
+// TO DO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
+    
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
      */
@@ -72,25 +75,25 @@ const AuthLoginPage = React.createClass({
             <div className='panel page-auth'>
                 <div>
                     <div>
-                        <h1>Log in.</h1>
+                        <h1><Translate content="auth.login.loginTitle" /></h1>
                         <p>
-                            Logging in allows you to view and save your progress.
+                            <Translate content="auth.login.loggingIn" />
                         </p>
 
                         <form onSubmit={ this.onSubmit }>
-                            <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}>Please enter an email address.</p>
-                            Email: <input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /> <br/>
-                            <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}>Oops! Incorrect email address or password.</p>
-                            Password: <input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /> <br/>
+                            <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p>
+                            <Translate content="auth.email" /> <input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /> <br/>
+                            <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p>
+                            <Translate content="auth.password" /> <input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /> <br/>
             
                             <button onClick={this.handleSubmit} >
-                                Sign In
+                                <Translate content="auth.login.loginButtonLabel" />
                             </button>
                         </form>
                     </div>
 
                     <Link to="register">
-                        Need an account? Join Now.
+                        <Translate content="auth.login.joinLink" />
                     </Link>
                 </div>
             </div>

@@ -223,7 +223,11 @@ nav ul li a, nav ul li p {
     background-color:#E3A557;
     color: lightyellow;     /* refers to text colour */
 }
-
+/* To stop Link for login in the nav dropdown being blue and underlined */
+.plainLink {
+    text-decoration: none;
+    color: black;
+}
 /* The button on the nav bar that tells you your username, or otherwise says 'Guest'. */
 #loggedInAs {
     float: right;

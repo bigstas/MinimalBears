@@ -9,12 +9,12 @@ counterpart.registerTranslations('fra', {
         text: "Sad bear face. Check you input the URL correctly."
     },
     nav: {
-        home: "Home",
+        home: "Page principale",
         about: "About",
-        train: "Train",
+        train: "Entrainer",
         record: "Record",
         guest: "Guest",
-        profile: "Profile",
+        profile: "Profil",
         settings: "Settings"
     },
     home: {
@@ -22,11 +22,11 @@ counterpart.registerTranslations('fra', {
         intro: " is an app that will help you learn new sounds in foreign languages.",
         continue: "Continue as guest",
         signIn: "Sign In",
-        register: "Register"
+        register: "Registrer"
     },
     about: {
         title: 'Minimal Bears: The research-based web app that improves your accent.',
-        whatIs: 'What is Minimal Bears?',
+        whatIs: "Qu'est-ce que c'est Minimal Bears?",
         p1: {
             line1: 'Minimal Bears is a web app that uses a technique known as ',
             HVPT: 'High Variability Phonetic Training',
@@ -34,7 +34,7 @@ counterpart.registerTranslations('fra', {
         }
     },
     loading: {
-        loading: 'Loading...'
+        loading: 'Chargeant...'
     },
     train: {
         chooseLanguage: "Choose the language you want to train",

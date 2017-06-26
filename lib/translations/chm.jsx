@@ -32,6 +32,29 @@ counterpart.registerTranslations('chm', {
     loading: {
         loading: '请稍等一下...'
     },
+    auth: {
+        email: "Email:",
+        username: "Username:",
+        password: "密码:",
+        confirmPassword: "Confirm password:",
+        register: {
+            joinTitle: "Join.",
+            joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
+            emailError: "Please provide a valid email address.",
+            usernameError: "This username is already taken. Please choose another.",
+            passwordError: "Your password must be the same in both fields.",
+            joinButtonLabel: "Join now",
+            loginLink: "Have an account? Log in."
+        },
+        login: {
+            loginTitle: "Log in.",
+            loggingIn: "Logging in allows you to save and view your progress.",
+            emailError: "Please enter an email address.",
+            passwordError: "Oops! Incorrect email address or password.",
+            loginButtonLabel: "Sign In",
+            joinLink: "Need an account? Join now."
+        }
+    },
     train: {
         chooseLanguage: "你想练习哪种语言？",
         chooseContrast: "你想练习哪种发音区别？",
@@ -73,6 +96,31 @@ counterpart.registerTranslations('chm', {
         submit: "发到数据库",
         submitTooltip: "当你已经录完了，把所有录音发到数据库。",
         reRecordTooltip: "重新录音这个词语",
-        playbackTooltip: "听这个词语"
+        playbackTooltip: "听这个词语",
+        tutorial: {
+            buttons: {
+                back: "退步",
+                close: "关闭",
+                last: "懂啦",
+                next: "进步",
+                skip: "Skip"
+            },
+            step0: {
+                title: '录音按钮',
+                text: "Press this to record. Then, press it to record the next thing."
+            },
+            step1: {
+                title: 'The Stop button',
+                text: 'Press this to stop recording.',
+            },
+            step2: {
+                title: 'Play back all',
+                text: 'Play back all that you have recorded so far, in sequence.'
+            },
+            step3: {
+                title: 'Submit',
+                text: "When you're ready, submit the audio you have recorded."
+            }
+        }
     }
 })

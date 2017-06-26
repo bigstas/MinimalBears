@@ -36,6 +36,29 @@ counterpart.registerTranslations('eng', {
     loading: {
         loading: 'Loading...'
     },
+    auth: {
+        email: "Email:",
+        username: "Username:",
+        password: "Password:",
+        confirmPassword: "Confirm password:",
+        register: {
+            joinTitle: "Join.",
+            joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
+            emailError: "Please provide a valid email address.",
+            usernameError: "This username is already taken. Please choose another.",
+            passwordError: "Your password must be the same in both fields.",
+            joinButtonLabel: "Join now",
+            loginLink: "Have an account? Log in."
+        },
+        login: {
+            loginTitle: "Log in.",
+            loggingIn: "Logging in allows you to save and view your progress.",
+            emailError: "Please enter an email address.",
+            passwordError: "Oops! Incorrect email address or password.",
+            loginButtonLabel: "Sign In",
+            joinLink: "Need an account? Join now."
+        }
+    },
     train: {
         chooseLanguage: "Choose the language you want to train",
         chooseContrast: "Choose which contrast you want to train",
