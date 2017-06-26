@@ -2,7 +2,7 @@
 
 import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
-import { renderRoutes } from './routes'
+import Routes from './routes'
 import React from 'react'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
@@ -28,10 +28,13 @@ const client = new ApolloClient({
     networkInterface
 })
 
+// <ApolloProvider> allows React to connect to Apollo
+// <Routes> allows client-side routing
+// The rendered page inserted into the HTML under 'content'
 Meteor.startup(() => {
     render(
-        <ApolloProvider client={client}>  // allow React to connect to Apollo
-            {renderRoutes()}  // client-side routing
+        <ApolloProvider client={client}>
+            <Routes/>
         </ApolloProvider>,
-        document.getElementById('content'))  // insert into the HTML
+        document.getElementById('content'))
 })

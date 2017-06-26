@@ -20,7 +20,7 @@ import NotFound from './static/notfound'
 //import Dummy from './auxiliary/dummy'
 
 
-export const renderRoutes = () => (
+const renderRoutes = () => (
     <Router history={browserHistory} >
         <Route path="/" component={AppBody} >
             <IndexRoute component={Home} />
@@ -38,3 +38,5 @@ export const renderRoutes = () => (
         </Route>
     </Router>
 )
+
+export default renderRoutes
