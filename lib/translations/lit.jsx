@@ -5,7 +5,7 @@ counterpart.registerTranslations('lit', {
         greeting: 'Hello %(name)s! How are you today?'
     },
     notfound: {
-        title: "Your webpage was not found.",
+        title: "Tinklo puslapis nerasta.",
         text: "Sad bear face. Check you input the URL correctly."
     },
     nav: {
@@ -25,7 +25,7 @@ counterpart.registerTranslations('lit', {
         register: "Įregistruoti"
     },
     about: {
-        title: 'Minimal Bears: The research-based web app that improves your accent.',
+        title: 'Minimal Bears: tyrimais paremta programa, kuri padės tau tobulinti akcentus užsenio kalbose.',
         whatIs: 'Kas yra Minimal Bears?',
         p1: {
             line1: 'Minimal Bears is a web app that uses a technique known as ',
@@ -77,6 +77,31 @@ counterpart.registerTranslations('lit', {
         submit: "Pateikti",
         submitTooltip: "Jeigu esi paruoštas, siųsk visus garso failus į duomenų bazę.",
         reRecordTooltip: "Įrašyti šį žodį iš naujo",
-        playbackTooltip: "Atkurti šį žodį"
+        playbackTooltip: "Atkurti šį žodį",
+        tutorial: {
+            buttons: {
+                back: "Atgal",
+                close: "Uždaryti",
+                last: "Baigti",
+                next: "Pirmyn",
+                skip: "Praleisti"
+            },
+            step0: {
+                title: 'The Record button',
+                text: "Press this to record. Then, press it to record the next thing."
+            },
+            step1: {
+                title: 'Pertraukti',
+                text: 'Press this to stop recording.',
+            },
+            step2: {
+                title: 'Play back all',
+                text: 'Play back all that you have recorded so far, in sequence.'
+            },
+            step3: {
+                title: 'Siųsti į duomenų bazę',
+                text: "When you're ready, submit the audio you have recorded."
+            }
+        }
     }
 })
