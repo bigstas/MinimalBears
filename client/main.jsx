@@ -25,7 +25,7 @@ networkInterface.use([{
 
 // Create an Apollo client that will connect to the database
 const client = new ApolloClient({
-    networkInterface,
+    networkInterface
 })
 
 Meteor.startup(() => {

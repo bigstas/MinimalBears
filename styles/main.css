@@ -43,12 +43,6 @@ h4 { padding-left: 2%; }
     padding: 3%;
     opacity: 90%;
 }
-.tutorialPanel {
-    background-color: white;
-    margin: 3% 10% 20px 10%; /* top right bottom left */
-    padding: 1px 20px 5px 20px;
-    height: 75%;
-}
 #guestHome, #userHome { text-align: center; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */

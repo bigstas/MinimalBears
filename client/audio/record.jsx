@@ -323,8 +323,6 @@ const RecordPage = React.createClass({
     
     getInitialState () {
         return {
-            isTutorialActive: true,     // tutorial active or not
-            tutorialIndex: 1,            // which step of the tutorial are we on
             audioURLs: [],  // List of the recorded audio (as object URLs)
             audioBlobs: [],  // List of the recorded audio (as blobs)
             mode: "wait",   // wait, record, done, reRecordSingleToWait, reRecordSingleToDone, playback, playbackAll
