@@ -11,6 +11,7 @@ import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
 import Tutorial from '../auxiliary/tutorials'
 
+    
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
 

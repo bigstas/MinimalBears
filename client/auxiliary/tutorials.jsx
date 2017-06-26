@@ -1,39 +1,8 @@
 import React from 'react'
 import Joyride from 'react-joyride'
-
-
-const steps = [
-    {
-        title: 'The Record button',
-        text: "Press this to record. Then, press it to record the next thing.",
-        selector: '#startButton',
-        position: 'bottom',
-        style: {
-            beacon: {
-                offsetY: 0
-            }
-        }
-    },
-    {
-      title: 'The Stop button',
-      text: 'Press this to stop recording.',
-      selector: '#stopButton',
-      position: 'bottom'
-    },
-    {
-      title: 'Play back all',
-      text: 'Play back all that you have recorded so far, in sequence.',
-      selector: '#playAllButton',
-      position: 'bottom'
-    },
-    {
-      title: 'Submit',
-      text: "When you're ready, submit the audio you have recorded.",
-      selector: '#submitButton',
-      position: 'bottom'
-    }
-]
-
+import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
+    
 
 const RecordPageTutorial = React.createClass({
     render() {
@@ -43,18 +12,49 @@ const RecordPageTutorial = React.createClass({
                 debug={true}
                 autoStart={true}
                 locale={{
-                    back: (<span>Back</span>),
-                    close: (<span>Close</span>),
-                    last: (<span>Last</span>),
-                    next: (<span>Next</span>),
-                    skip: (<span>Skip</span>),
+                    back: (<span><Translate content="record.tutorial.buttons.back" /></span>),
+                    close: (<span><Translate content="record.tutorial.buttons.close" /></span>),
+                    last: (<span><Translate content="record.tutorial.buttons.last" /></span>),
+                    next: (<span><Translate content="record.tutorial.buttons.next" /></span>),
+                    skip: (<span><Translate content="record.tutorial.buttons.skip" /></span>),
                 }}
                 run={true}
                 showOverlay={true}
                 showSkipButton={true}
                 showStepsProgress={true}
-                steps={steps}
                 type='continuous'
+                                             
+                steps={[
+                    {
+                        title: counterpart.translate(['record', 'tutorial', 'step0', 'title']),
+                        text: counterpart.translate(['record', 'tutorial', 'step0', 'text']),
+                        selector: '#startButton',
+                        position: 'bottom',
+                        style: {
+                            beacon: {
+                                offsetY: 0
+                            }
+                        }
+                    },
+                    {
+                        title: counterpart.translate(['record', 'tutorial', 'step1', 'title']),
+                        text: counterpart.translate(['record', 'tutorial', 'step1', 'text']),
+                        selector: '#stopButton',
+                        position: 'bottom'
+                    },
+                    {
+                        title: counterpart.translate(['record', 'tutorial', 'step2', 'title']),
+                        text: counterpart.translate(['record', 'tutorial', 'step2', 'text']),
+                        selector: '#playAllButton',
+                        position: 'bottom'
+                    },
+                    {
+                        title: counterpart.translate(['record', 'tutorial', 'step3', 'title']),
+                        text: counterpart.translate(['record', 'tutorial', 'step3', 'text']),
+                        selector: '#submitButton',
+                        position: 'bottom'
+                    }
+                ]} 
             />
         )
     }

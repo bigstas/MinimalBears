@@ -105,6 +105,31 @@ counterpart.registerTranslations('eng', {
         submit: "Submit",
         submitTooltip: "If you are ready, send all the audio to the database.",
         reRecordTooltip: "Re-record this word",
-        playbackTooltip: "Play back"
+        playbackTooltip: "Play back",
+        tutorial: {
+            buttons: {
+                back: "Back",
+                close: "Close",
+                last: "Done",
+                next: "Next",
+                skip: "Skip"
+            },
+            step0: {
+                title: 'The Record button',
+                text: "Press this to record. Then, press it to record the next thing."
+            },
+            step1: {
+                title: 'The Stop button',
+                text: 'Press this to stop recording.',
+            },
+            step2: {
+                title: 'Play back all',
+                text: 'Play back all that you have recorded so far, in sequence.'
+            },
+            step3: {
+                title: 'Submit',
+                text: "When you're ready, submit the audio you have recorded."
+            }
+        }
     }
 })
