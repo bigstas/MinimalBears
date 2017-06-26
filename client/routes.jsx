@@ -14,6 +14,7 @@ import About from './static/about'
 import ModerationPage from './audio/moderation'
 import EditingPage from './audio/edit'
 import NotFound from './static/notfound'
+import TourExample from './auxiliary/tour_example'
 // For development / debugging purposes only - not for deployment!
 // This allows for easy viewing of the loading screen during development.
 //import LoadingPage from './auxiliary/loading'
@@ -32,6 +33,7 @@ export const renderRoutes = () => (
             <Route path="profile" component={Profile} />
             <Route path="moderation" component={ModerationPage} />
             <Route path="edit" component={EditingPage} />
+            <Route path="tour" component={TourExample} />
             {/*<Route path="dummy" component={Dummy} />
             <Route path="loading" component={LoadingPage} />  -- for development / debugging purposes only */}
             <Route path="*" component={NotFound} />

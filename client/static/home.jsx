@@ -2,13 +2,13 @@ import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'    
 import Translate from 'react-translate-component'
-    
 
+    
 const UserHome = React.createClass({
     render() {
         return (
             <div className='panel animated fadeIn' id='userHome'>
-                <h2><Translate content="home.welcome" />, {this.props.username}!</h2>
+                <h2 id="welcome"><Translate content="home.welcome" />, {this.props.username}!</h2>
                 <div className='userpic' id='userpicHome'>
                     <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
                 </div>

@@ -77,6 +77,31 @@ counterpart.registerTranslations('pol', {
         submit: "Wyślij",
         submitTooltip: "Gdy jesteś gotowy/a, wyślij wszystkie nagrania do bazy danych.",
         reRecordTooltip: "Nagraj to słowo od nowa",
-        playbackTooltip: "Odtwórz słowo"
+        playbackTooltip: "Odtwórz słowo",
+        tutorial: {
+            buttons: {
+                back: "Cofnij",
+                close: "Zamknij",
+                last: "Koniec",
+                next: "Następne",
+                skip: "Pomiń"
+            },
+            step0: {
+                title: 'Nagrywaj',
+                text: "Kliknij tu, aby rozpocząć nagrywanie. Potem znowu to kliknij, aby nagrać następne słowo."
+            },
+            step1: {
+                title: 'Przerwać nagrywanie',
+                text: 'Kliknij tu, aby przestać nagrywanie.',
+            },
+            step2: {
+                title: 'Odtwórz wszystkie',
+                text: 'To Ci odtworzy wszystkie nagrania po kolei.'
+            },
+            step3: {
+                title: 'Wyślij',
+                text: "Gdy jesteś gotowy/a, wyślij audio do bazy danych. Dzięki!"
+            }
+        }
     }
 })
