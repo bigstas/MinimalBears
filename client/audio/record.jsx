@@ -9,6 +9,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
+import Tutorial from '../auxiliary/tutorials'
 
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -103,7 +104,7 @@ const StartButton = React.createClass({
         const focus = next
         return (
             <div>
-                <div className={className}
+                <div className={className} id='startButton'
                     data-tip data-for='startTooltip' data-delay-show='500'
                     onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next, clearAll )}>
                         <Translate content={label} />
@@ -141,7 +142,8 @@ const StopButton = React.createClass({
         
         return (
             <div>
-                <div className={className} data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className}  id='stopButton'
+                    data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
                 </div>
                 <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
@@ -165,7 +167,7 @@ const PlayAllButton = React.createClass({
         
         return (
             <div>
-                <div className={className}
+                <div className={className} id='playAllButton'
                     data-tip data-for='playAllTooltip' data-delay-show='500'
                     onClick={disabled ? null : this.props.playAllFunction}>
                         <Translate content="record.playbackAll" />
@@ -188,7 +190,7 @@ const SubmitButton = React.createClass({
         const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
         return (
             <div>
-                <div className={className}
+                <div className={className} id='submitButton'
                     data-tip data-for='submitTooltip' data-delay-show='500'
                     onClick={disabled ? null : this.props.submitAudio}>
                         <Translate content="record.submit" />
@@ -450,27 +452,30 @@ next: ${next}`)
     
     render() {
         return (
-            <div className='panel animated fadeIn' id='record'>
-                <TopRow next={this.state.next} 
-                        max={this.props.recordingWords.length -1} 
-                        mode={this.state.mode} 
-                        callback={this.recordCallback} 
-                        playbackAll={this.playbackAll} 
-                        submitAudio={this.dispatchAudio} 
-                        recordedSoFar={this.state.audioURLs.length}
-                        />
-                <div id="wordList">
-                    {this.props.recordingWords.map(
-                        function(c, index) {
-                            const audioRef = "audio" + index.toString()
-                            return(
-                                <div key={index}>
-                                    <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c[0]} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
-                                    <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
-                                </div>
-                            )
-                        }, this)
-                    }
+            <div>
+                <Tutorial />
+                <div className='panel animated fadeIn' id='record'>
+                    <TopRow next={this.state.next} 
+                            max={this.props.recordingWords.length -1} 
+                            mode={this.state.mode} 
+                            callback={this.recordCallback} 
+                            playbackAll={this.playbackAll} 
+                            submitAudio={this.dispatchAudio} 
+                            recordedSoFar={this.state.audioURLs.length}
+                            />
+                    <div id="wordList">
+                        {this.props.recordingWords.map(
+                            function(c, index) {
+                                const audioRef = "audio" + index.toString()
+                                return(
+                                    <div key={index}>
+                                        <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c[0]} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
+                                        <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
+                                    </div>
+                                )
+                            }, this)
+                        }
+                    </div>
                 </div>
             </div>
         )

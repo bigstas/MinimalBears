@@ -102,7 +102,7 @@ counterpart.registerTranslations('eng', {
         stopTooltip: "Click here to stop recording.",
         playbackAll: "Playback All",
         playbackAllTooltip: "Play all the audio.",
-        submit: "Sumbit",
+        submit: "Submit",
         submitTooltip: "If you are ready, send all the audio to the database.",
         reRecordTooltip: "Re-record this word",
         playbackTooltip: "Play back"
