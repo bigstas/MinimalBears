@@ -1,6 +1,8 @@
 import React from 'react'
 // see issue: https://github.com/bbc/peaks.js/issues/174
 import Peaks from '../../node_modules/peaks.js/peaks.js'
+import Slider, { Range } from 'rc-slider'
+
 
 const myAudioContext = new AudioContext()
 
@@ -14,6 +16,8 @@ const EditingPage = React.createClass({
                 <div id='audioContainer' ref='audioContainer'>
                     <audio id={this.state.lies} ref={'mainAudio'} src={"bukk bukk.wav"} controls />
                 </div>
+                <Slider />
+                <Range />
             </div>
         )
     },
