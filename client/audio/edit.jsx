@@ -11,9 +11,8 @@ const EditingPage = React.createClass({
         return(
             <div className='panel' id='edit'>
                 <p>Hello world</p>
-                <div id='audioContainer' ref='audioContainer'>
-                    <audio id={this.state.lies} ref={'mainAudio'} src={"bukk bukk.wav"} controls />
-                </div>
+                <div id='audioContainer' ref='audioContainer' />
+                <audio id={this.state.lies} ref={'mainAudio'} src={"bukk bukk.wav"} controls />
             </div>
         )
     },
