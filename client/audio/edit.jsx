@@ -1,6 +1,5 @@
 import React from 'react'
-// see issue: https://github.com/bbc/peaks.js/issues/174
-import Peaks from '../../node_modules/peaks.js/peaks.js'
+import Peaks from 'peaks.js'
 import Slider, { Range } from 'rc-slider'
 
 
