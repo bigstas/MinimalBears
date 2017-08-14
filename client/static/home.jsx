@@ -38,7 +38,8 @@ const GuestHome = React.createClass({
 
 const Home = React.createClass({
     render() {
-        return ( !!this.props.user ? <UserHome username={this.props.user} /> : <GuestHome /> )
+        const jwt = localStorage.getItem('token')
+        return ( !!jwt ? <UserHome username={this.props.user} /> : <GuestHome /> )
     }
 })
 
