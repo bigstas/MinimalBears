@@ -111,7 +111,7 @@ RETURNS json_web_token
 LANGUAGE plpgsql
 STRICT
 SECURITY DEFINER
-STABLE
+VOLATILE  -- so that the function is treated as a mutation, not a query
 AS $$
     DECLARE
         found_account private.account;
