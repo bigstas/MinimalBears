@@ -23,19 +23,19 @@ GRANT SELECT ON TABLE public.pair TO guest, loggedin;
 GRANT SELECT ON TABLE public.contrast_nonempty TO guest, loggedin;
 GRANT SELECT ON TABLE public.contrast_with_pairs TO guest, loggedin;
 GRANT SELECT ON TABLE public.item_with_audio TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_audio_list TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrast_list TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrasts TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_items_from_homophone TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_pair_list TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_audio_list(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_list(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrasts(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_items_from_homophone(text) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_pair_list(integer) TO guest, loggedin;
 
 -- Logged in users can submit new recordings
 GRANT UPDATE ON TABLE public.audio_submission TO loggedin;
-GRANT EXECUTE ON FUNCTION public.submit_audio TO loggedin;
+GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, text, integer) TO loggedin;
 
 -- Guests can log in and sign up
-GRANT EXECUTE ON FUNCTION public.authenticate TO guest;
-GRANT EXECUTE ON FUNCTION public.signup TO guest;
+GRANT EXECUTE ON FUNCTION public.authenticate(text, text) TO guest;
+GRANT EXECUTE ON FUNCTION public.signup(text, text) TO guest;
 
 
 -- Private schema (for user information)
