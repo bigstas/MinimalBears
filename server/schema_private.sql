@@ -33,10 +33,6 @@ GRANT EXECUTE ON FUNCTION public.get_pair_list(integer) TO guest, loggedin;
 GRANT UPDATE ON TABLE public.audio_submission TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, text, integer) TO loggedin;
 
--- Guests can log in and sign up
-GRANT EXECUTE ON FUNCTION public.authenticate(text, text) TO guest;
-GRANT EXECUTE ON FUNCTION public.signup(text, text) TO guest;
-
 
 -- Private schema (for user information)
 
@@ -94,7 +90,8 @@ AS $$
     END;
 $$;
 ALTER FUNCTION signup(text, text)
-  OWNER TO admin;
+    OWNER TO admin;
+GRANT EXECUTE ON FUNCTION public.signup(text, text) TO guest;
 
 -- The JWT type which will be signed by PostGraphQL 
 -- The role can be accessed using current_setting('jwt.claims.id')::integer
@@ -132,3 +129,4 @@ AS $$
 $$;
 ALTER FUNCTION authenticate(text, text)
     OWNER TO admin;
+GRANT EXECUTE ON FUNCTION public.authenticate(text, text) TO guest;
