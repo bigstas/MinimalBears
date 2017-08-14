@@ -11,6 +11,33 @@ CREATE ROLE loggedin
     NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
 GRANT loggedin TO admin;
 
+-- Permissions
+
+-- All users can read public information
+GRANT USAGE ON SCHEMA public TO guest, loggedin;
+GRANT SELECT ON TABLE public.audio TO guest, loggedin;
+GRANT SELECT ON TABLE public.contrast TO guest, loggedin;
+GRANT SELECT ON TABLE public.item TO guest, loggedin;
+GRANT SELECT ON TABLE public.language TO guest, loggedin;
+GRANT SELECT ON TABLE public.pair TO guest, loggedin;
+GRANT SELECT ON TABLE public.contrast_nonempty TO guest, loggedin;
+GRANT SELECT ON TABLE public.contrast_with_pairs TO guest, loggedin;
+GRANT SELECT ON TABLE public.item_with_audio TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_audio_list TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_list TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrasts TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_items_from_homophone TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_pair_list TO guest, loggedin;
+
+-- Logged in users can submit new recordings
+GRANT UPDATE ON TABLE public.audio_submission TO loggedin;
+GRANT EXECUTE ON FUNCTION public.submit_audio TO loggedin;
+
+-- Guests can log in and sign up
+GRANT EXECUTE ON FUNCTION public.authenticate TO guest;
+GRANT EXECUTE ON FUNCTION public.signup TO guest;
+
+
 -- Private schema (for user information)
 
 CREATE SCHEMA private;

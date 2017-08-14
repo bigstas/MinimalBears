@@ -10,6 +10,8 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM public;
+
 --
 -- Name: cached_pair; Type: TYPE; Schema: public; Owner: admin
 --
