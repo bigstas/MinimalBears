@@ -71,7 +71,7 @@ const AuthJoinPage = React.createClass({
         // TO DO: neaten up the presentation of the below by using a table
         return (
             <div className='panel page-auth'>
-                <div>
+                <div id="form">
                     <div>
                         <h1><Translate content="auth.register.joinTitle" /></h1>
                         <p>
@@ -79,14 +79,17 @@ const AuthJoinPage = React.createClass({
                         </p>
 
                         <form onSubmit={ this.onSubmit }>
-                            <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p>
-                            <Translate content="auth.email" /> <input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /> <br/>
-                            <p className={this.state.usernameError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.usernameError" /></p>
-                            <Translate content="auth.username" /> <input type="text" name="username" value={this.state.username} onChange={this.handleChange} /> <br/>
-                            <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.passwordError" /></p>
-                            <Translate content="auth.password" /> <input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /> <br/>
-                            <Translate content="auth.confirmPassword" /> <input type="text" name="confirmPassword" value={this.state.confirmPasswordValue} onChange={this.handleChange} /> <br/>
-            
+                            <table>
+                                <tbody>
+                                    <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /></td></tr>
+                                    <tr><td colSpan="2" className="tdError"><p className={this.state.usernameError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.usernameError" /></p></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.username" /></td><td><input type="text" name="username" value={this.state.username} onChange={this.handleChange} /></td></tr>
+                                    <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.passwordError" /></p></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="text" name="confirmPassword" value={this.state.confirmPasswordValue} onChange={this.handleChange} /></td></tr>
+                                </tbody>
+                            </table>
                             <button onClick={this.handleSubmit} >
                                 <Translate content="auth.register.joinButtonLabel" />
                             </button>
@@ -101,6 +104,7 @@ const AuthJoinPage = React.createClass({
         )
     }
 })
+
 
 const signup = gql`mutation ($input: SignupInput!) {
     signup(input:$input) {

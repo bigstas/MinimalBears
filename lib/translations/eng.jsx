@@ -44,9 +44,9 @@ counterpart.registerTranslations('eng', {
         register: {
             joinTitle: "Join.",
             joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
-            emailError: "Please provide a valid email address.",
-            usernameError: "This username is already taken. Please choose another.",
-            passwordError: "Your password must be the same in both fields.",
+            emailError: "invalid email address",
+            usernameError: "username unavailable",
+            passwordError: "password mismatch",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in."
         },
