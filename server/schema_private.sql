@@ -107,11 +107,11 @@ ALTER TYPE json_web_token
 -- checking the email and password with private.account
 
 CREATE FUNCTION authenticate(try_email text, try_password text)
-RETURNS jwt_token
+RETURNS json_web_token
 LANGUAGE plpgsql
 STRICT
 SECURITY DEFINER
-STABLE
+VOLATILE  -- so that the function is treated as a mutation, not a query
 AS $$
     DECLARE
         found_account private.account;
