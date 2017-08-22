@@ -20,5 +20,5 @@ public/Thumbs.db
 # Security
 server/jwt_secret.jsx
 
-# Articles about HVPT
+# Articles about HVPT for About page
 lib/articles

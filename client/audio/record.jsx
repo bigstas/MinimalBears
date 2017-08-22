@@ -48,6 +48,9 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 }
 
 // Cross-browser AudioContext and URL
+/* Currently this eventually produces an error after you browse the app from page to page enough times:
+Uncaught DOMException: Failed to construct 'AudioContext': The number of hardware contexts provided (6) is greater than or equal to the maximum bound (6).
+This needs DEBUGGING! */
 // https://developer.mozilla.org/en/docs/Web/API/AudioContext
 // https://developer.mozilla.org/en/docs/Web/API/Window/URL
 
@@ -143,8 +146,7 @@ const StopButton = React.createClass({
         
         return (
             <div>
-                <div className={className}  id='stopButton'
-                    data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
+                <div className={className} id='stopIc' data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
                     <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
                 </div>
                 <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">

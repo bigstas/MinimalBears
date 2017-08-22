@@ -32,13 +32,13 @@ h4 { padding-left: 2%; }
     float: left;
     z-index: -1;
     overflow: auto;
-    background-color: white;
+    background-color:#EAE5E1;
     border-radius: 8px;
     margin-left: 19%;
     margin-right: 19%;
     margin-bottom: 40px;
     width: 56%;
-    margin-top: 3%;
+    margin-top: 5%;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
     padding: 3%;
     opacity: 90%;
@@ -46,7 +46,11 @@ h4 { padding-left: 2%; }
 #guestHome, #userHome { text-align: center; }
 
 /* For elements that are inactive (at the moment only used on the Record page) */
-.transparent { opacity: 0.2; }
+.transparent { 
+    opacity: 0.5;
+    cursor:default;
+    pointer-events: none;
+}
 /* For elements that are not shown at all. (They may be shown when this class is removed from them.) */
 .noDisplay { display: none; }
 /* For elements which have a default cursor (not a hand) - to indicate that they are not clickable at the moment. */
@@ -92,8 +96,7 @@ h4 { padding-left: 2%; }
 
 .chooseOption:hover a {
     opacity: 1;
-    color: lightyellow;
-    /*padding-right: 15%;*/
+    color: #3C4536;
     transition: 0.5s;
 }
 
@@ -109,7 +112,8 @@ h4 { padding-left: 2%; }
 }
 
 .button:hover{
-  background-color: #FFC32E;
+    background-color: #FFC32E;
+    color: #3C4536;
 }
 
 
@@ -136,37 +140,65 @@ h4 { padding-left: 2%; }
     width: 50%;
     margin-left: 25%;
     margin-right: 25%;
+    color: black;
 }
-#extraButton:hover { background-color: darkgoldenrod; }
+#extraButton:hover { 
+    background-color: goldenrod;
+    color: lightyellow;
+}
 
 /* Record page buttons. */
 .wordRowButton, .topRowButton {
     display: inline-block;
     vertical-align: middle;
     text-align: center;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin: 3px;
-    border-radius: 6px;
-    background-color: darkgray;
+    padding-top: 0%;
+    padding-bottom: 0%;    
+    margin-left:10px;
+    margin-right:10px;
+    height:45px;  
+    line-height:45px;
 }
+
+.topRowButton {
+    background-image: url("topRow.png");
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size:cover;    
+    border-radius: 5px;         
+    line-height:45px;
+    padding-left:10px;
+    padding-right:10px;
+    margin:1px;
+    color:#492805;
+    height:45px;
+}
+
+.topRowButton:hover {
+    color:lightgoldenrodyellow;
+}
+
 .wordRowButtonEnabled, .topRowButtonEnabled {
-    background-color: skyblue;
     cursor: pointer;
 }
-.wordRowButtonEnabled:hover, .topRowButtonEnabled:hover { background-color: deepskyblue; }
 
 /* The play (>), record (o), and stop symbols on buttons */
 .buttonIcon { 
-    margin-right: 10px; 
-    margin-top: 2px;
+   /* margin-right: 1px;  */       
 }
+
 /* When the re-record single word buttons are currently re-recording */
-.reRecordActive {
-    background-color: coral;
+.reRecordActive { 
+    content:url("done.png");
     cursor: pointer;
+    width:60px;
+    height: 45px;
 }
-.reRecordActive:hover { background-color: black; }
+.reRecordActive:hover { 
+    content:url("doneHover.png");
+    width:60px;
+    height: 45px;
+}
 
 
 /* ================================== */
@@ -178,15 +210,17 @@ nav {
     height: 42px;
     text-align:center;
     background-color: #DE8312;
-    width: cover;
+    width: 100%;
     padding: 7px; /*This should be a number of pixels, not %, to keep consistent as the window is re-sized.
     Otherwise, the nav bar hugs the buttons more and more closely as the page is narrowed.
     For reference, the old value was 0.5%, in case you want to compare this and change the pixel number. */
     box-shadow: 0px 0px 25px rgba(0,0,128,0.2);
+    position:fixed;
+    z-index: 1;
 }
 /* The links within the navigation bar */
 nav a {
-    color:#5E3808;
+    color:#492805;
     text-decoration: none;
     white-space: nowrap;
     display: inline-block;
@@ -205,6 +239,7 @@ nav ul {
     margin: 0;
     padding-left: 18%;
     overflow: hidden;
+    padding-right:1%;
 }
 /* The styling of the buttons within the nav bar is done through their text (<a> and <p>). */
 nav ul li a, nav ul li p {
@@ -261,7 +296,7 @@ nav ul li a, nav ul li p {
 .dropdownElement:hover { background-color: #DE8312; }
 .dropdownText {
     text-decoration: none;
-    color: black;
+    color: #5E3808;
 }
 
 
@@ -332,24 +367,61 @@ nav ul li a, nav ul li p {
 /* ================================== */
 
 /* This is a bit hacky...! Should try not to do things this way! */
-#record * {margin-left: 10px;}
+#record * {margin-left: 1px;}
+
+#record {
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    opacity: 0.8;
+    padding:5%;    
+}
 
 /* The top row's buttons start from the left and go rightwards. */
-.topRowButton { float: left; }
+.topRowButton { 
+    float: left; 
+    margin-left:2px;
+}
 /* This is required to get the central body (the words and their buttons) to make a new line after the top row, rather than continuing horizontally from the top row. */
 #wordList { clear: left; }
 
 .wordRow, .wordRowFocused {
     display: list-item; /* puts each wordRow beneath the last, as a list */
     list-style: none;   /* stops there being any numbering for said list */
-    border-radius: 6px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    background-color: #E7E0DB;
+    border-bottom:1px solid #BFA184;
+    height:45px;   
+    border-radius:5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    color:#3C4536;
 }
-.wordRow:hover { background-color: darkseagreen; }
-.wordRowFocused { background-color: gold; }
-.wordRowFocused:hover { background-color: yellow; }
+.wordRow:hover { background-color: #E1BA67; }
+.wordRowFocused { background-color: #E1BA28; }
+.wordRowFocused:hover { background-color: #E67C29; }
 
+#stopIc {
+    content:url("/stop.png");
+    width:45px;
+    padding:0px;
+}
+
+#stopIc:hover {
+    content:url("/stopHover.png"); 
+    width:45px;
+    padding:0px;
+    display: inline-block;
+} 
+
+#playIcon:hover {
+    content:url("/playHover.png"); 
+    width:60px;
+}
+
+#recordIcon:hover {
+    content:url("/recordHover.png");
+    width:60px;
+}
 
 /* ================================== */
 /* ============ home.js ============ */

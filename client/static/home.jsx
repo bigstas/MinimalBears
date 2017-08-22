@@ -15,6 +15,12 @@ const UserHome = React.createClass({
                 <p id="homeStats">Last date logged in: December 25th 1950 <br/>
                 Current score: 100 points <br/>
                 Favourite contrast: szcz-ść</p>
+                <img src={'bear.png'} />
+                <img src={'bear2.png'} />
+                <img src={'bear3.png'} />
+                <img src={'bear4.png'} />
+                <img src={'bear6.png'} />
+                <img src={'bear7.png'} />
             </div>
         )
     }
