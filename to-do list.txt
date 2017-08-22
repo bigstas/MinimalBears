@@ -45,5 +45,7 @@ For Beta:
 18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy)
 19. An interface for audio editing (Staś)
     - started Edit page using BBC's peaks.js
+20. Record page bug - after navigating to the Record page 6 times it fails to load, giving the following error:
+Uncaught DOMException: Failed to construct 'AudioContext': The number of hardware contexts provided (6) is greater than or equal to the maximum bound (6).
     
 Do we have sheath vs sheaf?

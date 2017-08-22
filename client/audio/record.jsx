@@ -46,6 +46,9 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 }
 
 // Cross-browser AudioContext and URL
+/* Currently this eventually produces an error after you browse the app from page to page enough times:
+Uncaught DOMException: Failed to construct 'AudioContext': The number of hardware contexts provided (6) is greater than or equal to the maximum bound (6).
+This needs DEBUGGING! */
 // https://developer.mozilla.org/en/docs/Web/API/AudioContext
 // https://developer.mozilla.org/en/docs/Web/API/Window/URL
 
