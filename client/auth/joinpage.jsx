@@ -14,9 +14,9 @@ function validateEmail(email) {
 const AuthJoinPage = React.createClass({
     getInitialState() {
         return {
-            username: "mr_bear",
-            emailValue: "type your email address here",
-            passwordValue: "***",
+            username: "",
+            emailValue: "",
+            passwordValue: "",
             confirmPassword: "###",
             emailError: false,
             passwordError: false
@@ -82,12 +82,12 @@ const AuthJoinPage = React.createClass({
                             <table>
                                 <tbody>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p></td></tr>
-                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="type your email address here" onChange={this.handleChange} /></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.usernameError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.usernameError" /></p></td></tr>
-                                    <tr><td className="tdText"><Translate content="auth.username" /></td><td><input type="text" name="username" value={this.state.username} onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.username" /></td><td><input type="text" name="username" placeholder="Your name" onChange={this.handleChange} /></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.passwordError" /></p></td></tr>
-                                    <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /></td></tr>
-                                    <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="text" name="confirmPassword" value={this.state.confirmPasswordValue} onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="password" name="confirmPassword" onChange={this.handleChange} /></td></tr>
                                 </tbody>
                             </table>
                             <button onClick={this.handleSubmit} >

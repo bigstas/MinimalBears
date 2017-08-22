@@ -16,8 +16,8 @@ function validateEmail(email) {
 const AuthLoginPage = React.createClass({
     getInitialState() {
         return {
-            emailValue: "type your email address here",
-            passwordValue: "***",
+            emailValue: "",
+            passwordValue: "",
             emailError: false,
             passwordError: false
         }
@@ -82,9 +82,9 @@ const AuthLoginPage = React.createClass({
 
                         <form onSubmit={ this.onSubmit }>
                             <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p>
-                            <Translate content="auth.email" /> <input type="text" name="email" value={this.state.emailValue} onChange={this.handleChange} /> <br/>
+                            <Translate content="auth.email" /> <input type="text" name="email" placeholder="type your email address here" onChange={this.handleChange} /> <br/>
                             <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p>
-                            <Translate content="auth.password" /> <input type="text" name="password" value={this.state.passwordValue} onChange={this.handleChange} /> <br/>
+                            <Translate content="auth.password" /> <input type="password" name="password" onChange={this.handleChange} /> <br/>
             
                             <button onClick={this.handleSubmit} >
                                 <Translate content="auth.login.loginButtonLabel" />
