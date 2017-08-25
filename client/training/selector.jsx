@@ -24,7 +24,7 @@ const Selector = React.createClass({
 	render() {
         return (
             <div className='panel animated fadeIn' id='selector'>
-                <Translate content={this.props.selectionMessage} component="p" />
+                <Translate content={this.props.selectionMessage} component="p" style={{textAlign:"center"}} />
                 {this.props.options.map((c, index) =>
                     <div className='button chooseOption' key={c.id} 
                         onMouseEnter={!!this.props.mouseEnter ? this.props.mouseEnter : null} 

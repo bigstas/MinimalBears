@@ -200,10 +200,12 @@ const Arena = React.createClass({
             <div className='panel animated fadeIn' id='arena'>
                 {(this.state.mode === "done") ? 
                     <h1 id='arenaMessage'>Bravo! You scored {this.state.score} out of 10!</h1> : 
-                    <div><h1 className='score'><Translate content="train.score" /></h1><h1 className='score' id='scoreValue'>{this.state.score}</h1><h1 className='score'>/{this.state.counter}</h1></div> }
-                {/*<img className={starClass} src={this.data.starImage} alt='star' /> */}
+                    <div style={{textAlign:"center"}}>
+                        <div style={{display:"inline-block"}}><h1 className='score' id='scoreValue' style={{margin:"20px 0 40px 0"}}>{this.state.score}</h1></div>
+                        <div style={{display:"inline-block"}}><h4 className='score' style={{display:"inline"}}>/{this.state.maxRounds}</h4></div>
+                    </div>}
                 
-                <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "0.5s" }} />
+                <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
 
                 <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
                           

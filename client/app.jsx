@@ -8,7 +8,10 @@ const AppBody = React.createClass({
         return {
             activeLanguageId: null,
             interfaceLanguage: "English",
-            user: "Overlord" /* This is currently not the normal setting of false, as I want to be able to access the profile page to prepare graphs etc */
+            /* user setting:
+            false - for deployment. Also allows us to view/program things from the point of view of a guest (a non-logged-in user).
+            any string - for development purposes. This allows us to program everything for a logged-in user. */
+            user: "Overlord" 
         }
     },
     

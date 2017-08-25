@@ -18,7 +18,7 @@ body {
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
 li { float: left; }                 /* All list elements should keep to the left as much as they can throughout the site. */
-h4 { padding-left: 2%; }
+/* h4 { padding-left: 2%; } */
 .bulletpoints { clear: left; } /* We want bullet points to stack one on top of the other. */
 
 
@@ -32,13 +32,13 @@ h4 { padding-left: 2%; }
     float: left;
     z-index: -1;
     overflow: auto;
-    background-color:#EAE5E1;
+    background-color: white; /* #EAE5E1; */
     border-radius: 8px;
     margin-left: 19%;
     margin-right: 19%;
     margin-bottom: 40px;
     width: 56%;
-    margin-top: 5%;
+    margin-top: 100px;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
     padding: 3%;
     opacity: 90%;
@@ -101,9 +101,7 @@ h4 { padding-left: 2%; }
 }
 
 #progressButton {
-    color: floralwhite;
     text-align: center;
-    background-color: goldenrod;
     width: 30%;
     margin-top: 50px;
     margin-left: 35%;
@@ -117,8 +115,6 @@ h4 { padding-left: 2%; }
 }
 
 
-#progressButton:hover { background-color: antiquewhite; }
-
 /* Buttons on the Home page. */
 .homebtn { 
     width: 20%;
@@ -130,7 +126,7 @@ h4 { padding-left: 2%; }
 /* <Link> elements inside buttons need no text decoration, and white font. (For homebtn buttons.) */
 .btnLink {
     color: lightyellow;
-    font-size: 22px;
+    font-size: 1.4vw;
     text-decoration: none; 
 }
 
@@ -237,7 +233,7 @@ nav a:hover {
 nav ul {
     list-style-type: none;
     margin: 0;
-    padding-left: 18%;
+    padding-left: 18.5%;
     overflow: hidden;
     padding-right:1%;
 }
@@ -248,8 +244,7 @@ nav ul li a, nav ul li p {
     padding-right: 8px;
     padding-top:12px;
     padding-bottom:12px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 5px 0 5px;
     text-decoration: none;  /* To get rid of underline beneath the text */
     border-radius: 3px;
 }
@@ -281,7 +276,7 @@ nav ul li a, nav ul li p {
     margin-right: 5px;
     background-color: white;
     border-radius: 8px;
-    margin-top: 5px;
+    margin-top: 61px;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
     padding: 5px;
     z-index: 10;
@@ -304,23 +299,16 @@ nav ul li a, nav ul li p {
 /* ============ arena.js ============ */
 /* ================================== */
 
-#arena { height: 300px; } /* Only the Arena panel needs a limited height - other pages can stretch more */
+#arena { height: 380px; } /* Only the Arena panel needs a limited height - other pages can stretch more */
 
 /* The text at the top of the arena page, that says 'guess the words' or else 'congratulations!'.  */
 #arenaMessage {
     display: inline-block;
     padding-left: 10px;
 }
-.score {
-    display: inline-block;
-}
-#scoreValue {
-    padding-left: 3px;
-}
-
 #progressBar {
     height: 25px;
-    border: thick solid gold;
+    border: thick solid #E8A41E;
     border-radius: 20px;
     margin-left: 20px;
     margin-right: 20px;
@@ -328,7 +316,7 @@ nav ul li a, nav ul li p {
 /* The green 'fluid' inside the progress bar. */
 #progressBarFillFluid {
     height: 25px;
-    background-color: greenyellow;
+    background-color: #6EF5FF;
 }
 
 #optionContainer {
@@ -341,6 +329,7 @@ nav ul li a, nav ul li p {
 /* The buttons change colour depending on whether they were selected or not, and whether the user was right or not. */
 #wordOptionCorrect   { background-color: green; }
 #wordOptionWrong     { background-color: red; }
+#wordOptionCorrect:hover, #wordOptionWrong:hover { color: lightyellow; } /* No change from original colour as no action is possible on click */
 #wordOptionNotChosen { 
     background-color: white;
     margin-top: 0px;    /* Otherwise, even though this takes up no space, it has a margin, which the objects around it respect. That makes there be a slight change in position of buttons on the page in feedback mode. */

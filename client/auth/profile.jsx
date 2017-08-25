@@ -8,39 +8,11 @@ import { Line, Bar, Radar } from 'react-chartjs' // Charts
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 
-const AlphaProfile = React.createClass({
-    render() {
-        return(
-            <div className='panel animated fadeIn' id='alphaProfile'>
-                <h2>Oops!</h2>
-                <p>Personal profiles are not available in Minimal Bears Alpha release.</p>
-                <p>See you in Beta!</p>
-            </div>
-        )
-    }
-})
-    
-// when there is no logged in user
-const EmptyProfile = React.createClass({
-    render() {
-        return (
-            <div className='panel animated fadeIn' id='emptyProfile'>
-                <h2><Link to="/login">Log in</Link> or <Link to="/register">sign up</Link> to see your personal profile!</h2>
-                <ul>
-                    <li className='bulletpoints'>View your progress</li>
-                    <li className='bulletpoints'>Share your successes with friends</li>
-                    <li className='bulletpoints'>Contribute to Minimal Bears by recording words in your native language</li>
-                </ul>
-            </div>
-        )
-    }
-})
-
 // when there is a logged in user
 const UserProfile = React.createClass({
     render() {
         const lineChartData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             datasets: [
                 {
                     label: "My First dataset",
@@ -61,7 +33,7 @@ const UserProfile = React.createClass({
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    data: [65, 59, 80, 81, 56, 55, 40, 0, 1, 2, 3],
                     spanGaps: false,
                 }
             ]
@@ -118,7 +90,10 @@ const UserProfile = React.createClass({
             ]
         }
         // this object is required, but it can be empty...
-        const chartOptions = {}
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: true
+        }
         // for social media buttons
         const url = "http://www.minimalbears.com/"
         
@@ -129,38 +104,25 @@ const UserProfile = React.createClass({
                         <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
                     </div>
                     <div id='overview'>
-                        <h2 className="animated bounce">{this.props.user}</h2>
+                        <h2 className="animated bounce">{this.props.username}</h2>
                         <p style={{display: 'inline-block'}}>Member since 123 CE</p>
                     </div>
                 </div>
                 <div id='graphsDiv'>
                     <h4>Your XP points over time</h4>
-                    <Line data={lineChartData} options={chartOptions} /*width="400px" height="250"*/ />
+                    <Line data={lineChartData} options={chartOptions} />
                     <h4>Average success over time</h4>
                     <Bar data={barChartData} options={chartOptions} />
                     <h4>Relative ease of contrasts</h4>
                     <Radar data={radarChartData} options={chartOptions} />
-                    <TwitterButton className="button" id="twitterButton" element="div" url={url}>
-                        {" Share us on Twitter"}
-                    </TwitterButton>
                 </div>
-            </div>
-        )
-    }
-})
-
-const Profile = React.createClass({
-    render() {
-        return(
-            <div>
-                {!!this.props.user ?
-                    <UserProfile user={this.props.user} /> :
-                    <EmptyProfile />
-                }
+                <TwitterButton className="button" id="twitterButton" element="div" url={url}>
+                        {" Share us on Twitter"}
+                </TwitterButton>
             </div>
         )
     }
 })
 
 //export default createContainer(({params}) => {return {}}, Profile)    // do we still need createContainer?
-export default Profile
+export default UserProfile

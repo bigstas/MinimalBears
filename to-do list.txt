@@ -13,6 +13,8 @@ For Beta:
     - client-side mostly implemented
     - make the switching between examples happen according to the time of hover, not globally on the page -- DONE
     - TODO: server-side bringing up the examples to feed to the buttons (once we've done that then we're done on this point)
+    - TODO: once you're in the Arena, the state keeps setting for the selector buttons. This is brought up with a warning:
+    Warning: setState(...): Can only update a mounted or mounting component. This usually means you called setState() on an unmounted component. This is a no-op. Please check the code for the ContrastSelector component.
 5. some sort of interface for admins to approve audio (probably Staś and Guy)
     - Moderation page exists client side, need server-side connections to make work
 6. expansion into further languages (Staś and Guy)

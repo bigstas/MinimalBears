@@ -1,8 +1,9 @@
 import counterpart from 'counterpart'
 
 counterpart.registerTranslations('eng', {
-    example: {
-        greeting: 'Hello %(name)s! How are you today?'
+    general: {
+        minbears: "Minimal Bears",
+        article: "" /* articles are NOT REQUIRED in most languages, only for some e.g. Le Minimal Bears, El Minimal Bears, A Minimal Bears, Al (?) Minimal Bears */
     },
     notfound: {
         title: "Your webpage was not found.",
@@ -20,7 +21,7 @@ counterpart.registerTranslations('eng', {
     home: {
         welcome: "Welcome",
         intro: " is an app that will help you learn new sounds in foreign languages.",
-        continue: "Continue as guest",
+        continue: "Try it out",
         signIn: "Sign In",
         register: "Register"
     },
@@ -112,6 +113,14 @@ counterpart.registerTranslations('eng', {
         },
         correct: "Correct!",
         wrong: "Oops!"
+    },
+    norecord: {
+        title: "Join the club first!",
+        onlyLoggedIn: "Only logged-in users can create recordings. ",
+        login: "Log in",
+        loginReason: " to join the fun! :)",
+        noAccount: "Don't have an account? ",
+        signup: "Sign up"
     },
     record: {
         startLabel: {

@@ -39,7 +39,7 @@ const RecordPageTutorial = React.createClass({
                     {
                         title: counterpart.translate(['record', 'tutorial', 'step1', 'title']),
                         text: counterpart.translate(['record', 'tutorial', 'step1', 'text']),
-                        selector: '#stopButton',
+                        selector: '#stopIc',
                         position: 'bottom'
                     },
                     {

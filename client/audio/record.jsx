@@ -10,6 +10,7 @@ import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
 import Tutorial from '../auxiliary/tutorials'
+import NoRecordPage from './norecord'
 
     
 // Note that we use 'meteor/maxencecornet:audio-recorder',
@@ -518,21 +519,24 @@ next: ${next}`)
 
 const WrappedRecordPage = React.createClass({
     render() {
-        console.log(this.props.items)
-        if (this.props.items.loading) { return <LoadingPage /> }
-        
-        // JSON is built-in
-        // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
-        const nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
-        nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
-        console.log(nodes)
-        const firstNodes = nodes.slice(0,10)
-        const firstWords = firstNodes.map( function(item) {
-            return [item.homophones[0], item.id]
-        })
-        console.log(firstNodes)
-        
-        return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
+        if (this.props.user) {
+            console.log(this.props.items)
+            if (this.props.items.loading) { return <LoadingPage /> }
+
+            // JSON is built-in
+            // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
+            const nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
+            nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
+            console.log(nodes)
+            const firstNodes = nodes.slice(0,10)
+            const firstWords = firstNodes.map( function(item) {
+                return [item.homophones[0], item.id]
+            })
+            console.log(firstNodes)
+
+            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
+        }
+        else { return <NoRecordPage /> }
     }
 })
 

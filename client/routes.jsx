@@ -8,8 +8,6 @@ import AuthJoinPage from './auth/joinpage'
 import AuthSignInPage from './auth/loginpage'
 import RecordPage from './audio/record'
 import TrainPage from './training/train' // takes place of arena
-//import ProfileContainer from './profile'
-import Profile from './auth/profile'
 import About from './static/about'
 import ModerationPage from './audio/moderation'
 import EditingPage from './audio/edit'
@@ -29,7 +27,6 @@ const renderRoutes = () => (
             <Route path="record" component={RecordPage} />
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
-            <Route path="profile" component={Profile} />
             <Route path="moderation" component={ModerationPage} />
             <Route path="edit" component={EditingPage} />
             {/*<Route path="dummy" component={Dummy} />
