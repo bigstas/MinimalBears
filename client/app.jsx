@@ -11,7 +11,7 @@ const AppBody = React.createClass({
             /* user setting:
             false - for deployment. Also allows us to view/program things from the point of view of a guest (a non-logged-in user).
             any string - for development purposes. This allows us to program everything for a logged-in user. */
-            user: "Overlord" 
+            user: false 
         }
     },
     

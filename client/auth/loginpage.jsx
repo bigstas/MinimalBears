@@ -73,7 +73,7 @@ const AuthLoginPage = React.createClass({
     render() {
         return (
             <div className='panel page-auth'>
-                <div>
+                <div id="form">
                     <div>
                         <h1><Translate content="auth.login.loginTitle" /></h1>
                         <p>
@@ -81,14 +81,17 @@ const AuthLoginPage = React.createClass({
                         </p>
 
                         <form onSubmit={ this.onSubmit }>
-                            <p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p>
-                            <Translate content="auth.email" /> <input type="text" name="email" placeholder="type your email address here" onChange={this.handleChange} /> <br/>
-                            <p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p>
-                            <Translate content="auth.password" /> <input type="password" name="password" onChange={this.handleChange} /> <br/>
-            
-                            <button onClick={this.handleSubmit} >
+                            <table>
+                                <tbody>
+                                    <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
+                                    <tr><td><Translate content="auth.email" /></td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></tr>
+                                    <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
+                                    <tr><td><Translate content="auth.password" /></td><input type="password" name="password" onChange={this.handleChange} /> <br/></tr>
+                                </tbody>    
+                            </table>
+                            <div className="authbtn" onClick={this.handleSubmit} >
                                 <Translate content="auth.login.loginButtonLabel" />
-                            </button>
+                            </div>
                         </form>
                     </div>
 

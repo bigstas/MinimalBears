@@ -478,13 +478,13 @@ nav ul li a, nav ul li p {
 
 
 /* ================================== */
-/* =========== joinpage.jsx ========== */
+/* =========== joinpage.jsx / loginpage.jsx========== */
 /* ================================== */
 
 #form div { text-align: center; }
 #form div table { 
     text-align: right;
-    width: 300px;
+    width: 350px;
     margin: 10px auto;
 }
 .tdText {
@@ -493,3 +493,20 @@ nav ul li a, nav ul li p {
 .tdError{
     text-align: center;
 }
+
+.authbtn { 
+    display: inline-block;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: #FFA22E;
+    color: lightyellow;
+    text-align: center;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 1%;
+}
+.authbtn:hover{
+    background-color: #FFC32E;
+    color: #3C4536;
+}
+

@@ -82,7 +82,7 @@ const AuthJoinPage = React.createClass({
                             <table>
                                 <tbody>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p></td></tr>
-                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="type your email address here" onChange={this.handleChange} /></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.usernameError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.usernameError" /></p></td></tr>
                                     <tr><td className="tdText"><Translate content="auth.username" /></td><td><input type="text" name="username" placeholder="Your name" onChange={this.handleChange} /></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.passwordError" /></p></td></tr>
@@ -90,9 +90,9 @@ const AuthJoinPage = React.createClass({
                                     <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="password" name="confirmPassword" onChange={this.handleChange} /></td></tr>
                                 </tbody>
                             </table>
-                            <button onClick={this.handleSubmit} >
+                            <div className="authbtn" onClick={this.handleSubmit} >
                                 <Translate content="auth.register.joinButtonLabel" />
-                            </button>
+                            </div>
                         </form>
                     </div>
 
