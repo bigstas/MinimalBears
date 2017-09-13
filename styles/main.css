@@ -78,7 +78,6 @@ li { float: left; }                 /* All list elements should keep to the left
     text-align: center;
     border-radius: 8px;
     margin: 10px;
-    
 }
 
 /* Buttons that need to fill out a lot of space, so they have extra width and lots of margin. */
@@ -128,6 +127,8 @@ li { float: left; }                 /* All list elements should keep to the left
     color: lightyellow;
     font-size: 1.4vw;
     text-decoration: none; 
+    margin:auto;
+    display:table
 }
 
 /* Button at the bottom of the selector. Fills out most of the width of the page. */
