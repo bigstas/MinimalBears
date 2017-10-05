@@ -23,12 +23,7 @@ const GuestHome = React.createClass({
 
 const Home = React.createClass({
     render() {
-        const jwt = localStorage.getItem('token')
-        /* Below:
-        !!jwt is the correct code for deployment. 
-        this.props.username is there so that it is easier to switch between coding the guest experience and the logged-in experience. So it is only there for development purposes.
-        */
-        return ( /*!!jwt*/ this.props.user ? <UserProfile username={this.props.user} /> : <GuestHome /> )
+        return ( this.props.username ? <UserProfile username={this.props.username} user_id={this.props.user_id} /> : <GuestHome /> )
     }
 })
 

@@ -54,12 +54,12 @@ const AuthLoginPage = React.createClass({
         // Try to log in
         this.props.login({variables: {input: {tryEmail: this.state.emailValue, tryPassword: this.state.passwordValue}}}).then((response) => {
             const jwt = response.data.authenticate.jsonWebToken
-            if (jwt) {
+            if (!!jwt) {
 	            this.setState({
 	                emailError: false,
 	                passwordError: false
 	            })
-	            localStorage.setItem('token', jwt)
+	            this.props.callbackUser(jwt)
                 // TODO change page
             } else {
                 this.setState({

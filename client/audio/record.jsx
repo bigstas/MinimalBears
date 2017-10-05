@@ -519,7 +519,7 @@ next: ${next}`)
 
 const WrappedRecordPage = React.createClass({
     render() {
-        if (this.props.user) {
+        if (this.props.username) {
             console.log(this.props.items)
             if (this.props.items.loading) { return <LoadingPage /> }
 

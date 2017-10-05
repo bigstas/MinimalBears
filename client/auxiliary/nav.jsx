@@ -10,16 +10,15 @@ const Dropdown = React.createClass({
     handleClick (newLocale) {
         counterpart.setLocale(newLocale)
     },
-    logout() {
-        // TO DO: this is supposed to actually do something!
-        // Both log you out AND set the state so that the button turns into a login button
+    logOut() {
+        this.props.callbackLogOut()
         alert("You are logging out :)")
     },
     
     render() {
         let authElement
         if (this.props.username) {
-            authElement = <div className='dropdownElement' onClick={this.logout}>Log out</div>
+            authElement = <div className='dropdownElement' onClick={this.logOut}>Log out</div>
         } else {
             // TO DO: this link should not be available if you are currently on the login page!
             authElement = <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
@@ -88,7 +87,16 @@ const Nav = React.createClass({
                         <li style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
-                {this.state.dropdown ? <Dropdown onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler} /> : <span />}
+                {this.state.dropdown ?
+                    <Dropdown
+                        onMouseDown={this.mouseDownHandler}
+                        onMouseUp={this.mouseUpHandler}
+                        callbackLogOut={this.props.callbackLogOut}
+                        username={this.props.username}
+                        userId={this.props.userId}
+                    /> :
+                    <span />
+                }
             </div>
         )
     }
