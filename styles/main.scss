@@ -1,10 +1,2 @@
+// importing React Joyride styles
 @import '../node_modules/react-joyride/lib/react-joyride';
-
-// The below, and similar, do not work for some reason. The solution has been to copy and paste the required css file into our main styles folder.
-//@import '../node_modules/rc-slider/assets/index';
-// Produces the following error: 
-/*
-While processing files with fourseven:scss (for target web.browser):
-   /styles/main.scss: Scss compiler error: File to import: {}/node_modules/rc-slider/assets/_index not found in file:
-   /Users/stanislawpstrokonski/Desktop/software/MinimalBears/{}/styles/main.scss
-*/
