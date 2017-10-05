@@ -6,9 +6,8 @@ For Beta:
     - second draft to be reviewed
     - get links to link to PDFs rather than websites - this is surprisingly hard and poorly documented with React Router
 3. internationalisation (mostly Staś)
-    - mostly done structurally
-    - About page needs to be sorted before we get the translations ready for that
     - need translations into various languages
+    
 4. examples on selector buttons (mostly Staś)
     - client-side mostly implemented
     - make the switching between examples happen according to the time of hover, not globally on the page -- DONE
@@ -24,9 +23,7 @@ For Beta:
     - a logo
     - a placeholder image for the profile page? (tbd)
     - any changes to the favicon?
-9. connections to social media (Staś and Gergő)
-    - Twitter button functional, needs styling
-    - Facebook button only possible if the app is registered with Facebook (so people can "like" it)
+
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
     - Arena needs options other than "Go Again" once the user has finished (e.g. "Main Menu")
     - the Arena panel appears to have a slider on the side in Chrome, as if the contents don't fit. To be removed.
@@ -45,15 +42,9 @@ For Beta:
 15. profile with user data, like statistics (mostly Staś)
     - started charts on profile page
     - will need to arrange for data about users' activity to be logged in the db for this to be useful
-16. clean up all the warnings appearing when the app runs (Staś with Guy's help) -- DONE as these no longer appear
-17. different pages depending on whether the user is logged in or not (Staś)
-    - home page - changes started
-    - record page - should only be accessible to logged-in users
-18. SEO - we need the page to appear in Google searches (currently it doesn't) (Staś and Guy) -- DONE it appears on Google search
+
 19. An interface for audio editing (Staś)
     - started Edit page using BBC's peaks.js
-    - email Thomas Parisot at irfs@bbc.co.uk (this is the project website) -- SENT, Guy has now SOLVED the issue
+
 20. Record page bug - after navigating to the Record page 6 times it fails to load, giving the following error:
 Uncaught DOMException: Failed to construct 'AudioContext': The number of hardware contexts provided (6) is greater than or equal to the maximum bound (6).
-    
-Do we have sheath vs sheaf?

@@ -18,7 +18,7 @@ body {
 p, li, h1, h2, h3, h4, div {font-family: Verdana, Geneva, sans-serif;}   /* Set fonts throughout the document. */
 h1, h2, h3, h4, p { color: black; } /* Most text should be black. */
 li { float: left; }                 /* All list elements should keep to the left as much as they can throughout the site. */
-/* h4 { padding-left: 2%; } */
+
 .bulletpoints { clear: left; } /* We want bullet points to stack one on top of the other. */
 
 
@@ -482,8 +482,8 @@ nav ul li a, nav ul li p {
 /* =========== joinpage.jsx / loginpage.jsx========== */
 /* ================================== */
 
-#form div { text-align: center; }
-#form div table { 
+#form /*div*/ { text-align: center; }
+#form /*div*/ table { 
     text-align: right;
     width: 350px;
     margin: 10px auto;

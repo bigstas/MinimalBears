@@ -46,6 +46,10 @@ const AuthLoginPage = React.createClass({
                 passwordError: false
             })
             return
+        } else {
+            this.setState({
+                emailError: emailFail
+            })
         }
         // Try to log in
         this.props.login({variables: {input: {tryEmail: this.state.emailValue, tryPassword: this.state.passwordValue}}}).then((response) => {
@@ -84,9 +88,9 @@ const AuthLoginPage = React.createClass({
                             <table>
                                 <tbody>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
-                                    <tr><td><Translate content="auth.email" /></td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></tr>
+                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
-                                    <tr><td><Translate content="auth.password" /></td><input type="password" name="password" onChange={this.handleChange} /> <br/></tr>
+                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /> <br/></td></tr>
                                 </tbody>    
                             </table>
                             <div className="authbtn" onClick={this.handleSubmit} >

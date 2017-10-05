@@ -126,5 +126,9 @@ counterpart.registerTranslations('pol', {
                 text: "Gdy jesteś gotowy/a, wyślij audio do bazy danych. Dzięki!"
             }
         }
+    },
+    edit: {
+        submit: 'Wyślij',
+        playClip: 'Odtwórz kawałek'
     }
 })

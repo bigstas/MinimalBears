@@ -163,5 +163,9 @@ counterpart.registerTranslations('eng', {
                 text: "When you're ready, submit the audio you have recorded."
             }
         }
+    },
+    edit: {
+        submit: 'Submit',
+        playClip: 'Play Clip'
     }
 })

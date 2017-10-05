@@ -17,9 +17,8 @@ const Dropdown = React.createClass({
     },
     
     render() {
-        const loggedIn = true // replace with some condition
         let authElement
-        if (loggedIn) {
+        if (this.props.username) {
             authElement = <div className='dropdownElement' onClick={this.logout}>Log out</div>
         } else {
             // TO DO: this link should not be available if you are currently on the login page!
