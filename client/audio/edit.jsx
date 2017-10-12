@@ -3,24 +3,30 @@ import Translate from 'react-translate-component'
 import Peaks from 'peaks.js'
 
 
-const myAudioContext = new AudioContext()
-
-
 const PeaksObject = React.createClass({
     render() {
+        this.myAudioContext = new AudioContext()
+        console.log("this.props.src is " + this.props.src)
         return (
             <div>
-                <div id='audioContainer' ref='audioContainer' />
-                <audio id='editAudio' ref={'mainAudio'} src={this.props.src} controls />
+                <div id='audioContainer' ref={this.audioContainerRef} />
+                <audio id='mainAudio' ref={this.mainAudioRef} src={this.props.src} controls />
             </div>
         )
     },
     
+    audioContainerRef(el) {this.audioContainer = el; console.log('define audioContainer ref'); console.log(el)},
+    mainAudioRef(el) {this.mainAudio = el; console.log('define mainAudio ref'); console.log(el)},
+    
     updatePeaksObject() {
-        const instance = Peaks.init({
-            container: this.refs['audioContainer'],
-            mediaElement: this.refs['mainAudio'],
-            audioContext: myAudioContext,
+        console.log('updating')
+        console.log(this.mainAudio.src)
+        console.log(this.mainAudio)
+        console.log(this.audioContainer)
+        this.instance = Peaks.init({
+            container: this.audioContainer,
+            mediaElement: this.mainAudio,
+            audioContext: this.myAudioContext,
             keyboard: false,
             segments: [{
                 startTime: 1,
@@ -33,45 +39,37 @@ const PeaksObject = React.createClass({
             overviewHighlightRectangleColor: 'grey',
             logger: console.error.bind(console)
         })
-
-        instance.on('segments.ready', function(){
-            // do something when segments are ready to be displayed
-            console.log("everything is ready")
-        })
-        
-        this.setState({ 
-            instance: instance
-        })
     },
     
-    componentDidMount() { this.updatePeaksObject() },
-    componentDidUpdate() { 
-        this.state.instance.destroy() // to free up resources used by the old instance
-        this.updatePeaksObject() },   // instantiates a new instance
-    shouldComponentUpdate(nextProps, nextState) {  // to prevent infinite loops due to state being updated and then re-rendering
-        if (this.props.src === nextProps.src) { 
-            console.log("the props are the same, no need to change the Peaks object")
-            return false
-        } else {
-            console.log("the Peaks object will change now as the new props have been provided")
-            return true
-        }
+    componentDidMount() { this.mainAudio.addEventListener('loadeddata', this.updatePeaksObject) },
+    
+    shouldComponentUpdate(nextProps, nextState) {
+        this.mainAudio.src = nextProps.src
+        this.mainAudio.load()
+        this.instance.destroy()
+        
+        return false
+    },
+    
+    componentWillUnmount() { 
+        this.instance.destroy() 
+        // TODO: below requires testing - is it being destroyed?
+        this.myAudioContext.close()
     }
 })
-
 
 
 const EditingPage = React.createClass({
     getInitialState() { 
         return ({ 
-            lies: "false",
-            src: ["bukk bukk.wav", "monka.m4a"],
+            src: ["bukk bukk.wav", "monka.m4a", "bukk bukk.wav"],
             whichSrc: 0
         }) 
     },
     
     handleSubmit() {
-        const segment = this.refs.PeaksObject.state.instance.segments.getSegments()[0]
+        // TODO: this should be passed to the database rather than just logged
+        const segment = this.refs.PeaksObject.instance.segments.getSegments()[0]
         const times = [segment.startTime, segment.endTime]
         console.log(times)
         this.setState({ whichSrc: this.state.whichSrc +1 })
@@ -79,11 +77,13 @@ const EditingPage = React.createClass({
     },
     
     playClip() {
-        const segments = this.refs.PeaksObject.state.instance.segments.getSegments()
-        this.refs.PeaksObject.state.instance.player.playSegment(segments[0])
+        const segments = this.refs.PeaksObject.instance.segments.getSegments()
+        this.refs.PeaksObject.instance.player.playSegment(segments[0])
     },
     
     render() {
+        console.log(this.state.whichSrc)
+        
         return(
             <div className='panel' id='edit'>
                 <p>Welcome to the editing page!</p>
