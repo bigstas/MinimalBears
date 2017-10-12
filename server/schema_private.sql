@@ -5,7 +5,7 @@ CREATE ROLE guest
     NOSUPERUSER NOINHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
 GRANT guest TO admin;
 
--- loggedin role for users that are loggied in (more access)
+-- loggedin role for users that are logged in (more access)
 -- access to specific user information requires a password
 CREATE ROLE loggedin
     NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
@@ -30,8 +30,10 @@ GRANT EXECUTE ON FUNCTION public.get_items_from_homophone(text) TO guest, logged
 GRANT EXECUTE ON FUNCTION public.get_pair_list(integer) TO guest, loggedin;
 
 -- Logged in users can submit new recordings
-GRANT UPDATE ON TABLE public.audio_submission TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, text, integer) TO loggedin;
+GRANT INSERT ON TABLE public.audio_submission TO loggedin;
+GRANT SELECT ON TABLE public.audio_submission TO loggedin;
+GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;
 
 
 -- Private schema (for user information)
