@@ -24,19 +24,18 @@ const AppBody = React.createClass({
         const jwt = jwtDecode(raw_jwt)
         
         // Check if the token has expired
+        // Note that getTime() is in milliseconds, but jwt.exp is in seconds
         let userId
         const timestamp = (new Date).getTime()
-        if (!!jwt && timestamp > jwt.exp) {
-            userId = jwt.id
+        if (!!jwt && timestamp > jwt.exp * 1000) {
+            this.setState({
+                username: jwt.id,  // TODO get username
+                userId: jwt.id
+            })
+            localStorage.setItem('token', raw_jwt)   
         } else {
             this.logOut()
         }
-        
-        this.setState({
-            username: userId,  // TODO get username
-            userId: userId
-        })
-        localStorage.setItem('token', raw_jwt)        
     },
     
     logOut() {
@@ -46,6 +45,8 @@ const AppBody = React.createClass({
         })
         localStorage.removeItem('token')
     },
+    
+    //TODO: refresh tokens
     
     componentWillMount() {
         const raw_jwt = localStorage.getItem('token')
