@@ -63,6 +63,13 @@ const About = React.createClass({
             </div>
         )
     }
+    /*
+    componentDidMount() {
+        this.props.router.setRouteLeaveHook(this.props.route, () => {
+            if (true)
+                return 'The About page is very interesting. Are you sure you want to leave this page?'
+        })
+    }*/
 })
 
 export default About

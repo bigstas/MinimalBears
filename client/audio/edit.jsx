@@ -21,7 +21,7 @@ const PeaksObject = React.createClass({
             container: this.refs['audioContainer'],
             mediaElement: this.refs['mainAudio'],
             audioContext: myAudioContext,
-            keyboard: true,
+            keyboard: false,
             segments: [{
                 startTime: 1,
                 endTime: 10,
@@ -45,11 +45,15 @@ const PeaksObject = React.createClass({
     },
     
     componentDidMount() { this.updatePeaksObject() },
-    componentDidUpdate() { this.updatePeaksObject() },
-    shouldComponentUpdate(nextProps, nextState) {
+    componentDidUpdate() { 
+        this.state.instance.destroy() // to free up resources used by the old instance
+        this.updatePeaksObject() },   // instantiates a new instance
+    shouldComponentUpdate(nextProps, nextState) {  // to prevent infinite loops due to state being updated and then re-rendering
         if (this.props.src === nextProps.src) { 
+            console.log("the props are the same, no need to change the Peaks object")
             return false
         } else {
+            console.log("the Peaks object will change now as the new props have been provided")
             return true
         }
     }

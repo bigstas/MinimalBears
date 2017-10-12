@@ -116,7 +116,11 @@ const ContrastSelector = React.createClass({
                 mouseEnter={this.handleMouseEnter} mouseLeave={this.handleMouseLeave}
 			/>
 		)
-	}
+	},
+    
+    componentWillUnmount() {
+        clearInterval(this.timerID)
+    }
 })
 
 const languageQuery = gql`query {

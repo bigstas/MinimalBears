@@ -6,10 +6,11 @@ import counterpart from 'counterpart'
 
 const RecordPageTutorial = React.createClass({
     render() {
+        // set debug to true below if required - it is annoying / clunky if you're not currently specifically debugging Joyride
         return(
             <Joyride
                 ref={c => (this.joyride = c)}
-                debug={true}
+                debug={false}
                 autoStart={true}
                 locale={{
                     back: (<span><Translate content="record.tutorial.buttons.back" /></span>),
