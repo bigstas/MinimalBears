@@ -10,7 +10,7 @@ const PeaksObject = React.createClass({
         return (
             <div>
                 <div id='audioContainer' ref={this.audioContainerRef} />
-                <audio id='mainAudio' ref={this.mainAudioRef} src={this.props.src} controls />
+                <audio id='mainAudio' ref={this.mainAudioRef} src={this.props.src} controls={false} />
             </div>
         )
     },
@@ -19,23 +19,28 @@ const PeaksObject = React.createClass({
     mainAudioRef(el) {this.mainAudio = el; console.log('define mainAudio ref'); console.log(el)},
     
     updatePeaksObject() {
-        console.log('updating')
         console.log(this.mainAudio.src)
-        console.log(this.mainAudio)
-        console.log(this.audioContainer)
+        console.log(this.mainAudio.duration)
+        
         this.instance = Peaks.init({
             container: this.audioContainer,
             mediaElement: this.mainAudio,
             audioContext: this.myAudioContext,
             keyboard: false,
+            height: 200,
             segments: [{
-                startTime: 1,
-                endTime: 10,
+                startTime: 0.1,
+                endTime: 0.3,
                 editable: true,
                 color: "#ff0000",
                 labelText: "My label"
             }],
-            zoomAdapter: 'animated',
+            waveformBuilderOptions: {
+                scale: 1,
+                amplitude_scale: 2
+            },
+            zoomAdapter: 'static',
+            zoomLevels: [1, 2, 4, 8, 16, 32, 64, 128],
             overviewHighlightRectangleColor: 'grey',
             logger: console.error.bind(console)
         })
@@ -62,23 +67,45 @@ const PeaksObject = React.createClass({
 const EditingPage = React.createClass({
     getInitialState() { 
         return ({ 
-            src: ["bukk bukk.wav", "monka.m4a", "bukk bukk.wav"],
+            src: ["alex bid.wav", "fran win.wav"],
             whichSrc: 0
         }) 
     },
     
-    handleSubmit() {
+    handleSubmit(segment) {
         // TODO: this should be passed to the database rather than just logged
-        const segment = this.refs.PeaksObject.instance.segments.getSegments()[0]
-        const times = [segment.startTime, segment.endTime]
-        console.log(times)
+        if (segment) {
+            const segment = this.refs.PeaksObject.instance.segments.getSegments()[0]
+            const times = [segment.startTime, segment.endTime]
+            console.log(times)
+        } else {
+            // do something to accept the entire audio file as ok
+        }
         this.setState({ whichSrc: this.state.whichSrc +1 })
         alert("On to the next audio clip!")
+    },
+    
+    handleReject() {
+        this.setState({ whichSrc: this.state.whichSrc +1 })
+        // some sort of dialogue box concerning why the audio has been rejected?
+    },
+    
+    playOrPause() {
+        if(this.refs.PeaksObject.mainAudio.paused) {
+            this.refs.PeaksObject.instance.player.play()
+        } else {
+            this.refs.PeaksObject.instance.player.pause()
+        }
     },
     
     playClip() {
         const segments = this.refs.PeaksObject.instance.segments.getSegments()
         this.refs.PeaksObject.instance.player.playSegment(segments[0])
+    },
+    
+    zoom(zoomIn) {
+        if (zoomIn) { this.refs.PeaksObject.instance.zoom.zoomIn() }
+        else        { this.refs.PeaksObject.instance.zoom.zoomOut() }
     },
     
     render() {
@@ -88,11 +115,26 @@ const EditingPage = React.createClass({
             <div className='panel' id='edit'>
                 <p>Welcome to the editing page!</p>
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
-                <div className="authbtn" onClick={this.handleSubmit} >
-                    <Translate content="edit.submit" />
+                <div className="authbtn" onClick={this.playOrPause} >
+                    <p>Play</p>
                 </div>
                 <div className="authbtn" onClick={this.playClip} >
                     <Translate content="edit.playClip" />
+                </div>
+                <div className="authbtn" onClick={this.handleSubmit.bind(this, false)} >
+                    <p>Accept full</p>
+                </div>
+                <div className="authbtn" onClick={this.handleSubmit.bind(this, true)} >
+                    <p>Accept segment</p>
+                </div>
+                <div className="authbtn" onClick={this.handleReject} >
+                    <p>Reject</p>
+                </div>
+                <div className="authbtn" onClick={this.zoom.bind(this, true)} >
+                    <p>Zoom in</p>
+                </div>
+                <div className="authbtn" onClick={this.zoom.bind(this, false)} >
+                    <p>Zoom out</p>
                 </div>
             </div>
         )
