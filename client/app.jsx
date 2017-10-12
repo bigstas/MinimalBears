@@ -27,12 +27,12 @@ const AppBody = React.createClass({
         // Note that getTime() is in milliseconds, but jwt.exp is in seconds
         let userId
         const timestamp = (new Date).getTime()
-        if (!!jwt && timestamp > jwt.exp * 1000) {
+        if (!!jwt && timestamp < jwt.exp * 1000) {
             this.setState({
                 username: jwt.id,  // TODO get username
                 userId: jwt.id
             })
-            localStorage.setItem('token', raw_jwt)   
+            localStorage.setItem('token', raw_jwt)
         } else {
             this.logOut()
         }
