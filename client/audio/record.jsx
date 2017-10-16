@@ -201,6 +201,16 @@ const SubmitButton = React.createClass({
     }
 })
 
+const TutorialButton = React.createClass({
+    /* Press this button to start the tutorial. */
+    render() {
+        return (
+            <div className='topRowButton topRowButtonEnabled' id='tutorialButton' onClick={this.props.restartTutorial}>?</div>
+        )
+    }
+})
+
+
 const TopRow = React.createClass({
     /* The top row of buttons.
      * Includes: start, stop, play all, submit.
@@ -213,6 +223,7 @@ const TopRow = React.createClass({
                 <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
                 <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} recordedSoFar={this.props.recordedSoFar} />
                 <SubmitButton  mode={this.props.mode} submitAudio={this.props.submitAudio} />
+                <TutorialButton restartTutorial={this.props.restartTutorial} />
             </div>
         )
     }
@@ -446,10 +457,21 @@ next: ${next}`)
         }
     },
     
+    restartTutorial() {
+        // having difficulty getting this to work with refs and this.joyride.reset(true)
+        alert("This is supposed to restart the tutorial, but currently doesn't do anything.")
+    },
+    
     render() {
+        let tutorial
+        // placeholder - TO DO: use a db lookup for the user
+        const hasSeenTutorial = false
+        if (hasSeenTutorial) { tutorial = <span /> }
+        else { tutorial = <Tutorial ref={c => (this.joyride = c)} /> }
+        
         return (
             <div>
-                <Tutorial />
+                {tutorial}
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 
@@ -458,6 +480,7 @@ next: ${next}`)
                             playbackAll={this.playbackAll} 
                             submitAudio={this.dispatchAudio} 
                             recordedSoFar={this.state.audioURLs.length}
+                            restartTutorial={this.restartTutorial}
                             />
                     <div id="wordList">
                         {this.props.recordingWords.map(
