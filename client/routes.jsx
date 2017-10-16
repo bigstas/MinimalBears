@@ -9,7 +9,7 @@ import AuthSignInPage from './auth/loginpage'
 import RecordPage from './audio/record'
 import TrainPage from './training/train' // takes place of arena
 import About from './static/about'
-import ModerationPage from './audio/moderation'
+import Contact from './static/contact'
 import EditingPage from './audio/edit'
 import NotFound from './static/notfound'
 // For development / debugging purposes only - not for deployment!
@@ -27,8 +27,8 @@ const renderRoutes = () => (
             <Route path="record" component={RecordPage} />
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
-            <Route path="moderation" component={ModerationPage} />
             <Route path="edit" component={EditingPage} />
+            <Route path="contact" component={Contact} />
             {/*<Route path="dummy" component={Dummy} />
             <Route path="loading" component={LoadingPage} />  -- for development / debugging purposes only */}
             <Route path="*" component={NotFound} />

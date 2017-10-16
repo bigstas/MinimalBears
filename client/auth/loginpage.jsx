@@ -3,6 +3,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
+import { browserHistory } from 'react-router'
 
 // TO DO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
     
@@ -48,7 +49,7 @@ const AuthLoginPage = React.createClass({
             return
         } else {
             this.setState({
-                emailError: emailFail
+                emailError: emailFail  // sets to false? Should this just be removed as we set to false later anyway?
             })
         }
         // Try to log in
@@ -60,7 +61,8 @@ const AuthLoginPage = React.createClass({
 	                passwordError: false
 	            })
 	            this.props.callbackUser(jwt)
-                // TODO change page
+                // change page (currently navigates to Home)
+                browserHistory.push('/')
             } else {
                 this.setState({
                     emailError: false,
@@ -90,7 +92,7 @@ const AuthLoginPage = React.createClass({
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
                                     <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></td></tr>
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
-                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /> <br/></td></tr>
+                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /><br/></td></tr>
                                 </tbody>    
                             </table>
                             <div className="authbtn" onClick={this.handleSubmit} >

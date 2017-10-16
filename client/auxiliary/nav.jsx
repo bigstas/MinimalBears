@@ -13,6 +13,9 @@ const Dropdown = React.createClass({
     logOut() {
         this.props.callbackLogOut()
         alert("You are logging out :)")
+        // NOTE: for some reason when you click Log Out and then immediately click Log In, sometimes nothing happens.
+        // It appears that this is when the mouse has not moved from the Log Out position, and you need to roll the mouse out and back in and then the pointer changes to show that it is clickable again.
+        // This may be something to fix.
     },
     
     render() {
@@ -20,8 +23,15 @@ const Dropdown = React.createClass({
         if (this.props.username) {
             authElement = <div className='dropdownElement' onClick={this.logOut}>Log out</div>
         } else {
-            // TO DO: this link should not be available if you are currently on the login page!
+            // TO DO: should this link not be available if you are currently on the login page?
             authElement = <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
+        }
+            
+        let moderationElement
+        if (this.props.username && true) { // TODO - should read: if this person has the authority / rights to be a moderator AND if this person is logged in
+            moderationElement = <div className='dropdownElement'><Link className='plainLink' to="/edit">Moderation</Link></div>
+        } else {
+            moderationElement = <span /> // "empty" element
         }
         
         return (
@@ -30,6 +40,8 @@ const Dropdown = React.createClass({
                 <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
                 <hr />*/}
                 {authElement}
+                {moderationElement}
+                {<div className='dropdownElement'><Link className='plainLink' to="/contact">Contact Us</Link></div>}
                 <hr />
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'eng')}>English</div>
                 <div className='dropdownElement' onClick={this.handleClick.bind(this,'esp')}>Español</div>
