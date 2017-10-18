@@ -76,6 +76,13 @@ const AuthLoginPage = React.createClass({
         
     },
     
+    handleKeyPress(event) {
+        if(event.key == 'Enter') {
+            console.log('enter press here! ')
+            this.handleSubmit(event)
+        }
+    },
+    
     render() {
         return (
             <div className='panel page-auth'>
@@ -89,10 +96,14 @@ const AuthLoginPage = React.createClass({
                         <form onSubmit={ this.onSubmit }>
                             <table>
                                 <tbody>
+                                {/* Email error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
+                                {/* Input email */}
                                     <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></td></tr>
+                                {/* Password error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
-                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /><br/></td></tr>
+                                {/* Input password */}
+                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} onKeyPress={this.handleKeyPress} /><br/></td></tr>
                                 </tbody>    
                             </table>
                             <div className="authbtn" onClick={this.handleSubmit} >

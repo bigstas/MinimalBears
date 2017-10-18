@@ -19,12 +19,16 @@ const Dropdown = React.createClass({
     },
     
     render() {
-        let authElement
+        let authElement, registerElement, suggestWords
         if (this.props.username) {
             authElement = <div className='dropdownElement' onClick={this.logOut}>Log out</div>
+            registerElement = <span /> // "empty" element
+            suggestWords = <div className='dropdownElement'><Link className='plainLink' to="/suggest">Suggest words</Link></div>
         } else {
             // TO DO: should this link not be available if you are currently on the login page?
-            authElement = <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
+            authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
+            registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register">Register</Link></div>
+            suggestWords = <span /> // "empty" element
         }
             
         let moderationElement
@@ -40,6 +44,8 @@ const Dropdown = React.createClass({
                 <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
                 <hr />*/}
                 {authElement}
+                {registerElement}
+                {suggestWords}
                 {moderationElement}
                 {<div className='dropdownElement'><Link className='plainLink' to="/contact">Contact Us</Link></div>}
                 <hr />

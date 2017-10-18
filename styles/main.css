@@ -272,7 +272,7 @@ nav ul li a, nav ul li p {
 /* The dropdown menu from the gear symbol. */
 .dropdownDiv {
     right: 0;
-    position: absolute;
+    position: fixed; /* this means that it moves with the viewport, as required */
     margin-right: 5px;
     background-color: white;
     border-radius: 8px;

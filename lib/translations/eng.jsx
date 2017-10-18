@@ -48,6 +48,7 @@ counterpart.registerTranslations('eng', {
             emailError: "invalid email address",
             usernameError: "username unavailable",
             passwordError: "password mismatch",
+            languageError: "select your native language",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in."
         },
