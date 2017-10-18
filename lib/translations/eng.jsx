@@ -168,5 +168,10 @@ counterpart.registerTranslations('eng', {
     edit: {
         submit: 'Submit',
         playClip: 'Play Clip'
+    },
+    suggest: {
+        mainMessage: "On this page, you can suggest either new contrasts for a given language, or new word pairs for a given contrast. Please choose which you would like to suggest below.",
+        contrasts: "contrasts",
+        words: "words"
     }
 })

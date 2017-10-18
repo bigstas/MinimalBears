@@ -21,7 +21,7 @@ const AuthJoinPage = React.createClass({
             emailValue: "",
             passwordValue: "",
             confirmPassword: "###",
-            nativeLanguage: "",
+            nativeLanguage: "--select--",
             emailError: false,
             passwordError: false,
             languageError: false
@@ -54,7 +54,7 @@ const AuthJoinPage = React.createClass({
             usernameIssue: this.state.username === "",
             passwordClash: this.state.passwordValue !== this.state.confirmPassword,
             emailFail: !validateEmail(this.state.emailValue),
-            languageFail: this.state.nativeLanguage === ""
+            languageFail: this.state.nativeLanguage === "--select--"
         }
         this.setState({
             usernameError: errors.usernameIssue,
@@ -83,7 +83,12 @@ const AuthJoinPage = React.createClass({
     },
     
     render() {
-        // TO DO: neaten up the presentation of the below by using a table
+        const options = ["English", "German", "Polish"]
+        // Array.push - adds to the end of the array; Array.unshift - adds to the beginning of the array
+        options.push("none of the above")
+        options.unshift("--select--")
+        console.log(options)
+        
         return (
             <div className='panel page-auth'>
                 <div id="form">
@@ -119,11 +124,9 @@ const AuthJoinPage = React.createClass({
                                     {/* Possible alternatives to the HTML built-in <select> include react-select, which is perhaps prettier, and may have more useful functionality in some cases, but is otherwise not so different.
                                     Consider for future change, but below is the minimal example not requiring more libraries. */}
                                     <td><select onChange={this.getDropdownValue}>
-                                        <option value="">--choose one--</option>
-                                        <option value="english">English</option>
-                                        <option value="german">German</option>
-                                        <option value="polish">Polish</option>
-                                        <option value="other">None of the above</option>
+                                        {options.map((c, index) => 
+                                            <option key={index} value={c}>{c}</option>
+                                        )}
                                     </select></td></tr>
                                 </tbody>
                             </table>
