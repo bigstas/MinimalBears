@@ -69,6 +69,7 @@ const AppBody = React.createClass({
                     {activeLanguageId: this.state.activeLanguageId, 
                         interfaceLanguage: this.state.interfaceLanguage,
                         username: this.state.username,
+                        noSuchLanguage: false, /* TO DO - should depend on a database lookup */
                         userId: this.state.userId,
                         callbackLanguage: this.setLanguage,
                         callbackUser: this.setUser,

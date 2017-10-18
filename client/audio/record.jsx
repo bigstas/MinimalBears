@@ -541,7 +541,7 @@ next: ${next}`)
 
 const WrappedRecordPage = React.createClass({
     render() {
-        if (this.props.username) {
+        if (this.props.username && !this.props.noSuchLanguage) {
             console.log(this.props.items)
             if (this.props.items.loading) { return <LoadingPage /> }
 
@@ -558,7 +558,8 @@ const WrappedRecordPage = React.createClass({
 
             return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
         }
-        else { return <NoRecordPage /> }
+        else if (this.props.username && this.props.noSuchLanguage) { return <NoRecordPage loggedIn={true} noSuchLanguage={false} /> }
+        else if (!this.props.username) { return <NoRecordPage loggedIn={false} noSuchLanguage={null} /> }
     }
 })
 
