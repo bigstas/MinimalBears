@@ -4,7 +4,9 @@
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
-import { Line, Bar, Radar } from 'react-chartjs' // Charts
+import { Line, Bar, Radar, Pie } from 'react-chartjs' // Charts
+// other charts available: Doughnut, ...
+import data from './chartdata'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 // Stand-in data, to be done in/from the database in whatever way is best and most efficient
@@ -22,7 +24,7 @@ User inputs:
 - Recorded audio (maybe one day this will yield some sort of points system?)
 - Moderated audio (for moderators) ...?
 */
-const data = {
+/*const data = {
     english: {
         contrastsPopularity: [("ee-i", 0.3), ("s-th", 0.4), ("l-r", 0.3)],
         contrastSuccess: [],
@@ -41,90 +43,28 @@ const data = {
     all: {
         
     }
-}
+}*/
     
 
 // when there is a logged in user
 const UserProfile = React.createClass({
+    getInitialState() {
+        return {language: '0'}
+    },
+    
+    handleOptionChange(event) {
+        const language = event.target.value
+        this.setState({ language: language })
+    },
+    
     render() {
-        const lineChartData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-            datasets: [
-                {
-                    label: "My First dataset",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(75,192,192,0.4)",
-                    borderColor: "rgba(75,192,192,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(75,192,192,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: [65, 59, 80, 81, 56, 55, 40, 0, 1, 2, 3],
-                    spanGaps: false,
-                }
-            ]
-        }
-        const barChartData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [
-                {
-                    label: "My First dataset",
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1,
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                }
-            ]
-        }
-        const radarChartData = {
-            labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-            datasets: [
-                {
-                    label: "My First dataset",
-                    backgroundColor: "rgba(179,181,198,0.2)",
-                    borderColor: "rgba(179,181,198,1)",
-                    pointBackgroundColor: "rgba(179,181,198,1)",
-                    pointBorderColor: "#fff",
-                    pointHoverBackgroundColor: "#fff",
-                    pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [65, 59, 90, 81, 56, 55, 40]
-                },
-                {
-                    label: "My Second dataset",
-                    backgroundColor: "rgba(255,99,132,0.2)",
-                    borderColor: "rgba(255,99,132,1)",
-                    pointBackgroundColor: "rgba(255,99,132,1)",
-                    pointBorderColor: "#fff",
-                    pointHoverBackgroundColor: "#fff",
-                    pointHoverBorderColor: "rgba(255,99,132,1)",
-                    data: [28, 48, 40, 19, 96, 27, 100]
-                }
-            ]
-        }
+        console.log(data)    
+    
+        const pieChartData = data.pieChartData[this.state.language]
+        const lineChartData = data.lineChartData
+        const barChartData = data.barChartData
+        const radarChartData = data.radarChartData
+        
         // this object is required, but it can be empty...
         const chartOptions = {
             responsive: true,
@@ -145,6 +85,13 @@ const UserProfile = React.createClass({
                     </div>
                 </div>
                 <div id='graphsDiv'>
+                    <label>
+                        <input type="radio" value="0" checked={this.state.language === '0'} onChange={this.handleOptionChange} />English
+                    </label>
+                    <label>
+                        <input type="radio" value="1" checked={this.state.language === '1'} onChange={this.handleOptionChange} />Polish
+                    </label>
+                    <Pie data={pieChartData} options={chartOptions} />
                     <h4>Your XP points over time</h4>
                     <Line data={lineChartData} options={chartOptions} />
                     <h4>Average success over time</h4>
