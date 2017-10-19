@@ -44,7 +44,21 @@ User inputs:
         
     }
 }*/
-    
+
+const ChartLegend = React.createClass({
+    render() {
+        const datasets = _.map(this.props.datasets, function (ds, index) { 
+            return <li key={index}><span className="legend-color-box" style={{ backgroundColor: ds.color }}></span> { ds.label }</li>
+        })
+
+        return (
+            <ul className={ this.props.title + "-legend" }>
+                { datasets }
+            </ul>
+        )
+    }
+})
+   
 
 // when there is a logged in user
 const UserProfile = React.createClass({
@@ -52,12 +66,21 @@ const UserProfile = React.createClass({
         return {language: '0'}
     },
     
+    componentDidMount: function () {
+        // prepare the legend
+        const legend = this.refs.chart.getChart().generateLegend()
+        this.setState({ legend: legend })
+    },
+
+    
     handleOptionChange(event) {
         const language = event.target.value
         this.setState({ language: language })
     },
     
     render() {
+        const legend = this.state && this.state.legend || ''
+        
         console.log(data)    
     
         const pieChartData = data.pieChartData[this.state.language]
@@ -75,6 +98,7 @@ const UserProfile = React.createClass({
         
         return (
             <div className='panel animated fadeIn' id='profile'>
+            {/* TOP REGION */}
                 <div id='topband'>
                     <div className='userpic' id='userpicProfile'>
                         <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
@@ -85,13 +109,17 @@ const UserProfile = React.createClass({
                     </div>
                 </div>
                 <div id='graphsDiv'>
+            {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="0" checked={this.state.language === '0'} onChange={this.handleOptionChange} />English
                     </label>
                     <label>
                         <input type="radio" value="1" checked={this.state.language === '1'} onChange={this.handleOptionChange} />Polish
                     </label>
-                    <Pie data={pieChartData} options={chartOptions} />
+            {/* CHARTS */}
+                    <Pie data={pieChartData} options={chartOptions} ref='chart' />
+                    <ChartLegend datasets={data.pieChartData[0]} title="PieChart" />
+                    {/*<div dangerouslySetInnerHTML={{ __html: legend }} />*/}
                     <h4>Your XP points over time</h4>
                     <Line data={lineChartData} options={chartOptions} />
                     <h4>Average success over time</h4>
