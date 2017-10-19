@@ -2,7 +2,7 @@
  * react-chartjs is based *specifically* on chartjs version 1.1.1, and so make sure you *specifically* look at the documentation for this.
  * That of more recent versions is *not backwards-compatible*, and the way you need to input data is specific to v1.1.1.
  */
-const data = {
+const chartdata = {
     lineChartData: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         datasets: [
@@ -40,44 +40,73 @@ const data = {
             }
         ]
     },
-    pieChartData: [
-        [{
-            value: 300,
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-            label: "Red"
-        },
-        {
-            value: 50,
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            label: "Green"
-        },
-        {
-            value: 100,
-            color: "#FDB45C",
-            highlight: "#FFC870",
-            label: "Yellow"
-        }],
-        [{
-            value: 200,
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-            label: "Red"
-        },
-        {
-            value: 40,
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            label: "Green"
-        },
-        {
-            value: 15,
-            color: "#FDB45C",
-            highlight: "#FFC870",
-            label: "Yellow"
+    pieChartData: [{
+        labels: [
+            'Red',
+            'Green',
+            'Yellow'
+        ],
+        datasets: [{
+            data: [300, 50, 100],
+            backgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56'
+            ],
+            hoverBackgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56'
+            ]
         }]
-    ],
+    },
+    {
+        labels: [
+            'Blue',
+            'Orange',
+            'Brown'
+        ],
+        datasets: [{
+            data: [100, 70, 210],
+            backgroundColor: [
+                '#2222ff',
+                '#dd8811',
+                '#772222'
+            ],
+            hoverBackgroundColor: [
+                '#2222ff',
+                '#dd8811',
+                '#772222'
+            ]
+        }]
+    }],
+    mixChartData: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'Sales',
+            type:'line',
+            data: [51, 65, 40, 49, 60, 37, 40],
+            fill: false,
+            borderColor: '#EC932F',
+            backgroundColor: '#EC932F',
+            pointBorderColor: '#EC932F',
+            pointBackgroundColor: '#EC932F',
+            pointHoverBackgroundColor: '#EC932F',
+            pointHoverBorderColor: '#EC932F',
+            yAxisID: 'y-axis-2'
+        },
+        {
+            type: 'bar',
+            label: 'Visitor',
+            data: [200, 185, 590, 621, 250, 400, 95],
+            fill: false,
+            backgroundColor: '#71B37C',
+            borderColor: '#71B37C',
+            hoverBackgroundColor: '#71B37C',
+            hoverBorderColor: '#71B37C',
+            yAxisID: 'y-axis-1'
+        }]
+    },
     radarChartData: {
         labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
         datasets: [
@@ -105,4 +134,4 @@ const data = {
     }
 }
 
-export default data
+export default chartdata

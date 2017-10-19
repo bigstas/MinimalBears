@@ -4,9 +4,9 @@
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
-import { Line, Bar, Radar, Pie } from 'react-chartjs' // Charts
+import { Line, Bar, Radar, Pie } from 'react-chartjs-2' // Charts
 // other charts available: Doughnut, ...
-import data from './chartdata'
+import chartdata from './chartdata'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 // Stand-in data, to be done in/from the database in whatever way is best and most efficient
@@ -44,7 +44,58 @@ User inputs:
         
     }
 }*/
-    
+   
+const mixOptions = {
+  responsive: true,
+  tooltips: {
+    mode: 'label'
+  },
+  elements: {
+    line: {
+      fill: false
+    }
+  },
+  scales: {
+    xAxes: [
+      {
+        display: true,
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        }
+      }
+    ],
+    yAxes: [
+      {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        id: 'y-axis-1',
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        }
+      },
+      {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        id: 'y-axis-2',
+        gridLines: {
+          display: false
+        },
+        labels: {
+          show: true
+        }
+      }
+    ]
+  }
+}
+
 
 // when there is a logged in user
 const UserProfile = React.createClass({
@@ -58,12 +109,10 @@ const UserProfile = React.createClass({
     },
     
     render() {
-        console.log(data)    
-    
-        const pieChartData = data.pieChartData[this.state.language]
-        const lineChartData = data.lineChartData
-        const barChartData = data.barChartData
-        const radarChartData = data.radarChartData
+        // creating a copy so that the imported chartdata object is not written over
+        const newData = JSON.parse(JSON.stringify(chartdata))
+        const pieChartData = newData.pieChartData[this.state.language]
+        const mixChartData = newData.mixChartData
         
         // this object is required, but it can be empty...
         const chartOptions = {
@@ -75,6 +124,7 @@ const UserProfile = React.createClass({
         
         return (
             <div className='panel animated fadeIn' id='profile'>
+            {/* TOP REGION */}
                 <div id='topband'>
                     <div className='userpic' id='userpicProfile'>
                         <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
@@ -85,19 +135,22 @@ const UserProfile = React.createClass({
                     </div>
                 </div>
                 <div id='graphsDiv'>
+            {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="0" checked={this.state.language === '0'} onChange={this.handleOptionChange} />English
                     </label>
                     <label>
                         <input type="radio" value="1" checked={this.state.language === '1'} onChange={this.handleOptionChange} />Polish
                     </label>
-                    <Pie data={pieChartData} options={chartOptions} />
-                    <h4>Your XP points over time</h4>
+            {/* CHARTS */}
+                    <Pie data={pieChartData} />
+                    <Bar data={mixChartData} options={mixOptions} />
+                    {/*<h4>Your XP points over time</h4>
                     <Line data={lineChartData} options={chartOptions} />
                     <h4>Average success over time</h4>
                     <Bar data={barChartData} options={chartOptions} />
                     <h4>Relative ease of contrasts</h4>
-                    <Radar data={radarChartData} options={chartOptions} />
+                    <Radar data={radarChartData} options={chartOptions} />*/}
                 </div>
                 <TwitterButton className="button" id="twitterButton" element="div" url={url}>
                         {" Share us on Twitter"}
