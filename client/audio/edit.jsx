@@ -112,7 +112,7 @@ const EditingPage = React.createClass({
         console.log(this.state.whichSrc)
         
         return(
-            <div className='panel' id='edit'>
+            <div className='panel animated fadeIn' id='edit'>
                 <p>Welcome to the editing page!</p>
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
                 <div className="authbtn" onClick={this.playOrPause} >

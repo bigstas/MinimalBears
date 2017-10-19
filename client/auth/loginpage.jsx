@@ -85,7 +85,7 @@ const AuthLoginPage = React.createClass({
     
     render() {
         return (
-            <div className='panel page-auth'>
+            <div className='panel animated fadeIn'>
                 <div id="form">
                     <div>
                         <h1><Translate content="auth.login.loginTitle" /></h1>

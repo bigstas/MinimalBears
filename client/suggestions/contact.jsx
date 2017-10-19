@@ -8,7 +8,7 @@ const Contact = React.createClass({
     
     render() {
         return (
-            <div className='panel' id='contact'>
+            <div className='panel animated fadeIn' id='contact'>
                 <h1>Contact Us</h1>
                 <p>Let us know if you have any issues, comments, or suggestions.</p>
                 <textarea style={{width: "100%"}} name="text" cols="40" rows="8" placeholder="Hi guys!" />

@@ -90,7 +90,7 @@ const AuthJoinPage = React.createClass({
         console.log(options)
         
         return (
-            <div className='panel page-auth'>
+            <div className='panel animated fadeIn'>
                 <div id="form">
                     <div>
                         <h1><Translate content="auth.register.joinTitle" /></h1>
