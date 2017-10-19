@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 import { Line, Bar, Radar, Pie } from 'react-chartjs-2' // Charts
 // other charts available: Doughnut, ...
-import { makeChartData, mixOptions } from './chartdata'
+import { makeChartData, mixOptions, pieOptions } from './chartdata'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 // Stand-in data, to be done in/from the database in whatever way is best and most efficient
@@ -85,7 +85,7 @@ const UserProfile = React.createClass({
             const pieChartData = chartData.pieChartData[this.state.language]       //newData.pieChartData[this.state.language]
             const mixChartData = chartData.mixChartData[this.state.language]       //newData.mixChartData[this.state.language]
             
-            pieChart = <Pie data={pieChartData} />
+            pieChart = <Pie data={pieChartData} options={pieOptions} />
             mixChart = <Bar data={mixChartData} options={mixOptions} />
         }
         else {

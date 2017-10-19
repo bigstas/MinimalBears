@@ -109,7 +109,24 @@ function makeChartData(period) {
     ]}
     return chartdata
 }
-    
+
+const pieOptions = {
+     tooltips: {
+         callbacks: {
+            label: function(tooltipItem, data) {
+                const allData = data.datasets[tooltipItem.datasetIndex].data
+                const tooltipLabel = data.labels[tooltipItem.index]
+                const tooltipData = allData[tooltipItem.index]
+                let total = 0
+                for (var i in allData) {
+                    total += allData[i]
+                }
+                const tooltipPercentage = Math.round((tooltipData / total) * 100)
+                return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)'
+            }
+		}
+     }
+}
     
 const mixOptions = {
     responsive: true,
@@ -170,4 +187,4 @@ const mixOptions = {
     }
 }
 
-export { makeChartData, mixOptions }
+export { makeChartData, mixOptions, pieOptions }
