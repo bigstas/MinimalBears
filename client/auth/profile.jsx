@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 import { Line, Bar, Radar, Pie } from 'react-chartjs-2' // Charts
 // other charts available: Doughnut, ...
-import chartdata from './chartdata'
+import { chartdata, mixOptions } from './chartdata'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 // Stand-in data, to be done in/from the database in whatever way is best and most efficient
@@ -44,57 +44,6 @@ User inputs:
         
     }
 }*/
-   
-const mixOptions = {
-  responsive: true,
-  tooltips: {
-    mode: 'label'
-  },
-  elements: {
-    line: {
-      fill: false
-    }
-  },
-  scales: {
-    xAxes: [
-      {
-        display: true,
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        }
-      }
-    ],
-    yAxes: [
-      {
-        type: 'linear',
-        display: true,
-        position: 'left',
-        id: 'y-axis-1',
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        }
-      },
-      {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        id: 'y-axis-2',
-        gridLines: {
-          display: false
-        },
-        labels: {
-          show: true
-        }
-      }
-    ]
-  }
-}
 
 
 // when there is a logged in user
@@ -112,7 +61,7 @@ const UserProfile = React.createClass({
         // creating a copy so that the imported chartdata object is not written over
         const newData = JSON.parse(JSON.stringify(chartdata))
         const pieChartData = newData.pieChartData[this.state.language]
-        const mixChartData = newData.mixChartData
+        const mixChartData = newData.mixChartData[this.state.language]
         
         // this object is required, but it can be empty...
         const chartOptions = {

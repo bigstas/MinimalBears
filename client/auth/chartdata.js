@@ -1,7 +1,3 @@
-/* USE THE RIGHT VERSION: 
- * react-chartjs is based *specifically* on chartjs version 1.1.1, and so make sure you *specifically* look at the documentation for this.
- * That of more recent versions is *not backwards-compatible*, and the way you need to input data is specific to v1.1.1.
- */
 const chartdata = {
     lineChartData: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -30,41 +26,31 @@ const chartdata = {
             }
         ]
     },
-    barChartData: {
-        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-        datasets: [
-            {
-                label: "Population (millions)",
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                data: [2478,5267,734,784,433]
-            }
-        ]
-    },
     pieChartData: [{
         labels: [
-            'Red',
-            'Green',
-            'Yellow'
+            'ee/i',
+            's/th',
+            'i/e'
         ],
         datasets: [{
             data: [300, 50, 100],
             backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56'
+                '#ff0000',
+                '#00ff00',
+                'yellow'
             ],
             hoverBackgroundColor: [
-                '#FF6384',
-                '#36A2EB',
+                '#dd0000',
+                '#00dd00',
                 '#FFCE56'
             ]
         }]
     },
     {
         labels: [
-            'Blue',
-            'Orange',
-            'Brown'
+            'ś-sz',
+            'ć-cz',
+            'ą-ę'
         ],
         datasets: [{
             data: [100, 70, 210],
@@ -74,21 +60,21 @@ const chartdata = {
                 '#772222'
             ],
             hoverBackgroundColor: [
-                '#2222ff',
-                '#dd8811',
-                '#772222'
+                '#4444ff',
+                '#ff9922',
+                '#884444'
             ]
         }]
     }],
-    mixChartData: {
+    mixChartData: [{
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [{
-            label: 'Sales',
             type:'line',
-            data: [51, 65, 40, 49, 60, 37, 40],
+            label: 'Performance',
+            data: [51, 65, 55, 58, 60, 75, 89],
             fill: false,
             borderColor: '#EC932F',
-            backgroundColor: '#EC932F',
+            backgroundColor: '#EC932F', // only affects the legend's background (for lines)
             pointBorderColor: '#EC932F',
             pointBackgroundColor: '#EC932F',
             pointHoverBackgroundColor: '#EC932F',
@@ -97,7 +83,7 @@ const chartdata = {
         },
         {
             type: 'bar',
-            label: 'Visitor',
+            label: 'Practice',
             data: [200, 185, 590, 621, 250, 400, 95],
             fill: false,
             backgroundColor: '#71B37C',
@@ -106,32 +92,95 @@ const chartdata = {
             hoverBorderColor: '#71B37C',
             yAxisID: 'y-axis-1'
         }]
+    }, 
+    // Colours in the below are currently wild for the second element of the array just for demonstration purposes, not an actually suggested colour scheme. 
+    // The idea is that you can see what options affect what.
+    {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            type:'line',
+            label: 'Performance',
+            data: [48, 54, 55, 58, 52, 67, 70],
+            fill: false,
+            borderColor: 'red',
+            backgroundColor: 'red', // only affects the legend's background (for lines)
+            pointBorderColor: 'black',
+            pointBackgroundColor: 'grey',
+            pointHoverBackgroundColor: '#EC932F',
+            pointHoverBorderColor: 'black',
+            yAxisID: 'y-axis-2'
+        },
+        {
+            type: 'bar',
+            label: 'Practice',
+            data: [200, 185, 590, 621, 250, 400, 95],
+            fill: false,
+            backgroundColor: 'blue',
+            borderColor: '#71B37C',
+            hoverBackgroundColor: '#71B37C',
+            hoverBorderColor: '#71B37C',
+            yAxisID: 'y-axis-1'
+        }]
+    }
+]}
+
+const mixOptions = {
+    responsive: true,
+    tooltips: {
+        mode: 'label'
     },
-    radarChartData: {
-        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-        datasets: [
-            {
-                label: "My First dataset",
-                backgroundColor: "rgba(179,181,198,0.2)",
-                borderColor: "rgba(179,181,198,1)",
-                pointBackgroundColor: "rgba(179,181,198,1)",
-                pointBorderColor: "#fffaaa",
-                pointHoverBackgroundColor: "#fff",
-                pointHoverBorderColor: "rgba(179,181,198,1)",
-                data: [65, 59, 90, 81, 56, 55, 40]
+    elements: {
+        line: {
+            fill: false
+        }
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            gridLines: {
+                display: false
             },
-            {
-                label: "My Second dataset",
-                backgroundColor: "rgba(255,99,132,0.2)",
-                borderColor: "rgba(255,99,132,1)",
-                pointBackgroundColor: "rgba(255,99,132,1)",
-                pointBorderColor: "#fff",
-                pointHoverBackgroundColor: "#fff",
-                pointHoverBorderColor: "rgba(255,99,132,1)",
-                data: [28, 48, 40, 19, 96, 27, 100]
+            labels: {
+                show: true
             }
-        ]
+        }],
+        yAxes: [{
+            type: 'linear',
+            display: true,
+            position: 'left',
+            id: 'y-axis-1',
+            scaleLabel: {
+                display: true,
+                labelString: 'Practice (reps)'
+            },
+            ticks: {
+                suggestedMin: 40,    // minimum will be 0, unless there is a lower value
+                suggestedMax: 100
+            },
+            gridLines: { display: false },
+            labels: { show: true }
+        },
+        {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            id: 'y-axis-2',
+            scaleLabel: {
+                display: true,
+                labelString: 'Success rate (%)'
+            },
+            ticks: {
+                suggestedMin: 40,    // minimum will be 0, unless there is a lower value
+                suggestedMax: 100
+            },
+            gridLines: {
+                display: false
+            },
+            labels: {
+                show: true
+            }
+        }]
     }
 }
 
-export default chartdata
+export { chartdata, mixOptions }
