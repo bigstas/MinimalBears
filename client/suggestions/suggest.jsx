@@ -26,10 +26,24 @@ const SuggestSelector = React.createClass({
 
         
 const InputContrasts = React.createClass({
+    getInitialState() {
+        return { 
+            word0: "",
+            word1: ""
+        }
+    },
+    
+    handleChange(event) {
+        const field = event.target.name
+        if      (field === 'input0') { this.setState({word0: event.target.value}) }
+        else if (field === 'input1') { this.setState({word1: event.target.value}) }
+        else { /* Throw an error? */ }
+    },
+    
     render() {
         return (
             <div>
-                <input style={{display: "inline"}}></input><p style={{display: "inline"}}> vs </p><input style={{display: "inline"}}></input>
+                <input name='input0' style={{display: "inline"}} onChange={this.handleChange}></input><p style={{display: "inline"}}> vs </p><input name='input1' style={{display: "inline"}} onChange={this.handleChange}></input>
             </div>
         )
     }
@@ -37,10 +51,20 @@ const InputContrasts = React.createClass({
 
         
 const SuggestContrasts = React.createClass({
+    getDropdownValue() {
+        // Do something!
+    },
+    
     submitContrasts() {
         // TO DO: this should submit the example word pairs into a table in the database.
-        
-        alert("Thank you for your submission!")
+        let count = 0
+        for (let i=0; i<3; i++) {
+            const input = this.refs['pair' + count.toString()]
+            if (input.state.word0 && input.state.word1 && (input.state.word0 !== input.state.word1) ) { count +=1 }
+        }
+        if (count === 0 ) { alert ("Please enter at least one pair of words for your suggested new contrast.") }
+        else if (count > 0) { alert("Thank you for your submission!") }
+        else { /* Throw an error? */ }
     },
     
     render() {
@@ -62,10 +86,37 @@ const SuggestContrasts = React.createClass({
                 <br /><br />
                 <h4>Example word pairs</h4>
                 <p>One word pair is enough, but please submit more if you can think of any.</p>
-                <InputContrasts />
-                <InputContrasts />
-                <InputContrasts />                     
+                <p>Example: enter {<em>sheep</em>} in one box and {<em>ship</em>} in the other to highlight the distinction between "ee" and "i". Then you could also add {<em>cheap</em>} and {<em>chip</em>}, and {<em>read</em>} and {<em>rid</em>} as further examples if you happened to think of them. (We already have all those though, so no need to suggest them!)</p>
+                <InputContrasts ref='pair0' />
+                <InputContrasts ref='pair1' />
+                <InputContrasts ref='pair2' />                     
                 <div className="authbtn" onClick={this.submitContrasts}>Submit</div>
+                <div className="authbtn" onClick={this.props.callback}>Back</div>
+            </div>
+        )
+    }
+})
+
+const SuggestWordPairs = React.createClass({
+    getDropdownValue() {
+        // Do something!
+    },
+    
+    render() {
+        if (this.props.data.loading) { return <LoadingPage /> }
+        
+        const options = this.props.data.allLanguages.nodes.map((c, index) => (c.name))
+        
+        return (
+            <div className='panel' id='suggestWordPairs'>
+                <h2>Suggest Word Pairs</h2>
+                <h4>Select language and contrast for new word pairs</h4>
+                <select onChange={this.getDropdownValue}>
+                    {options.map((c, index) => 
+                        <option key={index} value={c}>{c}</option>
+                    )}
+                </select>
+                <div className="authbtn" onClick={this.props.callback}>Back</div>
             </div>
         )
     }
@@ -80,16 +131,7 @@ const languageQuery = gql`query {
 	}
 }`
 
-const SuggestWordPairs = React.createClass({
-    render() {
-        return (
-            <div className='panel' id='suggestWordPairs'>
-                <h2>Suggest Word Pairs</h2>
-            </div>
-        )
-    }
-})
-
 const ConnectedContrastSuggestion = graphql(languageQuery)(SuggestContrasts)
+const ConnectedWordPairSuggestion = graphql(languageQuery)(SuggestWordPairs)
 
-export { SuggestSelector, ConnectedContrastSuggestion, SuggestWordPairs }
+export { SuggestSelector, ConnectedContrastSuggestion, ConnectedWordPairSuggestion }

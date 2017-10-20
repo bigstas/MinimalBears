@@ -44,6 +44,32 @@ const TopBand = React.createClass({
     }
 })
 
+
+const BestAndWorst = React.createClass({
+    /* A table showing the best and worst performances in contrasts.
+     */
+    render() {
+        return (
+            <div>
+                <h3>Your best and worst word pairs</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Status </th><th>Contrast </th><th>Correct %</th>
+                        </tr>
+                        <tr>
+                            <td>Best</td><td>mouse / mouth</td><td>94%</td>
+                        </tr>
+                        <tr>
+                            <td>Worst</td><td>sheep / ship</td><td>52%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+})
+
 const UserProfile = React.createClass({
     getInitialState() {
         return {
@@ -137,6 +163,7 @@ const UserProfile = React.createClass({
                         <input type="radio" value="6month" checked={this.state.period === '6month'} onChange={this.handlePeriodChange} />Six month view
                     </label>
             {/* CHARTS */}
+                    <BestAndWorst />
                     {mixChartTitle}
                     {mixChart}
                     {pieChartTitle}
