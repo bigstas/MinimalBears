@@ -99,7 +99,7 @@ li { float: left; }                 /* All list elements should keep to the left
     transition: 0.5s;
 }
 
-#progressButton {
+.progressButton {
     text-align: center;
     width: 30%;
     margin-top: 50px;

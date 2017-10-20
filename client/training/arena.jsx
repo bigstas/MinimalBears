@@ -6,6 +6,7 @@ import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import key from 'keymaster'
 import Translate from 'react-translate-component'
+import { Link } from 'react-router'
 
 // new gql way of getting data...
 import { graphql, compose } from 'react-apollo'
@@ -34,14 +35,14 @@ const ProgressButton = React.createClass({
     render() {
         // Uses CSS animate.css library. Syntax is:
         // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
-        let btnClass = 'button animated rubberBand' // could do styling depending on mode if we want
+        let btnClass = 'button progressButton animated rubberBand' // could do styling depending on mode if we want
         let label
         if      (this.props.mode === "wait")     { label = "train.progressLabel.begin" }
         else if (this.props.mode === "ask")      { label = "train.progressLabel.playAgain" }
         else if (this.props.mode === "feedback") { label = "train.progressLabel.next" }
         else if (this.props.mode === "done")     { label = "train.progressLabel.goAgain" }
         return (
-            <div id='progressButton' className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
+            <div className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
         )
     }
 })
@@ -209,6 +210,11 @@ const Arena = React.createClass({
 
                 <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
                           
+                {(this.state.mode === "done") ?
+                    <div className="button progressButton" style={{marginTop: "10px"}}><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
+                    <span />
+                }
+                
                 {/* Buttons for choosing options */}
                 <div id='optionContainer' className="container">
                     {(this.state.mode === "ask" || this.state.mode === "feedback") ?

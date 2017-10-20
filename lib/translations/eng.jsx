@@ -112,6 +112,7 @@ counterpart.registerTranslations('eng', {
             next: "Next",
             goAgain: "Play again"
         },
+        viewStats: "View Stats",
         correct: "Correct!",
         wrong: "Oops!"
     },

@@ -1,50 +1,39 @@
 For Beta:
-1. authentication / user accounts (mostly Guy)
-    - rationalise behaviour: Make the appropriate options available or unavailable according to whether somebody is logged in or not (e.g. log in / register / record page availabilities)
-    - are the home page and the username button going to point to the same page? Currently they don't. There is an argument for making them both point either to the home page or to a single profile-and-stats page, depending on whether the user is logged in or not.
+1. DONE
 2. finalised text on About page (Staś and Guy)
     - second draft to be reviewed
     - get links to link to PDFs rather than websites - this is surprisingly hard and poorly documented with React Router
 3. internationalisation (mostly Staś)
-    - need translations into various languages
-    
+    - need translations into various languages 
 4. examples on selector buttons (mostly Staś)
-    - client-side mostly implemented
-    - make the switching between examples happen according to the time of hover, not globally on the page -- DONE
-    - TODO: server-side bringing up the examples to feed to the buttons (once we've done that then we're done on this point)
-    - TODO: once you're in the Arena, the state keeps setting for the selector buttons. This is brought up with a warning:
-    Warning: setState(...): Can only update a mounted or mounting component. This usually means you called setState() on an unmounted component. This is a no-op. Please check the code for the ContrastSelector component.
-5. some sort of interface for admins to approve audio (probably Staś and Guy)
-    - Moderation page exists client side, need server-side connections to make work
-6. expansion into further languages (Staś and Guy)
-    - add options for moderators on moderation page
-7. any further styling - esp. Record page and authentication pages (mostly Gergő)
+    - TODO: server-side bringing up the examples to feed to the buttons
+5. CANCELLED (now using only Edit page, no Moderation page)
+6. CANCELLED? (expansion into further languages (Staś and Guy)
+    - this should be centrally controlled, and can be done by Guy adding parts to the database through pgAdmin as and when we decide to?)
+7. DONE
 8. any images to be added (Gergő)
     - a logo
     - a placeholder image for the profile page? (tbd)
     - any changes to the favicon?
-
+9. DONE
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
-    - Arena needs options other than "Go Again" once the user has finished (e.g. "Main Menu")
-    - the Arena panel appears to have a slider on the side in Chrome, as if the contents don't fit. To be removed.
     - the Progress button in the Arena should be placed to the bottom-right to suggest more strongly that that's what is to be pressed next
-    - more instructions on the Record page (tutorial?)
-        - Already attempted tutorial with react-joyride (too much boilerplate and didn't position/render correctly), react-user-tour (worked but didn't position correctly), react-tour (didn't work), and react-tourist (didn't work). Considered using React-Tooltip as well.
     - Rare words can be offputting (e.g. remembering how to pronounce "bough") - maybe it could be worth adding an option to remove an item.  In this particular case, we have another homophone which is orthographically ambiguous ("bow"), so an alternative would be to show all homophones and add the comment for the item.
     - stronger colour contrast on some of the buttons
     - get SSL certificate so that Record page will work in security-conscious Chrome
 11. new/better sounds for feedback (Gergő)
-12. improvement in user experience on Arena page (mostly Gergő)
+12. DONE? (improvement in user experience on Arena page (mostly Gergő))
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
     - Jest is online with dummy.test.js
     - need to put in testing code for other files
 14. use of more efficient and better-scaling db calls (Guy)
 15. profile with user data, like statistics (mostly Staś)
-    - started charts on profile page
+    - charts mostly ready client-side on Profile page
     - will need to arrange for data about users' activity to be logged in the db for this to be useful
-
+16. DONE
+17. DONE
+18. DONE
 19. An interface for audio editing (Staś)
-    - started Edit page using BBC's peaks.js
-
-20. Record page bug - after navigating to the Record page 6 times it fails to load, giving the following error:
-Uncaught DOMException: Failed to construct 'AudioContext': The number of hardware contexts provided (6) is greater than or equal to the maximum bound (6).
+    - edit page mostly ready client-side, needs db connections
+20. DONE
+21. Keypress events in Arena - either fix or remove
