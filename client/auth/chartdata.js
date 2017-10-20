@@ -11,11 +11,7 @@ function makeRandomData(points, min, max) {
 function makeChartData(period) {
     const chartdata = {
         pieChartData: [{
-            labels: [
-                'ee/i',
-                's/th',
-                'i/e'
-            ],
+            labels: ['ee/i', 's/th', 'i/e'],
             datasets: [{
                 data: [300, 50, 100],
                 backgroundColor: [
@@ -31,11 +27,7 @@ function makeChartData(period) {
             }]
         },
         {
-            labels: [
-                'ś-sz',
-                'ć-cz',
-                'ą-ę'
-            ],
+            labels: ['ś/sz', 'ć/cz', 'ą/ę'],
             datasets: [{
                 data: [100, 70, 210],
                 backgroundColor: [
@@ -51,7 +43,7 @@ function makeChartData(period) {
             }]
         }],
         mixChartData: [{
-            labels: (period === "week" ? ['today', 'yesterday', '2 days ago', '3 days ago', '4 days ago', '5 days ago', '6 days ago', '7 days ago'] : ['January', 'February', 'March', 'April', 'May', 'June']),
+            labels: (period === "week" ? [ '7 days ago','6 days ago','5 days ago','4 days ago','3 days ago','2 days ago','yesterday','today' ] : ['January', 'February', 'March', 'April', 'May', 'June']),
             datasets: [{
                 type:'line',
                 label: 'Performance',
@@ -80,7 +72,7 @@ function makeChartData(period) {
         // Colours in the below are currently wild for the second element of the array just for demonstration purposes, not an actually suggested colour scheme. 
         // The idea is that you can see what options affect what.
         {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: (period === "week" ? ['today', 'yesterday', '2 days ago', '3 days ago', '4 days ago', '5 days ago', '6 days ago', '7 days ago'] : ['January', 'February', 'March', 'April', 'May', 'June']),
             datasets: [{
                 type:'line',
                 label: 'Performance',
@@ -105,9 +97,50 @@ function makeChartData(period) {
                 hoverBorderColor: '#71B37C',
                 yAxisID: 'y-axis-1'
             }]
-        }
-    ]}
+        }],
+        barChartData: [{
+            labels: ['ee/i', 's/th', 'i/e', 'overall'],
+            datasets: [{
+                label: 'Percent correct',
+                backgroundColor: 'rgba(255,99,132,0.2)',
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                hoverBorderColor: 'rgba(255,99,132,1)',
+                data: [65, 59, 80, 70]
+            }]
+        },
+        {
+            labels: ['ś/sz', 'ć/cz', 'ą/ę', 'overall'],
+            datasets: [{
+                label: 'Percent correct',
+                backgroundColor: 'rgba(255,99,132,0.2)',
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                hoverBorderColor: 'rgba(255,99,132,1)',
+                data: [52, 58, 76, 63]            
+            }]
+        }]
+    }
     return chartdata
+}
+
+const barOptions = {
+    maintainAspectRatio: true,
+    legend: { display: false },
+    scales: {
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Percent correct'
+            },
+            ticks: {
+                suggestedMin: 50,    // minimum will be 50, unless there is a lower value
+                suggestedMax: 100
+            }
+        }]
+    }
 }
 
 const pieOptions = {
@@ -158,7 +191,7 @@ const mixOptions = {
                 labelString: 'Practice (reps)'
             },
             ticks: {
-                suggestedMin: 40,    // minimum will be 0, unless there is a lower value
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value
                 suggestedMax: 100
             },
             gridLines: { display: false },
@@ -174,7 +207,7 @@ const mixOptions = {
                 labelString: 'Success rate (%)'
             },
             ticks: {
-                suggestedMin: 40,    // minimum will be 0, unless there is a lower value
+                suggestedMin: 50,    // minimum will be 50, unless there is a lower value
                 suggestedMax: 100
             },
             gridLines: {
@@ -187,4 +220,4 @@ const mixOptions = {
     }
 }
 
-export { makeChartData, mixOptions, pieOptions }
+export { makeChartData, barOptions, mixOptions, pieOptions }
