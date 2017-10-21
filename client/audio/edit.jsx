@@ -115,27 +115,15 @@ const EditingPage = React.createClass({
             <div className='panel animated fadeIn' id='edit'>
                 <p>Welcome to the editing page!</p>
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
-                <div className="authbtn" onClick={this.playOrPause} >
-                    <p>Play</p>
+                <div style={{display: "block"}}>
+                    <div className="authbtn" onClick={this.playOrPause} >Play</div>
+                    <div className="authbtn" onClick={this.playClip} ><Translate content="edit.playClip" /></div>
+                    <div className="authbtn" onClick={this.zoom.bind(this, true)} >Zoom in</div>
+                    <div className="authbtn" onClick={this.zoom.bind(this, false)} >Zoom out</div>
                 </div>
-                <div className="authbtn" onClick={this.playClip} >
-                    <Translate content="edit.playClip" />
-                </div>
-                <div className="authbtn" onClick={this.handleSubmit.bind(this, false)} >
-                    <p>Accept full</p>
-                </div>
-                <div className="authbtn" onClick={this.handleSubmit.bind(this, true)} >
-                    <p>Accept segment</p>
-                </div>
-                <div className="authbtn" onClick={this.handleReject} >
-                    <p>Reject</p>
-                </div>
-                <div className="authbtn" onClick={this.zoom.bind(this, true)} >
-                    <p>Zoom in</p>
-                </div>
-                <div className="authbtn" onClick={this.zoom.bind(this, false)} >
-                    <p>Zoom out</p>
-                </div>
+                <div className="authbtn" onClick={this.handleSubmit.bind(this, false)} >Accept full</div>
+                <div className="authbtn" onClick={this.handleSubmit.bind(this, true)} >Accept segment</div>
+                <div className="authbtn" onClick={this.handleReject} >Reject</div>
             </div>
         )
     }

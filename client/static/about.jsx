@@ -24,7 +24,7 @@ const About = React.createClass({
                 <p><Translate content="about.p1.line1" /><strong><Translate content="about.p1.HVPT" /></strong><Translate content="about.p1.line2" /></p>
                 <p>It's <strong>simple</strong>, it's <strong>quick</strong>, and it's <strong>scientifically proven</strong> to be effective.</p>
                 <p>You may have noticed that adult learners of a foreign language don't seem to improve their accent over time. This can be a barrier to communication, and often makes them seem less fluent than they really are.</p>
-                <p>HVPT has been <a href="http://www.minimalbears.com/th_francophones.pdf">known for some time</a> by researchers to be an effective way of getting people to improve their ability to distinguish similar sounds in a foreign language, and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3507383/">improve their accent as a result</a>. Minimal Bears is a <strong>free</strong>, <strong>open-source</strong> web app to allow language learners across the world to finally make use of this <a href="http://languagelog.ldc.upenn.edu/nll/?p=328">powerful yet little-known technique</a>.</p>
+                <p>HVPT has been <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">known for some time</a> by researchers to be an effective way of getting people to improve their ability to distinguish similar sounds in a foreign language, and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3507383/">improve their accent as a result</a>. Minimal Bears is a <strong>free</strong>, <strong>open-source</strong> web app to allow language learners across the world to finally make use of this <a href="http://languagelog.ldc.upenn.edu/nll/?p=328">powerful yet little-known technique</a>.</p>
                 <h2>Why might I want to use it?</h2>
                 <p>This video provides a humorous demonstration of the kinds of problems we are trying to solve.</p>
                 {/* TO DO: this video does not fit dimensions neatly. Ideally, we want width to be 100%, and height to scale with width. */}
@@ -73,3 +73,10 @@ const About = React.createClass({
 })
 
 export default About
+
+
+/*
+For reference - article addresses
+th_francophones: https://www.researchgate.net/profile/Donald_Jamieson/publication/226533069_Training_non-native_speech_contrasts_in_adults_Acquisition_of_the_English_d-TH_contrast_by_francophones/links/5670c10708ae0d8b0cc0fe3d.pdf
+
+*/

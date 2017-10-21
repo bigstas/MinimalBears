@@ -131,7 +131,14 @@ const AuthJoinPage = React.createClass({
                                 </tbody>
                             </table>
                             <ReactTooltip id='languageTooltip' place="bottom" type="light" effect="solid" multiline={true}>
-                                        <p style={{textAlign:'center', fontSize: "11px"}}>Why we ask this:<br/>You can contribute to the project by recording your voice<br/>saying words in your native language.<br/>Knowing your native accent will allow us to<br/>ask you for words in the appropriate language.<br />We do not share your data with anyone.</p>
+                                <p style={{textAlign:'center', fontSize: "11px"}}>
+                                    <Translate content="auth.register.tooltip.title" /><br/>
+                                    <Translate content="auth.register.tooltip.line1" /><br/>
+                                    <Translate content="auth.register.tooltip.line2" /><br/>
+                                    <Translate content="auth.register.tooltip.line3" /><br/>
+                                    <Translate content="auth.register.tooltip.line4" /><br/>
+                                    <Translate content="auth.register.tooltip.line5" />
+                                </p>
                             </ReactTooltip>
                             <div className="authbtn" onClick={this.handleSubmit} >
                                 <Translate content="auth.register.joinButtonLabel" />

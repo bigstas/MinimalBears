@@ -15,6 +15,7 @@ For Beta:
     - a logo
     - a placeholder image for the profile page? (tbd)
     - any changes to the favicon?
+    - great free open-source icon libraries to check out: http://mariodelvalle.github.io/CaptainIconWeb/; http://mapsk.in/
 9. DONE
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
     - the Progress button in the Arena should be placed to the bottom-right to suggest more strongly that that's what is to be pressed next
