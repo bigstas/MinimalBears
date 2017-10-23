@@ -19,7 +19,7 @@ const NoRecordPage = React.createClass({
                 </div>
         } else {
             NoRecord =
-                <div className="panel">
+                <div className="panel animated fadeIn">
                     <h1><Translate content="norecord.title" /></h1>
                     <p><Translate content="norecord.onlyLoggedIn" /><Link to="/login"><Translate content="norecord.login" /></Link><Translate content="norecord.loginReason" /></p>
                     <p><Translate content="norecord.noAccount" /><Link to="/register"><Translate content="norecord.signup" /></Link>!</p>

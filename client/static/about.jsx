@@ -19,6 +19,10 @@ const About = React.createClass({
             <div className='panel animated fadeIn' id='about'>
                 <Translate content="about.title" component='h1' />
                 <Translate content="about.whatIs" component='h2' />
+                <div style={{display: "inline-block", float: "right", margin: "10px 1em 0 10px"}}>
+                    <img src="bear.png" />
+                    <p style={{display: "block", margin: "0px", textAlign: "center", fontSize: "13px", color: "#97989f"}}><em>Brown Bear has done his research</em></p>
+                </div>
                 <p><Translate content="about.p1.line1" /><strong><Translate content="about.p1.HVPT" /></strong><Translate content="about.p1.line2" /></p>
                 <p>It's <strong>simple</strong>, it's <strong>quick</strong>, and it's <strong>scientifically proven</strong> to be effective.</p>
                 <p>You may have noticed that adult learners of a foreign language don't seem to improve their accent over time. This can be a barrier to communication, and often makes them seem less fluent than they really are.</p>

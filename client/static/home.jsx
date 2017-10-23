@@ -10,6 +10,7 @@ const GuestHome = React.createClass({
         return (
             <div className='panel animated fadeIn' id='guestHome'>
                 <div id='usermessage'>
+                    <img src="bear7.png" />
                     <h2><Translate content="home.welcome" />!</h2>
                     <p><Translate content="general.article" /><strong><Translate content="general.minbears" /></strong><Translate content="home.intro" /></p>
                     <div className='button homebtn' id='guestbutton'><Link className='btnLink' to="/train"><Translate content="home.continue" /></Link></div>

@@ -75,7 +75,7 @@ const SuggestContrasts = React.createClass({
         //["English", "German", "Polish"]
         
         return (
-            <div className='panel' id='suggestContrasts'>
+            <div className='panel animated fadeIn' id='suggestContrasts'>
                 <h2>Suggest contrasts</h2>
                 <h4>Select language of new contrast</h4>
                 <select onChange={this.getDropdownValue}>
@@ -108,7 +108,7 @@ const SuggestWordPairs = React.createClass({
         const options = this.props.data.allLanguages.nodes.map((c, index) => (c.name))
         
         return (
-            <div className='panel' id='suggestWordPairs'>
+            <div className='panel animated fadeIn' id='suggestWordPairs'>
                 <h2>Suggest Word Pairs</h2>
                 <h4>Select language and contrast for new word pairs</h4>
                 <select onChange={this.getDropdownValue}>
