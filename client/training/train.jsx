@@ -18,7 +18,9 @@ const TrainPage = React.createClass({
         if (this.state.activeContrastId != null) {
             // Contrast has been chosen
             activeComponent = <Arena activeLanguageId={this.props.activeLanguageId}
-                                     activeContrastId={this.state.activeContrastId} />
+                                     activeContrastId={this.state.activeContrastId} 
+                                     username={this.props.username}
+                                  />
         } else if (this.props.activeLanguageId != null) {
             // Contrast has not been chosen, but language has
             activeComponent = <ConnectedContrastSelector activeLanguageId={this.props.activeLanguageId}

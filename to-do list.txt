@@ -2,7 +2,6 @@ For Beta:
 1. DONE
 2. finalised text on About page (Staś and Guy)
     - second draft to be reviewed
-    - get links to link to PDFs rather than websites - this is surprisingly hard and poorly documented with React Router
 3. internationalisation (mostly Staś)
     - need translations into various languages 
 4. examples on selector buttons (mostly Staś)
@@ -22,6 +21,7 @@ For Beta:
     - Rare words can be offputting (e.g. remembering how to pronounce "bough") - maybe it could be worth adding an option to remove an item.  In this particular case, we have another homophone which is orthographically ambiguous ("bow"), so an alternative would be to show all homophones and add the comment for the item.
     - stronger colour contrast on some of the buttons
     - get SSL certificate so that Record page will work in security-conscious Chrome
+    - tutorial - mostly done, except need to be able to switch it on with button-press
 11. new/better sounds for feedback (Gergő)
 12. DONE? (improvement in user experience on Arena page (mostly Gergő))
 13. testing code (code that checks everything is working correctly) (Guy and Staś)

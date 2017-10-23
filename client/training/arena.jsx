@@ -98,12 +98,61 @@ const WordOption = React.createClass({
     }
 })
 
+const DonePanel = React.createClass({
+    getInitialState() {
+        return { clicked: false }
+    },
+    
+    mustBeLoggedIn() {
+        alert("You must be logged in to view stats!")
+    },
+    
+    render() {
+        const bearPics = [
+            ["bear2.png", "There's no greater power than the power of Hi 5."], 
+            ["bear3.png", "Give a bear a fish, and it will be your friend for a day."], 
+            ["bear4.png", "Remember to share with your friends!"], 
+            ["bear6.png", "Bears never forget!"]
+        ]
+        const pic = random(bearPics)
+        console.log(pic)
+        
+        const statsButton = (this.props.loggedIn ? 
+            <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
+            <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.viewStats"} /></div>
+        )
+        
+        return (
+            <div className="panel animated fadeIn">
+                <img id="endImage" src={pic[0]} />
+                <p className="caption"><em>{pic[1]}</em></p>
+                <div>
+                    <div className="endDiv" id="resultsDiv">
+                        <div className="endDiv">
+                            <p className="hugeNumberTitle">Your score:</p>
+                            <p className="hugeNumber">{this.props.score}%</p>
+                        </div>
+                        <div className="endDiv">
+                            <p className="hugeNumberTitle">Your average:</p>
+                            <p className="hugeNumber">{this.props.average}%</p>
+                        </div>
+                    </div>
+                    <div className="endDiv" id="buttonDiv">
+                        <div className="button endButton" onClick={this.props.handleClick}>Play again</div>
+                        {statsButton}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+})
+
 // The arena - where the action happens  
 const Arena = React.createClass({
     getInitialState() {
         return {
             counter: 0,
-            maxRounds: 10,   // this number is set low during development - it should be increased for release
+            maxRounds: 2,   // this number is set low during development - it should be increased for release
             score: 0,
             mode: "wait",   // possible modes are "wait", "feedback", "ask", "done"
             correctAnswer: Math.round(Math.random()),
@@ -196,43 +245,47 @@ const Arena = React.createClass({
             snd.play()
         }
         */
-        
-        return (
-            <div className='panel animated fadeIn' id='arena'>
-                {(this.state.mode === "done") ? 
-                    <h1 id='arenaMessage'>Bravo! You scored {this.state.score} out of 10!</h1> : 
+        if (this.state.mode === "done") {
+            return <DonePanel handleClick={this.handleProgressClick} 
+                       loggedIn={!!this.props.username}
+                       score={100*this.state.score/this.state.maxRounds}
+                       average="80" /> 
+            /* TO DO - average should actually refer to some statistic */
+        } else {
+            return (
+                <div className='panel animated fadeIn' id='arena'>
                     <div style={{textAlign:"center"}}>
-                        <div style={{display:"inline-block"}}><h1 className='score' id='scoreValue' style={{margin:"20px 0 40px 0"}}>{this.state.score}</h1></div>
-                        <div style={{display:"inline-block"}}><h4 className='score' style={{display:"inline"}}>/{this.state.maxRounds}</h4></div>
-                    </div>}
-                
-                <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
+                        <div style={{display:"inline-block"}}>
+                            <h1 className='score' id='scoreValue' style={{margin:"20px 0 40px 0"}}>{this.state.score}</h1>
+                        </div>
+                        <div style={{display:"inline-block"}}>
+                            <h4 className='score' style={{display:"inline"}}>/{this.state.maxRounds}</h4>
+                        </div>
+                    </div>
+                    
+                    <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
+                    
+                    <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
 
-                <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
-                          
-                {(this.state.mode === "done") ?
-                    <div className="button progressButton" style={{marginTop: "10px"}}><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
-                    <span />
-                }
-                
-                {/* Buttons for choosing options */}
-                <div id='optionContainer' className="container">
-                    {(this.state.mode === "ask" || this.state.mode === "feedback") ?
-                        this.state.textList.map(function(c,index) {
-                            return <WordOption
-                                correct={index===this.state.correctAnswer ? true : false}
-                                chosen={index===this.state.chosenWord ? true : false}
-                                word={c}
-                                key={index}
-                                callbackParent={this.onWordChosen.bind(this, index)}
-                                mode={this.state.mode} />
-                        }, this) :
-                        <div>{/*empty div*/}</div>
-                    }
+                    {/* Buttons for choosing options */ }
+                    <div id='optionContainer' className="container">
+                        {(this.state.mode === "ask" || this.state.mode === "feedback") ?
+                            this.state.textList.map(function(c,index) {
+                                return <WordOption
+                                    correct={index===this.state.correctAnswer ? true : false}
+                                    chosen={index===this.state.chosenWord ? true : false}
+                                    word={c}
+                                    key={index}
+                                    callbackParent={this.onWordChosen.bind(this, index)}
+                                    mode={this.state.mode} />
+                            }, this) :
+                            <div>{/*empty div*/}</div>
+                        }
+                    </div>
                 </div>
-            </div> 
-        )
-    }, 
+            )
+        }
+    },
         
     componentDidMount() {
         /* Keypress events:
