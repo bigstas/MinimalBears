@@ -480,13 +480,12 @@ next: ${next}`)
     },
     
     render() {
-        let tutorial
         // placeholder - TO DO: use a db lookup for the user
         const hasSeenTutorial = false
         
         return (
             <div>
-                <Tutorial autorun={!hasSeenTutorial} ref={c => (this.joyride = c)} />
+                <Tutorial autorun={!hasSeenTutorial} interfaceLanguage={this.props.interfaceLanguage} ref={c => (this.joyride = c)} />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 
@@ -571,7 +570,7 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
+            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} interfaceLanguage={this.props.interfaceLanguage} /> 
         }
         else if (this.props.username && this.props.noSuchLanguage) { return <NoRecordPage loggedIn={true} noSuchLanguage={false} /> }
         else if (!this.props.username) { return <NoRecordPage loggedIn={false} noSuchLanguage={null} /> }

@@ -8,8 +8,15 @@ import Translate from 'react-translate-component'
     
 const Dropdown = React.createClass({
     handleClick (newLocale) {
+        // Sets locale for <Translate> components.
         counterpart.setLocale(newLocale)
+        // Sets state throughout the app (in app.jsx).
+        // This is necessary to get the text of the tutorial to update, since it's not a <Translate> object.
+        // On the one hand, it seems a bit heavy-handed to make this app-level state just for that reason. On the other hand,
+        // we have an app-level state for the chosen training language, so why not for the interface language?
+        this.props.callbackInterfaceLanguage(newLocale)
     },
+    
     logOut() {
         this.props.callbackLogOut()
         alert("You are logging out :)")
@@ -114,6 +121,7 @@ const Nav = React.createClass({
                         callbackLogOut={this.props.callbackLogOut}
                         username={this.props.username}
                         userId={this.props.userId}
+                        callbackInterfaceLanguage={this.props.callbackInterfaceLanguage}
                     /> :
                     <span />
                 }

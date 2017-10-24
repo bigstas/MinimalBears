@@ -20,6 +20,12 @@ const AppBody = React.createClass({
         })
     },
     
+    setInterfaceLanguage(name) {
+        this.setState({
+            interfaceLanguage: name
+        })
+    },
+    
     setUser(raw_jwt) {
         const jwt = jwtDecode(raw_jwt)
         
@@ -62,6 +68,7 @@ const AppBody = React.createClass({
                 <Nav username={this.state.username}
                     userId={this.state.userId}
                     callbackLogOut={this.logOut}
+                    callbackInterfaceLanguage={this.setInterfaceLanguage}
                 />
                 {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props */}
                 {React.cloneElement(

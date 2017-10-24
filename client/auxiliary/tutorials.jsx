@@ -66,6 +66,7 @@ const RecordPageTutorial = React.createClass({
         
         return(
             <Joyride
+                className={this.props.interfaceLanguage} // this just needs to appear as some sort of prop, never mind what prop, so long as it makes Joyride update when the prop changes
                 ref={c => (this.joyride = c)}
                 debug={false}
                 autoStart={this.props.autorun}
