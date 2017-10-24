@@ -157,20 +157,36 @@ counterpart.registerTranslations('eng', {
                 skip: "Skip"
             },
             step0: {
+                title: 'The word list',
+                text: "Here is a list of words to record. The purpose of this page is to record native English speakers pronouncing words, so that second language learners of English can practice their listening skills with these recordings in the app."
+            },
+            step1: {
                 title: 'The Record button',
                 text: "Press this to record. Then, press it to record the next thing."
             },
-            step1: {
+            step2: {
                 title: 'The Stop button',
                 text: 'Press this to stop recording.',
             },
-            step2: {
-                title: 'Play back all',
-                text: 'Play back all that you have recorded so far, in sequence.'
-            },
             step3: {
+                title: 'Play back word',
+                text: "Each word you've recorded can be played back individually to check that it's okay."
+            },
+            step4: {
+                title: 'Re-record word',
+                text: "If you think you need to correct it, you can re-record the word by pressing here."
+            },
+            step5: {
+                title: 'Play back all',
+                text: "You can also play back all that you've recorded so far, in sequence."
+            },
+            step6: {
                 title: 'Submit',
                 text: "When you're ready, submit the audio you have recorded."
+            },
+            step7: {
+                title: 'Help',
+                text: "If you ever want to run the tutorial again, just press this button."
             }
         }
     },

@@ -110,20 +110,36 @@ counterpart.registerTranslations('pol', {
                 skip: "Pomiń"
             },
             step0: {
+                title: 'Lista słów',
+                text: "Tu się pojawia lista słów do nagrania. Ta strona na tym polega, że nagrywamy ludzi polskojęzycznych wymawiających słowa po Polsku, aby obcokrajowcy uczący się Polskiego mogli ćwiczyć swój słuch tymi nagrywaniami."
+            },
+            step1: {
                 title: 'Nagrywaj',
                 text: "Kliknij tu, aby rozpocząć nagrywanie. Potem znowu to kliknij, aby nagrać następne słowo."
             },
-            step1: {
+            step2: {
                 title: 'Przerwać nagrywanie',
                 text: 'Kliknij tu, aby przestać nagrywanie.',
             },
-            step2: {
-                title: 'Odtwórz wszystkie',
-                text: 'To Ci odtworzy wszystkie nagrania po kolei.'
-            },
             step3: {
+                title: 'Odtwórz pojedyńcze słowo',
+                text: "Każde nagrane słowo może być odtworzone aby sprawdzić, że dobrze się nagrało."
+            },
+            step4: {
+                title: 'Nagraj poszczególne słowo',
+                text: "Jeśli należy poprawić nagranie jednego słowa, można tu kliknąć, aby nagrać go od nowa."
+            },
+            step5: {
+                title: 'Odtwórz wszystkie',
+                text: 'Można równierz odtworzyć wszystkie nagrania po kolei klikając tu.'
+            },
+            step6: {
                 title: 'Wyślij',
                 text: "Gdy jesteś gotowy/a, wyślij audio do bazy danych. Dzięki!"
+            },
+            step7: {
+                title: 'Pomoc',
+                text: "Jeśli kiedykolwiek zechcesz jeszcze raz obejrzeć ten tutorial, to kliknij tu by go uruchomić."
             }
         }
     },

@@ -270,9 +270,14 @@ const ReRecord = React.createClass({
             }
         }
         
+        // The first in the list needs to be highlighted for the tutorial
+        let id
+        if (this.props.index === 0) { id = "firstReRecordWord" }
+        else { id = null }
+        
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
+                <div className={className} id={id} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
                     <img className='buttonIcon' id='recordIcon' src={icon} />
                 </div>
                 <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
@@ -292,9 +297,14 @@ const PlaybackOne = React.createClass({
         const className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
         const tooltipId = 'playbackTooltip' + this.props.index.toString()
         
+        // The first in the list needs to be highlighted for the tutorial
+        let id
+        if (this.props.index === 0) { id="firstPlaybackWord" }
+        else { id = null }
+        
         return (
             <div style={{display: 'inline-block'}}>
-                <div className={className} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
+                <div className={className} id={id} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
                     <img className='buttonIcon' id='playIcon' src='play.png' />
                 </div>
                 <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
@@ -313,8 +323,13 @@ const WordRow = React.createClass({
     render() {
         const rowClassName = this.props.focused === true ? "wordRowFocused" : "wordRow"
         
+        // The first in the list needs to be highlighted for the tutorial
+        let id
+        if (this.props.index === 0) { id="firstWord" }
+        else { id = null }
+        
         return (
-            <div className={rowClassName}>
+            <div id={id} className={rowClassName}>
                 <ReRecord index={this.props.index} mode={this.props.mode} next={this.props.next} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
                 <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
                 <p style={{display: "inline", cursor: "default"}}>{this.props.word}</p>
@@ -458,20 +473,20 @@ next: ${next}`)
     },
     
     restartTutorial() {
-        // having difficulty getting this to work with refs and this.joyride.reset(true)
-        alert("This is supposed to restart the tutorial, but currently doesn't do anything.")
+        /* Resets the tutorial and plays it back from the beginning, regardless of where they stopped the tutorial before
+         */
+        // accessing child's refs requires "joyride" twice - once for parent's ref to child, once for child's ref to Joyride object
+        this.joyride.joyride.reset(true)
     },
     
     render() {
         let tutorial
         // placeholder - TO DO: use a db lookup for the user
         const hasSeenTutorial = false
-        if (hasSeenTutorial) { tutorial = <span /> }
-        else { tutorial = <Tutorial ref={c => (this.joyride = c)} /> }
         
         return (
             <div>
-                {tutorial}
+                <Tutorial autorun={!hasSeenTutorial} ref={c => (this.joyride = c)} />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 

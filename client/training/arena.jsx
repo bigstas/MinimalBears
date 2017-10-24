@@ -14,7 +14,7 @@ import gql from 'graphql-tag'
 
 
 function random(myArray) {
-    var rand = myArray[Math.floor(Math.random() * myArray.length)]
+    const rand = myArray[Math.floor(Math.random() * myArray.length)]
     return rand
 }
 
@@ -40,7 +40,7 @@ const ProgressButton = React.createClass({
         if      (this.props.mode === "wait")     { label = "train.progressLabel.begin" }
         else if (this.props.mode === "ask")      { label = "train.progressLabel.playAgain" }
         else if (this.props.mode === "feedback") { label = "train.progressLabel.next" }
-        else if (this.props.mode === "done")     { label = "train.progressLabel.goAgain" }
+        {/*else if (this.props.mode === "done")     { label = "train.progressLabel.goAgain" }*/}
         return (
             <div className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
         )
@@ -61,10 +61,10 @@ const WordOption = React.createClass({
             //: "#b0b0e0" 
         //var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word
         //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption')
-        var text = ""
-        var id = ""
-        var useTranslate = true
-        var wordOptionClass = "button wordOption"
+        let text = ""
+        let id = ""
+        let useTranslate = true
+        let wordOptionClass = "button wordOption"
         if (this.props.mode === "feedback") {
             wordOptionClass += " defaultCursor"
             if (this.props.chosen) {
@@ -154,7 +154,7 @@ const Arena = React.createClass({
             counter: 0,
             maxRounds: 2,   // this number is set low during development - it should be increased for release
             score: 0,
-            mode: "wait",   // possible modes are "wait", "feedback", "ask", "done"
+            mode: "wait",   // possible modes are "wait", "feedback", "ask", "done", and "restart"
             correctAnswer: Math.round(Math.random()),
             chosenWord: null,
             currentAudio: null,
@@ -176,10 +176,10 @@ const Arena = React.createClass({
                 counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
             })
             if (chosenIndex === this.state.correctAnswer) {
-                var snd = new Audio("correct bell short.wav")
+                const snd = new Audio("correct bell short.wav")
                 snd.play()
             } else {
-                var snd = new Audio("quack wrong.wav")
+                const snd = new Audio("quack wrong quieter.wav")
                 snd.play()
             }
         }
@@ -190,7 +190,7 @@ const Arena = React.createClass({
          * It either moves on to a new pair and plays a new sound; or it replays the current sound; or it starts from the beginning, depending on the current state.
          */
         // In "feedback" and "wait" mode, pressing the button should load a new pair and play a new sound
-        if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "done") {
+        if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "restart") {
             // If the data has been returned:
             if (!this.props.pairs.loading && !this.props.items.loading) {
                 /* Get all the pairs for a given contrast. Select a pair randomly.
@@ -218,8 +218,8 @@ const Arena = React.createClass({
                     correctAnswer: correctAnswer
                 })
                 
-                // if we're in "done" mode, we also need to reset some things
-                if (this.state.mode === "done") {
+                // if we're in "restart" mode, we also need to reset some things
+                if (this.state.mode === "restart") {
                     this.setState({
                         counter: 0,
                         score: 0
@@ -237,21 +237,24 @@ const Arena = React.createClass({
         }
     },
     
+    restart() {
+        this.setState({ mode: "restart" })
+    },
+    
     render() {
-        var starClass = (this.state.counter < this.state.maxRounds) ? 'offStar' : 'onStar'
-        /* Trumpet at the end of training. To be fixed.
-        if (this.state.counter === this.state.maxRounds) {
-            var snd = new Audio(this.data.tadaSound) // TO BE AMENDED - no more this.data
+        if (this.state.mode === "restart") {
+            const snd = new Audio("Ta Da quieter.wav")
             snd.play()
-        }
-        */
-        if (this.state.mode === "done") {
+            
             return <DonePanel handleClick={this.handleProgressClick} 
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
                        average="80" /> 
             /* TO DO - average should actually refer to some statistic */
         } else {
+            if (this.state.mode === "done") {
+                setTimeout(this.restart, 2000) // wait for a moment before showing the results page
+            }
             return (
                 <div className='panel animated fadeIn' id='arena'>
                     <div style={{textAlign:"center"}}>
@@ -265,7 +268,7 @@ const Arena = React.createClass({
                     
                     <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
                     
-                    <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} />
+                    {this.state.mode !== "done" ? <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} /> : <span />}
 
                     {/* Buttons for choosing options */ }
                     <div id='optionContainer' className="container">
