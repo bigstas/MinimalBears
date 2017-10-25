@@ -499,10 +499,21 @@ next: ${next}`)
                     <div id="wordList">
                         {this.props.recordingWords.map(
                             function(c, index) {
+                                // making a string of words
+                                let word = ""
+                                c[0].map(
+                                    function(d, index) {
+                                        const nextItem = " / " + d.toString()
+                                        word += nextItem
+                                    }
+                                )
+                                // don't include the first ", "
+                                word = word.slice(3)
+                                
                                 const audioRef = "audio" + index.toString()
                                 return(
                                     <div key={index}>
-                                        <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={c[0]} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
+                                        <WordRow index={index} mode={this.state.mode} next={this.state.next} callback={this.recordCallback} playbackFunction={this.playback} word={word} focused={index === this.state.focus} srcExists={!!this.state.audioURLs[index]} />
                                         <audio ref={audioRef} controls={false} muted={false} src={this.state.audioURLs[index]} />
                                     </div>
                                 )
@@ -566,7 +577,7 @@ const WrappedRecordPage = React.createClass({
             console.log(nodes)
             const firstNodes = nodes.slice(0,10)
             const firstWords = firstNodes.map( function(item) {
-                return [item.homophones[0], item.id]
+                return [item.homophones, item.id]
             })
             console.log(firstNodes)
 
