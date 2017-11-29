@@ -1,8 +1,9 @@
 -- Roles --
 
 -- admin role for database connection (full access)
+-- change password as appropriate
 CREATE ROLE admin LOGIN
-    ENCRYPTED PASSWORD 'encrypted-password-goes-here'
+    PASSWORD 'your-password-here'
     SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
 
 -- guest role for users that are not logged in (limited access)
