@@ -53,7 +53,41 @@ CREATE TABLE pair (
     id serial PRIMARY KEY
 );
 ALTER TABLE public.pair OWNER TO "admin";
--- TODO add a contrast to force the constrast and items to be from the same language
+-- Force the contrast and items to be from the same language
+CREATE FUNCTION check_language()
+    RETURNS trigger
+    LANGUAGE plpgsql
+    STABLE
+    AS $$
+        DECLARE
+            contrast_lang integer;
+            first_lang integer;
+            second_lang integer;
+        BEGIN
+            SELECT language INTO contrast_lang
+                FROM contrast
+                WHERE contrast.id = NEW.contrast;
+            SELECT language INTO first_lang
+                FROM item
+                WHERE item.id = NEW.first;
+            SELECT language INTO second_lang
+                FROM item
+                WHERE item.id = NEW.second;
+            IF contrast_lang = first_lang
+                AND contrast_lang = second_lang
+            THEN
+                RETURN NEW;
+            ELSE
+                RAISE EXCEPTION 'Languages of contrast and items do not match';
+            END IF;
+        END;
+    $$;
+ALTER FUNCTION public.check_language() OWNER TO "admin";
+-- Use the function in a trigger
+CREATE TRIGGER check_language_trigger BEFORE INSERT OR UPDATE
+    ON pair
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_language();
 
 -- Submissions of audio recordings
 CREATE TABLE audio_submission (
