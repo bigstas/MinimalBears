@@ -27,8 +27,18 @@ const AuthLoginPage = React.createClass({
     handleChange(event) {
         let field = event.target.name
         //console.log("event.target.name : " + event.target.name)   // for debugging
-        if      (field === "email")    { this.setState({emailValue:    event.target.value}) }
-        else if (field === "password") { this.setState({passwordValue: event.target.value}) }
+        if (field === "email")    { 
+            this.setState({ 
+                emailValue: event.target.value,
+                emailError: false 
+            }) 
+        }
+        else if (field === "password") { 
+            this.setState({
+                passwordValue: event.target.value,
+                passwordError: false
+            }) 
+        }
         else {alert ("something is wrong")}
     },
     

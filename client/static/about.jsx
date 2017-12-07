@@ -17,24 +17,27 @@ const About = React.createClass({
         
         return (
             <div className='panel animated fadeIn' id='about'>
-                {/*<Translate content="about.title" component='h1' />*/}
-                <Translate content="about.whatIs" component='h2' /> {/*What is Minimal Bears?*/}
+                <Translate content="about.whatIs.heading" component='h2' /> {/*What is Minimal Bears?*/}
                 <div style={{display: "inline-block", float: "right", margin: "10px 1em 0 10px"}}>
                     <img src="bear.png" />
-                    <p style={{display: "block", margin: "0px", textAlign: "center", fontSize: "13px", color: "#97989f"}}><em>Brown Bear has done thorough research</em></p>
+                    <p style={{display: "block", margin: "0px", textAlign: "center", fontSize: "13px", color: "#97989f"}}><em><Translate content="about.bearCaption" /></em></p>
                 </div>
-                {/*<p><Translate content="about.p1.line1" /><strong><Translate content="about.p1.HVPT" /></strong><Translate content="about.p1.line2" /></p>*/}
-                <p>You may have noticed that adult learners of a language speak with a foreign accent, even after many years of learning and practice. This can be a barrier to communication, and often makes them seem less fluent than they really are.</p>
-                <p>Minimal Bears is a web app that helps you learn the sounds of a foreign language. It's <strong>simple</strong>, it's <strong>quick</strong>, and it's <strong>scientifically proven</strong> to be effective.</p>
-                <p>The app is <strong>free</strong> and <strong>open-source</strong>, and you can start using it <Link to="/train">right now</Link>.</p>
-                 
-                <h2>How does it work?</h2>
-                <p>You learn by playing a simple game. You are presented with a pair of words that differ only in one sound &ndash; for example "mouse"/"mouth", "sheep"/"ship", or "will"/"well". Such a pair of words is called a <strong>minimal pair</strong>. You hear one of the words being said, and have to decide which one it was. You then get immediate feedback about the correct answer.</p>
-                <p>Scientists have called this technique <strong>High Variability Phonetic Training</strong> (HVPT). This has been <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">known for some time</a> to be an effective way to improve people's ability to distinguish similar sounds in a foreign language, <a target="_blank" href="http://www.minimalbears.com/articles/proficiency_doesnt_matter.pdf">regardless of their level of proficiency</a>, and <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_speech_production.pdf">improve their accent as a result</a>. Despite the research, this technique is <a target="_blank" href="http://languagelog.ldc.upenn.edu/nll/?p=328">not well-known</a>, and we designed Minimal Bears to fill this gap.</p>
-                <p>As you practise, you will find it easier and easier to recognise the sounds.</p>
                 
-                <h2>Why might I want to use it?</h2>
-                <p>This video provides a humorous demonstration of the kinds of problems we are trying to solve. (Video produced by Jokhie Judy.)</p>
+                <Translate component="p" content="about.whatIs.p1" />
+                <Translate component="p" content="about.whatIs.p2" unsafe />
+                {/* p3 is split into three parts, this is the only way that we can put the link into the text with translation */}
+                <p><Translate content="about.whatIs.p3_start" unsafe />
+                <Link to='/train'><Translate content="about.whatIs.p3_link" /></Link>
+                <Translate content="about.whatIs.p3_end" /></p>
+                
+                <Translate component="h2" content="about.howWorks.heading" />
+                <Translate component="p" content="about.howWorks.p1" unsafe />
+                <Translate component="p" content="about.howWorks.p2" with={{url1: "http://www.minimalbears.com/articles/th_francophones.pdf", url2: "http://www.minimalbears.com/articles/proficiency_doesnt_matter.pdf", url3: "http://www.minimalbears.com/articles/rl_japanese_speech_production.pdf", url4: "http://languagelog.ldc.upenn.edu/nll/?p=328"}} unsafe />
+                <Translate component="p" content="about.howWorks.p3" />
+                
+                <Translate component="h2" content="about.whyUse.heading" />
+                <Translate component="p" content="about.whyUse.p1" />
+                
                 {/* TODO: this video does not fit dimensions neatly. Ideally, we want width to be 100%, and height to scale with width. */}
                 {/* For details and options, see https://github.com/troybetz/react-youtube */}
                 <YouTube
@@ -43,39 +46,36 @@ const About = React.createClass({
                     onReady={this._onReady}
                 />
                 
-                <h2>What results can I expect?</h2>
-                <p>Prior to training, learners often perform <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">barely better than chance</a> at distinguishing similar sounds in a foreign language, even if they've lived in target language community for several years.{/*TODO link*/} Significant improvements have been verified <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">within 90 minutes of training</a>.</p>
-                <p>The effect has been verified for speakers and learners of many different languages, including <a target="_blank" href="http://asa.scitation.org/doi/abs/10.1121/1.4945716">Korean-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_acoustic_cue.pdf">Japanese-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/ae_cantonese.PDF">Cantonese-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/10vowels_mandarin.pdf">Mandarin-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">French-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/vowels_arabic.pdf">Arabic-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/vowels_german&spanish.pdf">German-</a>, <a target="_blank" href="http://www.minimalbears.com/articles/VOT_brazilian_portuguese.pdf">Portuguese-</a>, <a target="_blank" href="http://asa.scitation.org/doi/abs/10.1121/1.2934625">Finnish-</a>, <a target="_blank" href="http://minimalbears.com/articles/eei_greek.pdf">Greek-</a>, and <a target="_blank" href="http://www.minimalbears.com/articles/stops&vowels_catalan.pdf">Catalan-speaking learners of English</a>; <a target="_blank" href="http://asa.scitation.org/doi/abs/10.1121/1.4970670">Chinese learners of Korean</a>; and <a target="_blank" href="http://www.minimalbears.com/articles/english_learners_of_arabic.pdf">English-speaking learners of Arabic</a>, <a target="_blank" href="http://www.minimalbears.com/articles/english_learners_of_korean.pdf">Korean</a>, and <a target="_blank" href="http://www.minimalbears.com/articles/english_learners_of_mandarin.pdf">Mandarin</a>.</p>
-                <p>Researchers have found that people trained by this method have long-term improvements that only diminish very slightly over time. One team found that learners performed significantly better, <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518835/">even when tested 6 months later</a>, without any training in the interim.</p>
-                <p>In addition to improvements in the perception and production of sounds, learners also reported <a target="_blank" href="http://www.minimalbears.com/articles/english_learners_of_korean.pdf">increased confidence</a>, as in this quote from a learner:</p>
+                <Translate component="h2" content="about.results.heading" />
+                <Translate component="p" content="about.results.p1" unsafe />
+                <Translate component="p" content="about.results.p2" with={{Korean: "http://asa.scitation.org/doi/abs/10.1121/1.4945716", Japanese: "http://www.minimalbears.com/articles/rl_japanese_acoustic_cue.pdf", Cantonese: "http://www.minimalbears.com/articles/ae_cantonese.PDF", Mandarin: "http://www.minimalbears.com/articles/10vowels_mandarin.pdf", French: "http://www.minimalbears.com/articles/th_francophones.pdf", Arabic: "http://www.minimalbears.com/articles/vowels_arabic.pdf", German: "http://www.minimalbears.com/articles/vowels_german&spanish.pdf", Portuguese: "http://www.minimalbears.com/articles/VOT_brazilian_portuguese.pdf", Finnish: "http://asa.scitation.org/doi/abs/10.1121/1.2934625", Greek: "http://minimalbears.com/articles/eei_greek.pdf", Catalan: "http://www.minimalbears.com/articles/stops&vowels_catalan.pdf", ChineseKorean: "http://asa.scitation.org/doi/abs/10.1121/1.4970670", EnglishArabic: "http://www.minimalbears.com/articles/english_learners_of_arabic.pdf", EnglishKorean: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf", EnglishMandarin: "http://www.minimalbears.com/articles/english_learners_of_mandarin.pdf"}}  unsafe />
+                <Translate component="p" content="about.results.p3" with={{sixMonths: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518835/"}} unsafe />
+                <Translate component="p" content="about.results.p4" with={{confidence: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf"}} unsafe />
                 <div style={{paddingLeft: "15%", paddingRight: "15%"}}>
-                    <p><em>"I feel a lot more confidence compared to before training. I have more confidence saying it and listening to it. In general I have more confidence with the language."</em></p>
+                    <p><em><Translate content="about.results.p5" /></em></p>
                 </div>
-                <p>So regardless of your mother tongue, the language you are learning, or your <a target="_blank" href="http://www.minimalbears.com/articles/proficiency_level_cantonese.pdf">level of proficiency</a>, HVPT can help to improve your language skills.</p>
+                <Translate component="p" content="about.results.p6" with={{proficiency: "http://www.minimalbears.com/articles/proficiency_level_cantonese.pdf"}} unsafe />
                 
-                <h2>Why does it work so well?</h2>
-                <p>There are three key features that make HVPT such an effective method: <strong>lack of context</strong>, <strong>varied speakers</strong>, and <strong>immediate feedback</strong>. All of them are present in Minimal Bears.</p>
-                
-                <h3>Lack of context</h3>
-                <p>For most minimal pairs, we can use the context as a guide. For example, suppose a learner struggles to distinguish "mouse" and "mouth". If they heard someone say "You took the words right out of my mouth", they're unlikely to start looking for a mouse!</p>
-                <p>As a result, simply engaging in conversation with native speakers of the language does not guarantee improvement.{/*TODO add link*/} With Minimal Bears, you can't rely on the context, allowing you to focus on your listening skills.</p>
-                
-                <h3>Varied speakers</h3>
-                <p>If you only hear one person's pronunciation, you might struggle when listening to someone new. It would seem reasonable that listening to many people should be better than listening to just one. This common sense idea is also <a target="_blank" href="http://www.minimalbears.com/articles/low&high_variability_cantonese.pdf">supported by research</a>. With Minimal Bears, you can practise with recordings crowd-sourced from around the world.</p>
+                <Translate component="h2" content="about.whyWorks.heading" />
+                <Translate component="p" content="about.whyWorks.p1" unsafe />
+                <Translate component="h3" content="about.whyWorks.context.heading" />
+                <Translate component="p" content="about.whyWorks.context.p1" />
+                <Translate component="p" content="about.whyWorks.context.p2" />
+                <Translate component="h3" content="about.whyWorks.varied.heading" />
+                <Translate component="p" content="about.whyWorks.varied.p1" with={{supported: "http://www.minimalbears.com/articles/low&high_variability_cantonese.pdf"}} unsafe />
                 {/*TODO put all links here <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518834/"> <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509365/">*/}
+                <Translate component="h3" content="about.whyWorks.feedback.heading" />
+                <Translate component="p" content="about.whyWorks.feedback.p1" />
                 
-                <h3>Immediate feedback</h3>
-                <p>The importance of quick, unambiguous feedback for learning is one of behavioural science's most well-supported findings. However, in a social environment, small errors in pronouncing or distinguishing foreign sounds are rarely corrected in the moment. Minimal Bears allows you to immediately perceive any errors, resulting in rapid progress.</p>
+                <Translate component="h2" content="about.whichLangs.heading" />
+                <p><Translate content="about.whichLangs.p1_start" /><Link to="/train"><Translate content="about.whichLangs.p1_link" /></Link><Translate content="about.whichLangs.p1_end" /></p>
+                <Translate component="p" content="about.whichLangs.p2" />
                 
-                <h2>Which languages can I practise?</h2>
-                <p>The range of languages on Minimal Bears is continually growing, thanks to the contributions. Go to the <Link to="/train">Train page</Link> to see what languages are currently available.</p>
-                <p>The site's interface is also becoming available in an increasing number of languages, so that more people can make use of it.</p>
+                <Translate component="h2" content="about.getStarted.heading" />
+                <p><Translate content="about.getStarted.p1_start" /><Link to="/train"><Translate content="about.getStarted.p1_link" /></Link><Translate content="about.getStarted.p1_end" /></p>
                 
-                <h2>Great! How do I get started?</h2>
-                <p>Go to the <Link to="/train">Train page</Link>, choose your language and contrast to train, and get practising!</p>
-                
-                <h2>Is there a way I can contribute?</h2>
-                <p>The audio for Minimal Bears is crowd-sourced, like Wikipedia. In order to expand the range of content (different contrasts from different languages, spoken by different people), we rely on words recorded by volunteers. If you'd like to contribute, go to the <Link to="/record">Record page</Link> and get talking!</p>
+                <Translate component="h2" content="about.contribute.heading" />
+                <p><Translate content="about.contribute.p1_start" /><Link to="/record"><Translate content="about.contribute.p1_link" /></Link><Translate content="about.contribute.p1_end" /></p>
             </div>
         )
     }

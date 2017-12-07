@@ -1,9 +1,6 @@
 import counterpart from 'counterpart'
 
 counterpart.registerTranslations('pol', {
-    example: {
-        greeting: 'Cześć %(name)s! Jak życie płynie?'
-    },
     notfound: {
         title: "Nie znaleziono tej strony.",
         text: "Niestety. Sprawdź, czy dobrze wpisano URL."
@@ -19,7 +16,7 @@ counterpart.registerTranslations('pol', {
     },
     home: {
         welcome: "Witaj",
-        intro: " to aplikacja, która pozwoli Ci udoskonalić wymowę obcych języków.",
+        intro: "<strong>Minimal Bears</strong> to aplikacja, która pozwoli Ci udoskonalić wymowę obcych języków.",
         continue: "Kontynuuj jako gość",
         signIn: "Wloguj",
         register: "Zapisz się"
