@@ -14,9 +14,6 @@ npm-debug.log
 # Windows thumbnail cache
 public/Thumbs.db
 
-# Databases
-*.sql
-
 # Security
 server/jwt_secret.jsx
 
