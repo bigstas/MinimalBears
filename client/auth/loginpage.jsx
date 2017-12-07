@@ -27,8 +27,18 @@ const AuthLoginPage = React.createClass({
     handleChange(event) {
         let field = event.target.name
         //console.log("event.target.name : " + event.target.name)   // for debugging
-        if      (field === "email")    { this.setState({emailValue:    event.target.value}) }
-        else if (field === "password") { this.setState({passwordValue: event.target.value}) }
+        if (field === "email")    { 
+            this.setState({ 
+                emailValue: event.target.value,
+                emailError: false 
+            }) 
+        }
+        else if (field === "password") { 
+            this.setState({
+                passwordValue: event.target.value,
+                passwordError: false
+            }) 
+        }
         else {alert ("something is wrong")}
     },
     
@@ -99,7 +109,7 @@ const AuthLoginPage = React.createClass({
                                 {/* Email error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
                                 {/* Input email */}
-                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></td></tr>
+                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="abc@email.com" onChange={this.handleChange} /><br/></td></tr>
                                 {/* Password error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
                                 {/* Input password */}

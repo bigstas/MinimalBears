@@ -1,9 +1,6 @@
 import counterpart from 'counterpart'
 
 counterpart.registerTranslations('pol', {
-    example: {
-        greeting: 'Cześć %(name)s! Jak życie płynie?'
-    },
     notfound: {
         title: "Nie znaleziono tej strony.",
         text: "Niestety. Sprawdź, czy dobrze wpisano URL."
@@ -19,7 +16,7 @@ counterpart.registerTranslations('pol', {
     },
     home: {
         welcome: "Witaj",
-        intro: " to aplikacja, która pozwoli Ci udoskonalić wymowę obcych języków.",
+        intro: "<strong>Minimal Bears</strong> to aplikacja, która pozwoli Ci udoskonalić wymowę obcych języków.",
         continue: "Kontynuuj jako gość",
         signIn: "Wloguj",
         register: "Zapisz się"
@@ -44,11 +41,13 @@ counterpart.registerTranslations('pol', {
         register: {
             joinTitle: "Załącz się.",
             joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
-            emailError: "Please provide a valid email address.",
+            emailError: "Błędny adres emailowy.",
             usernameError: "Ta nazwa użytownika jest już w użytku. Proszę wybrać inną.",
             passwordError: "Twoje hasło musi być takie same w obu polach.",
+            nativeLanguage: "Język ojczysty:",
             joinButtonLabel: "Załącz się",
-            loginLink: "Masz już konto? Zaloguj."
+            loginLink: "Masz już konto? Zaloguj.",
+            tooltip: "Dlaczego my się pytamy:<br>DODAĆ TEKST"
         },
         login: {
             loginTitle: "Zaloguj.",

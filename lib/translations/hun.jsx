@@ -2,8 +2,7 @@ import counterpart from 'counterpart'
 
 counterpart.registerTranslations('hun', {
     general: {
-        minbears: "Minimal Bears",
-        article: "A "
+        minbears: "Minimal Bears"
     },
     notfound: {
         title: "A keresett weboldal nem található.",
@@ -20,7 +19,7 @@ counterpart.registerTranslations('hun', {
     },
     home: {
         welcome: "Üdvözöllek",
-        intro: " is an app that will help you learn new sounds in foreign languages.",
+        intro: "A <strong>Minimal Bears</strong> egy aplikáció, ami hívhat neked a külföldi nyelvek kiéjtésevel.",
         continue: "Próbáld ki",
         signIn: "Bejelentkezés",
         register: "Regisztráció"

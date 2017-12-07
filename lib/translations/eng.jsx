@@ -2,8 +2,7 @@ import counterpart from 'counterpart'
 
 counterpart.registerTranslations('eng', {
     general: {
-        minbears: "Minimal Bears",
-        article: "" /* articles are NOT REQUIRED in most languages, only for some e.g. Le Minimal Bears, El Minimal Bears, A Minimal Bears, Al (?) Minimal Bears */
+        minbears: "Minimal Bears"
     },
     notfound: {
         title: "Your webpage was not found.",
@@ -20,18 +19,75 @@ counterpart.registerTranslations('eng', {
     },
     home: {
         welcome: "Welcome",
-        intro: " is an app that will help you learn new sounds in foreign languages.",
+        intro: "<strong>Minimal Bears</strong> is an app that will help you learn new sounds in foreign languages.",
         continue: "Try it out",
         signIn: "Sign In",
         register: "Register"
     },
     about: {
-        title: 'Minimal Bears: The research-based web app that improves your accent.',
-        whatIs: 'What is Minimal Bears?',
-        p1: {
-            line1: 'Minimal Bears is a web app that uses a technique known as ',
-            HVPT: 'High Variability Phonetic Training',
-            line2: ' (HVPT) to help people learn the sounds of a foreign language.'
+        bearCaption: "Brown Bear has done thorough research",
+        whatIs: {
+            heading: "What is Minimal Bears?",
+            p1: "You may have noticed that adult learners of a language speak with a foreign accent, even after many years of learning and practice. This can be a barrier to communication, and often makes them seem less fluent than they really are.",
+            p2: "Minimal Bears is a web app that helps you learn the sounds of a foreign language. It's <strong>simple</strong>, it's <strong>quick</strong>, and it's <strong>scientifically proven</strong> to be effective.",
+            p3_start: "The app is <strong>free</strong> and <strong>open-source</strong>, and you can start using it ",
+            p3_link: "right now",
+            p3_end: "."
+        },
+        howWorks: {
+            heading: "How does it work?",
+            p1: `You learn by playing a simple game. You are presented with a pair of words that differ only in one sound &ndash; for example "mouse"/"mouth", "sheep"/"ship", or "will"/"well". Such a pair of words is called a <strong>minimal pair</strong>. You hear one of the words being said, and have to decide which one it was. You then get immediate feedback about the correct answer.`,
+            p2: `Scientists have called this technique <strong>High Variability Phonetic Training</strong> (HVPT). This has been <a target="_blank" href="%(url1)s">known for some time</a> to be an effective way to improve people's ability to distinguish similar sounds in a foreign language, <a target="_blank" href="%(url2)s">regardless of their level of proficiency</a>, and <a target="_blank" href="%(url3)s">improve their accent as a result</a>. Despite the research, this technique is <a target="_blank" href="%(url4)s">not well-known</a>, and we designed Minimal Bears to fill this gap.`,
+            p3: "As you practise, you will find it easier and easier to recognise the sounds."
+        },
+        whyUse: {
+            heading: "Why might I want to use it?",
+            p1: "This video provides a humorous demonstration of the kinds of problems we are trying to solve. (Video produced by Jokhie Judy.)"
+        },
+        results: {
+            heading: "What results can I expect?",
+            p1: `Prior to training, learners often perform <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">barely better than chance</a> at distinguishing similar sounds in a foreign language, even if they've lived in target language community for several years.{/*TODO link*/} Significant improvements have been verified <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">within 90 minutes of training</a>.`,
+            p2: `The effect has been verified for speakers and learners of many different languages, including <a target="_blank" href="%(Korean)s">Korean-</a>, <a target="_blank" href="%(Japanese)s">Japanese-</a>, <a target="_blank" href="%(Cantonese)s">Cantonese-</a>, <a target="_blank" href="%(Mandarin)s">Mandarin-</a>, <a target="_blank" href="%(French)s">French-</a>, <a target="_blank" href="%(Arabic)s">Arabic-</a>, <a target="_blank" href="%(German)s">German-</a>, <a target="_blank" href="%(Portuguese)s">Portuguese-</a>, <a target="_blank" href="%(Finnish)s">Finnish-</a>, <a target="_blank" href="%(Greek)s">Greek-</a>, and <a target="_blank" href="%(Catalan)s">Catalan-speaking learners of English</a>; <a target="_blank" href="%(ChineseKorean)s">Chinese learners of Korean</a>; and <a target="_blank" href="%(EnglishArabic)s">English-speaking learners of Arabic</a>, <a target="_blank" href="%(EnglishKorean)s">Korean</a>, and <a target="_blank" href="%(EnglishMandarin)s">Mandarin</a>.`,
+            p3: `Researchers have found that people trained by this method have long-term improvements that only diminish very slightly over time. One team found that learners performed significantly better, <a target="_blank" href="%(sixMonths)s">even when tested 6 months later</a>, without any training in the interim.`,
+            p4: `In addition to improvements in the perception and production of sounds, learners also reported <a target="_blank" href="%(confidence)s">increased confidence</a>, as in this quote from a learner:`,
+            p5: `"I feel a lot more confidence compared to before training. I have more confidence saying it and listening to it. In general I have more confidence with the language."`,
+            p6: `So regardless of your mother tongue, the language you are learning, or your <a target="_blank" href="%(proficiency)s">level of proficiency</a>, HVPT can help to improve your language skills.`
+        },
+        whyWorks: {
+            heading: "Why does it work so well?",
+            p1: "There are three key features that make HVPT such an effective method: <strong>lack of context</strong>, <strong>varied speakers</strong>, and <strong>immediate feedback</strong>. All of them are present in Minimal Bears.",
+            context: {
+                heading: "Lack of context",
+                p1: `For most minimal pairs, we can use the context as a guide. For example, suppose a learner struggles to distinguish "mouse" and "mouth". If they heard someone say "You took the words right out of my mouth", they're unlikely to start looking for a mouse!`,
+                p2: `As a result, simply engaging in conversation with native speakers of the language does not guarantee improvement.{/*TODO add link*/} With Minimal Bears, you can't rely on the context, allowing you to focus on your listening skills.`
+            },
+            varied: {
+                heading: "Varied speakers",
+                p1: `If you only hear one person's pronunciation, you might struggle when listening to someone new. It would seem reasonable that listening to many people should be better than listening to just one. This common sense idea is also <a target="_blank" href="%(supported)s">supported by research</a>. With Minimal Bears, you can practise with recordings crowd-sourced from around the world.`
+            },
+            feedback: {
+                heading: "Immediate feedback",
+                p1: "The importance of quick, unambiguous feedback for learning is one of behavioural science's most well-supported findings. However, in a social environment, small errors in pronouncing or distinguishing foreign sounds are rarely corrected in the moment. Minimal Bears allows you to immediately perceive any errors, resulting in rapid progress."
+            } 
+        },
+        whichLangs: {
+            heading: "Which languages can I practise?",
+            p1_start: "The range of languages on Minimal Bears is continually growing, thanks to the contributions. Go to the ",
+            p1_link: "Train page",
+            p1_end: " to see what languages are currently available.",
+            p2: "The site's interface is also becoming available in an increasing number of languages, so that more people can make use of it."
+        },
+        getStarted: {
+            heading: "Great! How do I get started?",
+            p1_start: "Go to the ",
+            p1_link: "Train page",
+            p1_end: ", choose your language and contrast to train, and get practising!"
+        },
+        contribute: {
+            heading: "Is there a way I can contribute?",
+            p1_start: "The audio for Minimal Bears is crowd-sourced, like Wikipedia. In order to expand the range of content (different contrasts from different languages, spoken by different people), we rely on words recorded by volunteers. If you'd like to contribute, go to the ",
+            p1_link: "Record page",
+            p1_end: " and get talking!"
         }
     },
     loading: {
@@ -48,17 +104,11 @@ counterpart.registerTranslations('eng', {
             emailError: "invalid email address",
             usernameError: "username unavailable",
             passwordError: "password mismatch",
+            nativeLanguage: "Native Language:",
             languageError: "select your native language",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in.",
-            tooltip: {
-                title: "Why we ask this:",
-                line1: "You can contribute to the project by recording your voice",
-                line2: "saying words in your native language.",
-                line3: "Knowing your native accent will allow us to",
-                line4: "ask you for words in the appropriate language.",
-                line5: "We do not share your data with anyone."
-            }
+            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native accent will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone."
         },
         login: {
             loginTitle: "Log in.",

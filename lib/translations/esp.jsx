@@ -1,9 +1,6 @@
 import counterpart from 'counterpart'
 
 counterpart.registerTranslations('esp', {
-    example: {
-        greeting: 'Hello %(name)s! How are you today?'
-    },
     notfound: {
         title: "La página web no existe.",
         text: "¡Qué lástima! Verifica que has ingresado la url correctamente."
@@ -19,8 +16,8 @@ counterpart.registerTranslations('esp', {
     },
     home: {
         welcome: "Bienvenido",
-        intro: " es un programa que puede ayudarte a aprender sonidos en otros idiomas.",
-        continue: "Continuar como huésped",
+        intro: "<strong>Minimal Bears</strong> es un programa que puede ayudarte a aprender sonidos en idiomas extranjeros.",
+        continue: "Pruébalo",
         signIn: "Acceder",
         register: "Registrarse"
     },

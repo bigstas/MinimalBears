@@ -1,7 +1,8 @@
 For Beta:
 1. DONE
 2. finalised text on About page (Staś and Guy)
-    - second draft to be reviewed
+    - second draft to be reviewed - DONE
+    - final check of links / inclusion of more links
 3. internationalisation (mostly Staś)
     - need translations into various languages 
 4. examples on selector buttons (mostly Staś)
@@ -19,8 +20,7 @@ For Beta:
 10. anything fed back from the user tests (Guy, Staś, and Gergő)
     - the Progress button in the Arena should be placed to the bottom-right to suggest more strongly that that's what is to be pressed next
     - Rare words can be offputting (e.g. remembering how to pronounce "bough") - maybe it could be worth adding an option to remove an item.  In this particular case, we have another homophone which is orthographically ambiguous ("bow"), so an alternative would be to show all homophones (DONE) and add the comment for the item.
-    - stronger colour contrast on some of the buttons
-    - get SSL certificate so that Record page will work in security-conscious Chrome
+    - DONE
 11. new/better sounds for feedback (Gergő)
 12. DONE? (improvement in user experience on Arena page (mostly Gergő))
 13. testing code (code that checks everything is working correctly) (Guy and Staś)

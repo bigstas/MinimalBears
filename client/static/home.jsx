@@ -12,7 +12,8 @@ const GuestHome = React.createClass({
                 <div id='usermessage'>
                     <img src="bear7.png" />
                     <h2><Translate content="home.welcome" />!</h2>
-                    <p><Translate content="general.article" /><strong><Translate content="general.minbears" /></strong><Translate content="home.intro" /></p>
+                    <Translate component="p" content="home.intro" unsafe />
+                    {/*<strong><Translate content="general.minbears" /></strong><Translate content="home.intro" />*/}
                     <div className='button homebtn' id='guestbutton'><Link className='btnLink' to="/train"><Translate content="home.continue" /></Link></div>
                     <div className='button homebtn' id='signinbutton'><Link className='btnLink' to="/login"><Translate content="home.signIn" /></Link></div>
                     <div className='button homebtn' id='registerbutton'><Link className='btnLink' to="/register"><Translate content="home.register" /></Link></div>
