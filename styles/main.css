@@ -466,7 +466,7 @@ nav ul li a, nav ul li p {
 
 #about {text-align: justify;}
 
-#about h1, #about h2, #about p {
+#about h1, #about h2, #about h3, #about h4, #about p {
     padding-left: 2%;
     padding-right: 2%;
 }
