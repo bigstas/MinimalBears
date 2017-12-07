@@ -15,7 +15,7 @@ networkInterface.use([{
         if (!req.options.headers) {
             req.options.headers = {}  // Create the header object if needed.
         }
-        let token = localStorage.getItem('token')
+        const token = localStorage.getItem('token')
         if (token) {
             req.options.headers['authorization'] = 'Bearer ' + token
         }

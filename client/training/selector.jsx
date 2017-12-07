@@ -95,11 +95,6 @@ const ContrastSelector = React.createClass({
     handleMouseLeave() {
         clearInterval(this.timerID)
     },
-    /*
-    componentDidMount() {
-        // timed switch of example value
-        const startTimer = setInterval(this.switchExample, 2000)
-    },*/
     
 	render() {
 		if (this.props.data.loading) { return <LoadingPage /> }

@@ -33,13 +33,12 @@ const RecordPageTutorial = React.createClass({
                 scrollToSteps={false}
                 disableOverlay={true}
                 
-                steps={selectors.map((s, i) => {
-		            return {
-		                title: <Translate content={`record.tutorial.step${i}.title`} />,
-		                text: <Translate content={`record.tutorial.step${i}.text`} />,
-		                selector: s
-		            }
-                })} 
+                steps={selectors.map((s, i) => ({
+	                title: <Translate content={`record.tutorial.step${i}.title`} />,
+	                text: <Translate content={`record.tutorial.step${i}.text`} />,
+	                selector: s,
+	                position: 'bottom'
+                }))} 
             />
         )
     }

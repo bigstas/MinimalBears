@@ -53,7 +53,8 @@ const AuthLoginPage = React.createClass({
             })
         }
         // Try to log in
-        this.props.login({variables: {input: {tryEmail: this.state.emailValue, tryPassword: this.state.passwordValue}}}).then((response) => {
+        this.props.login({variables: {input: {tryEmail: this.state.emailValue, tryPassword: this.state.passwordValue}}})
+        .then((response) => {
             const jwt = response.data.authenticate.jsonWebToken
             if (!!jwt) {
 	            this.setState({
@@ -73,7 +74,6 @@ const AuthLoginPage = React.createClass({
             console.log(error)
             // TODO unexpected error (e.g. network error)...
         })
-        
     },
     
     handleKeyPress(event) {

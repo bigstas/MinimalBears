@@ -358,13 +358,13 @@ const RecordPage = React.createClass({
         // Set up audio context (which contains audio nodes)
         this.audioContext = new AudioContext()
         // Find the microphone (note, using a Promise)
-        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(
-            stream => {
-                // Create the audio node for the microphone
-                this.source = this.audioContext.createMediaStreamSource(stream)
-                // Create the recorder node (connected to the audio node)
-                this.recorder = new Recorder(this.source)
-            })
+        navigator.mediaDevices.getUserMedia({audio: true, video: false})
+        .then(stream => {
+            // Create the audio node for the microphone
+            this.source = this.audioContext.createMediaStreamSource(stream)
+            // Create the recorder node (connected to the audio node)
+            this.recorder = new Recorder(this.source)
+        })
     },
     
     cutRecording () {

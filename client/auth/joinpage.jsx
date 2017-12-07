@@ -66,7 +66,8 @@ const AuthJoinPage = React.createClass({
             // Connect to the server to create a new account
             this.props.signup({variables: {input: {email: this.state.emailValue,
                                                    password: this.state.passwordValue,
-                                                   username: this.state.username}}}).then((response) => {
+                                                   username: this.state.username}}})
+            .then((response) => {
                 const newUserId = response.data.signup.integer
                 console.log(newUserId)
                 // TODO log in and change page

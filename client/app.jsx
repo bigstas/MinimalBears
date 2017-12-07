@@ -1,5 +1,7 @@
 import React from 'react'
 import jwtDecode from 'jwt-decode'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Nav from './auxiliary/nav'
     
@@ -8,8 +10,8 @@ const AppBody = React.createClass({
         // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
         return {
             activeLanguageId: null,
-            username: false, 
-            userId: false
+            username: null,
+            userId: null
         }
     },
     
@@ -24,33 +26,67 @@ const AppBody = React.createClass({
         
         // Check if the token has expired
         // Note that getTime() is in milliseconds, but jwt.exp is in seconds
-        let userId
         const timestamp = (new Date).getTime()
         if (!!jwt && timestamp < jwt.exp * 1000) {
+            // If the token is still valid:
+            // Set the state, to change the app
             this.setState({
-                username: jwt.id,
+                username: jwt.username,
                 userId: jwt.id
             })
+            // Store the token in memory, to be added to request headers
             localStorage.setItem('token', raw_jwt)
+            // Automatically refresh the token
+            this.refreshTimer = setInterval(this.refresh, 1000*60*20)  // Refresh every 20 minutes
+            console.log('timer set up')
+            
         } else {
+            // If the token is no longer valid, log out to clear information
             this.logOut()
         }
     },
     
     logOut() {
+        // Clear everything from setUser (state, memory, refreshing)
+        console.log('logging out')
         this.setState({
-            username: false,
-            userId: false
+            username: null,
+            userId: null
         })
         localStorage.removeItem('token')
+        clearInterval(this.refreshTimer)
     },
     
-    //TODO: refresh tokens
+    refresh() {
+        // Get a new token using the refresh code
+        console.log('refreshing json web token')
+        this.props.refresh()
+        .then((response) => {
+            // Store the new token
+            const raw_jwt = response.data.refresh.jsonWebToken
+            console.log('setting token')
+            console.log(raw_jwt)
+            localStorage.setItem('token', raw_jwt)
+        }).catch((error) => {
+            // If we can't connect to the server, try again
+            if (error.networkError) {
+                console.log('network error?') //TODO
+                //this.refresh()
+            } else { //TODO
+                // If we connected to the server and refreshing failed, log out
+                console.log('error, logging out')
+                console.log(error)
+                this.logOut()
+            }
+        })
+    },
     
     componentWillMount() {
         const raw_jwt = localStorage.getItem('token')
         if (!!raw_jwt) {
+            console.log('found json web token')
             this.setUser(raw_jwt)
+            this.refresh()
         }
     },
     
@@ -76,4 +112,14 @@ const AppBody = React.createClass({
     }
 })
 
-export default AppBody
+const refresh = gql`mutation {
+    refresh(input:{}) {
+        jsonWebToken
+    }
+}`
+
+const refreshConfig = {
+    name: 'refresh'
+}
+
+export default graphql(refresh, refreshConfig)(AppBody)
