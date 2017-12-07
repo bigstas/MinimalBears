@@ -69,6 +69,10 @@ const About = React.createClass({
                 <h3>Immediate feedback</h3>
                 <p>The importance of quick, unambiguous feedback for learning is one of behavioural science's most well-supported findings. However, in a social environment, small errors in pronouncing or distinguishing foreign sounds are rarely corrected in the moment. HVPT allows the learner to immediately perceive any errors, resulting in rapid progress.</p>
                 
+                <h2>Which languages can I practise?</h2>
+                <p>The range of languages whose minimal pairs you can practice on Minimal Bears is continually growing. Go to the <Link to="/train">Train page</Link> to see what languages are currently available.</p>
+                <p>The site's interface is also becoming available in an increasing number of languages, so that more people can make use of it.</p>
+                
                 <h2>Great! How do I get started?</h2>
                 <p>Go to the <Link to="/train">Train page</Link>, choose your language and contrast to train, and get practising!</p>
                 
