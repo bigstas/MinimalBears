@@ -104,17 +104,11 @@ counterpart.registerTranslations('eng', {
             emailError: "invalid email address",
             usernameError: "username unavailable",
             passwordError: "password mismatch",
+            nativeLanguage: "Native Language:",
             languageError: "select your native language",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in.",
-            tooltip: {
-                title: "Why we ask this:",
-                line1: "You can contribute to the project by recording your voice",
-                line2: "saying words in your native language.",
-                line3: "Knowing your native accent will allow us to",
-                line4: "ask you for words in the appropriate language.",
-                line5: "We do not share your data with anyone."
-            }
+            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native accent will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone."
         },
         login: {
             loginTitle: "Log in.",

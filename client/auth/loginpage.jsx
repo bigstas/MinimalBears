@@ -109,7 +109,7 @@ const AuthLoginPage = React.createClass({
                                 {/* Email error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
                                 {/* Input email */}
-                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="Type your email address here" onChange={this.handleChange} /><br/></td></tr>
+                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="abc@email.com" onChange={this.handleChange} /><br/></td></tr>
                                 {/* Password error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
                                 {/* Input password */}

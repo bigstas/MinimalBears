@@ -122,7 +122,7 @@ const AuthJoinPage = React.createClass({
                                 {/* Native language error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.languageError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.languageError" /></p></td></tr>
                                 {/* Choose native language TO DO: use database */}
-                                    <tr><td className="tdText"><p style={{display: "inline"}}>Native language</p><img style={{width: "15px", display: "inline"}} src="questionmark.png" data-tip data-for='languageTooltip' data-delay-show='100' /></td>
+                                    <tr><td className="tdText"><p style={{display: "inline"}}><Translate content="auth.register.nativeLanguage" /></p><img style={{width: "15px", display: "inline"}} src="questionmark.png" data-tip data-for='languageTooltip' data-delay-show='100' /></td>
                                     {/* Possible alternatives to the HTML built-in <select> include react-select, which is perhaps prettier, and may have more useful functionality in some cases, but is otherwise not so different.
                                     Consider for future change, but below is the minimal example not requiring more libraries. */}
                                     <td><select onChange={this.getDropdownValue}>
@@ -134,12 +134,7 @@ const AuthJoinPage = React.createClass({
                             </table>
                             <ReactTooltip id='languageTooltip' place="bottom" type="light" effect="solid" multiline={true}>
                                 <p style={{textAlign:'center', fontSize: "11px"}}>
-                                    <Translate content="auth.register.tooltip.title" /><br/>
-                                    <Translate content="auth.register.tooltip.line1" /><br/>
-                                    <Translate content="auth.register.tooltip.line2" /><br/>
-                                    <Translate content="auth.register.tooltip.line3" /><br/>
-                                    <Translate content="auth.register.tooltip.line4" /><br/>
-                                    <Translate content="auth.register.tooltip.line5" />
+                                    <Translate content="auth.register.tooltip" unsafe />
                                 </p>
                             </ReactTooltip>
                             <div className="authbtn" onClick={this.handleSubmit} >
