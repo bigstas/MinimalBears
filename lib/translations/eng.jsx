@@ -130,7 +130,9 @@ counterpart.registerTranslations('eng', {
         login: "Log in",
         loginReason: " to join the fun! :)",
         noAccount: "Don't have an account? ",
-        signup: "Sign up"
+        signup: "Sign up",
+        noSuchLanguage: "We aren't using your language as a training language yet.",
+        noRecordingsNeeded: "We are using your language as a training language, but there is nothing that we need recorded at the moment."
     },
     record: {
         startLabel: {

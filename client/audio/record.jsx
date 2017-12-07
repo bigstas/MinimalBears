@@ -480,12 +480,13 @@ next: ${next}`)
     },
     
     render() {
-        // placeholder - TO DO: use a db lookup for the user
+        // TODO extra screen to explain the page if the user has not been here before
+        // placeholder - TODO: use a db lookup for the user
         const hasSeenTutorial = false
         
         return (
             <div>
-                <Tutorial autorun={!hasSeenTutorial} interfaceLanguage={this.props.interfaceLanguage} ref={c => (this.joyride = c)} />
+                <Tutorial autorun={!hasSeenTutorial} ref={c => (this.joyride = c)} />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 
@@ -566,7 +567,8 @@ next: ${next}`)
 
 const WrappedRecordPage = React.createClass({
     render() {
-        if (this.props.username && !this.props.noSuchLanguage) {
+        // TODO Look up the user's language
+        if (this.props.username) {
             console.log(this.props.items)
             if (this.props.items.loading) { return <LoadingPage /> }
 
@@ -581,10 +583,10 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} interfaceLanguage={this.props.interfaceLanguage} /> 
+            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
         }
-        else if (this.props.username && this.props.noSuchLanguage) { return <NoRecordPage loggedIn={true} noSuchLanguage={false} /> }
-        else if (!this.props.username) { return <NoRecordPage loggedIn={false} noSuchLanguage={null} /> }
+        // else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
+        else { return <NoRecordPage loggedIn={false} /> }
     }
 })
 

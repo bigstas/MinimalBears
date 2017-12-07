@@ -449,6 +449,11 @@ nav ul li a, nav ul li p {
     width:60px;
 }
 
+/*Hack to stop someone closing the tutorial*/
+.joyride-tooltip__close {
+	display: none !important;
+}
+
 /* ================================== */
 /* ============ home.js ============ */
 /* ================================== */

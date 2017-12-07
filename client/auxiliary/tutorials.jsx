@@ -6,69 +6,19 @@ import counterpart from 'counterpart'
 
 const RecordPageTutorial = React.createClass({
     render() {
-        // set debug to true below if required - it is annoying / clunky if you're not currently specifically debugging Joyride
-        console.log(counterpart.getLocale())
-        const steps = [
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step0', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step0', 'text']),
-                selector: '#firstWord',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step1', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step1', 'text']),
-                selector: '#startButton',
-                position: 'bottom',
-                style: {
-                    beacon: {
-                        offsetY: 0
-                    }
-                }
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step2', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step2', 'text']),
-                selector: '#stopIc',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step3', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step3', 'text']),
-                selector: '#firstPlaybackWord',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step4', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step4', 'text']),
-                selector: '#firstReRecordWord',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step5', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step5', 'text']),
-                selector: '#playAllButton',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step6', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step6', 'text']),
-                selector: '#submitButton',
-                position: 'bottom'
-            },
-            {
-                title: counterpart.translate(['record', 'tutorial', 'step7', 'title']),
-                text: counterpart.translate(['record', 'tutorial', 'step7', 'text']),
-                selector: '#tutorialButton',
-                position: 'bottom'
-            }
-        ]
+        const selectors = ['#firstWord',  //0
+                           '#startButton',  //1
+                           '#stopIc',  //2
+                           '#firstPlaybackWord',  //3
+                           '#firstReRecordWord',  //4
+                           '#playAllButton',  //5
+                           '#submitButton',  //6
+                           '#tutorialButton']   //7
         
         return(
             <Joyride
-                className={this.props.interfaceLanguage} // this just needs to appear as some sort of prop, never mind what prop, so long as it makes Joyride update when the prop changes
                 ref={c => (this.joyride = c)}
-                debug={false}
+                debug={false}  //Set to true for Joyride to print information to console
                 autoStart={this.props.autorun}
                 run={this.props.autorun}
                 locale={{
@@ -76,14 +26,20 @@ const RecordPageTutorial = React.createClass({
                     close: (<span><Translate content="record.tutorial.buttons.close" /></span>),
                     last: (<span><Translate content="record.tutorial.buttons.last" /></span>),
                     next: (<span><Translate content="record.tutorial.buttons.next" /></span>),
-                    skip: (<span><Translate content="record.tutorial.buttons.skip" /></span>),
                 }}
                 showOverlay={true}
-                showSkipButton={true}
                 showStepsProgress={true}
                 type='continuous'
+                scrollToSteps={false}
+                disableOverlay={true}
                 
-                steps={steps} 
+                steps={selectors.map((s, i) => {
+		            return {
+		                title: <Translate content={`record.tutorial.step${i}.title`} />,
+		                text: <Translate content={`record.tutorial.step${i}.text`} />,
+		                selector: s
+		            }
+                })} 
             />
         )
     }

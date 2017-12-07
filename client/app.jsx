@@ -8,7 +8,6 @@ const AppBody = React.createClass({
         // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
         return {
             activeLanguageId: null,
-            interfaceLanguage: "English",
             username: false, 
             userId: false
         }
@@ -17,12 +16,6 @@ const AppBody = React.createClass({
     setLanguage(langId) {
         this.setState({
             activeLanguageId: langId
-        })
-    },
-    
-    setInterfaceLanguage(name) {
-        this.setState({
-            interfaceLanguage: name
         })
     },
     
@@ -35,7 +28,7 @@ const AppBody = React.createClass({
         const timestamp = (new Date).getTime()
         if (!!jwt && timestamp < jwt.exp * 1000) {
             this.setState({
-                username: jwt.id,  // TODO get username
+                username: jwt.id,
                 userId: jwt.id
             })
             localStorage.setItem('token', raw_jwt)
@@ -61,22 +54,18 @@ const AppBody = React.createClass({
         }
     },
     
-    // TO DO: The props below are old, some (most? all?) not necessary. Revise.
     render() {
         return (
             <div id="app-container" >
                 <Nav username={this.state.username}
                     userId={this.state.userId}
                     callbackLogOut={this.logOut}
-                    callbackInterfaceLanguage={this.setInterfaceLanguage}
                 />
                 {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props */}
                 {React.cloneElement(
                     this.props.children, 
                     {activeLanguageId: this.state.activeLanguageId, 
-                        interfaceLanguage: this.state.interfaceLanguage,
                         username: this.state.username,
-                        noSuchLanguage: false, /* TO DO - should depend on a database lookup */
                         userId: this.state.userId,
                         callbackLanguage: this.setLanguage,
                         callbackUser: this.setUser,
