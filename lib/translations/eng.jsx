@@ -15,7 +15,12 @@ counterpart.registerTranslations('eng', {
         record: "Record",
         guest: "Guest",
         profile: "Profile",
-        settings: "Settings"
+        settings: "Settings",
+        login: "Log in",
+        logout: "Log out",
+        register: "Sign up",
+        moderation: "Moderation",
+        contactUs: "Contact Us"
     },
     home: {
         welcome: "Welcome",
@@ -106,9 +111,16 @@ counterpart.registerTranslations('eng', {
             passwordError: "password mismatch",
             nativeLanguage: "Native Language:",
             languageError: "select your native language",
+            select: "--select--",
+            noneOfTheAbove: "none of the above",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in.",
-            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native accent will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone."
+            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native accent will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone.",
+            errors: {
+                serverError: "We cannot connect to the server! Check your internet connection.",
+                duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
+                duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
+            }
         },
         login: {
             loginTitle: "Log in.",
@@ -243,8 +255,13 @@ counterpart.registerTranslations('eng', {
         }
     },
     edit: {
-        submit: 'Submit',
-        playClip: 'Play Clip'
+        playAll: "Play",
+        playClip: "Play clip",
+        zoomIn: "Zoom in",
+        zoomOut: "Zoom out",
+        acceptFull: "Accept full",
+        acceptSegment: "Accept clip",
+        reject: "Reject"
     },
     suggest: {
         mainMessage: "On this page, you can suggest either new contrasts for a given language, or new word pairs for a given contrast. Please choose which you would like to suggest below.",

@@ -5,6 +5,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 import ReactTooltip from 'react-tooltip'
 
 function validateEmail(email) {
@@ -73,12 +74,12 @@ const AuthJoinPage = React.createClass({
                 // TODO log in and change page
                 alert('New user created with id ' + newUserId + ' and username ' + this.state.username)
             }).catch((error) => {
-                // TODO translate these messages
+                // TODO test this to see whether the translation is working! (How to do this??)
                 if (error.networkError) {
-                    alert('We cannot connect to the server! Sadbearface.')
+                    alert( counterpart.translate(["auth", "register", "errors", "serverError"]) )
                 } else {
                     // Apart from network errors, the only error we would expect is a duplicate email address -- OR USERNAME (TODO)
-                    alert('Have you already registered this email address? Please log in!')  // TODO add link
+                    alert( counterpart.translate(["auth", "register", "errors", "duplicateEmail"]) )  // TODO add link
                     // The human-readable Postgres error message will be under error.graphQLErrors[0].message
                 }
             })
@@ -86,7 +87,7 @@ const AuthJoinPage = React.createClass({
     },
     
     render() {
-        const options = ["English", "German", "Polish"]
+        const options = ["English", "Deutsch", "Polski"]
         // Array.push - adds to the end of the array; Array.unshift - adds to the beginning of the array
         options.push("none of the above")
         options.unshift("--select--")
@@ -127,9 +128,11 @@ const AuthJoinPage = React.createClass({
                                     {/* Possible alternatives to the HTML built-in <select> include react-select, which is perhaps prettier, and may have more useful functionality in some cases, but is otherwise not so different.
                                     Consider for future change, but below is the minimal example not requiring more libraries. */}
                                     <td><select onChange={this.getDropdownValue}>
-                                        {options.map((c, index) => 
-                                            <option key={index} value={c}>{c}</option>
-                                        )}
+                                        {options.map(function(c, index) { 
+                                            if (c === "--select--") { return <option key={index} value={c}><Translate content="auth.register.select" /></option>  }
+                                            else if (c === "none of the above") { return <option key={index} value={c}><Translate content="auth.register.noneOfTheAbove" /></option> }
+                                            else { return <option key={index} value={c}>{c}</option> }
+                                        })}
                                     </select></td></tr>
                                 </tbody>
                             </table>

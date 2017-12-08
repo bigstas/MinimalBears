@@ -23,21 +23,21 @@ const Dropdown = React.createClass({
     render() {
         let authElement, registerElement, suggestWords, contactUs
         if (this.props.username) {
-            authElement = <div className='dropdownElement' onClick={this.logOut}>Log out</div>
+            authElement = <div className='dropdownElement' onClick={this.logOut}><Translate content="nav.logout" /></div>
             registerElement = <span /> // "empty" element
             suggestWords = <div className='dropdownElement'><Link className='plainLink' to="/suggest">Suggest words</Link></div>
-            contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact">Contact Us</Link></div>
+            contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
             // TO DO: should this link not be available if you are currently on the login page?
-            authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login">Log in</Link></div>
-            registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register">Register</Link></div>
+            authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
+            registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
             suggestWords = <span /> // "empty" element
             contactUs = <span />
         }
             
         let moderationElement
         if (this.props.username && true) { // TODO - should read: if this person has the authority / rights to be a moderator AND if this person is logged in
-            moderationElement = <div className='dropdownElement'><Link className='plainLink' to="/edit">Moderation</Link></div>
+            moderationElement = <div className='dropdownElement'><Link className='plainLink' to="/edit"><Translate content="nav.moderation" /></Link></div>
         } else {
             moderationElement = <span /> // "empty" element
         }

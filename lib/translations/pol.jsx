@@ -12,7 +12,12 @@ counterpart.registerTranslations('pol', {
         record: "Nagrywaj",
         guest: "Gość",
         profile: "Profil",
-        settings: "Ustawienia"
+        settings: "Ustawienia",
+        login: "Zaloguj",
+        logout: "Wyloguj",
+        register: "Zapisz się",
+        moderation: "Moderacja",
+        contactUs: "Skontaktuj się"
     },
     home: {
         welcome: "Witaj",
@@ -143,7 +148,12 @@ counterpart.registerTranslations('pol', {
         }
     },
     edit: {
-        submit: 'Wyślij',
-        playClip: 'Odtwórz kawałek'
+        playAll: "Odtwórz całe",
+        playClip: "Odtwórz kawałek",
+        zoomIn: "Zbliż",
+        zoomOut: "Oddal",
+        acceptFull: "Akceptuj całość",
+        acceptSegment: "Akceptuje kawałek",
+        reject: "Odrzuć"
     }
 })
