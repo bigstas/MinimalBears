@@ -523,11 +523,17 @@ nav ul li a, nav ul li p {
 /* == joinpage.jsx / loginpage.jsx == */
 /* ================================== */
 
-#form /*div*/ { text-align: center; }
-#form /*div*/ table { 
+#form { text-align: center; }
+#form table { 
     text-align: right;
-    width: 350px;
+    width: 80%;
     margin: 10px auto;
+}
+#form table tbody tr td input {
+    height: 34px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
 }
 .tdText {
     text-align: left;

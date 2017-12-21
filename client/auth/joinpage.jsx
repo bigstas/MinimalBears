@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
 import ReactTooltip from 'react-tooltip'
+import Select from 'react-select'
+import 'react-select/dist/react-select.css'
 
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
@@ -22,11 +24,20 @@ const AuthJoinPage = React.createClass({
             emailValue: "",
             passwordValue: "",
             confirmPassword: "###",
-            nativeLanguage: "--select--",
+            nativeLanguage: [],
+            customNativeLanguage: "",
+            inputCustomLanguage: false,
             emailError: false,
             passwordError: false,
             languageError: false
         }
+    },
+    
+    toggleCustomLanguage() {
+        this.setState({ 
+            inputCustomLanguage: !this.state.inputCustomLanguage,
+            customNativeLanguage: ""
+        })
     },
     
     handleChange(event) {
@@ -36,13 +47,19 @@ const AuthJoinPage = React.createClass({
         else if (field === "email")    { this.setState({emailValue:    event.target.value}) }
         else if (field === "password") { this.setState({passwordValue: event.target.value}) }
         else if (field === "confirmPassword") { this.setState({confirmPassword: event.target.value}) }
+        else if (field === "customNativeLanguage") { this.setState({ customNativeLanguage: event.target.value }) }
         else {alert ("something is wrong")}
     },
     
-    getDropdownValue(event) {
-        const value = event.target.value
-        console.log(value)
-        this.setState({ nativeLanguage: value })
+    getDropdownValue(selectedOptions) {
+        let values = []
+        selectedOptions.map(function(c, index) {
+            values.push(c.value)
+        })
+        this.setState({ nativeLanguage: values })
+        console.log(`values: ` + values)
+        console.log(`Selected: label ${selectedOptions.label} and value ${selectedOptions.value}`)
+        console.log(`Stringified: ` + JSON.stringify(selectedOptions, null, 4))
     },
     
     handleSubmit(event) {
@@ -55,8 +72,8 @@ const AuthJoinPage = React.createClass({
             usernameIssue: this.state.username === "",
             passwordClash: this.state.passwordValue !== this.state.confirmPassword,
             emailFail: !validateEmail(this.state.emailValue),
-            languageFail: this.state.nativeLanguage === "--select--"
-        }
+            languageFail: (this.state.nativeLanguage.length === 0 && this.state.customNativeLanguage === "")
+        } // Note: [] === [] returns false (wtf!), as does []===false, because Javascript is like that
         this.setState({
             usernameError: errors.usernameIssue,
             emailError: errors.emailFail,
@@ -79,6 +96,7 @@ const AuthJoinPage = React.createClass({
                     alert( counterpart.translate(["auth", "register", "errors", "serverError"]) )
                 } else {
                     // Apart from network errors, the only error we would expect is a duplicate email address -- OR USERNAME (TODO)
+                    // TODO this is throwing email errors when it should be throwing email errors (i.e. when you use the same username, it tells you to change the email address)
                     alert( counterpart.translate(["auth", "register", "errors", "duplicateEmail"]) )  // TODO add link
                     // The human-readable Postgres error message will be under error.graphQLErrors[0].message
                 }
@@ -89,9 +107,10 @@ const AuthJoinPage = React.createClass({
     render() {
         const options = ["English", "Deutsch", "Polski"]
         // Array.push - adds to the end of the array; Array.unshift - adds to the beginning of the array
-        options.push("none of the above")
-        options.unshift("--select--")
-        console.log(options)
+        let optionList = []
+        for (let i=0; i<options.length; i++) {
+            optionList.push({value: options[i], label: options[i]})
+        }
         
         return (
             <div className='panel animated fadeIn'>
@@ -123,19 +142,26 @@ const AuthJoinPage = React.createClass({
                                     <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="password" name="confirmPassword" onChange={this.handleChange} /></td></tr>
                                 {/* Native language error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.languageError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.languageError" /></p></td></tr>
-                                {/* Choose native language TO DO: use database */}
+                                {/* Choose native language TODO: use database */}
                                     <tr><td className="tdText"><p style={{display: "inline"}}><Translate content="auth.register.nativeLanguage" /></p><img style={{width: "15px", display: "inline"}} src="questionmark.png" data-tip data-for='languageTooltip' data-delay-show='100' /></td>
-                                    {/* Possible alternatives to the HTML built-in <select> include react-select, which is perhaps prettier, and may have more useful functionality in some cases, but is otherwise not so different.
-                                    Consider for future change, but below is the minimal example not requiring more libraries. */}
-                                    <td><select onChange={this.getDropdownValue}>
-                                        {options.map(function(c, index) { 
-                                            if (c === "--select--") { return <option key={index} value={c}><Translate content="auth.register.select" /></option>  }
-                                            else if (c === "none of the above") { return <option key={index} value={c}><Translate content="auth.register.noneOfTheAbove" /></option> }
-                                            else { return <option key={index} value={c}>{c}</option> }
-                                        })}
-                                    </select></td></tr>
+                                    <td>
+                                        <Select
+                                            name="form-field-name"
+                                            value={this.state.nativeLanguage}
+                                            onChange={this.getDropdownValue}
+                                            options={optionList}
+                                            multi
+                                            rtl={false} autosize={false} placeholder=""
+                                            noResultsText="No results found"
+                                            style={{textAlign: "left"}}
+                                        />
+                                    </td></tr>
+                                    <tr><td style={{textAlign: "left"}}><input id="customLanguageInput" type="checkbox" name="offTheList" onChange={this.toggleCustomLanguage} style={{width: "15px", verticalAlign: "middle"}} /><label htmlFor="customLanguageInput" style={{verticalAlign: "middle"}}><Translate content="auth.register.notInTheList" /></label></td>
+                                    <td>{this.state.inputCustomLanguage ? <input type="text" name="customNativeLanguage" placeholder="Cebuano, Hopi, Saami, ..." onChange={this.handleChange} /> : <span /> }</td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            
                             <ReactTooltip id='languageTooltip' place="bottom" type="light" effect="solid" multiline={true}>
                                 <p style={{textAlign:'center', fontSize: "11px"}}>
                                     <Translate content="auth.register.tooltip" unsafe />
