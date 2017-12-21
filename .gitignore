@@ -19,3 +19,6 @@ server/jwt_secret.jsx
 
 # Articles about HVPT for About page
 lib/articles
+
+# Translation drafts for the About page
+lib/translations/about
