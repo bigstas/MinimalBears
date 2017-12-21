@@ -564,8 +564,29 @@ next: ${next}`)
     }
 })
 
+const PreRecord = React.createClass({
+    render() {
+        return (
+            <div className='panel animated fadeIn' id='preRecord'>
+                <h1>Record Page</h1>
+                <p>This is the record page. Here, you can record yourself saying words in your native language, so that learners of your language can practise their listening skills using your recordings.</p>
+                <p>Minimal Bears is non-profit and open-source, and it relies on contributions like yours for content for people to practise with.</p>
+                <p>If you press "continue", you will be given a tutorial on how to use the Record page. It takes approximately 2 minutes. You will not be able to leave the tutorial once you begin.</p>
+                <div className="button" onClick={this.props.callback}>Continue</div>
+            </div>
+        )
+    }
+})
 
 const WrappedRecordPage = React.createClass({
+    getInitialState() {
+        return { readyToGo: false }
+    },
+    
+    makeReady() {
+        this.setState({ readyToGo: true })
+    },
+    
     render() {
         // TODO Look up the user's language
         if (this.props.username) {
@@ -583,7 +604,11 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
+            // TODO: this "preparatory page" should not render if the user has seen the tutorial already,
+            // so it should be something like
+            // if (!this.state.readyToGo && !this.props.hasSeenTutorial)
+            if (!this.state.readyToGo) { return <PreRecord callback={this.makeReady} /> }
+            else { return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> }
         }
         // else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
