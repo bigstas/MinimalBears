@@ -51,7 +51,7 @@ counterpart.registerTranslations('eng', {
         },
         results: {
             heading: "What results can I expect?",
-            p1: `Prior to training, learners often perform <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">barely better than chance</a> at distinguishing similar sounds in a foreign language, even if they've lived in target language community for several years.{/*TODO link*/} Significant improvements have been verified <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">within 90 minutes of training</a>.`,
+            p1: `Prior to training, learners often perform <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">barely better than chance</a> at distinguishing similar sounds in a foreign language, even if they've lived in the target language community for several years.{/*TODO link*/} Significant improvements have been verified <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">within 90 minutes of training</a>.`,
             p2: `The effect has been verified for speakers and learners of many different languages, including <a target="_blank" href="%(Korean)s">Korean-</a>, <a target="_blank" href="%(Japanese)s">Japanese-</a>, <a target="_blank" href="%(Cantonese)s">Cantonese-</a>, <a target="_blank" href="%(Mandarin)s">Mandarin-</a>, <a target="_blank" href="%(French)s">French-</a>, <a target="_blank" href="%(Arabic)s">Arabic-</a>, <a target="_blank" href="%(German)s">German-</a>, <a target="_blank" href="%(Portuguese)s">Portuguese-</a>, <a target="_blank" href="%(Finnish)s">Finnish-</a>, <a target="_blank" href="%(Greek)s">Greek-</a>, and <a target="_blank" href="%(Catalan)s">Catalan-speaking learners of English</a>; <a target="_blank" href="%(ChineseKorean)s">Chinese learners of Korean</a>; and <a target="_blank" href="%(EnglishArabic)s">English-speaking learners of Arabic</a>, <a target="_blank" href="%(EnglishKorean)s">Korean</a>, and <a target="_blank" href="%(EnglishMandarin)s">Mandarin</a>.`,
             p3: `Researchers have found that people trained by this method have long-term improvements that only diminish very slightly over time. One team found that learners performed significantly better, <a target="_blank" href="%(sixMonths)s">even when tested 6 months later</a>, without any training in the interim.`,
             p4: `In addition to improvements in the perception and production of sounds, learners also reported <a target="_blank" href="%(confidence)s">increased confidence</a>, as in this quote from a learner:`,
@@ -64,7 +64,7 @@ counterpart.registerTranslations('eng', {
             context: {
                 heading: "Lack of context",
                 p1: `For most minimal pairs, we can use the context as a guide. For example, suppose a learner struggles to distinguish "mouse" and "mouth". If they heard someone say "You took the words right out of my mouth", they're unlikely to start looking for a mouse!`,
-                p2: `As a result, simply engaging in conversation with native speakers of the language does not guarantee improvement.{/*TODO add link*/} With Minimal Bears, you can't rely on the context, allowing you to focus on your listening skills.`
+                p2: `As a result, simply engaging in conversation with native speakers of the language does not guarantee improvement.{/*TODO add link*/} With Minimal Bears, you can't rely on the context, which means you have to focus on the sounds to distinguish the words. This improves your listening skills.`
             },
             varied: {
                 heading: "Varied speakers",
@@ -77,7 +77,7 @@ counterpart.registerTranslations('eng', {
         },
         whichLangs: {
             heading: "Which languages can I practise?",
-            p1_start: "The range of languages on Minimal Bears is continually growing, thanks to the contributions. Go to the ",
+            p1_start: "The range of languages on Minimal Bears is continually growing, thanks to the contributions from our members. Go to the ",
             p1_link: "Train page",
             p1_end: " to see what languages are currently available.",
             p2: "The site's interface is also becoming available in an increasing number of languages, so that more people can make use of it."
