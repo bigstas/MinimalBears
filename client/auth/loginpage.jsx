@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import { browserHistory } from 'react-router'
 
-// TO DO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
+// TODO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
     
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
@@ -43,7 +43,7 @@ const AuthLoginPage = React.createClass({
     },
     
     handleSubmit(event) {
-        /* If the email is not a valid expression (according to regexp above), show an error in red on the page. Otherwise, check the database. (To do!)
+        /* If the email is not a valid expression (according to regexp above), show an error in red on the page. Otherwise, check the database. (TODO)
          * If the server says the email is wrong, show that error. If it says the password is wrong, show that error.
          * Otherwise, let the user in.
          */
@@ -67,11 +67,11 @@ const AuthLoginPage = React.createClass({
         .then((response) => {
             const jwt = response.data.authenticate.jsonWebToken
             if (!!jwt) {
-	            this.setState({
-	                emailError: false,
-	                passwordError: false
-	            })
-	            this.props.callbackUser(jwt)
+                this.setState({
+                    emailError: false,
+                    passwordError: false
+                })
+                this.props.callbackUser(jwt)
                 // change page (currently navigates to Home)
                 browserHistory.push('/')
             } else {

@@ -451,7 +451,7 @@ nav ul li a, nav ul li p {
 
 /*Hack to stop someone closing the tutorial*/
 .joyride-tooltip__close {
-	display: none !important;
+    display: none !important;
 }
 
 /* ================================== */

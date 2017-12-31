@@ -56,7 +56,7 @@ const SuggestContrasts = React.createClass({
     },
     
     submitContrasts() {
-        // TO DO: this should submit the example word pairs into a table in the database.
+        // TODO: this should submit the example word pairs into a table in the database.
         let count = 0
         for (let i=0; i<3; i++) {
             const input = this.refs['pair' + count.toString()]
@@ -123,12 +123,12 @@ const SuggestWordPairs = React.createClass({
 })
 
 const languageQuery = gql`query {
-	allLanguages {
-		nodes {
-			name
-			id
-		}
-	}
+    allLanguages {
+        nodes {
+            name
+            id
+        }
+    }
 }`
 
 const ConnectedContrastSuggestion = graphql(languageQuery)(SuggestContrasts)

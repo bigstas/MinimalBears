@@ -28,7 +28,7 @@ const Dropdown = React.createClass({
             suggestWords = <div className='dropdownElement'><Link className='plainLink' to="/suggest">Suggest words</Link></div>
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
-            // TO DO: should this link not be available if you are currently on the login page?
+            // TODO: should this link not be available if you are currently on the login page?
             authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
             registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
             suggestWords = <span /> // "empty" element

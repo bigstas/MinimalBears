@@ -192,7 +192,7 @@ const Arena = React.createClass({
         // In "feedback" and "wait" mode, pressing the button should load a new pair and play a new sound
         if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "restart") {
             // If the data has been returned:
-            if (!this.props.pairs.loading && !this.props.items.loading) {
+            if (!this.props.pairs.loading && !this.props.items.loading) { // TODO move this check earlier on; it shouldn't be possible to click the button when there's no data
                 /* Get all the pairs for a given contrast. Select a pair randomly.
                  * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
                  * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
@@ -250,7 +250,7 @@ const Arena = React.createClass({
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
                        average="80" /> 
-            /* TO DO - average should actually refer to some statistic */
+            /* TODO - average should actually refer to some statistic */
         } else {
             if (this.state.mode === "done") {
                 setTimeout(this.restart, 2000) // wait for a moment before showing the results page
@@ -309,46 +309,36 @@ const Arena = React.createClass({
  * We must provide a function that defines the queries.
  */
 
-const pairQuery = gql`query ($orderBy: ContrastWithPairsOrderBy) {
-	allContrastWithPairs(orderBy: $orderBy) {
-    	nodes {
-        	language
-        	name
-        	pairs {
+const pairQuery = gql`query {
+    allContrastWithPairs(orderBy: ID_ASC) {
+        nodes {
+            language
+            name
+            pairs {
                 first
                 second
-        	}
-    	}
-	}
+            }
+        }
+    }
 }`
 
 const pairQueryConfig = {
-    name: 'pairs',
-    options: {
-        variables: {
-            orderBy: 'ID_ASC'
-        }
-    }
+    name: 'pairs'
 }
 
-const itemQuery = gql`query ($orderBy: ItemWithAudiosOrderBy) {
-    allItemWithAudios (orderBy: $orderBy) {
+const itemQuery = gql`query {
+    allItemWithAudios (orderBy: ID_ASC) {
         nodes {
-        	id
-        	language
-        	homophones
-        	audioList
+            id
+            language
+            homophones
+            audioList
         }
     }
 }`
 
 const itemQueryConfig = {
-    name: 'items',
-    options: {
-        variables: {
-    	    orderBy: 'ID_ASC'
-        }
-    }
+    name: 'items'
 }
 
 export default compose(

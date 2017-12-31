@@ -13,7 +13,7 @@ const TrainPage = React.createClass({
     },
     
     render() {
-    	let activeComponent
+        let activeComponent
         // If language and contrast are both specified, render the Arena, otherwise render the appropriate Selector
         if (this.state.activeContrastId != null) {
             // Contrast has been chosen

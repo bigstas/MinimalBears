@@ -157,8 +157,8 @@ const pieOptions = {
                 const tooltipPercentage = Math.round((tooltipData / total) * 100)
                 return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)'
             }
-		}
-     }
+        }
+    }
 }
     
 const mixOptions = {

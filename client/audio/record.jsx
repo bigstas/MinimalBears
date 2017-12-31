@@ -443,32 +443,37 @@ next: ${next}`)
     },
     
     dispatchAudio () {
-        const speaker = prompt("Please enter your name", "Harry Potter")
-        if (speaker) {
-            if (this.props.recordingWords.length !== this.state.audioURLs.length) {
-                // error message
-                console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
-            } else {
-                // Should we be using the URLs? Is there anything else we need?
-                const blobPacket = _.zip(this.props.recordingWords, this.state.audioBlobs)
-                blobPacket.map( function(c) {
-                    const item = c[0][1]  // id of the word
-                    // Asynchronously read the file
-                    const reader = new FileReader()
-                    // the "loadend" event will trigger once readAsText is complete
-                    const _this = this  // to use inside function...
-                    reader.addEventListener("loadend", function() {
-                        // reader.result contains the contents of blob as a string
-                        const blobString = btoa(reader.result)
-                        console.log(blobString.length)
-                        _this.props.submitAudio({variables: {input: { file: blobString, speaker, item }}})
-	                    // It seems like we need to limit the size of the mutation...
-	                    // error "request entity too large" from express-graphql
-	                    // This also seems to happen if we don't convert to base-64...?
-                    });
-                    reader.readAsBinaryString(c[1]) // convert blob to string
-                }, this)
-            }
+        if (this.props.recordingWords.length !== this.state.audioURLs.length) {
+            // error message
+            console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
+        } else {
+            const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
+            blobPackets.map( (packet) => {
+                const itemId = packet[0][1]
+                const blob = packet[1]
+                // Asynchronously read the file
+                // the "loadend" event will trigger once readAsBinaryString is complete
+                const reader = new FileReader()
+                const _this = this  // to use inside function...
+                reader.addEventListener("loadend", () => {
+                    // reader.result contains the contents of blob as a string
+                    const blobString = btoa(reader.result)  // Make the byte string friendly (base-64 encoding)
+                    console.log(blobString.length)
+                    console.log(this.props.userId)
+                    console.log(itemId)
+                    _this.props.submitAudio({variables: {input: { file: blobString,
+                                                                  speaker: this.props.userId,
+                                                                  item: itemId }}})
+                    .then( (response) => {
+                        console.log('submitted')
+                        console.log(response)
+                    }).catch( (error) => {
+                        console.log('error')
+                        console.log(error)
+                    })
+                });
+                reader.readAsBinaryString(blob) // convert blob to string
+            }, this)
         }
     },
     
@@ -533,7 +538,7 @@ next: ${next}`)
          * Also, create a list of <audio> elements for future reference.
          */
         console.log(this.refs)
-        this.audioElements = this.props.recordingWords.map(function(c, index) {
+        this.audioElements = this.props.recordingWords.map(function(c, index) {  // Not actually using the words, just the index
             const myRef = "audio" + index.toString()
             const element = this.refs[myRef]
             console.log('adding listener to index ' + index.toString())
@@ -569,7 +574,6 @@ const WrappedRecordPage = React.createClass({
     render() {
         // TODO Look up the user's language
         if (this.props.username) {
-            console.log(this.props.items)
             if (this.props.items.loading) { return <LoadingPage /> }
 
             // JSON is built-in
@@ -583,20 +587,20 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} /> 
+            return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} /> 
         }
         // else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
     }
 })
 
-const itemQuery = gql`query ($orderBy: ItemWithAudiosOrderBy, $language: Int) {
-    allItemWithAudios (orderBy: $orderBy, condition: {language: $language}) {
+const itemQuery = gql`query ($languageId: Int) {
+    allItemWithAudios (orderBy: ID_ASC, condition: {language: $languageId}) {
         nodes {
-        	id
-        	language
-        	homophones
-        	audioList
+            id
+            language
+            homophones
+            audioList
         }
     }
 }`
@@ -605,8 +609,7 @@ const itemQueryConfig = {
     name: 'items',
     options: {
         variables: {
-    	    orderBy: 'ID_ASC',
-            language: 1
+            languageId: 1  // TODO check user's native languages / if one, choose / if more than one, display a selector
         }
     }
 }
