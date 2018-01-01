@@ -7,9 +7,9 @@ counterpart.registerTranslations('pol', {
     },
     nav: {
         home: "Strona Główna",
-        about: "O tej stronie",
+        about: "O nas",
         train: "Ćwicz",
-        record: "Nagrywaj",
+        record: "Nagraj się",
         guest: "Gość",
         profile: "Profil",
         settings: "Ustawienia",
@@ -27,12 +27,69 @@ counterpart.registerTranslations('pol', {
         register: "Zapisz się"
     },
     about: {
-        title: 'Minimal Bears: aplikacja, która pozwoli Ci udoskonalić wymowę głosek w obcych językach.',
-        whatIs: 'Co to jest Minimal Bears?',
-        p1: {
-            line1: 'Minimal Bears to aplikacja internetowa stosująca technikę zwaną ',
-            HVPT: 'Trening Fonetyczny o Wysokiej Zmienności',
-            line2: ' (po angielsku High Variability Phonetic Training, czyli HVPT) aby pomóc ludziom nauczyć się brzmienia głosek pochodzących z języków obcych.'
+        bearCaption: "Brązowy Miś zrobił swoje badania",
+        whatIs: {
+            heading: "Czym jest Minimal Bears?",
+            p1: "Zapewne zauważyłeś, że dorośli uczący się języka zachowują swój akcent nawet po wielu latach nauki i praktyki. Może być to przeszkodą w komunikacji i sprawiać, że mówca wydaje się posługiwać językiem mniej biegle niż w rzeczywistości.",
+            p2: "Minimal Bears jest aplikacją, która pomoże Ci w nauce wymowy obcego języka. Jest to <strong>proste</strong>, <strong>szybkie</strong> i, jak dowodzi nauka, niezwykle <strong>efektywne</strong>.",
+            p3_start: "Aplikacja jest <strong>darmowa</strong> i o <strong>otwartym kodzie źródłowym</strong>. Możesz zacząć używać jej nawet ",
+            p3_link: "w tej chwili",
+            p3_end: "."
+        },
+        howWorks: {
+            heading: "Jak to działa?",
+            p1: `Uczysz się, grając w prostą grę. Usłyszysz parę słów, które różnią się od siebie tylko jednym dźwiękiem - na przykład angielskie ,,mouse’’ i ,,mouth’’, ,,sheep’’ i ,,ship’’ oraz ,,cat’’ i ,,cut’’, lub polskie ,,waż’’ i ,,wasz’’. Takie pary nazywają się <strong>parami minimalnymi</strong>. Po usłyszeniu jednego słowa z zestawienia zdecydujesz, które z nich zostało wypowiedziane. Zaraz po Twoim wyborze dostaniesz poprawną odpowiedź.`,
+            p2: `Naukowcy nazwali tę technikę High Variability Phonetic Training (HVPT), czyli ,,trening fonetyczny o wysokiej częstotliwości’’. Jest <a target="_blank" href="%(url1)s">wiadomo od dłuższego czasu</a>, iż efektywnie poprawia zdolność rozróżniania podobnych dźwięków w języku obcym u użytkownika <a target="_blank" href="%(url2)s">bez względu na jego poziom biegłości</a>, i <a target="_blank" href="%(url3)s">w rezultacie udoskonala akcent</a>. Pomimo badań, ta technika <a target="_blank" href="%(url4)s">nie jest zbyt znana</a> i stworzyliśmy Minimal Bears z myślą o rozpowszechnieniu jej. `,
+            p3: "Wraz z praktyką, rozróżnianie poszczególnych dźwięków będzie stawać się coraz łatwiejsze."
+        },
+        whyUse: {
+            heading: "Dlaczego warto używać tę aplikację?",
+            p1: "To wideo humorystycznie przedstawia przykład problemów, które próbujemy rozwiązać. (Wideo jest po angielsku i umieszczone na YouTube przez Jokhie Judy.)"
+        },
+        results: {
+            heading: "Jakich rezultatów możesz oczekiwać?",
+            p1: `Bez używania tej techniki, osoby uczące się języka często odróżniają podobne dźwięki w języku obcym <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">zaledwie odrobinę lepiej niż wybierając słowo na chybił-trafił</a> - nawet jeśli żyją przez wiele lat w obcym państwie i posługują się jego narodowym językiem. Lecz <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">już po 90 minutach</a> używania tej techniki badania wykazały znaczną poprawę.`,
+            p2: `Rezultaty zostały zweryfikowane u mówców i uczących się wielu różnych języków, w tym u <a target="_blank" href="%(Korean)s">Koreańczyków</a>, <a target="_blank" href="%(Japanese)s">Japończyków</a>, <a target="_blank" href="%(Cantonese)s">Chiń</a>cz<a target="_blank" href="%(Mandarin)s">yków</a>, <a target="_blank" href="%(French)s">Francuzów</a>, <a target="_blank" href="%(Arabic)s">Arabów</a>, <a target="_blank" href="%(German)s">Niemców</a>, <a target="_blank" href="%(Portuguese)s">Brazylijczyków</a>, <a target="_blank" href="%(Finnish)s">Finów</a>, <a target="_blank" href="%(Greek)s">Greków</a> i <a target="_blank" href="%(Catalan)s">Katalończyków</a> uczących się języka angielskiego, <a target="_blank" href="%(ChineseKorean)s">Chińczyków uczących się języka koreańskiego</a> oraz <a target="_blank" href="%(EnglishArabic)s">ojczystych użytkowników angielskiego uczących się arabskiego</a>, <a target="_blank" href="%(EnglishKorean)s">koreańskiego</a> i <a target="_blank" href="%(EnglishMandarin)s">mandaryńskiego</a>.`,
+            p3: `Naukowcy odkryli, że ta metoda ma długotrwały i pozytywny wpływ, który z czasem obniża się tylko nieznacznie. Jeden zespół naukowców wykazał, że uczący się wypadli znacznie lepiej <a target="_blank" href="%(sixMonths)s">nawet sześć miesięcy później</a> i bez używania HVPT w międzyczasie od tych, którzy tej techniki w ogóle nie używali.`,
+            p4: `Oprócz polepszenia się odbierania i produkcji dźwięków, uczniowie zadeklarowali również <a target="_blank" href="%(confidence)s">większą pewność siebie</a>, tak jak w tym przypadku:`,
+            p5: `,,Teraz czuję się bardziej pewny siebie niż przed praktyką. Mam więcej pewności w wymowie i słuchaniu. Ogólnie mam więcej pewności z językiem.’’`,
+            p6: `Zatem bez względu na Twój język ojczysty, język, którego się uczysz oraz <a target="_blank" href="%(proficiency)s">poziom biegłości</a>, HVPT może Ci pomóc w szlifowaniu swoich umiejętności.`
+        },
+        whyWorks: {
+            heading: "Dlaczego to działa tak dobrze?",
+            p1: "Są trzy główne powody, które sprawiają, że ta metoda jest tak efektywna: <strong>brak kontekstu</strong>, <strong>zróżnicowani mówcy</strong> i <strong>natychmiastowa informacja zwrotna</strong>. Wszystkie trzy są podstawą Minimal Bears.",
+            context: {
+                heading: "Brak kontekstu",
+                p1: `Dla większości par minimalnych, możemy użyć kontekstu jako przewodnika. Na przykład, przypuśćmy że uczeń ma problem z rozróżnieniem słów ,,mouse’’ (<em>mysz</em>) i ,,mouth’’ (<em>usta</em>), które w wymowie brzmią bardzo podobnie. Jeśli uczeń usłyszy ,,you took the words right of my mouth!’’ (<em>z ust mi to wyjąłeś!</em>), jest pewne, że nie chodzi tutaj o ,,mouse’’ (<em>mysz</em>).`,
+                p2: `Zatem sama rozmowa z ojczystym użytkownikiem języka angielskiego nie gwarantuje poprawy wymowy i akcentu. Z Minimal Bears nie można polegać na kontekście, co oznacza, że musisz skupić się na rozróżnieniu dźwięków. To trenuje Twoje umiejętności słuchania.`
+            },
+            varied: {
+                heading: "Zróżnicowani mówcy",
+                p1: `Jeśli słyszysz wymowę tylko jednej osoby, prawdopodobnie będziesz miał trudność ze zrozumieniem kogoś nowego. Rozsądna jest zatem propozycja, że słuchanie wielu ludzi jest lepsze od słuchania jednego człowieka. To zdrowo rozsądkowe podejście jest także <a target="_blank" href="%(supported)s">poparte badaniami</a>. Z Minimal Bears, możesz wysłuchać nagrań z mówcami z wielu zakątków świata.`
+            },
+            feedback: {
+                heading: "Natychmiastowa informacja zwrotna",
+                p1: "To jak ważna jest szybka, jednoznaczna odpowiedź, jest jednym z najważniejszych i popartych solidnymi dowodami odkryć behawiorystyki. Jednakże, w kontekście towarzyskim, małe błędy w wymowie i odróżnianiu dźwięków są rzadko poprawiane w danym momencie. Minimal Bears pozwala na natychmiastowe zobaczenie każdego błędu, co skutkuje w bardzo szybkich postępach w nauce."
+            } 
+        },
+        whichLangs: {
+            heading: "Jakie języki można ćwiczyć?",
+            p1_start: "Ilość języków w Minimal bears ciągle wzrasta dzięki udziałowi ludzi. Przejdź do ",
+            p1_link: ",,Ćwicz’’",
+            p1_end: " by zobaczyć, jakie języki są obecnie dostępne.",
+            p2: "Interfejs naszej strony również pojawia się w coraz większej ilości języków aby aplikacja była dostępna dla szerszej publiczności."
+        },
+        getStarted: {
+            heading: "Świetnie! Jak zacząć?",
+            p1_start: "Przejdź do ",
+            p1_link: ",,Ćwicz’’",
+            p1_end: ", wybierz swój język oraz język kontrastujący i zacznij ćwiczyć!"
+        },
+        contribute: {
+            heading: "Czy można w jakiś sposób pomóc w rozwoju aplikacji?",
+            p1_start: "Nagrania w Minimal bears są brane od społeczności za pomocą crowdsourcingu, tak jak Wikipedia. Aby poszerzyć zawartość (różne kontrasty w różnych językach wymawiane przez zróżnicowanych mówców), polegamy na słowach nagranych przez wolontariuszy. Jeśli chciałbyś przyczynić się do rozwoju aplikacji, przejdź do ",
+            p1_link: ",,Nagraj się’’",
+            p1_end: " i nagraj swoje słowa."
         }
     },
     loading: {

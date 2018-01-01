@@ -59,7 +59,7 @@ const About = React.createClass({
                 <Translate component="h2" content="about.whyWorks.heading" />
                 <Translate component="p" content="about.whyWorks.p1" unsafe />
                 <Translate component="h3" content="about.whyWorks.context.heading" />
-                <Translate component="p" content="about.whyWorks.context.p1" />
+                <Translate component="p" content="about.whyWorks.context.p1" unsafe />
                 <Translate component="p" content="about.whyWorks.context.p2" />
                 <Translate component="h3" content="about.whyWorks.varied.heading" />
                 <Translate component="p" content="about.whyWorks.varied.p1" with={{supported: "http://www.minimalbears.com/articles/low&high_variability_cantonese.pdf"}} unsafe />

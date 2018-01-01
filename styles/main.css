@@ -73,6 +73,8 @@ li { float: left; }                 /* All list elements should keep to the left
     cursor: pointer;
     padding-top: 3%;
     padding-bottom: 3%;
+    padding-left: 1%;
+    padding-right: 1%;
     background-color: #FFA22E;
     color: lightyellow;
     text-align: center;
@@ -82,7 +84,7 @@ li { float: left; }                 /* All list elements should keep to the left
 
 /* Buttons that need to fill out a lot of space, so they have extra width and lots of margin. */
 .wordOption, .chooseOption { 
-    width: 30%;
+    width: 28%;
     margin-left: 10%;
     margin-right: 10%;
 }
@@ -523,11 +525,17 @@ nav ul li a, nav ul li p {
 /* == joinpage.jsx / loginpage.jsx == */
 /* ================================== */
 
-#form /*div*/ { text-align: center; }
-#form /*div*/ table { 
+#form { text-align: center; }
+#form table { 
     text-align: right;
-    width: 350px;
+    width: 80%;
     margin: 10px auto;
+}
+#form table tbody tr td input {
+    height: 34px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
 }
 .tdText {
     text-align: left;
