@@ -13,8 +13,8 @@ CREATE TABLE private.account (
     password_hash text NOT NULL,
     username text NOT NULL UNIQUE,
     refresh text NOT NULL DEFAULT MD5(random()::text),  -- code for refreshing JWT tokens without a password
-    interface integer NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    native integer[] NOT NULL,  -- TODO this is not in normal form, so we cannot enforce a foreign key constraint to interface_language
+    interface text NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    native text[] NOT NULL,  -- TODO this is not in normal form, so we cannot enforce a foreign key constraint to interface_language
     custom_native text,  -- native languages we're not recording (free text)
     tutorial_completed bool NOT NULL DEFAULT FALSE
 );
@@ -51,8 +51,8 @@ CREATE FUNCTION public.signup(email text, password text, username text)
                 email,
                 crypt(password, gen_salt('bf')),
                 username,
-                1,  -- TODO choose interface language
-                '{1}'  -- TODO choose native languages  -- TODO error here?
+                'eng',  -- TODO choose interface language
+                '{"eng"}'  -- TODO choose native languages
             )
             RETURNING * INTO new_account;
         
@@ -185,7 +185,7 @@ GRANT EXECUTE ON FUNCTION public.get_pair_list(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_text(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_text(cached_pair) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_random_examples(cached_pair[]) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(text) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO guest, loggedin;
 
 -- Logged in users can submit new recordings, and use the refresh code

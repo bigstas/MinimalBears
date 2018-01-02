@@ -24,22 +24,21 @@ ALTER DEFAULT PRIVILEGES GRANT ALL ON TYPES TO admin;
 
 -- Languages being learnt
 CREATE TABLE language (
+    id text PRIMARY KEY,
     name text NOT NULL,
-    "iso639-3" text NOT NULL,
-    id serial PRIMARY KEY,  -- TODO can we use the code instead of a numeric id?
     interface bool NOT NULL  -- whether available as the interface language
 );
 
 -- Contrasts in the above languages
 CREATE TABLE contrast (
-    language integer NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    language text NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     name text NOT NULL,
     id serial PRIMARY KEY
 );
 
 -- Items in the above languages
 CREATE TABLE item (
-    language integer NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    language text NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     homophones text[] NOT NULL,
     id serial PRIMARY KEY,
     comment text  -- optionally clarify the pronunciation
@@ -69,9 +68,9 @@ CREATE FUNCTION check_language()
     STABLE
     AS $$
         DECLARE
-            contrast_lang integer;
-            first_lang integer;
-            second_lang integer;
+            contrast_lang text;
+            first_lang text;
+            second_lang text;
         BEGIN
             SELECT language INTO contrast_lang
                 FROM contrast
@@ -220,7 +219,7 @@ CREATE FUNCTION get_random_examples(pair_list cached_pair[]) RETURNS text_pair[]
 -- First define a type for the contrasts
 
 -- Now define the function
-CREATE FUNCTION get_contrasts_with_examples(language_id integer) RETURNS SETOF contrast_with_examples
+CREATE FUNCTION get_contrasts_with_examples(language_id text) RETURNS SETOF contrast_with_examples
     LANGUAGE SQL
     STABLE
     AS $$
@@ -258,5 +257,5 @@ ALTER TYPE contrast_with_examples OWNER TO admin;
 ALTER FUNCTION get_text(integer) OWNER TO admin;
 ALTER FUNCTION get_text(cached_pair) OWNER TO admin;
 ALTER FUNCTION get_random_examples(cached_pair[]) OWNER TO admin;
-ALTER FUNCTION get_contrasts_with_examples(integer) OWNER TO admin;
+ALTER FUNCTION get_contrasts_with_examples(text) OWNER TO admin;
 ALTER FUNCTION get_items_from_string(text) OWNER TO admin;

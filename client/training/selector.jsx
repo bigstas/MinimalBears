@@ -136,7 +136,7 @@ const languageQuery = gql`query {
     }
 }`
 
-const contrastQuery = gql`query ($languageId:Int!) {
+const contrastQuery = gql`query ($languageId:String!) {
     getContrastsWithExamples(languageId:$languageId) {
         nodes {
             name

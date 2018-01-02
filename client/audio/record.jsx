@@ -333,6 +333,7 @@ const WordRow = React.createClass({
                 <ReRecord index={this.props.index} mode={this.props.mode} next={this.props.next} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
                 <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
                 <p style={{display: "inline", cursor: "default"}}>{this.props.word}</p>
+                {/*TODO allow an optional comment to follow the word*/}
             </div>
         )
     }
@@ -444,7 +445,7 @@ next: ${next}`)
     
     dispatchAudio () {
         if (this.props.recordingWords.length !== this.state.audioURLs.length) {
-            // error message
+            // error message // TODO should this ever be possible?
             console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
         } else {
             const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
@@ -475,6 +476,8 @@ next: ${next}`)
                 reader.readAsBinaryString(blob) // convert blob to string
             }, this)
         }
+        // TODO if everything submits correctly, thank the user and load a fresh set of words
+        // TODO if there is an error, ask the user to try again
     },
     
     restartTutorial() {
@@ -583,6 +586,7 @@ const PreRecord = React.createClass({
     }
 })
 
+// TODO define an SQL function for this
 const WrappedRecordPage = React.createClass({
     getInitialState() {
         return { readyToGo: false }
@@ -622,7 +626,7 @@ const WrappedRecordPage = React.createClass({
     }
 })
 
-const itemQuery = gql`query ($languageId: Int) {
+const itemQuery = gql`query ($languageId: String!) {
     allItemWithAudios (orderBy: ID_ASC, condition: {language: $languageId}) {
         nodes {
             id
@@ -637,7 +641,7 @@ const itemQueryConfig = {
     name: 'items',
     options: {
         variables: {
-            languageId: 1  // TODO check user's native languages / if one, choose / if more than one, display a selector
+            languageId: 'eng'  // TODO check user's native languages / if one, choose / if more than one, display a selector
         }
     }
 }
