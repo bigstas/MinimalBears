@@ -150,18 +150,18 @@ const AuthJoinPage = React.createClass({
                                             </p>
                                             <img style={{width: "15px", display: "inline"}} src="questionmark.png" data-tip data-for='languageTooltip' data-delay-show='100' />
                                         </td>
-	                                    <td>
-	                                        <Select
-	                                            name="form-field-name"
-	                                            value={this.state.nativeLanguage}
-	                                            onChange={this.getDropdownValue}
-	                                            options={optionList}
-	                                            multi
-	                                            rtl={false} autosize={false} placeholder=""
-	                                            noResultsText={<Translate content="auth.register.noResults" />}
-	                                            style={{textAlign: "left"}}
-	                                        />
-	                                    </td>
+                                        <td>
+                                            <Select
+                                                name="form-field-name"
+                                                value={this.state.nativeLanguage}
+                                                onChange={this.getDropdownValue}
+                                                options={optionList}
+                                                multi
+                                                rtl={false} autosize={false} placeholder=""
+                                                noResultsText={<Translate content="auth.register.noResults" />}
+                                                style={{textAlign: "left"}}
+                                            />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td style={{textAlign: "left"}}>
