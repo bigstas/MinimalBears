@@ -9,7 +9,7 @@ import Translate from 'react-translate-component'
 import { Link } from 'react-router'
 
 // new gql way of getting data...
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 
@@ -155,7 +155,7 @@ const Arena = React.createClass({
             maxRounds: 2,   // this number is set low during development - it should be increased for release
             score: 0,
             mode: "wait",   // possible modes are "wait", "feedback", "ask", "done", and "restart"
-            correctAnswer: Math.round(Math.random()),
+            correctAnswer: null,
             chosenWord: null,
             currentAudio: null,
             textList: ["placeholder", "more placeholder"]
@@ -182,6 +182,7 @@ const Arena = React.createClass({
                 const snd = new Audio("quack wrong quieter.wav")
                 snd.play()
             }
+            // TODO save result in database
         }
     },
     
@@ -192,30 +193,22 @@ const Arena = React.createClass({
         // In "feedback" and "wait" mode, pressing the button should load a new pair and play a new sound
         if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "restart") {
             // If the data has been returned:
-            if (!this.props.pairs.loading && !this.props.items.loading) { // TODO move this check earlier on; it shouldn't be possible to click the button when there's no data
+            if (!this.props.questions.loading) { // TODO move this check earlier on; it shouldn't be possible to click the button when there's no data
                 /* Get all the pairs for a given contrast. Select a pair randomly.
                  * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
                  * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
                  */
-                const correctAnswer = Math.round(Math.random()) // randomly either 0 or 1
-                const correctProperty = correctAnswer ? "second" : "first"
-                // in nodes, need to subtract 1 from index, as GraphQL is 1-indexed, but JavaScript is 0-indexed
-                // fetch all the pairs
-                const pairArray = this.props.pairs.allContrastWithPairs.nodes[this.props.activeContrastId-1].pairs
-                // randomly select a single pair (list) of two ids, corresponding to the items in the given pair
-                const pair = random(pairArray)
-
-                const items = this.props.items.allItemWithAudios.nodes
-                const currentAudio = random(items[pair[correctProperty]-1].audioList) 
-                const snd = new Audio(currentAudio)
+                
+                const currentQuestion = this.props.questions.getQuestions.nodes[this.state.counter]
+                const snd = new Audio(currentQuestion.file)
                 snd.play()
                 
                 this.setState({
                     mode: "ask",
-                    currentAudio: currentAudio,
-                    textList: [items[pair.first-1].homophones[0],  // Choose the first homophone (which is less ambiguous) --- TO BE AMENDED to choose a random homophone
-                               items[pair.second-1].homophones[0]],
-                    correctAnswer: correctAnswer
+                    currentAudio: currentQuestion.file,
+                    textList: [currentQuestion.first,
+                               currentQuestion.second],
+                    correctAnswer: currentQuestion.correct
                 })
                 
                 // if we're in "restart" mode, we also need to reset some things
@@ -239,7 +232,7 @@ const Arena = React.createClass({
     
     restart() {
         this.setState({ mode: "restart" })
-    },
+    },  // TODO do we need this mode?
     
     render() {
         if (this.state.mode === "restart") {
@@ -291,7 +284,7 @@ const Arena = React.createClass({
     },
         
     componentDidMount() {
-        /* Keypress events:
+        /* Keypress events: TODO
          * Space - press central "progress" button; 1 & 2 - Word Option buttons 0 & 1
          * BUG: When you get to the end of training with the keyboard, then it doesn't set the score back down to 0. It does when you use mouse.
          * 2nd BUG: Two sounds play at the same time when you press space. Very strange.
@@ -309,39 +302,25 @@ const Arena = React.createClass({
  * We must provide a function that defines the queries.
  */
 
-const pairQuery = gql`query {
-    allContrastWithPairs(orderBy: ID_ASC) {
+const questionQuery = gql`query($contrastId:Int) {
+    getQuestions(contrastId:$contrastId) {
         nodes {
-            language
-            name
-            pairs {
-                first
-                second
-            }
+          pair
+          first
+          second
+          file
+          correct
         }
     }
 }`
 
-const pairQueryConfig = {
-    name: 'pairs'
-}
-
-const itemQuery = gql`query {
-    allItemWithAudios (orderBy: ID_ASC) {
-        nodes {
-            id
-            language
-            homophones
-            audioList
+const questionQueryConfig = {
+    name: 'questions',
+    options: (ownProps) => ({
+        variables: {
+            contrastId: ownProps.activeContrastId
         }
-    }
-}`
-
-const itemQueryConfig = {
-    name: 'items'
+    })
 }
 
-export default compose(
-    graphql(pairQuery, pairQueryConfig),
-    graphql(itemQuery, itemQueryConfig)
-)(Arena)
+export default graphql(questionQuery, questionQueryConfig)(Arena)

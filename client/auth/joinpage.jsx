@@ -25,7 +25,7 @@ const AuthJoinPage = React.createClass({
             passwordValue: "",
             confirmPassword: "###",
             nativeLanguage: [],
-            customNativeLanguage: "",
+            customNativeLanguage: null,
             inputCustomLanguage: false,
             emailError: false,
             passwordError: false,
@@ -36,7 +36,7 @@ const AuthJoinPage = React.createClass({
     toggleCustomLanguage() {
         this.setState({ 
             inputCustomLanguage: !this.state.inputCustomLanguage,
-            customNativeLanguage: ""
+            customNativeLanguage: null
         })
     },
     
@@ -72,8 +72,8 @@ const AuthJoinPage = React.createClass({
             usernameIssue: this.state.username === "",
             passwordClash: this.state.passwordValue !== this.state.confirmPassword,
             emailFail: !validateEmail(this.state.emailValue),
-            languageFail: (this.state.nativeLanguage.length === 0 && this.state.customNativeLanguage === "")
-        } // Note: [] === [] returns false (wtf!), as does []===false, because Javascript is like that
+            languageFail: (this.state.nativeLanguage.length === 0 && !this.state.customNativeLanguage)
+        }
         this.setState({
             usernameError: errors.usernameIssue,
             emailError: errors.emailFail,
@@ -82,13 +82,23 @@ const AuthJoinPage = React.createClass({
         })
         if (!errors.passwordClash && !errors.emailFail && !errors.usernameIssue && !errors.languageFail) {
             // Connect to the server to create a new account
+            
+            // Replace an empty string with null
+            let customNativeLanguage = this.state.customNativeLanguage
+            if (customNativeLanguage === "") {
+                customNativeLanguage = null 
+            }
+            
             this.props.signup({variables: {input: {email: this.state.emailValue,
                                                    password: this.state.passwordValue,
-                                                   username: this.state.username}}})
+                                                   username: this.state.username,
+                                                   interface: counterpart.getLocale(),
+                                                   nativeArray: this.state.nativeLanguage,
+                                                   customNative: customNativeLanguage}}})
             .then((response) => {
                 const newUserId = response.data.signup.integer
                 console.log(newUserId)
-                // TODO log in and change page
+                // TODO log in and change page (instead of alert)
                 alert('New user created with id ' + newUserId + ' and username ' + this.state.username)
             }).catch((error) => {
                 // TODO test this to see whether the translation is working! (How to do this??)
@@ -105,12 +115,11 @@ const AuthJoinPage = React.createClass({
     },
     
     render() {
-        const options = ["English", "Deutsch", "Polski"]
-        // Array.push - adds to the end of the array; Array.unshift - adds to the beginning of the array
-        let optionList = []
-        for (let i=0; i<options.length; i++) {
-            optionList.push({value: options[i], label: options[i]})
-        }
+        // TODO get list from database
+        // TODO translate language names
+        const optionList = [{value: "eng", label: "English"},
+                            {value: "deu", label: "Deutsch"},
+                            {value: "pol", label: "Polski"}]
         
         return (
             <div className='panel animated fadeIn'>

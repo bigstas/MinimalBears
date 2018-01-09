@@ -63,15 +63,18 @@ const AuthLoginPage = React.createClass({
             })
         }
         // Try to log in
-        this.props.login({variables: {input: {tryEmail: this.state.emailValue, tryPassword: this.state.passwordValue}}})
+        this.props.login({variables: {input: {tryEmail: this.state.emailValue,
+                                              tryPassword: this.state.passwordValue}}})
         .then((response) => {
-            const jwt = response.data.authenticate.jsonWebToken
+            const {jwt, refresh} = response.data.authenticateFromEmail.tokenPair
             if (!!jwt) {
                 this.setState({
                     emailError: false,
                     passwordError: false
                 })
                 this.props.callbackUser(jwt)
+                localStorage.setItem('refreshToken', refresh)
+                
                 // change page (currently navigates to Home)
                 browserHistory.push('/')
             } else {
@@ -131,9 +134,12 @@ const AuthLoginPage = React.createClass({
     }
 })
 
-const login = gql`mutation ($input: AuthenticateInput!) {
-    authenticate(input: $input) {
-        jsonWebToken
+const login = gql`mutation ($input: AuthenticateFromEmailInput!) {
+    authenticateFromEmail(input: $input) {
+        tokenPair {
+            jwt
+            refresh
+        }
     }
 }`
 

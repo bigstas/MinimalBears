@@ -25,7 +25,7 @@ const Selector = React.createClass({
         return (
             <div className='panel animated fadeIn' id='selector'>
                 <Translate content={this.props.selectionMessage} component="p" style={{textAlign:"center"}} />
-                {this.props.options.map((option, index) =>
+                {this.props.options.map(option =>
                     <div className='button chooseOption' key={option.id} 
                         onMouseEnter={!!this.props.mouseEnter ? this.props.mouseEnter : null} 
                         onMouseLeave={!!this.props.mouseLeave ? this.props.mouseLeave : null} 
@@ -57,7 +57,7 @@ const LanguageSelector = React.createClass({
     render() {
         if (this.props.data.loading) { return <LoadingPage /> }
         
-        const options = this.props.data.allLanguages.nodes.map((language, index) =>
+        const options = this.props.data.allTrainingLanguages.nodes.map(language =>
             ({text: <Translate content={"train.language."+language.id.toString()} />,
               id: language.id,
               example: false})
@@ -102,7 +102,7 @@ const ContrastSelector = React.createClass({
     render() {
         if (this.props.data.loading) { return <LoadingPage /> }
         
-        const options = this.props.data.getContrastsWithExamples.nodes.map((contrast, index) => {
+        const options = this.props.data.getContrastsWithExamples.nodes.map(contrast => {
             const pair = contrast.examples[this.state.exampleCounter]
             const pairString = pair.first + "/" + pair.second
             return {text: contrast.name,
@@ -128,7 +128,7 @@ const ContrastSelector = React.createClass({
 })
 
 const languageQuery = gql`query {
-    allLanguages {
+    allTrainingLanguages {
         nodes {
             name
             id

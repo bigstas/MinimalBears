@@ -31,7 +31,7 @@ const AppBody = React.createClass({
             // If the token is still valid:
             // Set the state, to change the app
             this.setState({
-                username: jwt.username,
+                username: "Placeholder Username",  // TODO
                 userId: jwt.id
             })
             // Store the token in memory, to be added to request headers
@@ -54,13 +54,14 @@ const AppBody = React.createClass({
             userId: null
         })
         localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
         clearInterval(this.refreshTimer)
     },
     
     refresh() {
         // Get a new token using the refresh code
         console.log('refreshing json web token')
-        this.props.refresh()
+        this.props.refresh(localStorage.getItem('refreshToken'))
         .then((response) => {
             // Store the new token
             const raw_jwt = response.data.refresh.jsonWebToken
@@ -112,14 +113,21 @@ const AppBody = React.createClass({
     }
 })
 
-const refresh = gql`mutation {
-    refresh(input:{}) {
+const refresh = gql`mutation($input:RefreshInput!) {
+    refresh(input:$input) {
         jsonWebToken
     }
 }`
 
 const refreshConfig = {
-    name: 'refresh'
+    name: 'refresh',
+    options: {
+        variables: {
+            input: {
+                refreshToken: localStorage.getItem('refreshToken')
+            }
+        }
+    }
 }
 
 export default graphql(refresh, refreshConfig)(AppBody)

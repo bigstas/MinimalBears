@@ -22,43 +22,61 @@ ALTER DEFAULT PRIVILEGES GRANT ALL ON TYPES TO admin;
 
 -- Tables --
 
--- Languages being learnt
+-- Languages (both those being learnt and those for the user interface)
 CREATE TABLE language (
     id text PRIMARY KEY,
     name text NOT NULL,
-    interface bool NOT NULL  -- whether available as the interface language
+    interface bool NOT NULL,  -- whether available as the interface language
+    training bool NOT NULL  -- whether available as a training language
+);
+CREATE INDEX ON language (interface);
+CREATE INDEX ON language (training);
+
+CREATE VIEW interface_language AS (
+    SELECT * FROM language
+    WHERE interface
+);
+
+CREATE VIEW training_language AS (
+    SELECT * FROM language
+    WHERE training
 );
 
 -- Contrasts in the above languages
 CREATE TABLE contrast (
-    language text NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    language text NOT NULL REFERENCES language (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     name text NOT NULL,
-    id serial PRIMARY KEY
+    id serial PRIMARY KEY,
+    ready boolean NOT NULL
 );
+CREATE INDEX ON contrast (language); 
+CREATE INDEX ON contrast (language) WHERE ready;
 
 -- Items in the above languages
 CREATE TABLE item (
-    language text NOT NULL REFERENCES language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    homophones text[] NOT NULL,
+    language text NOT NULL REFERENCES language (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    homophones text[] NOT NULL CHECK (homophones != '{}'),  -- not in 1st normal form, which would make the constraint difficult
     id serial PRIMARY KEY,
     comment text  -- optionally clarify the pronunciation
 );
+CREATE INDEX ON item (language);
 
 -- Audio recordings
 CREATE TABLE audio (
-    file text NOT NULL,
+    file text PRIMARY KEY,
     speaker integer NOT NULL,  -- will reference user id
-    item integer NOT NULL REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    id serial PRIMARY KEY
+    item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
+CREATE INDEX ON audio (item);
 
 -- Minimal pairs
 CREATE TABLE pair (
-    contrast integer NOT NULL REFERENCES contrast(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    first integer NOT NULL REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    second integer NOT NULL REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    contrast integer NOT NULL REFERENCES contrast (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    first integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    second integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     id serial PRIMARY KEY
 );
+CREATE INDEX ON pair (contrast);
 
 -- Force the contrast and items to be from the same language
 -- (Function to be used in a trigger)
@@ -100,84 +118,28 @@ CREATE TRIGGER check_language_trigger BEFORE INSERT OR UPDATE
 CREATE TABLE audio_submission (
   file bytea NOT NULL,
   speaker integer NOT NULL,  -- will reference user id
-  item integer NOT NULL REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
   id serial PRIMARY KEY
 );
-
--- Views --
-
--- Item table extended with cache of audio files
--- Rather than storing the audio ids, we can store the filepaths
--- First define a function, then define the view
-CREATE FUNCTION get_audio_list(item_id integer) RETURNS text[]
-    LANGUAGE SQL
-    STABLE
-    AS $$SELECT ARRAY(SELECT file FROM audio WHERE audio.item = item_id);$$;
-
-CREATE MATERIALIZED VIEW item_with_audio AS
-    SELECT item.language,
-        item.homophones,
-        item.id,
-        item.comment,
-        get_audio_list(item.id) AS audio_list
-    FROM item;
-
--- Contrast table extended with cache of minimal pairs
--- Rather than storing the pair ids, we can store pairs of item ids (cached_pair type)
--- Define the return type of the function, then the function, then the view
-CREATE TYPE cached_pair AS (
-    first integer,
-    second integer
-);
-
-CREATE FUNCTION get_pair_list(contrast_id integer) RETURNS cached_pair[]
-    LANGUAGE SQL
-    STABLE
-    AS $$SELECT ARRAY(  -- return as an array, not as a table
-        SELECT (pair.first, pair.second)::cached_pair  -- return a pair, of type cached_pair
-        FROM pair
-        WHERE pair.contrast = contrast_id  -- only pairs for this contrast
-            AND (SELECT audio_list FROM item_with_audio WHERE id = pair.first) != '{}'  -- items must have audio
-            AND (SELECT audio_list FROM item_with_audio WHERE id = pair.second) != '{}'
-    );$$;
-
-CREATE MATERIALIZED VIEW contrast_with_pairs AS
-    SELECT contrast.language,
-        contrast.name,
-        contrast.id,
-        get_pair_list(contrast.id) AS pairs
-    FROM contrast;
-
--- Contrast table filtered to include only those with a nonempty list of pairs
-CREATE MATERIALIZED VIEW contrast_nonempty AS
-    SELECT contrast_with_pairs.language,
-        contrast_with_pairs.name,
-        contrast_with_pairs.id
-    FROM contrast_with_pairs
-    WHERE (contrast_with_pairs.pairs != '{}');
-
--- Interface languages
-CREATE MATERIALIZED VIEW interface_language AS
-    SELECT * FROM language
-    WHERE interface = TRUE;
 
 -- Functions --
 
 -- For a user to submit their audio recordings
-CREATE FUNCTION submit_audio(
-    file bytea,
-    speaker integer,
-    item integer)
+CREATE FUNCTION submit_audio(file bytea, speaker integer, item integer)
     RETURNS integer
-    LANGUAGE SQL VOLATILE 
-    AS $$INSERT INTO audio_submission (file, speaker, item)
+    LANGUAGE SQL
+    VOLATILE 
+    AS $$
+        INSERT INTO audio_submission (file, speaker, item)
         VALUES (file, speaker, item)
-        RETURNING id;$$;
+        RETURNING id;
+    $$;
 
--- Get list of contrasts for a given language, each with a random set of examples
+-- Get the list of contrasts for a given language, each with a random set of examples
 -- First define the return type (and a type for an example word pair)
 -- Then define a function mapping item ids to words
--- Then define a function randomly choosing a subset
+-- Then define a function randomly choosing a subset for one contrast
+-- Finally define the function applying this to each contrast in a language
 
 CREATE TYPE text_pair AS (
     first text,
@@ -190,72 +152,114 @@ CREATE TYPE contrast_with_examples AS (
     examples text_pair[]
 );
 
-CREATE FUNCTION get_text (item_id integer) RETURNS text
+CREATE FUNCTION get_text (item_id integer)
+    RETURNS text
     LANGUAGE SQL
     STABLE
     AS $$
-        SELECT homophones[1] FROM item WHERE item.id = item_id
+        SELECT homophones[1]  -- TODO choose a random homophone?
+        FROM item
+        WHERE id = item_id
     $$;
 
-CREATE FUNCTION get_text(id_pair cached_pair) RETURNS text_pair
-    LANGUAGE SQL
-    STABLE
-    AS $$
-        SELECT (get_text(id_pair.first), get_text(id_pair.second))::text_pair
-    $$;
-
-CREATE FUNCTION get_random_examples(pair_list cached_pair[]) RETURNS text_pair[]
+CREATE FUNCTION get_random_examples(contrast_id integer, number integer)
+    RETURNS text_pair[]
     LANGUAGE SQL
     STABLE
     AS $$
         SELECT ARRAY(
-            SELECT get_text((first, second))
-                FROM UNNEST(pair_list)
-                ORDER BY RANDOM()
-                LIMIT 5
-        );
+            SELECT (get_text(first), get_text(second))::text_pair
+            FROM pair
+            WHERE contrast = contrast_id
+            ORDER BY RANDOM()
+            LIMIT number
+        )
     $$;
--- Next step: get the contrasts for a language, with a random set of examples
--- First define a type for the contrasts
 
--- Now define the function
-CREATE FUNCTION get_contrasts_with_examples(language_id text) RETURNS SETOF contrast_with_examples
+CREATE FUNCTION get_contrasts_with_examples(language_id text, number integer)
+    RETURNS SETOF contrast_with_examples
     LANGUAGE SQL
     STABLE
     AS $$
-        SELECT (name, id, get_random_examples(pairs))::contrast_with_examples
-            FROM contrast_with_pairs
-            WHERE language = language_id
-                AND pairs != '{}'
+        SELECT (name, id, get_random_examples(id, number))::contrast_with_examples
+        FROM contrast
+        WHERE ready AND language = language_id
+    $$;
+
+-- Get questions for a training session
+-- First define the return type
+-- Then define a function 
+-- Finally define a function applying this to each contrast in a language
+
+CREATE TYPE question AS (
+    pair integer,
+    first text,
+    second text,
+    file text,
+    correct integer
+);
+
+CREATE FUNCTION get_random_audio(item_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT file
+        FROM audio
+        WHERE item = item_id
+        ORDER BY RANDOM()
+    $$;
+
+CREATE FUNCTION get_questions(contrast_id integer, number integer)
+    RETURNS SETOF question
+    LANGUAGE plpgsql
+    STABLE
+    AS $$
+        DECLARE
+            coin integer;  -- 0 (first) or 1 (second)
+            this_pair pair;
+            file text;
+            first_file text;
+            second_file text;
+            count integer := 0;
+        BEGIN
+            FOR this_pair IN
+               SELECT * FROM pair
+               WHERE contrast = contrast_id
+               ORDER BY RANDOM()
+            LOOP
+                -- we will only return a file for one item in th pair,
+                -- but both items should have at least one file
+                first_file := get_random_audio(this_pair.first);
+                second_file := get_random_audio(this_pair.second);
+                CONTINUE WHEN first_file IS NULL OR second_file IS NULL;
+                -- randomly choose one item
+                coin := FLOOR(RANDOM() * 2);  -- 0 or 1
+                IF coin = 0
+                THEN
+                    file := first_file;
+                ELSE
+                    file := second_file;
+                END IF;
+                RETURN NEXT (this_pair.id,
+                             get_text(this_pair.first),
+                             get_text(this_pair.second),
+                             file,
+                             coin)::question;
+                count := count + 1;
+                EXIT WHEN count = number;
+            END LOOP;
+            RETURN;
+        END;
     $$;
 
 -- Get list of possible items, from a given string
-CREATE FUNCTION get_items_from_string(string text) RETURNS SETOF item
+-- (if this function is used often, homophones should be put into their own table, not as an array)
+CREATE FUNCTION get_items_from_string(string text)
+    RETURNS SETOF item
     LANGUAGE SQL
     STABLE
     AS $$SELECT * FROM item WHERE string = ANY(homophones)$$;
 
--- Ownership --
-
-ALTER TABLE language OWNER TO admin;
-ALTER TABLE contrast OWNER TO admin;
-ALTER TABLE item OWNER TO admin;
-ALTER TABLE audio OWNER TO admin;
-ALTER TABLE pair OWNER TO admin;
-ALTER FUNCTION check_language() OWNER TO admin;  -- (the trigger check_language_trigger is part of the language table)
-ALTER TABLE audio_submission OWNER TO admin;
-ALTER FUNCTION get_audio_list(item_id integer) OWNER TO admin;
-ALTER TABLE item_with_audio OWNER TO admin;
-ALTER TYPE cached_pair OWNER TO admin;
-ALTER FUNCTION get_pair_list(contrast_id integer) OWNER TO admin;
-ALTER TABLE contrast_with_pairs OWNER TO admin;
-ALTER TABLE contrast_nonempty OWNER TO admin;
-ALTER TABLE interface_language OWNER TO admin;
-ALTER FUNCTION submit_audio(bytea, integer, integer) OWNER TO admin;
-ALTER TYPE text_pair OWNER TO admin;
-ALTER TYPE contrast_with_examples OWNER TO admin;
-ALTER FUNCTION get_text(integer) OWNER TO admin;
-ALTER FUNCTION get_text(cached_pair) OWNER TO admin;
-ALTER FUNCTION get_random_examples(cached_pair[]) OWNER TO admin;
-ALTER FUNCTION get_contrasts_with_examples(text) OWNER TO admin;
-ALTER FUNCTION get_items_from_string(text) OWNER TO admin;
+-- TODO get recording words
+-- TODO moderate audio submissions

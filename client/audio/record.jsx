@@ -601,12 +601,8 @@ const WrappedRecordPage = React.createClass({
         if (this.props.username) {
             if (this.props.items.loading) { return <LoadingPage /> }
 
-            // JSON is built-in
-            // We need to do this to deep copy ...nodes, since props are read-only and we need to sort the array
-            const nodes = JSON.parse(JSON.stringify(this.props.items.allItemWithAudios.nodes))
-            nodes.sort( (a, b) => a.audioList.length - b.audioList.length)
-            console.log(nodes)
-            const firstNodes = nodes.slice(0,10)
+            const firstNodes = this.props.items.allItems.nodes.slice(0,10)
+            console.log(firstNodes)
             const firstWords = firstNodes.map( function(item) {
                 return [item.homophones, item.id]
             })
@@ -627,12 +623,11 @@ const WrappedRecordPage = React.createClass({
 })
 
 const itemQuery = gql`query ($languageId: String!) {
-    allItemWithAudios (orderBy: ID_ASC, condition: {language: $languageId}) {
+    allItems (orderBy: ID_ASC, condition: {language: $languageId}) {
         nodes {
             id
             language
             homophones
-            audioList
         }
     }
 }`
