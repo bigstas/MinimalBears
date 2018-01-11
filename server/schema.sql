@@ -121,8 +121,53 @@ CREATE TABLE audio_submission (
   item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
   id serial PRIMARY KEY
 );
+CREATE INDEX ON audio_submission (item);
 
--- Functions --
+-- Util functions --
+
+CREATE FUNCTION public.get_contrast_id(pair_id integer)
+    RETURNS integer
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT contrast
+        FROM pair
+        WHERE id = pair_id
+    $$;
+
+CREATE FUNCTION public.get_contrast_name(contrast_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT name
+        FROM contrast
+        WHERE id = contrast_id
+    $$;
+
+CREATE FUNCTION public.get_language_id(contrast_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT language
+        FROM contrast
+        WHERE id = contrast_id
+    $$;
+
+-- Get list of possible items, from a given string
+-- (if this function is used often, homophones should be put into their own table, not as an array)
+CREATE FUNCTION get_items_from_string(string text)
+    RETURNS SETOF item
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT *
+        FROM item
+        WHERE string = ANY(homophones)
+    $$;
+
+-- User functions --
 
 -- For a user to submit their audio recordings
 CREATE FUNCTION submit_audio(file bytea, speaker integer, item integer)
@@ -253,13 +298,26 @@ CREATE FUNCTION get_questions(contrast_id integer, number integer)
         END;
     $$;
 
--- Get list of possible items, from a given string
--- (if this function is used often, homophones should be put into their own table, not as an array)
-CREATE FUNCTION get_items_from_string(string text)
+-- Get items to record, choosing those that have not been recorded many times
+CREATE FUNCTION get_items_to_record(language_id text, number integer)
     RETURNS SETOF item
     LANGUAGE SQL
     STABLE
-    AS $$SELECT * FROM item WHERE string = ANY(homophones)$$;
+    AS $$
+        SELECT *
+        FROM item
+        WHERE language = language_id
+        ORDER BY (
+            SELECT count(*)
+            FROM audio
+            WHERE item = item.id
+        ) + 0.9 * (
+            SELECT count(*)
+            FROM audio_submission
+            WHERE item = item.id 
+        )
+        LIMIT number
+    $$;
 
--- TODO get recording words
 -- TODO moderate audio submissions
+-- TODO allow moderator to extend contrast, pair, item...

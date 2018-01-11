@@ -6,7 +6,9 @@
 CREATE SCHEMA private;
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Users, including emails and passwords --
+-- Tables --
+
+-- Users, including emails and passwords
 CREATE TABLE private.account (
     id serial PRIMARY KEY,
     email text NOT NULL UNIQUE CHECK (email ~* '^\S+@\S+\.\S+$'),
@@ -18,7 +20,7 @@ CREATE TABLE private.account (
     tutorial bool NOT NULL DEFAULT FALSE
 );
 
--- Native languages (can have more than one)
+-- Users' native languages (can have more than one)
 CREATE TABLE private.native (
     account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     language text NOT NULL REFERENCES public.language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -48,6 +50,18 @@ CREATE VIEW private.account_info AS (
     FROM private.account
 );
 
+-- Users' practice sessions (one row per answered question)
+CREATE TABLE private.practice (
+    account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    stamp timestamp NOT NULL DEFAULT now(),
+    pair integer NOT NULL REFERENCES public.pair(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    audio text NOT NULL REFERENCES public.audio(file) ON UPDATE CASCADE ON DELETE RESTRICT,
+    correct boolean NOT NULL,
+    PRIMARY KEY (account, stamp)
+);
+CREATE INDEX ON private.practice (account);
+-- (currently no check that the audio's item is one element of the pair)
+
 -- Public functions --
 -- These allow controlled access to the private schema
 
@@ -63,7 +77,6 @@ CREATE FUNCTION public.signup(email text, password text, username text, interfac
             new_account private.account;
             native_lang text;
         BEGIN
-            -- TODO check password length
 	        INSERT INTO private.account (email, password_hash, username, interface, custom_native) VALUES (
                 email,
                 crypt(password, gen_salt('bf')),
@@ -206,7 +219,17 @@ CREATE FUNCTION public.new_refresh_token(try_password text)
         END;
     $$;
 
--- TODO get user information (except for refresh token)
+-- Get safe user information (no password or refresh token)
+CREATE FUNCTION public.get_account_info()
+    RETURNS private.account_info
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT *
+        FROM private.account_info
+        WHERE id = current_setting('jwt.claims.id')
+    $$;
 
 -- Record that a user has completed the tutorial for the record page
 CREATE FUNCTION public.complete_tutorial()
@@ -220,17 +243,72 @@ CREATE FUNCTION public.complete_tutorial()
         WHERE id = current_setting('jwt.claims.id')
     $$;
 
--- TODO training information --
+-- Record a user's answer to a question
+CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean)
+    RETURNS void
+    LANGUAGE SQL
+    SECURITY DEFINER
+    VOLATILE
+    AS $$
+        INSERT INTO private.practice (account, pair, audio, correct)
+        VALUES (current_setting('jwt.claims.id'), pair, audio, correct);
+    $$;
 
-CREATE TABLE private.practice (
-    account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    stamp timestamp NOT NULL DEFAULT now(),
-    pair integer NOT NULL REFERENCES public.pair(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    audio text NOT NULL REFERENCES public.audio(file) ON UPDATE CASCADE ON DELETE RESTRICT,
-    correct boolean NOT NULL,
-    PRIMARY KEY (account, stamp)
+-- number and average for each contrast, and in total, for a chosen period of time
+
+-- names and types to match count and sum functions
+CREATE TYPE public.stats AS (
+    stamp timestamp,
+    contrast text,
+    count bigint,
+    sum bigint
 );
-CREATE INDEX ON private.practice (account);
+
+CREATE TYPE private.contrast_practice AS (
+    contrast integer,
+    stamp timestamp,
+    correct boolean
+);
+
+CREATE FUNCTION public.get_practices(unit text, number integer)
+    RETURNS SETOF private.contrast_practice
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT get_contrast_id(pair) AS contrast,
+            date_trunc(unit, stamp) AS stamp,
+            correct
+        FROM private.practice
+        WHERE account = current_setting('jwt.claims.id')::integer
+            AND stamp > date_trunc(unit, now()) - number * ('1 ' || unit)::interval
+    $$;
+-- TODO timezone?
+-- SET TIME ZONE TO ... ;
+
+CREATE FUNCTION public.get_all_stats(language_id text, unit text, number integer)
+    RETURNS SETOF stats
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT stamp,
+            get_contrast_name(contrast) AS contrast,
+            count(*),
+            sum(correct::integer)
+        FROM public.get_practices(unit, number)
+        GROUP BY stamp, contrast
+    $$;
+
+CREATE FUNCTION public.get_contrast_avg(contrast_id integer, unit text, number integer)
+    RETURNS numeric
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT avg(correct::integer)
+        FROM public.get_practices(unit, number)
+        WHERE contrast = contrast_id
+    $$;
 
 -- Permissions --
 
@@ -251,11 +329,20 @@ GRANT EXECUTE ON FUNCTION public.get_random_examples(integer, integer) TO guest,
 GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(text, integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_random_audio(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_id(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_name(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_language_id(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO guest, loggedin;
 
 -- Logged in users can submit new recordings, and use the refresh code
 GRANT EXECUTE ON FUNCTION public.complete_tutorial() TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_items_to_record(text, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_account_info() TO loggedin;
+GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_practices(text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, integer, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_all_stats(text, text, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_avg(integer, text, integer) TO loggedin;
 GRANT INSERT ON TABLE public.audio_submission TO loggedin;
 GRANT SELECT ON TABLE public.audio_submission TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;

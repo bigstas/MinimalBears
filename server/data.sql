@@ -1626,7 +1626,7 @@ INSERT INTO audio (file, speaker, item) VALUES
 ('http://www.minimalbears.com/audio/tfss-1d5a9abd-af29-4bff-b37c-617ece28e0a9-fran chick.wav', 2, 282),
 ('http://www.minimalbears.com/audio/tfss-4c2ffa54-882a-4324-a396-a6e79a308aa6-wozza wraith.wav', 4, 217),
 ('http://www.minimalbears.com/audio/tfss-d9fc3d60-f04f-4d13-bd4e-d460899af8d6-wozza thong.wav', 4, 98),
-('http://www.minimalbears.com/audio/tfss-57d43353-f97a-4312-86bf-e914ef4d2796-alex win.wav', 3, 180),
+('http://www.minimalbears.com/audio/tfss-57d43353-f97a-4312-86bf-e914ef4d2796-alex win.wav', 3, 50),
 ('http://www.minimalbears.com/audio/tfss-0bdb35bb-881f-4913-a8a4-bc2bd79b418e-wozza race.wav', 4, 257),
 ('http://www.minimalbears.com/audio/tfss-118eefad-9dfb-4a86-9dbb-33e11c0f137f-asher wean.wav', 6, 141),
 ('http://www.minimalbears.com/audio/tfss-50868903-8d16-4916-826a-900114a69283-kaija some.wav', 1, 301),

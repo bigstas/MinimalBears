@@ -61,7 +61,7 @@ const AppBody = React.createClass({
     refresh() {
         // Get a new token using the refresh code
         console.log('refreshing json web token')
-        this.props.refresh(localStorage.getItem('refreshToken'))
+        this.props.refresh({variables: {input: {refreshToken: localStorage.getItem('refreshToken')}}})
         .then((response) => {
             // Store the new token
             const raw_jwt = response.data.refresh.jsonWebToken
@@ -120,14 +120,7 @@ const refresh = gql`mutation($input:RefreshInput!) {
 }`
 
 const refreshConfig = {
-    name: 'refresh',
-    options: {
-        variables: {
-            input: {
-                refreshToken: localStorage.getItem('refreshToken')
-            }
-        }
-    }
+    name: 'refresh'
 }
 
 export default graphql(refresh, refreshConfig)(AppBody)
