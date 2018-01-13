@@ -6,13 +6,13 @@ import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import key from 'keymaster'
 import Translate from 'react-translate-component'
-import { Link } from 'react-router'
+import DonePanel from './donepanel'
 
 // new gql way of getting data...
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-
+// random function not used in this file anymore as the random selection is done on the server. TODO - Remove this function?
 function random(myArray) {
     const rand = myArray[Math.floor(Math.random() * myArray.length)]
     return rand
@@ -56,11 +56,6 @@ const WordOption = React.createClass({
     },
     
     render() {
-        //var background = (this.props.mode === "feedback")
-            //? (this.props.correct) ? "green" : "white"
-            //: "#b0b0e0" 
-        //var text = (this.props.mode === "feedback") ? this.props.feedback : this.props.word
-        //var wordOptionClass = (this.props.mode === "ask" ? 'wordOption wordOptionActive animated pulse' : 'wordOption')
         let text = ""
         let id = ""
         let useTranslate = true
@@ -98,54 +93,6 @@ const WordOption = React.createClass({
     }
 })
 
-const DonePanel = React.createClass({
-    getInitialState() {
-        return { clicked: false }
-    },
-    
-    mustBeLoggedIn() {
-        alert("You must be logged in to view stats!")
-    },
-    
-    render() {
-        const bearPics = [
-            ["bear2.png", "There's no greater power than the power of Hi 5."], 
-            ["bear3.png", "Give a bear a fish, and it will be your friend for a day."], 
-            ["bear4.png", "Remember to share with your friends!"], 
-            ["bear6.png", "Bears never forget!"]
-        ]
-        const pic = random(bearPics)
-        console.log(pic)
-        
-        const statsButton = (this.props.loggedIn ? 
-            <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
-            <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.viewStats"} /></div>
-        )
-        
-        return (
-            <div className="panel animated fadeIn">
-                <img id="endImage" src={pic[0]} />
-                <p className="caption"><em>{pic[1]}</em></p>
-                <div>
-                    <div className="endDiv" id="resultsDiv">
-                        <div className="endDiv">
-                            <p className="hugeNumberTitle">Your score:</p>
-                            <p className="hugeNumber">{this.props.score}%</p>
-                        </div>
-                        <div className="endDiv">
-                            <p className="hugeNumberTitle">Your average:</p>
-                            <p className="hugeNumber">{this.props.average}%</p>
-                        </div>
-                    </div>
-                    <div className="endDiv" id="buttonDiv">
-                        <div className="button endButton" onClick={this.props.handleClick}>Play again</div>
-                        {statsButton}
-                    </div>
-                </div>
-            </div>
-        )
-    }
-})
 
 // The arena - where the action happens  
 const Arena = React.createClass({
@@ -242,11 +189,12 @@ const Arena = React.createClass({
             return <DonePanel handleClick={this.handleProgressClick} 
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
+                       activeContrastId={this.props.activeContrastId}
                        average="80" /> 
             /* TODO - average should actually refer to some statistic */
         } else {
             if (this.state.mode === "done") {
-                setTimeout(this.restart, 2000) // wait for a moment before showing the results page
+                setTimeout(this.restart, 1500) // wait for a moment before showing the results page
             }
             return (
                 <div className='panel animated fadeIn' id='arena'>
@@ -303,7 +251,7 @@ const Arena = React.createClass({
  */
 
 const questionQuery = gql`query($contrastId:Int) {
-    getQuestions(contrastId:$contrastId) {
+    getQuestions(contrastId:$contrastId, number: 10) {
         nodes {
           pair
           first
