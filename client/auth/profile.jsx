@@ -7,6 +7,8 @@ import { Link } from 'react-router'
 import { Bar, Pie } from 'react-chartjs-2' // Charts
 // other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
 import { makeChartData, barOptions, mixOptions, pieOptions } from './chartdata'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
     
 // Stand-in data, to be done in/from the database in whatever way is best and most efficient
@@ -138,6 +140,9 @@ const UserProfile = React.createClass({
             barChartTitle = <span />
         }
         
+        const allStats = this.props.allStats.getAllStats
+        console.log(allStats)
+        
         return (
             <div className='panel animated fadeIn' id='profile'>
             {/* TOP REGION */}
@@ -179,5 +184,18 @@ const UserProfile = React.createClass({
     }
 })
 
-//export default createContainer(({params}) => {return {}}, Profile)    // do we still need createContainer?
-export default UserProfile
+const allStatsQuery = gql`query {
+  getAllStats {
+    nodes {
+      stamp
+      contrast
+      count
+      sum
+    }
+  }
+}`
+
+const allStatsQueryConfig = { name: 'allStats' } // no variables needed here
+
+//export default createContainer(({params}) => {return {}}, Profile)    // TODO - do we still need createContainer?
+export default graphql(allStatsQuery, allStatsQueryConfig)(UserProfile)

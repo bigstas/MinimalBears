@@ -28,6 +28,8 @@ const DonePanel = React.createClass({
         const pic = random(bearPics)
         console.log(pic)
         // For some reason, this is running twice - it seems that the page is re-rendering twice. TODO - should only re-render once.
+        // Note: it appears from the console.log that the first time, the data output of graphql does not contain the key contrastAverage, whereas the second time it does contain it (with a value of null).
+        // Is this why it's refreshing? What is going on here?
         
         const statsButton = (this.props.loggedIn ? 
             <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :

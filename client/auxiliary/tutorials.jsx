@@ -2,6 +2,8 @@ import React from 'react'
 import Joyride from 'react-joyride'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
     
 
 const RecordPageTutorial = React.createClass({
@@ -33,6 +35,26 @@ const RecordPageTutorial = React.createClass({
                 type='continuous'
                 scrollToSteps={false}
                 disableOverlay={true}
+                callback={(stepdata)=> {
+                    console.log(stepdata.type)
+                    if (stepdata.type === "finished") {
+                        console.log("It is finished.")
+                        // now that the tutorial is complete, do the mutation
+                        this.props.completeTutorialMutation({variables: {input: {
+                            clientMutationId: "100"
+                            /* currently raises the following error:
+                            Error: GraphQL error: operator does not exist: integer = text
+                            It seems to be some sort of type error.*/
+                        }}})
+                        .then( (response) => {
+                            console.log('Tutorial is complete - mutation sent to database.')
+                            console.log(response)
+                        }).catch( (error) => {
+                            console.log('Tutorial completion mutation error')
+                            console.log(error)
+                        })
+                    }
+                }}
                 
                 steps={selectors.map((selector, i) => ({
                     title: <Translate content={`record.tutorial.step${i}.title`} />,
@@ -45,4 +67,15 @@ const RecordPageTutorial = React.createClass({
     }
 })
 
-export default RecordPageTutorial
+const completeTutorialMutation = gql`mutation ($input: CompleteTutorialInput!) {
+    completeTutorial (input: $input) {
+        boolean
+    }
+}` // "boolean" for whether the tutorial is finished or not? TODO - CHECK
+
+// Variables must be defined when the function is called
+const completeTutorialMutationConfig = {
+    name: 'completeTutorialMutation'
+}
+
+export default graphql(completeTutorialMutation, completeTutorialMutationConfig)(RecordPageTutorial)
