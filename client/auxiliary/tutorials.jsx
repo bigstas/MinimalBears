@@ -40,12 +40,7 @@ const RecordPageTutorial = React.createClass({
                     if (stepdata.type === "finished") {
                         console.log("It is finished.")
                         // now that the tutorial is complete, do the mutation
-                        this.props.completeTutorialMutation({variables: {input: {
-                            clientMutationId: "100"
-                            /* currently raises the following error:
-                            Error: GraphQL error: operator does not exist: integer = text
-                            It seems to be some sort of type error.*/
-                        }}})
+                        this.props.completeTutorialMutation()
                         .then( (response) => {
                             console.log('Tutorial is complete - mutation sent to database.')
                             console.log(response)
@@ -67,13 +62,12 @@ const RecordPageTutorial = React.createClass({
     }
 })
 
-const completeTutorialMutation = gql`mutation ($input: CompleteTutorialInput!) {
-    completeTutorial (input: $input) {
-        boolean
+const completeTutorialMutation = gql`mutation {
+    completeTutorial (input: {}) {
+        string
     }
-}` // "boolean" for whether the tutorial is finished or not? TODO - CHECK
+}`
 
-// Variables must be defined when the function is called
 const completeTutorialMutationConfig = {
     name: 'completeTutorialMutation'
 }

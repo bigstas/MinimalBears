@@ -233,14 +233,14 @@ CREATE FUNCTION public.get_account_info()
 
 -- Record that a user has completed the tutorial for the record page
 CREATE FUNCTION public.complete_tutorial()
-    RETURNS boolean
+    RETURNS void
     LANGUAGE SQL
     SECURITY DEFINER
     VOLATILE
     AS $$
         UPDATE private.account
         SET tutorial = TRUE
-        WHERE id = current_setting('jwt.claims.id')
+        WHERE id = current_setting('jwt.claims.id')::integer
     $$;
 
 -- Record a user's answer to a question
