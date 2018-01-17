@@ -829,6 +829,13 @@ INSERT INTO private.account (id, email, password_hash, username, interface) VALU
 (5, 'stas@example.com', 'nologin', 'stas', 'eng'),
 (6, 'asher@example.com', 'nologin', 'asher', 'eng');
 
+SELECT public.signup('a@b.com', 'mypassword', 'myusername', 'eng', '{"eng"}', null);
+
+INSERT INTO private.practice (account, stamp, correct, pair, audio) VALUES
+(7, now() - interval '2 days 3 hours', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 hour', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 week 3 days', FALSE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav');
+
 INSERT INTO private.native (account, language) VALUES
 (1, 'eng'),
 (2, 'eng'),
