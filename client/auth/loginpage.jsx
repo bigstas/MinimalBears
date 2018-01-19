@@ -112,11 +112,14 @@ const AuthLoginPage = React.createClass({
                                 {/* Email error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.emailError" /></p></td></tr>
                                 {/* Input email */}
-                                    <tr><td><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="abc@email.com" onChange={this.handleChange} /><br/></td></tr>
+                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="abc@email.com" onChange={this.handleChange} /><br/></td></tr>
                                 {/* Password error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.login.passwordError" /></p></td></tr>
-                                {/* Input password */}
-                                    <tr><td><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} onKeyPress={this.handleKeyPress} /><br/></td></tr>
+                                {/* Input password */} 
+                                {/* TODO: password error currently not bringing up anything on screen! */}
+                                {/* TODO: if the user presses the button to log in more than once (or presses enter more than once), */}
+                                {/* the page refreshes multiple times on login (as if it is respoding to each login request - should only respond once). */}
+                                    <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} onKeyPress={this.handleKeyPress} /><br/></td></tr>
                                 </tbody>    
                             </table>
                             <div className="authbtn" onClick={this.handleSubmit} >

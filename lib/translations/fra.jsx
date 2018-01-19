@@ -97,9 +97,9 @@ counterpart.registerTranslations('fra', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "Score",
         language: {
-            1: "English",
-            2: "German",
-            3: "Polish"
+            eng: "Anglais",
+            deu: "Aleman",
+            pol: "Polonais"
         },
         contrast: {
             1: {

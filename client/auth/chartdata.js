@@ -1,3 +1,66 @@
+function extractChartData(graphType, data) {
+    console.log(data)
+    switch(graphType) {
+        case "bar":
+            return extractBarChartData(data)
+        case "pie":
+            console.log("pie")
+            console.log(extractPieChartData(data))
+            return extractPieChartData(data)
+        case "mix":
+            return extractMixChartData(data)
+    }
+}
+
+function extractPieChartData(data) {
+    // a set is convenient because it automatically strips out duplicates
+    let labels = new Set([])
+    for (let i=0; i<data.length; i++) {
+        labels.add(data[i].contrast)
+    }
+    // convert to array - JS sets are awkward to extract data from
+    labels = Array.from(labels)
+    console.log(labels)
+    
+    const chartdata = {
+        pieChartData: [{
+            labels: ['s/th', 's/f', 's/p'],
+            datasets: [{
+                data: [300, 50, 100],
+                backgroundColor: [
+                    '#ff0000',
+                    '#00ff00',
+                    'yellow'
+                ],
+                hoverBackgroundColor: [
+                    '#dd0000',
+                    '#00dd00',
+                    '#FFCE56'
+                ]
+            }]
+        },
+        {
+            labels: ['ś/sz', 'ć/cz', 'ą/ę'],
+            datasets: [{
+                data: [100, 70, 210],
+                backgroundColor: [
+                    '#2222ff',
+                    '#dd8811',
+                    '#772222'
+                ],
+                hoverBackgroundColor: [
+                    '#4444ff',
+                    '#ff9922',
+                    '#884444'
+                ]
+            }]
+        }]}
+    return chartdata
+}
+
+
+
+
 function makeRandomData(points, min, max) {
     const range = max - min
     let randomData = []
@@ -8,12 +71,21 @@ function makeRandomData(points, min, max) {
     return randomData
 }
 
-function makeChartData(period) {
+function makeChartData(period, data) {
+    console.log(data)
+    let labels = new Set([])
+    for (let i=0; i<data.nodes.length; i++) {
+        labels.add(data.nodes[i].contrast)
+    }
+    // convert to array - JS sets are awkward to extract data from
+    labels = Array.from(labels)
+    console.log(labels)
+    
     const chartdata = {
         pieChartData: [{
-            labels: ['ee/i', 's/th', 'i/e'],
+            labels: labels,
             datasets: [{
-                data: [300, 50, 100],
+                data: [300, 50, 100].slice(0, labels.length),
                 backgroundColor: [
                     '#ff0000',
                     '#00ff00',
@@ -220,4 +292,4 @@ const mixOptions = {
     }
 }
 
-export { makeChartData, barOptions, mixOptions, pieOptions }
+export { extractChartData, makeChartData, barOptions, mixOptions, pieOptions }

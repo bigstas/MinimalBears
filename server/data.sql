@@ -831,11 +831,6 @@ INSERT INTO private.account (id, email, password_hash, username, interface) VALU
 
 SELECT public.signup('a@b.com', 'mypassword', 'myusername', 'eng', '{"eng"}', null);
 
-INSERT INTO private.practice (account, stamp, correct, pair, audio) VALUES
-(7, now() - interval '2 days 3 hours', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
-(7, now() - interval '1 hour', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
-(7, now() - interval '1 week 3 days', FALSE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav');
-
 INSERT INTO private.native (account, language) VALUES
 (1, 'eng'),
 (2, 'eng'),
@@ -2274,3 +2269,9 @@ INSERT INTO pair (contrast, first, second, id) VALUES
 (16, 781, 782, 453),
 (16, 783, 784, 454),
 (16, 367, 368, 455);
+
+-- add practice data for development
+INSERT INTO private.practice (account, stamp, correct, pair, audio) VALUES
+(7, now() - interval '2 days 3 hours', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 hour', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 week 3 days', FALSE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav');

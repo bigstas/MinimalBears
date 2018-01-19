@@ -40,9 +40,9 @@ counterpart.registerTranslations('esp', {
         sorryNoContrasts: "Lo siento, aún no tenemos bastante archivos de sonido para este lenguage. ¡Estamos trabajando en ello!",
         score: "Puntos",
         language: {
-            1: "Inglés",
-            2: "Alemán",
-            3: "Polaco"
+            eng: "Inglés",
+            deu: "Alemán",
+            pol: "Polaco"
         },
         contrast: {
             1: "ee/i",

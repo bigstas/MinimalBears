@@ -59,7 +59,8 @@ let getLocale = function() {
     /* Return user locale.
      * This function is actually an entire copied module. I (Staś) went for just copying the source code as it's short, and it let me understand it better.
      */
-    var lang
+    // default to null
+    var lang = null
   
     if (navigator.languages) {
         // chrome does not currently set navigator.language correctly https://code.google.com/p/chromium/issues/detail?id=101138
@@ -75,27 +76,27 @@ let getLocale = function() {
     return lang
 } 
 
-let locale = getLocale()
-console.log(locale)
-
-// Try to get locale. 
-// This will run once on startup and not run again.
-
-let threeLetterLocale
-Object.keys(localeMapper).forEach(function(key,index) {
-    if (locale === key) {
-        threeLetterLocale = localeMapper[key]
-        console.log("The three letter locale chosen is " + threeLetterLocale + " based on the locale " + key)
-        return
-    }
-    // key: the name of the object key
-    // index: the ordinal position of the key within the object 
-})
-
 // Set language according to locale.
-// If no locale is found, set default locale to 'eng'. The automatic default would be 'en', which would be unrecognised since we're using three-letter codes.
-if (threeLetterLocale) {
-    counterpart.setLocale(threeLetterLocale)
-} else {
-    counterpart.setLocale('eng')
+// If no locale is found, set default locale to 'eng'.
+let locale = getLocale()
+const threeLetterLocale = locale != null ? localeMapper[locale] : 'eng';
+console.log("The three letter locale chosen is " + threeLetterLocale + " based on the locale " + locale)
+counterpart.setLocale(threeLetterLocale)
+
+const rtlLanguages = new Set(['far', 'ara'])
+
+function getDirection(locale) {
+    const result = rtlLanguages.has(locale) ? 'rtl' : 'ltr';
+    return result
 }
+
+counterpart.onLocaleChange( (newLocale, oldLocale) => {
+    // check text direction
+    const oldDirection = getDirection(oldLocale)
+    const newDirection = getDirection(newLocale)
+    if (oldDirection !== newDirection) {
+        // get the "content" div, which is written in index.html (the container for the whole app) 
+        // and change its text direction style
+        document.getElementById("content").style["direction"] = newDirection
+    }
+})

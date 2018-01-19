@@ -101,9 +101,9 @@ counterpart.registerTranslations('far', {
         sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
         score: "نمره",
         language: {
-            1: "اینگلیسی",
-            2: "آلمانی",
-            3: "لخستانی"
+            eng: "اینگلیسی",
+            deu: "آلمانی",
+            pol: "لخستانی"
         },
         contrast: {
             1: "ee/i",

@@ -127,9 +127,9 @@ counterpart.registerTranslations('pol', {
         sorryNoContrasts: "Niestety nie mamy jeszcze przygotowanych plików audio dla tego języka. Pracujemy nad tym!",
         score: "Wynik",
         language: {
-            1: "Angielski",
-            2: "Niemiecki",
-            3: "Polski"
+            eng: "Angielski",
+            deu: "Niemiecki",
+            pol: "Polski"
         },
         contrast: {
             1: "ee/i",

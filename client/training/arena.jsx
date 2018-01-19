@@ -271,4 +271,20 @@ const questionQueryConfig = {
     })
 }
 
+const statsMutation = gql`mutation ($input: SubmitAudioInput!) {
+    submitAudio (input: $input) {
+        integer
+    }
+}` // "integer" is the id of the new row
+
+// Variables must be defined when the function is called
+const statsMutationConfig = {
+    name: 'statsMutation',
+    options: (ownProps) => ({
+        variables: {
+            // ... put variables in here!!
+        }
+    })
+}
+
 export default graphql(questionQuery, questionQueryConfig)(Arena)

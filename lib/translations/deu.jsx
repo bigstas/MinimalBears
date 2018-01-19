@@ -39,9 +39,9 @@ counterpart.registerTranslations('deu', {
         sorryNoContrasts: "Nein nein nein nein contrast ist schlecht",
         score: "Punkten",
         language: {
-            1: "Anglisch",
-            2: "Deutsch",
-            3: "Polnisch"
+            eng: "Anglisch",
+            deu: "Deutsch",
+            pol: "Polnisch"
         },
         contrast: {
             1: "ee/i",

@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 import { Bar, Pie } from 'react-chartjs-2' // Charts
 // other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
-import { makeChartData, barOptions, mixOptions, pieOptions } from './chartdata'
+import { extractChartData, makeChartData, barOptions, mixOptions, pieOptions } from './chartdata'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
@@ -105,14 +105,21 @@ const UserProfile = React.createClass({
             responsive: true,
             maintainAspectRatio: true
         }
-        
-        const chartData = makeChartData(this.state.period)
+        let allStats = {
+            nodes: [{contrast :'s/th'}, {contrast: 'm/n'}, {contrast: 'f/p'}]
+        }
+        if (!this.props.allStats.loading) {
+            allStats = this.props.allStats.getAllStats
+            console.log(allStats)
+        }
+        const chartData = makeChartData(this.state.period, allStats)
         
         let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
         console.log(this.state.language)
         console.log(chartData.pieChartData.length)
         if (this.state.language < chartData.pieChartData.length) {
             const pieChartData = chartData.pieChartData[this.state.language]
+            console.log(pieChartData)
             const mixChartData = chartData.mixChartData[this.state.language]
             const barChartData = chartData.barChartData[this.state.language]
             
@@ -140,15 +147,11 @@ const UserProfile = React.createClass({
             barChartTitle = <span />
         }
         
-        const allStats = this.props.allStats.getAllStats
-        console.log(allStats)
-        
         return (
             <div className='panel animated fadeIn' id='profile'>
             {/* TOP REGION */}
                 <TopBand username={this.props.username} />
                 <div id='graphsDiv'>
-                    <p style={{fontSize: "10px"}}>Note to other developers: at the moment, every time you change the input, new random data is generated. This is only for demonstration purposes - of course in the final version using data from the database, then the view will be consistent when you move away from it and come back.</p>
             {/* DROPDOWNS */}
                     <select onChange={this.setLanguage}>
                         <option value="0">English</option>
@@ -184,8 +187,8 @@ const UserProfile = React.createClass({
     }
 })
 
-const allStatsQuery = gql`query {
-  getAllStats {
+const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: Int) {
+  getAllStats(languageId: $languageId, unit: $unit, number: $number) {
     nodes {
       stamp
       contrast
@@ -195,7 +198,17 @@ const allStatsQuery = gql`query {
   }
 }`
 
-const allStatsQueryConfig = { name: 'allStats' } // no variables needed here
+// TODO - this will actually use props (ownProps) soon
+const allStatsQueryConfig = { 
+    name: 'allStats',
+    options: (ownProps) => ({
+        variables: {
+            languageId: 'eng',
+            unit: 'week',
+            number: 100
+        }
+    })
+}
 
 //export default createContainer(({params}) => {return {}}, Profile)    // TODO - do we still need createContainer?
 export default graphql(allStatsQuery, allStatsQueryConfig)(UserProfile)
