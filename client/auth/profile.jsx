@@ -105,8 +105,10 @@ const UserProfile = React.createClass({
             responsive: true,
             maintainAspectRatio: true
         }
+        // default allStats while query is loading
+        // TODO: handle this in some more sensible way (rather than just making up data!)
         let allStats = {
-            nodes: [{contrast :'s/th'}, {contrast: 'm/n'}, {contrast: 'f/p'}]
+            nodes: [{contrast :'s/th', count: 2, stamp: '2018-01-17T00:00:00'}, {contrast: 'm/n', count: 1, stamp: '2018-01-17T00:00:01'}, {contrast: 'f/p', count:4, stamp: '2018-01-17T00:00:02'}]
         }
         if (!this.props.allStats.loading) {
             allStats = this.props.allStats.getAllStats
