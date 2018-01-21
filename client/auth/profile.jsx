@@ -172,6 +172,9 @@ const UserProfile = React.createClass({
                     <label>
                         <input type="radio" value="month" checked={this.state.period === 'month'} onChange={this.handlePeriodChange} />Month view
                     </label>
+                    <label>
+                        <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} />Year view
+                    </label>
             {/* CHARTS */}
                     <BestAndWorst />
                     {mixChartTitle}

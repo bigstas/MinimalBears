@@ -19,13 +19,25 @@ function decomposeTimestamp(stamp) {
     }
 }
 
-function sameDay(decomposedTimestamp, daysAgo) {
-    const dts = decomposedTimestamp
+function nDaysAgo(dts, n) {
+    // dts: decomposed timestamp
     // TODO: consider people in other time zones...
     let d = new Date()
-    d.setDate(d.getDate()-daysAgo)
-    // note: fullYear and Date as expected, Month is 0-11 so we need to add 1
+    d.setDate(d.getDate()-n)
+    return d
+}
+function sameDay(dts, daysAgo) {
+    const d = nDaysAgo(dts, daysAgo)
+    // note: fullYear and Date as expected, Month is 0-indexed (0-11) so we need to add 1
     if (dts.year === d.getFullYear() && dts.month === d.getMonth()+1 && dts.day === d.getDate()) {
+        return true
+    } else {
+        return false
+    }
+}
+function sameMonth(dts, daysAgo) {
+    const d = nDaysAgo(dts, daysAgo)
+    if (dts.year === d.getFullYear() && dts.month === d.getMonth()+1) {
         return true
     } else {
         return false
@@ -39,8 +51,9 @@ function mod(n, m) {
 
 function makeMixData(data, period) {
     // period: "week", "month", "year", "all time"
-    let days = []
+    let yValues
     if (period === "week" || period === "month") {
+        let days = []
         const numDays = (period === "week" ? 7 : 30)
         // at first, make an array for all the days with [0,0] in each day
         // days = Array(period).fill([0,0]) -- this is weirdly buggy, don't use it! It generates multiple references to a single array (why??)
@@ -62,9 +75,27 @@ function makeMixData(data, period) {
                 }
             }
         })
+        yValues = days
     }
     else if (period === "year") {
-        // TODO: loop over year, arrange by month
+        let months = []
+        for (let i=0; i<12; i++) {
+            months.push([0,0]) 
+        }
+        data.nodes.map(function(c, index) {
+            // TODO: How to make this efficient? A lot of looping and checking happening here!
+            const stamp = decomposeTimestamp(c.stamp)
+            for (let monthsAgo=0; monthsAgo<12; mothsAgo++) {
+                if (sameMonth(stamp, monthsAgo)) {
+                    months[monthsAgo][0] += parseInt(c.count)
+                    months[monthsAgo][1] += parseInt(c.sum)
+                    //console.log(days)
+                    //console.log(days[daysAgo][0])
+                    break
+                }
+            }
+        })
+        yValues = months
     }
     else if (period === "all time") {
         // TODO: loop over everything...
@@ -73,31 +104,32 @@ function makeMixData(data, period) {
     let mixLabels = []
     let mixLineValues = []
     let mixBarValues = []
+    const dayMapper = {
+        0: 'Sunday',
+        1: 'Monday',
+        2: 'Tuesday',
+        3: 'Wednesday',
+        4: 'Thursday',
+        5: 'Friday',
+        6: 'Saturday'
+    }
+    const monthMapper = {
+        0: 'Jan',
+        1: 'Feb',
+        2: 'Mar',
+        3: 'Apr',
+        4: 'May',
+        5: 'Jun',
+        6: 'Jul',
+        7: 'Aug',
+        8: 'Sep',
+        9: 'Oct',
+        10: 'Nov',
+        11: 'Dec'
+    }
     if (period === "week" || period === "month") {
-        const dayMapper = {
-            0: 'Sunday',
-            1: 'Monday',
-            2: 'Tuesday',
-            3: 'Wednesday',
-            4: 'Thursday',
-            5: 'Friday',
-            6: 'Saturday'
-        }
-        const monthMapper = {
-            0: 'Jan',
-            1: 'Feb',
-            2: 'Mar',
-            3: 'Apr',
-            4: 'May',
-            5: 'Jun',
-            6: 'Jul',
-            7: 'Aug',
-            8: 'Sep',
-            9: 'Oct',
-            10: 'Nov',
-            11: 'Dec'
-        }
         // data needs to be in order of x ascending
+        const days = yValues
         for (let daysAgo=days.length-1; daysAgo>=0; daysAgo--) {
             let label
             let now = new Date()
@@ -114,19 +146,29 @@ function makeMixData(data, period) {
             if (days[daysAgo][0] === 0) {
                 // default to 0% if there is no data for that day
                 mixLineValues.push(0)
-            }
-            else {
+            } else {
                 // calculate percentage
-                mixLineValues.push(100*days[daysAgo][1]/days[daysAgo][0])
+                mixLineValues.push(Math.round(100*days[daysAgo][1]/days[daysAgo][0]))
             }
             mixBarValues.push(days[daysAgo][0])
         }
     } else if (period === "year") {
-        // ... TODO: do something!
+        const months = yValues
+        for (let monthsAgo=months.length-1; monthsAgo>=0; monthsAgo--) {
+            let now = new Date()
+            const label = monthMapper[mod(now.getMonth()-monthsAgo, 12)]
+            mixLabels.push(label)
+            if (months[monthsAgo][0] === 0) {
+                mixLineValues.push(0)
+            } else {
+                mixLineValues.push(Math.round(100*months[monthsAgo][1]/months[monthsAgo][0]))
+            }
+            mixBarValues.push(months[monthsAgo][0])
+        }
     } else if (period === "all time") {
-        
+        // ... do something!
     }
-    console.log(days)
+    console.log(yValues)
     console.log(mixLabels)
     console.log(mixLineValues)
     console.log(mixBarValues)
@@ -388,7 +430,7 @@ const mixOptions = {
             },
             ticks: {
                 suggestedMin: 0,    // minimum will be 0, unless there is a lower value
-                suggestedMax: 100
+                suggestedMax: 10    // maximum will be 10 for now (TODO: handle this programmatically... or at least test it!)
             },
             gridLines: { display: false },
             labels: { show: true }
