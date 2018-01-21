@@ -170,7 +170,7 @@ const UserProfile = React.createClass({
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} />Week view
                     </label>
                     <label>
-                        <input type="radio" value="6month" checked={this.state.period === '6month'} onChange={this.handlePeriodChange} />Six month view
+                        <input type="radio" value="month" checked={this.state.period === 'month'} onChange={this.handlePeriodChange} />Month view
                     </label>
             {/* CHARTS */}
                     <BestAndWorst />

@@ -38,20 +38,20 @@ function mod(n, m) {
 }
 
 function makeMixData(data, period) {
-    // period is a number of days
-    // week === 7, month === 30, year === 365, all-time === -1
+    // period: "week", "month", "year", "all time"
     let days = []
-    if (period !== -1) {
+    if (period === "week" || period === "month") {
+        const numDays = (period === "week" ? 7 : 30)
         // at first, make an array for all the days with [0,0] in each day
         // days = Array(period).fill([0,0]) -- this is weirdly buggy, don't use it! It generates multiple references to a single array (why??)
-        for (let i=0; i<period; i++) {
+        for (let i=0; i<numDays; i++) {
             days.push([0,0]) 
         }
         // loop over all the data and fit it to the days
         data.nodes.map(function(c, index) {
             // TODO: How to make this efficient? A lot of looping and checking happening here!
             const stamp = decomposeTimestamp(c.stamp)
-            for (let daysAgo=0; daysAgo<period; daysAgo++) {
+            for (let daysAgo=0; daysAgo<numDays; daysAgo++) {
                 console.log(sameDay(stamp,daysAgo))
                 if (sameDay(stamp, daysAgo)) {
                     days[daysAgo][0] += parseInt(c.count)
@@ -63,15 +63,17 @@ function makeMixData(data, period) {
             }
         })
     }
-    if (period === -1) {
+    else if (period === "year") {
+        // TODO: loop over year, arrange by month
+    }
+    else if (period === "all time") {
         // TODO: loop over everything...
     }
     // JS doesn't have any built-in unzip array method, hence below code
     let mixLabels = []
     let mixLineValues = []
     let mixBarValues = []
-    const now = new Date()
-    if (period === 7) {
+    if (period === "week" || period === "month") {
         const dayMapper = {
             0: 'Sunday',
             1: 'Monday',
@@ -81,10 +83,33 @@ function makeMixData(data, period) {
             5: 'Friday',
             6: 'Saturday'
         }
+        const monthMapper = {
+            0: 'Jan',
+            1: 'Feb',
+            2: 'Mar',
+            3: 'Apr',
+            4: 'May',
+            5: 'Jun',
+            6: 'Jul',
+            7: 'Aug',
+            8: 'Sep',
+            9: 'Oct',
+            10: 'Nov',
+            11: 'Dec'
+        }
         // data needs to be in order of x ascending
         for (let daysAgo=days.length-1; daysAgo>=0; daysAgo--) {
-            let weekday = dayMapper[mod(now.getDay()-daysAgo, 7)]
-            mixLabels.push(weekday)
+            let label
+            let now = new Date()
+            if (period === "week") {
+                label = dayMapper[mod(now.getDay()-daysAgo, 7)]
+            } else if (period === "month") {
+                // getDate() is confusing; it can be used to manipulate the whole date value with + or - (line below),
+                // or it can be used to reference just the day of the month (two lines below).
+                now.setDate(now.getDate()-daysAgo)
+                label = (now.getDate().toString() + " " + monthMapper[now.getMonth()])
+            }
+            mixLabels.push(label)
             // careful of division by zero!
             if (days[daysAgo][0] === 0) {
                 // default to 0% if there is no data for that day
@@ -96,9 +121,10 @@ function makeMixData(data, period) {
             }
             mixBarValues.push(days[daysAgo][0])
         }
-    } else {
+    } else if (period === "year") {
         // ... TODO: do something!
-        // different for different period lengths
+    } else if (period === "all time") {
+        
     }
     console.log(days)
     console.log(mixLabels)
@@ -171,10 +197,12 @@ function makeBarData(data) {
 }
 
 function makeChartData(period, data) {
+    // period is "week", "month", "year", or "all time"
+    // data is the raw data object passed from the database
     console.log(data) 
     const pieData = makePieData(data)
     const barData = makeBarData(data)
-    const mixData = makeMixData(data, 7)
+    const mixData = makeMixData(data, period)
     
     // currently the other language is hard-coded - TODO: this should respond to what the user has been practising
     const chartdata = {
