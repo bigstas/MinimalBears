@@ -230,7 +230,7 @@ CREATE FUNCTION public.get_account_info()
     AS $$
         SELECT *
         FROM private.account_info
-        WHERE id = current_setting('jwt.claims.id')
+        WHERE id = current_setting('jwt.claims.id')::integer
     $$;
 
 -- Record that a user has completed the tutorial for the record page
@@ -255,7 +255,7 @@ CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean
     VOLATILE
     AS $$
         INSERT INTO private.practice (account, pair, audio, correct)
-        VALUES (current_setting('jwt.claims.id'), pair, audio, correct);
+        VALUES (current_setting('jwt.claims.id')::integer, pair, audio, correct);
     $$;
 
 -- number and average for each contrast, and in total, for a chosen period of time
