@@ -2272,6 +2272,8 @@ INSERT INTO pair (contrast, first, second, id) VALUES
 
 -- add practice data for development
 INSERT INTO private.practice (account, stamp, correct, pair, audio) VALUES
-(7, now() - interval '2 days 3 hours', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
-(7, now() - interval '1 hour', TRUE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
-(7, now() - interval '1 week 3 days', FALSE, 143, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav');
+(7, now() - interval '2 days 3 hours', TRUE, 22, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 hour', TRUE, 22, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '1 week 3 days', FALSE, 22, 'http://www.minimalbears.com/audio/tfss-899324fe-eb52-4aa2-8e96-a45dba306faa-kaija seek.wav'),
+(7, now() - interval '14 weeks', FALSE, 423, 'http://www.minimalbears.com/audio/tfss-3cfe9a9f-397b-413c-9f95-40bc2a23a3fd-wozza keen.wav'),
+(7, now() - interval '14 weeks 1 hour', TRUE, 423, 'http://www.minimalbears.com/audio/tfss-3cfe9a9f-397b-413c-9f95-40bc2a23a3fd-wozza keen.wav');
