@@ -1,5 +1,6 @@
 import React from 'react'
 import LoadingPage from '../auxiliary/loading'
+// other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
 import { Bar, Pie } from 'react-chartjs-2' // Charts
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -71,7 +72,7 @@ function mod(n, m) {
 }
 
 function makeMixData(data, period) {
-    // period: "week", "month", "year", "all time"
+    // period: "week", "month", "year"
     let yValues
     if (period === "week" || period === "month") {
         let days = []
@@ -90,8 +91,6 @@ function makeMixData(data, period) {
                 if (sameDay(stamp, daysAgo)) {
                     days[daysAgo][0] += parseInt(c.count)
                     days[daysAgo][1] += parseInt(c.sum)
-                    console.log(days)
-                    console.log(days[daysAgo][0])
                     break
                 }
             }
@@ -106,22 +105,17 @@ function makeMixData(data, period) {
         data.nodes.map(function(c, index) {
             // TODO: How to make this efficient? A lot of looping and checking happening here!
             const stamp = decomposeTimestamp(c.stamp)
-            for (let monthsAgo=0; monthsAgo<12; mothsAgo++) {
+            for (let monthsAgo=0; monthsAgo<12; monthsAgo++) {
                 if (sameMonth(stamp, monthsAgo)) {
                     months[monthsAgo][0] += parseInt(c.count)
                     months[monthsAgo][1] += parseInt(c.sum)
-                    //console.log(days)
-                    //console.log(days[daysAgo][0])
                     break
                 }
             }
         })
         yValues = months
     }
-    else if (period === "all time") {
-        // TODO: loop over everything...
-    }
-    // JS doesn't have any built-in unzip array method, hence below code
+    
     let mixLabels = []
     let mixLineValues = []
     let mixBarValues = []
@@ -148,6 +142,8 @@ function makeMixData(data, period) {
         10: 'Nov',
         11: 'Dec'
     }
+    
+    // JS doesn't have any built-in unzip array method, hence below code
     if (period === "week" || period === "month") {
         // data needs to be in order of x ascending
         const days = yValues
@@ -267,7 +263,10 @@ function makeChartData(period, data) {
     const barData = makeBarData(data)
     const mixData = makeMixData(data, period)
     
-    // currently the other language is hard-coded - TODO: this should respond to what the user has been practising
+    // Currently presented as a list of two objects, differing only in style (not data).
+    // It is possible to have different styles for different languages or contrasts, if preferred.
+    // I leave this option open to you, Gergő, our master designer. You may opt for only one consistent styling.
+    // TODO: Gergő - make this pretty! :)
     const chartdata = {
         pieChartData: [{
             labels: pieData.pieLabels,
@@ -286,9 +285,9 @@ function makeChartData(period, data) {
             }]
         },
         {
-            labels: ['ś/sz', 'ć/cz', 'ą/ę'],
+            labels: pieData.pieLabels,
             datasets: [{
-                data: [100, 70, 210],
+                data: pieData.pieValues,
                 backgroundColor: [
                     '#2222ff',
                     '#dd8811',
@@ -331,11 +330,11 @@ function makeChartData(period, data) {
         // Colours in the below are currently wild for the second element of the array just for demonstration purposes, not an actually suggested colour scheme. 
         // The idea is that you can see what options affect what.
         {
-            labels: (period === "week" ? ['today', 'yesterday', '2 days ago', '3 days ago', '4 days ago', '5 days ago', '6 days ago', '7 days ago'] : ['January', 'February', 'March', 'April', 'May', 'June']),
+            labels: mixData.mixLabels,
             datasets: [{
                 type:'line',
                 label: 'Performance',
-                data: ( period === "week" ? makeRandomData(7, 50, 100) : makeRandomData(6, 50, 100) ),
+                data: mixData.mixLineValues,
                 fill: false,
                 borderColor: 'red',
                 backgroundColor: 'red', // only affects the legend's background (for lines)
@@ -348,7 +347,7 @@ function makeChartData(period, data) {
             {
                 type: 'bar',
                 label: 'Practice',
-                data: ( period === "week" ? makeRandomData(7, 0, 200) : makeRandomData(6, 0, 200) ),
+                data: mixData.mixBarValues,
                 fill: false,
                 backgroundColor: 'blue',
                 borderColor: '#71B37C',
@@ -370,7 +369,7 @@ function makeChartData(period, data) {
             }]
         },
         {
-            labels: ['ś/sz', 'ć/cz', 'ą/ę', 'overall'],
+            labels: barData.barLabels,
             datasets: [{
                 label: 'Percent correct',
                 backgroundColor: 'rgba(255,99,132,0.2)',
@@ -378,7 +377,7 @@ function makeChartData(period, data) {
                 borderWidth: 1,
                 hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                 hoverBorderColor: 'rgba(255,99,132,1)',
-                data: [52, 58, 76, 63]            
+                data: barData.barValues            
             }]
         }]
     }
@@ -395,7 +394,7 @@ const barOptions = {
                 labelString: 'Percent correct'
             },
             ticks: {
-                suggestedMin: 50,    // minimum will be 50, unless there is a lower value
+                suggestedMin: 40,    // minimum will be 40, unless there is a lower value
                 suggestedMax: 100
             }
         }]
@@ -491,21 +490,19 @@ const Charts = React.createClass({
         
         let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
         
-        const pieChartData = chartData.pieChartData[this.props.language]
-        const mixChartData = chartData.mixChartData[this.props.language]
-        const barChartData = chartData.barChartData[this.props.language]
+        // TODO: should vary as this.props.language varies...
+        const pieChartData = chartData.pieChartData[0]
+        const mixChartData = chartData.mixChartData[0]
+        const barChartData = chartData.barChartData[0]
 
         pieChart = <Pie data={pieChartData} options={pieOptions} />
         mixChart = <Bar data={mixChartData} options={mixOptions} />
         barChart = <Bar data={barChartData} options={barOptions} />
 
-        const language = ["English", "Polish", "German"][this.props.language]
-        // The idea is for this to say the contrast's actual name rather than a number (e.g. "for ee/i" rather than "for Contrast 1"), 
-        // but for the purposes of demonstration prior to database hookup it just shows a number
         if ( this.props.contrast === '0') {
-            mixChartTitle = <h3>Practice rate and success rate over time for all contrasts in {language}</h3> 
+            mixChartTitle = <h3>Practice rate and success rate over time</h3> 
         } else {
-            mixChartTitle = <h3>Practice rate and success rate over time for Contrast {this.props.contrast} in {language}</h3>
+            mixChartTitle = <h3>Practice rate and success rate over time</h3>
         }
 
         return (
@@ -545,4 +542,3 @@ const allStatsQueryConfig = {
 }
 
 export default graphql(allStatsQuery, allStatsQueryConfig)(Charts)
-//export { makeChartData, barOptions, mixOptions, pieOptions }

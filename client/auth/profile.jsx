@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
-// other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
+import Translate from 'react-translate-component'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import Charts from './charts'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
 
@@ -54,7 +56,7 @@ const BestAndWorst = React.createClass({
 const UserProfile = React.createClass({
     getInitialState() {
         return {
-            language: '0',
+            language: 'eng',
             contrast: '0',
             period: 'week'
         }
@@ -78,6 +80,11 @@ const UserProfile = React.createClass({
     render() {
         // for social media buttons
         const url = "http://www.minimalbears.com/"
+        // loading default language list
+        let languageOptions = ["Please wait..."]
+        if (!this.props.practiceLanguages.loading) {
+            languageOptions = this.props.practiceLanguages.getPracticeLanguages.nodes
+        }
         
         return (
             <div className='panel animated fadeIn' id='profile'>
@@ -86,9 +93,10 @@ const UserProfile = React.createClass({
                 <div id='graphsDiv'>
             {/* DROPDOWNS */}
                     <select onChange={this.setLanguage}>
-                        <option value="0">English</option>
-                        <option value="2">German</option>
-                        <option value="1">Polish</option>
+                        {languageOptions.map(function(c, index) {
+                            const content = 'train.language.' + c
+                            return <Translate component='option' content={content} key={index} value={c} />
+                        })}
                     </select>
                     <select onChange={this.setContrast}>
                         <option value="0">All contrasts</option>
@@ -117,4 +125,20 @@ const UserProfile = React.createClass({
     }
 })
 
-export default UserProfile
+const practiceLanguagesQuery = gql`query ($unit: String, $number: Int) {
+  getPracticeLanguages(unit: $unit, number: $number) {
+    nodes
+  }
+}`
+
+const practiceLanguagesQueryConfig = {
+    name: 'practiceLanguages',
+    options: (ownProps) => ({
+        variables: {
+            unit: 'day',
+            number: 100
+        }
+    })
+}
+
+export default graphql(practiceLanguagesQuery ,practiceLanguagesQueryConfig)(UserProfile)

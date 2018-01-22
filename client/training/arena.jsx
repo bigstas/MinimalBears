@@ -1,5 +1,4 @@
 // Arena object and children for 'Train' page
-// Star image by Yellowicon (licence: GNU/GPL)
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
 
 import React from 'react'
@@ -9,7 +8,7 @@ import Translate from 'react-translate-component'
 import DonePanel from './donepanel'
 
 // new gql way of getting data...
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // random function not used in this file anymore as the random selection is done on the server. TODO - Remove this function?
@@ -115,21 +114,35 @@ const Arena = React.createClass({
          * Add to the counter (and maybe score), visual feedback (button changes colour), auditory feedback (bell or quack).
          */
         // this event can only fire if you are asking for a response from the user
+        const correct = (this.state.correctAnswer === chosenIndex)
         if (this.state.mode === 'ask') {
             this.setState({
                 mode: (this.state.counter < this.state.maxRounds -1) ? "feedback" : "done",
                 chosenWord: chosenIndex,
-                score: (this.state.correctAnswer === chosenIndex) ? this.state.score +1 : this.state.score,
+                score: correct ? this.state.score +1 : this.state.score,
                 counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
             })
-            if (chosenIndex === this.state.correctAnswer) {
+            if (correct) {
                 const snd = new Audio("correct bell short.wav")
                 snd.play()
             } else {
                 const snd = new Audio("quack wrong quieter.wav")
                 snd.play()
             }
-            // TODO save result in database
+            // Below: TODO - CHECK if this is the right audio to use!! (and the right pair, & the right correct)
+            this.props.statsMutation({
+                variables: {
+                    input: { 
+                        pair: this.props.questions.getQuestions.nodes[this.state.counter].pair,
+                        audio: this.state.currentAudio,
+                        correct: correct 
+            }}}).then( (response) => {
+                console.log('answer submitted to database')
+                console.log(response)
+            }).catch( (error) => {
+                console.log('answer submission error')
+                console.log(error)
+            })
         }
     },
     
@@ -271,9 +284,9 @@ const questionQueryConfig = {
     })
 }
 
-const statsMutation = gql`mutation ($input: SubmitAudioInput!) {
-    submitAudio (input: $input) {
-        integer
+const statsMutation = gql`mutation ($input: AnswerQuestionInput!) {
+    answerQuestion (input: $input) {
+        clientMutationId
     }
 }` // "integer" is the id of the new row
 
@@ -287,4 +300,8 @@ const statsMutationConfig = {
     })
 }
 
-export default graphql(questionQuery, questionQueryConfig)(Arena)
+export default compose(
+    graphql(questionQuery, questionQueryConfig),
+    graphql(statsMutation, statsMutationConfig))
+(Arena)
+//export default graphql(questionQuery, questionQueryConfig)(Arena)
