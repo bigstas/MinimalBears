@@ -1,3 +1,24 @@
+import React from 'react'
+import LoadingPage from '../auxiliary/loading'
+import { Bar, Pie } from 'react-chartjs-2' // Charts
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+
+/* GRAPH TYPES
+All graphs should be available for one or all languages (or contrasts), and for different time periods (month, year, life).
+By language:
+- Pie chart showing relative popularity of contrasts (how much you have trained each one in the stated period)
+By language, by contrast:
+- How much you have studied when in attempts/day (or /month)
+- Success rate over time
+- Problem words...(?)
+- Problem speakers...(?) (& then they can listen to a sample of their recordings?)
+- Words (& speakers) which you don't have a problem with?
+User inputs:
+- Recorded audio (maybe one day this will yield some sort of points system?)
+- Moderated audio (for moderators) ...?
+*/
+
 function makeRandomData(points, min, max) {
     const range = max - min
     let randomData = []
@@ -458,4 +479,70 @@ const mixOptions = {
     }
 }
 
-export { makeChartData, barOptions, mixOptions, pieOptions }
+const Charts = React.createClass({
+    render() {
+        if (this.props.allStats.loading) {
+            return( <LoadingPage /> )
+        }
+        
+        const allStats = this.props.allStats.getAllStats
+        console.log(allStats)
+        const chartData = makeChartData(this.props.period, allStats)
+        
+        let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
+        
+        const pieChartData = chartData.pieChartData[this.props.language]
+        const mixChartData = chartData.mixChartData[this.props.language]
+        const barChartData = chartData.barChartData[this.props.language]
+
+        pieChart = <Pie data={pieChartData} options={pieOptions} />
+        mixChart = <Bar data={mixChartData} options={mixOptions} />
+        barChart = <Bar data={barChartData} options={barOptions} />
+
+        const language = ["English", "Polish", "German"][this.props.language]
+        // The idea is for this to say the contrast's actual name rather than a number (e.g. "for ee/i" rather than "for Contrast 1"), 
+        // but for the purposes of demonstration prior to database hookup it just shows a number
+        if ( this.props.contrast === '0') {
+            mixChartTitle = <h3>Practice rate and success rate over time for all contrasts in {language}</h3> 
+        } else {
+            mixChartTitle = <h3>Practice rate and success rate over time for Contrast {this.props.contrast} in {language}</h3>
+        }
+
+        return (
+            <div>
+                {mixChartTitle}
+                {mixChart}
+                <h3>Number of practices by contrast for this period</h3>
+                {pieChart}
+                <h3>Success rate by contrast</h3>
+                {barChart}
+            </div>
+        )
+    }
+})
+
+const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: Int) {
+  getAllStats(languageId: $languageId, unit: $unit, number: $number) {
+    nodes {
+      stamp
+      contrast
+      count
+      sum
+    }
+  }
+}`
+
+// TODO - this will actually use props (ownProps) soon
+const allStatsQueryConfig = { 
+    name: 'allStats',
+    options: (ownProps) => ({
+        variables: {
+            languageId: ownProps.language,
+            unit: 'day',
+            number: 100
+        }
+    })
+}
+
+export default graphql(allStatsQuery, allStatsQueryConfig)(Charts)
+//export { makeChartData, barOptions, mixOptions, pieOptions }
