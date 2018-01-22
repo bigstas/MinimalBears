@@ -62,7 +62,7 @@ CREATE TABLE private.practice (
 CREATE INDEX ON private.practice (account);
 -- (currently no check that the audio's item is one element of the pair)
 
--- Public functions --
+-- Authentication functions --
 -- These allow controlled access to the private schema
 
 -- Create a new user account
@@ -219,6 +219,8 @@ CREATE FUNCTION public.new_refresh_token(try_password text)
         END;
     $$;
 
+-- Account maintenance functions --
+
 -- Get safe user information (no password or refresh token)
 CREATE FUNCTION public.get_account_info()
     RETURNS private.account_info
@@ -242,6 +244,8 @@ CREATE FUNCTION public.complete_tutorial()
         SET tutorial = TRUE
         WHERE id = current_setting('jwt.claims.id')::integer
     $$;
+
+-- Training and stats functions --
 
 -- Record a user's answer to a question
 CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean)
@@ -276,7 +280,7 @@ CREATE FUNCTION public.get_practices(unit text, number integer)
     SECURITY DEFINER
     STABLE
     AS $$
-        SELECT get_contrast_id(pair) AS contrast,
+        SELECT public.get_contrast_id(pair) AS contrast,
             date_trunc(unit, stamp) AS stamp,
             correct
         FROM private.practice
@@ -292,22 +296,31 @@ CREATE FUNCTION public.get_all_stats(language_id text, unit text, number integer
     STABLE
     AS $$
         SELECT stamp,
-            get_contrast_name(contrast) AS contrast,
+            public.get_contrast_name(contrast) AS contrast,
             count(*),
             sum(correct::integer)
         FROM public.get_practices(unit, number)
+        WHERE public.get_contrast_language_id(contrast) = language_id
         GROUP BY stamp, contrast
     $$;
 
 CREATE FUNCTION public.get_contrast_avg(contrast_id integer, unit text, number integer)
     RETURNS numeric
     LANGUAGE SQL
-    SECURITY DEFINER
     STABLE
     AS $$
         SELECT avg(correct::integer)
         FROM public.get_practices(unit, number)
         WHERE contrast = contrast_id
+    $$;
+
+CREATE FUNCTION public.get_practice_languages(unit text, number integer)
+    RETURNS SETOF text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT DISTINCT public.get_contrast_language_id(contrast)
+        FROM public.get_practices(unit, number)
     $$;
 
 -- Permissions --
@@ -343,6 +356,7 @@ GRANT EXECUTE ON FUNCTION public.get_practices(text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, integer, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_all_stats(text, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_contrast_avg(integer, text, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_practice_languages(text, integer) TO loggedin;
 GRANT INSERT ON TABLE public.audio_submission TO loggedin;
 GRANT SELECT ON TABLE public.audio_submission TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;
