@@ -1,11 +1,25 @@
 // Navigation bar
-
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
-
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
+const BetaSign = React.createClass({
+    render() {
+        const styles = {
+            color: 'white',
+            fontSize: '8px',
+            textAlign: 'center',
+            backgroundColor: 'black',
+            position: 'relative',
+            bottom: '9px'
+        }
+        return (
+            <div style={styles}>BETA</div>
+        )
+    }
+})
+
 const Dropdown = React.createClass({
     handleClick (newLocale) {
         // Sets locale for <Translate> components.
@@ -105,7 +119,7 @@ const Nav = React.createClass({
             <div className="container">
                 <nav>
                     <ul>
-                        <li><IndexLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}>{/*<Translate content="nav.home" />*/}<img src="favicon.ico" style={{height: "40px"}} /></IndexLink></li>
+                        <li style={{maxHeight:'40px'}}><IndexLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></IndexLink></li>
                         <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
                         <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
                         <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>

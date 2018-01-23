@@ -220,7 +220,12 @@ function makePieData(data) {
     // debug logs
     console.log(pieLabels)
     console.log(pieValues)
-    return {pieLabels: pieLabels, pieValues: pieValues}
+    // If the pie chart is empty, tell the page to render a message that there is no data
+    if (pieValues.length === 0) {
+        return false
+    } else {
+        return {pieLabels: pieLabels, pieValues: pieValues}
+    }
 }
 
 // TODO - some of the code in these functions is repeated, code could be made nicer by minimising repetitions
@@ -268,6 +273,10 @@ function makeChartData(period, data) {
     // data is the raw data object passed from the database
     console.log(data) 
     const pieData = makePieData(data)
+    // if there is no data, propagate this message
+    if (pieData === false) {
+        return false
+    }
     const barData = makeBarData(data)
     const mixData = makeMixData(data, period)
     
@@ -495,7 +504,11 @@ const Charts = React.createClass({
         const allStats = this.props.allStats.getAllStats
         console.log(allStats)
         const chartData = makeChartData(this.props.period, allStats)
-        
+        console.log(chartData)
+        if (chartData === false) {
+            return ( <p>No training occured for this language and contrast in this period</p> )
+        }
+                    
         let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
         
         // TODO: should vary as this.props.language varies...
