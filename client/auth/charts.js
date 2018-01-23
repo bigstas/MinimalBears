@@ -20,36 +20,30 @@ User inputs:
 - Moderated audio (for moderators) ...?
 */
 
-function makeRandomData(points, min, max) {
-    const range = max - min
-    let randomData = []
-    for (let i = 0; i < points; i++ ) {
-        const randomDatum = Math.round( min + range*Math.random() )
-        randomData.push(randomDatum)
-    }
-    return randomData
+// JS doesn't handle modulo of negative integers well, so here's a function to get around that
+function mod(n, m) {
+    return ((n % m) + m) % m
 }
-
 function decomposeTimestamp(stamp) {
     return {
         year:   parseInt(stamp.substring(0,4)),
         month:  parseInt(stamp.substring(5,7)),
         day:    parseInt(stamp.substring(8,10)),
+        /* These last three properties are probably unnecessary. Consider deleting. */
         hour:   parseInt(stamp.substring(11,13)),
         minute: parseInt(stamp.substring(14,16)),
         second: parseInt(stamp.substring(17,19))
     }
 }
-
-function nDaysAgo(dts, n) {
-    // dts: decomposed timestamp
+function nDaysAgoAsDateObject(n) {
     // TODO: consider people in other time zones...
     let d = new Date()
     d.setDate(d.getDate()-n)
     return d
 }
 function sameDay(dts, daysAgo) {
-    const d = nDaysAgo(dts, daysAgo)
+    // dts: decomposed timestamp
+    const d = nDaysAgoAsDateObject(daysAgo)
     // note: fullYear and Date as expected, Month is 0-indexed (0-11) so we need to add 1
     if (dts.year === d.getFullYear() && dts.month === d.getMonth()+1 && dts.day === d.getDate()) {
         return true
@@ -57,19 +51,33 @@ function sameDay(dts, daysAgo) {
         return false
     }
 }
-function sameMonth(dts, daysAgo) {
-    const d = nDaysAgo(dts, daysAgo)
-    if (dts.year === d.getFullYear() && dts.month === d.getMonth()+1) {
+function nMonthsAgoAsDts(n) {
+    // This can't return a date object, as there appears to be no nice native way of doing what we need here in JS.
+    const now = new Date()
+    let year = now.getFullYear()
+    // below: If the number of months to subtract would take us into last year, subtract 1 from the year.
+    // Since at the moment are data displays only as far as one year back as a maximum, 
+    // we don't need to currently consider the cases where you would go back more than 12 months.
+    if (n >= now.getMonth()+1) {
+        year -= 1
+    }
+    return {
+        year:  year,
+        month: mod(now.getMonth()-n, 12) +1,
+        day:   1
+        /* What day it is is irrelevant for the way this function is used, but need to avoid issues with 31/30/29/28 days in a month */
+        /* Hours, minutes, and seconds are not necessary, though can be made available */
+    }
+}
+function sameMonth(dts, monthsAgo) {
+    const d = nMonthsAgoAsDts(monthsAgo)
+    if (dts.year === d.year && dts.month === d.month) {
         return true
     } else {
         return false
     }
 }
 
-// JS doesn't handle modulo of negative integers well, so here's a function to get around that
-function mod(n, m) {
-    return ((n % m) + m) % m
-}
 
 function makeMixData(data, period) {
     // period: "week", "month", "year"
@@ -78,7 +86,6 @@ function makeMixData(data, period) {
         let days = []
         const numDays = (period === "week" ? 7 : 30)
         // at first, make an array for all the days with [0,0] in each day
-        // days = Array(period).fill([0,0]) -- this is weirdly buggy, don't use it! It generates multiple references to a single array (why??)
         for (let i=0; i<numDays; i++) {
             days.push([0,0]) 
         }
@@ -106,6 +113,7 @@ function makeMixData(data, period) {
             // TODO: How to make this efficient? A lot of looping and checking happening here!
             const stamp = decomposeTimestamp(c.stamp)
             for (let monthsAgo=0; monthsAgo<12; monthsAgo++) {
+                console.log(sameMonth(stamp,monthsAgo))
                 if (sameMonth(stamp, monthsAgo)) {
                     months[monthsAgo][0] += parseInt(c.count)
                     months[monthsAgo][1] += parseInt(c.sum)
@@ -256,7 +264,7 @@ function makeBarData(data) {
 }
 
 function makeChartData(period, data) {
-    // period is "week", "month", "year", or "all time"
+    // period is "week", "month", or "year"
     // data is the raw data object passed from the database
     console.log(data) 
     const pieData = makePieData(data)
@@ -529,14 +537,23 @@ const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: In
   }
 }`
 
+// TODO: Is this really the best way? Loading times could be shorter / loading could be less frequent
+// if we take all the queries we need at the start and calculate based on them, rather than 
+// making new queries as the user changes what they want to view on the page.
+const periodMapper = {
+    week:  ['day', 7],
+    month: ['day', 30],
+    year:  ['month', 12]
+}
+    
 // TODO - this will actually use props (ownProps) soon
 const allStatsQueryConfig = { 
     name: 'allStats',
     options: (ownProps) => ({
         variables: {
             languageId: ownProps.language,
-            unit: 'day',
-            number: 100
+            unit:   periodMapper[ownProps.period][0],
+            number: periodMapper[ownProps.period][1]
         }
     })
 }
