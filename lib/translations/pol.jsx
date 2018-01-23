@@ -107,9 +107,17 @@ counterpart.registerTranslations('pol', {
             usernameError: "Ta nazwa użytownika jest już w użytku. Proszę wybrać inną.",
             passwordError: "Twoje hasło musi być takie same w obu polach.",
             nativeLanguage: "Język ojczysty:",
+            languageError: "select your native language",
+            noResults: "No results found",
+            notInTheList: "My language is not in the list",
             joinButtonLabel: "Załącz się",
             loginLink: "Masz już konto? Zaloguj.",
-            tooltip: "Dlaczego my się pytamy:<br>DODAĆ TEKST"
+            tooltip: "Dlaczego my się pytamy: You can contribute to the project by recording your voice saying words in your native language. Knowing your native accent will allow us to ask you for words in the appropriate language. We do not share your data with anyone.",
+            errors: {
+                serverError: "We cannot connect to the server! Check your internet connection.",
+                duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
+                duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
+            }
         },
         login: {
             loginTitle: "Zaloguj.",
@@ -131,22 +139,34 @@ counterpart.registerTranslations('pol', {
             deu: "Niemiecki",
             pol: "Polski"
         },
-        contrast: {
-            1: "ee/i",
-            3: "i/e",
-            11: "l/r", 
-            2: "s/th"
-        },
         progressLabel: {
             begin: "Zacznij",
             playAgain: "Usłysz znowu",
             next: "Następne",
             goAgain: "Zagraj jeszcze raz"
         },
+        viewStats: "View Stats",
         correct: "Dobrze!",
         wrong: "Źle!"
     },
+    norecord: {
+        title: "Join the club first!",
+        onlyLoggedIn: "Only logged-in users can create recordings. ",
+        login: "Log in",
+        loginReason: " to join the fun! :)",
+        noAccount: "Don't have an account? ",
+        signup: "Sign up",
+        noSuchLanguage: "We aren't using your language as a training language yet.",
+        noRecordingsNeeded: "We are using your language as a training language, but there is nothing that we need recorded at the moment."
+    },
     record: {
+        preRecord: {
+            heading: "Welcome to the Record Page",
+            intro: "Here, you can record yourself saying words in your native language, so that learners of your language can practise their listening skills using your recordings.",
+            contributions: "Minimal Bears is non-profit and crowd-sourced, and so it relies on contributions like yours for content for people to practise with.",
+            tutorial: `If you press "continue", you will be given a tutorial on how to use the Record page. It takes approximately 2 minutes. You will not be able to leave the tutorial once you begin.`,
+            buttonLabel: "Dalej"
+        },
         startLabel: {
             record: "Nagraj",
             done: "Gotowe",

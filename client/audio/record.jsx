@@ -576,11 +576,11 @@ const PreRecord = React.createClass({
     render() {
         return (
             <div className='panel animated fadeIn' id='preRecord'>
-                <h1>Welcome to the Record Page</h1>
-                <p>Here, you can record yourself saying words in your native language, so that learners of your language can practise their listening skills using your recordings.</p>
-                <p>Minimal Bears is non-profit and crowd-sourced, and so it relies on contributions like yours for content for people to practise with.</p>
-                <p>If you press "continue", you will be given a tutorial on how to use the Record page. It takes approximately 2 minutes. You will not be able to leave the tutorial once you begin.</p>
-                <div className="button" onClick={this.props.callback}>Continue</div>
+                <Translate component='h1' content='record.preRecord.heading' />
+                <Translate component='p'  content='record.preRecord.intro' />
+                <Translate component='p'  content='record.preRecord.contributions' />
+                <Translate component='p'  content='record.preRecord.tutorial' />
+                <div className="button" onClick={this.props.callback}><Translate content='record.preRecord.buttonLabel' /></div>
             </div>
         )
     }

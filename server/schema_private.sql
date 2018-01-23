@@ -344,6 +344,7 @@ GRANT EXECUTE ON FUNCTION public.get_random_audio(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_contrast_id(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_contrast_name(integer) TO guest, loggedin;
+GRANT EXECUTE ON FUNCTION public.get_contrast_language_id(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_language_id(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO guest, loggedin;
 

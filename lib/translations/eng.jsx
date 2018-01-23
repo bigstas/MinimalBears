@@ -142,40 +142,6 @@ counterpart.registerTranslations('eng', {
             deu: "German",
             pol: "Polish"
         },
-        contrast: {
-            1: {
-                name: "ee/i",
-                examples: {
-                    0: "sheep/ship",
-                    1: "read/rid",
-                    2: "feast/fist"
-                }
-            },
-            3: {
-                name: "i/e",
-                examples: {
-                    0: "hill/hell",
-                    1: "rid/red",
-                    2: "middle/meddle"
-                }
-            },
-            11: {
-                name: "l/r", 
-                examples: {
-                    0: "law/raw",
-                    1: "late/rate",
-                    2: "light/right"
-                }
-            },
-            2: {
-                name: "s/th",
-                examples: {
-                    0: "mouse/mouth",
-                    1: "sum/thumb",
-                    2: "sing/thing"
-                }
-            }
-        },
         progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",
@@ -197,6 +163,13 @@ counterpart.registerTranslations('eng', {
         noRecordingsNeeded: "We are using your language as a training language, but there is nothing that we need recorded at the moment."
     },
     record: {
+        preRecord: {
+            heading: "Welcome to the Record Page",
+            intro: "Here, you can record yourself saying words in your native language, so that learners of your language can practise their listening skills using your recordings.",
+            contributions: "Minimal Bears is non-profit and crowd-sourced, and so it relies on contributions like yours for content for people to practise with.",
+            tutorial: `If you press "continue", you will be given a tutorial on how to use the Record page. It takes approximately 2 minutes. You will not be able to leave the tutorial once you begin.`,
+            buttonLabel: "Continue"
+        },
         startLabel: {
             record: "Record",
             done: "Done",
