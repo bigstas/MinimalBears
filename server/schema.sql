@@ -145,7 +145,7 @@ CREATE FUNCTION public.get_contrast_name(contrast_id integer)
         WHERE id = contrast_id
     $$;
 
-CREATE FUNCTION public.get_language_id(contrast_id integer)
+CREATE FUNCTION public.get_contrast_language_id(contrast_id integer)
     RETURNS text
     LANGUAGE SQL
     STABLE
@@ -153,6 +153,16 @@ CREATE FUNCTION public.get_language_id(contrast_id integer)
         SELECT language
         FROM contrast
         WHERE id = contrast_id
+    $$;
+
+CREATE FUNCTION public.get_item_language_id(item_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT language
+        FROM item
+        WHERE id = item_id
     $$;
 
 -- Get list of possible items, from a given string
