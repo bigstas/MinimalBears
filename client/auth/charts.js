@@ -78,10 +78,25 @@ function sameMonth(dts, monthsAgo) {
     }
 }
 
+function extractContrasts(contrastData) {
+    let contrasts = new Set([])
+    for (let i=0; i<contrastData.length; i++) {
+        contrasts.add(contrastData[i]["contrast"])
+    }
+    return Array.from(contrasts)
+}
 
-function makeMixData(data, period) {
+function extractChartRawData(period, data) {
     // period: "week", "month", "year"
     let yValues
+    let barData = {}
+    /* Object of the form:
+     * { ee/i: [3, 2],
+         s/th: [10, 7], ... },
+     * where the array goes [count, sum].
+     * Accounts for bar chart AND pie chart data.
+     */
+    
     if (period === "week" || period === "month") {
         let days = []
         const numDays = (period === "week" ? 7 : 30)
@@ -90,8 +105,15 @@ function makeMixData(data, period) {
             days.push([0,0]) 
         }
         // loop over all the data and fit it to the days
-        data.nodes.map(function(c, index) {
-            // TODO: How to make this efficient? A lot of looping and checking happening here!
+        data.nodes.map(function(c) {
+            // add to bar chart data (also used for pie chart)
+            if (barData.hasOwnProperty(c.contrast)) {
+                barData[c.contrast][0] += parseInt(c.count)
+                barData[c.contrast][1] += parseInt(c.sum)
+            } else {
+                barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
+            }
+            // add to mix chart data
             const stamp = decomposeTimestamp(c.stamp)
             for (let daysAgo=0; daysAgo<numDays; daysAgo++) {
                 console.log(sameDay(stamp,daysAgo))
@@ -105,12 +127,20 @@ function makeMixData(data, period) {
         yValues = days
     }
     else if (period === "year") {
+        // TODO: still some repeated code here, scope for merging this and the above block for more laconic code...
         let months = []
         for (let i=0; i<12; i++) {
             months.push([0,0]) 
         }
         data.nodes.map(function(c, index) {
-            // TODO: How to make this efficient? A lot of looping and checking happening here!
+            // add to bar chart data (also used for pie chart)
+            if (barData.hasOwnProperty(c.contrast)) {
+                barData[c.contrast][0] += parseInt(c.count)
+                barData[c.contrast][1] += parseInt(c.sum)
+            } else {
+                barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
+            }
+            // add to mix chart data
             const stamp = decomposeTimestamp(c.stamp)
             for (let monthsAgo=0; monthsAgo<12; monthsAgo++) {
                 console.log(sameMonth(stamp,monthsAgo))
@@ -124,6 +154,36 @@ function makeMixData(data, period) {
         yValues = months
     }
     
+    // split object into two arrays, one of keys and one of values
+    let barLabels = Object.keys(barData)
+    let pieLabels = Object.keys(barData)
+    if (barLabels.length === 0) {
+        // If the charts are empty, tell the page to render a message that there is no data
+        return false 
+    }
+    let barValues = []
+    let pieValues = []
+    let fullCount = 0
+    let total = 0
+    // loop to populate pieValues and barValues
+    for (let i=0; i<barLabels.length; i++) {
+        pieValues.push(barData[barLabels[i]][0])
+        // get array
+        const arr = barData[barLabels[i]]
+        // calculate percent correct, and push to values
+        barValues.push(Math.round(100*arr[1]/arr[0]))
+        // add to total count and total sum, to calculate overall performance percentage after loop finishes
+        fullCount += arr[0]
+        total += arr[1]
+    }
+    barLabels.push('overall')
+    barValues.push(Math.round(100*total/fullCount))
+    // debug logs
+    console.log(barLabels)
+    console.log(barValues)
+    console.log(pieValues)
+    
+    // pie and bar data ready, now prepare mix data
     let mixLabels = []
     let mixLineValues = []
     let mixBarValues = []
@@ -150,8 +210,6 @@ function makeMixData(data, period) {
         10: 'Nov',
         11: 'Dec'
     }
-    
-    // JS doesn't have any built-in unzip array method, hence below code
     if (period === "week" || period === "month") {
         // data needs to be in order of x ascending
         const days = yValues
@@ -190,99 +248,35 @@ function makeMixData(data, period) {
             }
             mixBarValues.push(months[monthsAgo][0])
         }
-    } else if (period === "all time") {
-        // ... do something!
     }
     console.log(yValues)
     console.log(mixLabels)
     console.log(mixLineValues)
     console.log(mixBarValues)
-    return {mixLabels: mixLabels, mixLineValues: mixLineValues, mixBarValues: mixBarValues}
+    return {
+        mix: {mixLabels: mixLabels, mixLineValues: mixLineValues, mixBarValues: mixBarValues},
+        pie: {pieLabels: pieLabels, pieValues: pieValues},
+        bar: {barLabels: barLabels, barValues: barValues}
+    }    
 }
 
-function makePieData(data) {
-    let pieData = {}
-    // group all counts for each label
-    data.nodes.map(function(c) {
-        if (pieData.hasOwnProperty(c.contrast)) {
-            pieData[c.contrast] += parseInt(c.count)
-        } else {
-            pieData[c.contrast]  = parseInt(c.count)
-        }
-    })
-    console.log(pieData)
-    // split object into two arrays, one of keys and one of values
-    const pieLabels = Object.keys(pieData)
-    const pieValues = []
-    for (let i=0; i<pieLabels.length; i++) {
-        pieValues.push(pieData[pieLabels[i]])
-    }
-    // debug logs
-    console.log(pieLabels)
-    console.log(pieValues)
-    // If the pie chart is empty, tell the page to render a message that there is no data
-    if (pieValues.length === 0) {
-        return false
-    } else {
-        return {pieLabels: pieLabels, pieValues: pieValues}
-    }
-}
-
-// TODO - some of the code in these functions is repeated, code could be made nicer by minimising repetitions
-function makeBarData(data) {
-    let barData = {}
-    /* Object of the form:
-     * { ee/i: [3, 2],
-         s/th: [10, 7], ... },
-     * where the array goes [count, sum].
-     */
-    data.nodes.map(function(c) {
-        if (barData.hasOwnProperty(c.contrast)) {
-            barData[c.contrast][0] += parseInt(c.count)
-            barData[c.contrast][1] += parseInt(c.sum)
-        } else {
-            barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
-        }
-    })
-    console.log(barData)
-    // split object into two arrays, one of keys and one of values
-    let barLabels = Object.keys(barData)
-    let barValues = []
-    let fullCount = 0
-    let total = 0
-    for (let i=0; i<barLabels.length; i++) {
-        // get array
-        const arr = barData[barLabels[i]]
-        // calculate percent correct, and push to values
-        barValues.push(Math.round(100*arr[1]/arr[0]))
-        // add to total count and total sum, to calculate overall performance percentage after loop finishes
-        fullCount += arr[0]
-        total += arr[1]
-    }
-    // 'overall' bar
-    barLabels.push('overall')
-    barValues.push(Math.round(100*total/fullCount))
-    // debug logs
-    console.log(barLabels)
-    console.log(barValues)
-    return {barLabels: barLabels, barValues: barValues}
-}
 
 function makeChartData(period, data) {
     // period is "week", "month", or "year"
     // data is the raw data object passed from the database
     console.log(data) 
-    const pieData = makePieData(data)
-    // if there is no data, propagate this message
-    if (pieData === false) {
+    const allData = extractChartRawData(period, data)
+    if (allData === false) {
+        // if there is no data, then there is nothing to display; send this message up the hierarchy
         return false
     }
-    const barData = makeBarData(data)
-    const mixData = makeMixData(data, period)
+    const pieData = allData.pie
+    const barData = allData.bar
+    const mixData = allData.mix
     
     // Currently presented as a list of two objects, differing only in style (not data).
     // It is possible to have different styles for different languages or contrasts, if preferred.
-    // I leave this option open to you, Gergő, our master designer. You may opt for only one consistent styling.
+    // I leave this option open to you, Gergő, our master designer. You might opt for only one consistent styling.
     // TODO: Gergő - make this pretty! :)
     const chartdata = {
         pieChartData: [{
@@ -549,7 +543,6 @@ const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: In
     }
   }
 }`
-
 // TODO: Is this really the best way? Loading times could be shorter / loading could be less frequent
 // if we take all the queries we need at the start and calculate based on them, rather than 
 // making new queries as the user changes what they want to view on the page.
@@ -557,9 +550,7 @@ const periodMapper = {
     week:  ['day', 7],
     month: ['day', 30],
     year:  ['month', 12]
-}
-    
-// TODO - this will actually use props (ownProps) soon
+}   
 const allStatsQueryConfig = { 
     name: 'allStats',
     options: (ownProps) => ({

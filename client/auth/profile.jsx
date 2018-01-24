@@ -4,6 +4,7 @@ import Translate from 'react-translate-component'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import Charts from './charts'
+import ContrastDropdown from './contrastdropdown'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
 
 
@@ -98,11 +99,7 @@ const UserProfile = React.createClass({
                             return <Translate component='option' content={content} key={index} value={c} />
                         })}
                     </select>
-                    <select onChange={this.setContrast}>
-                        <option value="0">All contrasts</option>
-                        <option value="1">Contrast 1</option>
-                        <option value="2">Contrast 2</option>
-                    </select>
+                    <ContrastDropdown language={this.state.language} callback={this.setContrast} />
             {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} />Week view
@@ -130,7 +127,6 @@ const practiceLanguagesQuery = gql`query ($unit: String, $number: Int) {
     nodes
   }
 }`
-
 const practiceLanguagesQueryConfig = {
     name: 'practiceLanguages',
     options: (ownProps) => ({
