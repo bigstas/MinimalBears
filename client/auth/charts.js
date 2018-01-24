@@ -5,21 +5,6 @@ import { Bar, Pie } from 'react-chartjs-2' // Charts
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-/* GRAPH TYPES
-All graphs should be available for one or all languages (or contrasts), and for different time periods (month, year, life).
-By language:
-- Pie chart showing relative popularity of contrasts (how much you have trained each one in the stated period)
-By language, by contrast:
-- How much you have studied when in attempts/day (or /month)
-- Success rate over time
-- Problem words...(?)
-- Problem speakers...(?) (& then they can listen to a sample of their recordings?)
-- Words (& speakers) which you don't have a problem with?
-User inputs:
-- Recorded audio (maybe one day this will yield some sort of points system?)
-- Moderated audio (for moderators) ...?
-*/
-
 // JS doesn't handle modulo of negative integers well, so here's a function to get around that
 function mod(n, m) {
     return ((n % m) + m) % m
@@ -86,73 +71,124 @@ function extractContrasts(contrastData) {
     return Array.from(contrasts)
 }
 
-function extractChartRawData(period, data, contrast) {
-    // period: "week", "month", "year"
-    let yValues
+function mapNodesToChartData(data, period, contrast) {
+    const periodProperties = {
+        numberOfBins: {
+            week:  7,
+            month: 30,
+            year:  12
+        },
+        sameFunction: {
+            week:  sameDay,
+            month: sameDay,
+            year:  sameMonth
+        }
+    }
+    const numberOfBins = periodProperties.numberOfBins[period]
+    console.log(numberOfBins)
+    const sameFunction = periodProperties.sameFunction[period]
+    let bins = []
+    // bins collects the data that will be used for the mix chart
     let barData = {}
-    /* Object of the form:
+    /* barData will be an object of the form:
      * { ee/i: [3, 2],
          s/th: [10, 7], ... },
      * where the array goes [count, sum].
      * Accounts for bar chart AND pie chart data.
      */
+    // at first, make an array for all the bins (days or months) with [0,0] in each day
+    for (let i=0; i<numberOfBins; i++) {
+        bins.push([0,0]) 
+    }
+    console.log(bins)
+    // loop over all the data and fit it to the bins
+    data.nodes.map(function(c) {
+        // add to bar chart data (also used for pie chart)
+        if (barData.hasOwnProperty(c.contrast)) {
+            barData[c.contrast][0] += parseInt(c.count)
+            barData[c.contrast][1] += parseInt(c.sum)
+        } else {
+            barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
+        }
+        // add to mix chart data
+        const stamp = decomposeTimestamp(c.stamp)
+        for (let binsAgo=0; binsAgo<numberOfBins; binsAgo++) {
+            console.log(sameFunction(stamp,binsAgo))
+            if (sameFunction(stamp, binsAgo) && (contrast==="all" || contrast===c.contrast)) {
+                bins[binsAgo][0] += parseInt(c.count)
+                bins[binsAgo][1] += parseInt(c.sum)
+                break
+            }
+        }
+    })
+    return {
+        yValues: bins,
+        barData: barData
+    }
+}
+
+function mapChartDataToLabelledMixChartData(period, bins) {
+    const dayMapper = {
+        0: 'Sunday',
+        1: 'Monday',
+        2: 'Tuesday',
+        3: 'Wednesday',
+        4: 'Thursday',
+        5: 'Friday',
+        6: 'Saturday'
+    }
+    const monthMapper = {
+        0: 'Jan',
+        1: 'Feb',
+        2: 'Mar',
+        3: 'Apr',
+        4: 'May',
+        5: 'Jun',
+        6: 'Jul',
+        7: 'Aug',
+        8: 'Sep',
+        9: 'Oct',
+        10: 'Nov',
+        11: 'Dec'
+    }
+    let now = new Date()
+    const labelFunctions = {
+        week:  (daysAgo) => dayMapper[mod(now.getDay()-daysAgo, 7)],
+        month: (daysAgo) => ((now.setDate(now.getDate()-daysAgo)).getDate().toString() + " " + monthMapper[now.getMonth()]),
+        year: (monthsAgo) => monthMapper[mod(now.getMonth()-monthsAgo, 12)]
+    }
+    const labelFunction = labelFunctions[period]
     
-    if (period === "week" || period === "month") {
-        let days = []
-        const numDays = (period === "week" ? 7 : 30)
-        // at first, make an array for all the days with [0,0] in each day
-        for (let i=0; i<numDays; i++) {
-            days.push([0,0]) 
+    let mixLabels =     []
+    let mixBarValues =  []
+    let mixLineValues = []
+    for (let binsAgo=bins.length-1; binsAgo>=0; binsAgo--) {
+        let now = new Date()
+        const label = labelFunction(binsAgo)
+        mixLabels.push(label)
+        if (bins[binsAgo][0] === 0) {
+            mixLineValues.push(0)
+        } else {
+            mixLineValues.push(Math.round(100*bins[binsAgo][1]/bins[binsAgo][0]))
         }
-        // loop over all the data and fit it to the days
-        data.nodes.map(function(c) {
-            // add to bar chart data (also used for pie chart)
-            if (barData.hasOwnProperty(c.contrast)) {
-                barData[c.contrast][0] += parseInt(c.count)
-                barData[c.contrast][1] += parseInt(c.sum)
-            } else {
-                barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
-            }
-            // add to mix chart data
-            const stamp = decomposeTimestamp(c.stamp)
-            for (let daysAgo=0; daysAgo<numDays; daysAgo++) {
-                console.log(sameDay(stamp,daysAgo))
-                if (sameDay(stamp, daysAgo) && (contrast==="all" || contrast===c.contrast)) {
-                    days[daysAgo][0] += parseInt(c.count)
-                    days[daysAgo][1] += parseInt(c.sum)
-                    break
-                }
-            }
-        })
-        yValues = days
+        mixBarValues.push(bins[binsAgo][0])
     }
-    else if (period === "year") {
-        // TODO: still some repeated code here, scope for merging this and the above block for more laconic code...
-        let months = []
-        for (let i=0; i<12; i++) {
-            months.push([0,0]) 
-        }
-        data.nodes.map(function(c, index) {
-            // add to bar chart data (also used for pie chart)
-            if (barData.hasOwnProperty(c.contrast)) {
-                barData[c.contrast][0] += parseInt(c.count)
-                barData[c.contrast][1] += parseInt(c.sum)
-            } else {
-                barData[c.contrast] = [parseInt(c.count), parseInt(c.sum)]
-            }
-            // add to mix chart data
-            const stamp = decomposeTimestamp(c.stamp)
-            for (let monthsAgo=0; monthsAgo<12; monthsAgo++) {
-                console.log(sameMonth(stamp,monthsAgo))
-                if (sameMonth(stamp, monthsAgo) && (contrast==="all" || contrast===c.contrast)) {
-                    months[monthsAgo][0] += parseInt(c.count)
-                    months[monthsAgo][1] += parseInt(c.sum)
-                    break
-                }
-            }
-        })
-        yValues = months
+    console.log(bins)
+    console.log(mixLabels)
+    console.log(mixLineValues)
+    console.log(mixBarValues)
+    
+    return {
+        mixLabels: mixLabels,  
+        mixBarValues: mixBarValues,
+        mixLineValues: mixLineValues
     }
+}
+
+function extractChartRawData(period, data, contrast) {
+    let unlabelledData = mapNodesToChartData(data, period, contrast)
+    let yValues = unlabelledData.yValues
+    let barData = unlabelledData.barData
     
     // split object into two arrays, one of keys and one of values
     let barLabels = Object.keys(barData)
@@ -184,77 +220,10 @@ function extractChartRawData(period, data, contrast) {
     console.log(pieValues)
     
     // pie and bar data ready, now prepare mix data
-    let mixLabels = []
-    let mixLineValues = []
-    let mixBarValues = []
-    const dayMapper = {
-        0: 'Sunday',
-        1: 'Monday',
-        2: 'Tuesday',
-        3: 'Wednesday',
-        4: 'Thursday',
-        5: 'Friday',
-        6: 'Saturday'
-    }
-    const monthMapper = {
-        0: 'Jan',
-        1: 'Feb',
-        2: 'Mar',
-        3: 'Apr',
-        4: 'May',
-        5: 'Jun',
-        6: 'Jul',
-        7: 'Aug',
-        8: 'Sep',
-        9: 'Oct',
-        10: 'Nov',
-        11: 'Dec'
-    }
-    if (period === "week" || period === "month") {
-        // data needs to be in order of x ascending
-        const days = yValues
-        for (let daysAgo=days.length-1; daysAgo>=0; daysAgo--) {
-            let label
-            let now = new Date()
-            if (period === "week") {
-                label = dayMapper[mod(now.getDay()-daysAgo, 7)]
-            } else if (period === "month") {
-                // getDate() is confusing; it can be used to manipulate the whole date value with + or - (line below),
-                // or it can be used to reference just the day of the month (two lines below).
-                now.setDate(now.getDate()-daysAgo)
-                label = (now.getDate().toString() + " " + monthMapper[now.getMonth()])
-            }
-            mixLabels.push(label)
-            // careful of division by zero!
-            if (days[daysAgo][0] === 0) {
-                // default to 0% if there is no data for that day
-                mixLineValues.push(0)
-            } else {
-                // calculate percentage
-                mixLineValues.push(Math.round(100*days[daysAgo][1]/days[daysAgo][0]))
-            }
-            mixBarValues.push(days[daysAgo][0])
-        }
-    } else if (period === "year") {
-        const months = yValues
-        for (let monthsAgo=months.length-1; monthsAgo>=0; monthsAgo--) {
-            let now = new Date()
-            const label = monthMapper[mod(now.getMonth()-monthsAgo, 12)]
-            mixLabels.push(label)
-            if (months[monthsAgo][0] === 0) {
-                mixLineValues.push(0)
-            } else {
-                mixLineValues.push(Math.round(100*months[monthsAgo][1]/months[monthsAgo][0]))
-            }
-            mixBarValues.push(months[monthsAgo][0])
-        }
-    }
-    console.log(yValues)
-    console.log(mixLabels)
-    console.log(mixLineValues)
-    console.log(mixBarValues)
+    const mix = mapChartDataToLabelledMixChartData(period, yValues)
+    
     return {
-        mix: {mixLabels: mixLabels, mixLineValues: mixLineValues, mixBarValues: mixBarValues},
+        mix: mix,
         pie: {pieLabels: pieLabels, pieValues: pieValues},
         bar: {barLabels: barLabels, barValues: barValues}
     }    
@@ -283,6 +252,9 @@ function makeChartData(period, data, contrast) {
             labels: pieData.pieLabels,
             datasets: [{
                 data: pieData.pieValues,
+                /* TODO: colours arrays need to be long enough to handle any possible number of contrasts. */
+                /* How would this work? How would this be handled programmatically? */
+                /* What is the default behaviour? Testing and further development required. */
                 backgroundColor: [
                     '#ff0000',
                     '#00ff00',

@@ -244,6 +244,11 @@ CREATE FUNCTION public.complete_tutorial()
         SET tutorial = TRUE
         WHERE id = current_setting('jwt.claims.id')::integer
     $$;
+    
+-- TODO: Record that a user has submitted audio (to give kudos to the user)
+
+-- TODO: When a moderator accepts audio from a user, record this (to give kudos to the user)
+
 
 -- Training and stats functions --
 

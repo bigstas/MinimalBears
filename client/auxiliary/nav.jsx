@@ -12,7 +12,7 @@ const BetaSign = React.createClass({
             textAlign: 'center',
             backgroundColor: 'black',
             position: 'relative',
-            bottom: '9px'
+            bottom: '10px'
         }
         return (
             <div style={styles}>BETA</div>

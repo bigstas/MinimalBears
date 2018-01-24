@@ -16,38 +16,13 @@ const TopBand = React.createClass({
         return (
             <div id='topband'>
                 <div className='userpic' id='userpicProfile'>
-                    <p style={{color: '#cccccc'}}>Your <br/> picture <br/> here</p>
+                    <p style={{color: '#cccccc'}}>Some <br/> picture <br/> here...?</p>
                 </div>
                 <div id='overview'>
                     <h2 className="animated bounce">{this.props.username}</h2>
-                    <p style={{display: 'inline-block'}}>Member since 123 CE</p>
+                    {/* TODO: "kudos" etc. shuold be populated from database */}
+                    <p>Recordings submitted: 19 <br/>Recordings accepted: 12 <br/>Total kudos: 43</p>
                 </div>
-            </div>
-        )
-    }
-})
-
-
-const BestAndWorst = React.createClass({
-    /* A table showing the best and worst performances in contrasts.
-     */
-    render() {
-        return (
-            <div>
-                <h3>Your best and worst word pairs</h3>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Status </th><th>Contrast </th><th>Correct %</th>
-                        </tr>
-                        <tr>
-                            <td>Best</td><td>mouse / mouth</td><td>94%</td>
-                        </tr>
-                        <tr>
-                            <td>Worst</td><td>sheep / ship</td><td>52%</td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         )
     }
@@ -75,8 +50,6 @@ const UserProfile = React.createClass({
                 language: language,
                 contrast: 'all'
             })
-            const elem = this.refs.contrastDropdown
-            elem.value = 'all'
         }
     },
     
@@ -106,7 +79,7 @@ const UserProfile = React.createClass({
                             return <Translate component='option' content={content} key={index} value={c} />
                         })}
                     </select>
-                    <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" />
+                    <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" value={this.state.contrast} />
             {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} />Week view
@@ -118,7 +91,6 @@ const UserProfile = React.createClass({
                         <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} />Year view
                     </label>
             {/* CHARTS */}
-                    <BestAndWorst />
                     <Charts language={this.state.language} contrast={this.state.contrast} period={this.state.period} />
                 </div>
                 <TwitterButton className="button" id="twitterButton" element="div" url={url}>

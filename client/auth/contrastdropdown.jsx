@@ -13,7 +13,7 @@ const ContrastDropdown = React.createClass({
             )
         } else {
             return (
-                <select onChange={this.props.callback}>
+                <select onChange={this.props.callback} value={this.props.value}>
                     <option value="all">All contrasts</option>
                     {this.props.contrasts.getAllStats.nodes.map(function(c,index) {
                         return <option key={index} value={c.contrast}>{c.contrast}</option>

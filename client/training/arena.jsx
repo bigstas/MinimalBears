@@ -3,7 +3,6 @@
 
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
-import key from 'keymaster'
 import Translate from 'react-translate-component'
 import DonePanel from './donepanel'
 
@@ -242,18 +241,6 @@ const Arena = React.createClass({
                 </div>
             )
         }
-    },
-        
-    componentDidMount() {
-        /* Keypress events: TODO
-         * Space - press central "progress" button; 1 & 2 - Word Option buttons 0 & 1
-         * BUG: When you get to the end of training with the keyboard, then it doesn't set the score back down to 0. It does when you use mouse.
-         * 2nd BUG: Two sounds play at the same time when you press space. Very strange.
-         */
-        key('1', this.onWordChosen.bind(this, 0))
-        key('2', this.onWordChosen.bind(this, 1))
-        key('space', this.handleProgressClick)  // check bug in docstring
-        
     }
 })
 
