@@ -86,7 +86,7 @@ function extractContrasts(contrastData) {
     return Array.from(contrasts)
 }
 
-function extractChartRawData(period, data) {
+function extractChartRawData(period, data, contrast) {
     // period: "week", "month", "year"
     let yValues
     let barData = {}
@@ -117,7 +117,7 @@ function extractChartRawData(period, data) {
             const stamp = decomposeTimestamp(c.stamp)
             for (let daysAgo=0; daysAgo<numDays; daysAgo++) {
                 console.log(sameDay(stamp,daysAgo))
-                if (sameDay(stamp, daysAgo)) {
+                if (sameDay(stamp, daysAgo) && (contrast==="all" || contrast===c.contrast)) {
                     days[daysAgo][0] += parseInt(c.count)
                     days[daysAgo][1] += parseInt(c.sum)
                     break
@@ -144,7 +144,7 @@ function extractChartRawData(period, data) {
             const stamp = decomposeTimestamp(c.stamp)
             for (let monthsAgo=0; monthsAgo<12; monthsAgo++) {
                 console.log(sameMonth(stamp,monthsAgo))
-                if (sameMonth(stamp, monthsAgo)) {
+                if (sameMonth(stamp, monthsAgo) && (contrast==="all" || contrast===c.contrast)) {
                     months[monthsAgo][0] += parseInt(c.count)
                     months[monthsAgo][1] += parseInt(c.sum)
                     break
@@ -261,11 +261,11 @@ function extractChartRawData(period, data) {
 }
 
 
-function makeChartData(period, data) {
+function makeChartData(period, data, contrast) {
     // period is "week", "month", or "year"
     // data is the raw data object passed from the database
     console.log(data) 
-    const allData = extractChartRawData(period, data)
+    const allData = extractChartRawData(period, data, contrast)
     if (allData === false) {
         // if there is no data, then there is nothing to display; send this message up the hierarchy
         return false
@@ -497,7 +497,7 @@ const Charts = React.createClass({
         
         const allStats = this.props.allStats.getAllStats
         console.log(allStats)
-        const chartData = makeChartData(this.props.period, allStats)
+        const chartData = makeChartData(this.props.period, allStats, this.props.contrast)
         console.log(chartData)
         if (chartData === false) {
             return ( <p>No training occured for this language and contrast in this period</p> )
@@ -514,10 +514,11 @@ const Charts = React.createClass({
         mixChart = <Bar data={mixChartData} options={mixOptions} />
         barChart = <Bar data={barChartData} options={barOptions} />
 
-        if ( this.props.contrast === '0') {
-            mixChartTitle = <h3>Practice rate and success rate over time</h3> 
+        if ( this.props.contrast === 'all') {
+            mixChartTitle = <h3>Practice and success rate for all contrasts</h3>            
         } else {
-            mixChartTitle = <h3>Practice rate and success rate over time</h3>
+            const titleString = "Practice and success rate for contrast " + this.props.contrast
+            mixChartTitle = <h3>{titleString}</h3>
         }
 
         return (
@@ -526,7 +527,7 @@ const Charts = React.createClass({
                 {mixChart}
                 <h3>Number of practices by contrast for this period</h3>
                 {pieChart}
-                <h3>Success rate by contrast</h3>
+                <h3>Success rate by contrast for this period</h3>
                 {barChart}
             </div>
         )

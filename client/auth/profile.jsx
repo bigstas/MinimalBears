@@ -58,7 +58,7 @@ const UserProfile = React.createClass({
     getInitialState() {
         return {
             language: 'eng',
-            contrast: '0',
+            contrast: 'all',
             period: 'week'
         }
     },
@@ -70,7 +70,14 @@ const UserProfile = React.createClass({
     
     setLanguage(event) {
         const language = event.target.value
-        this.setState({ language: language })
+        if (language !== this.state.language) {
+            this.setState({ 
+                language: language,
+                contrast: 'all'
+            })
+            const elem = this.refs.contrastDropdown
+            elem.value = 'all'
+        }
     },
     
     setContrast(event) {
@@ -99,7 +106,7 @@ const UserProfile = React.createClass({
                             return <Translate component='option' content={content} key={index} value={c} />
                         })}
                     </select>
-                    <ContrastDropdown language={this.state.language} callback={this.setContrast} />
+                    <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" />
             {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} />Week view
