@@ -154,7 +154,10 @@ function mapChartDataToLabelledMixChartData(period, bins) {
     let now = new Date()
     const labelFunctions = {
         week:  (daysAgo) => dayMapper[mod(now.getDay()-daysAgo, 7)],
-        month: (daysAgo) => ((now.setDate(now.getDate()-daysAgo)).getDate().toString() + " " + monthMapper[now.getMonth()]),
+        month: (daysAgo) => {
+            now.setDate(now.getDate()-daysAgo)
+            return ( now.getDate().toString() + " " + monthMapper[now.getMonth()] )
+        },
         year: (monthsAgo) => monthMapper[mod(now.getMonth()-monthsAgo, 12)]
     }
     const labelFunction = labelFunctions[period]
@@ -477,10 +480,9 @@ const Charts = React.createClass({
                     
         let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
         
-        // TODO: should vary as this.props.language varies...
-        const pieChartData = chartData.pieChartData[0]
-        const mixChartData = chartData.mixChartData[0]
-        const barChartData = chartData.barChartData[0]
+        const pieChartData = chartData.pieChartData[this.props.themeIndex]
+        const mixChartData = chartData.mixChartData[this.props.themeIndex]
+        const barChartData = chartData.barChartData[this.props.themeIndex]
 
         pieChart = <Pie data={pieChartData} options={pieOptions} />
         mixChart = <Bar data={mixChartData} options={mixOptions} />

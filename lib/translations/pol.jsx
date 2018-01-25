@@ -161,10 +161,10 @@ counterpart.registerTranslations('pol', {
     },
     record: {
         preRecord: {
-            heading: "Welcome to the Record Page",
-            intro: "Here, you can record yourself saying words in your native language, so that learners of your language can practise their listening skills using your recordings.",
-            contributions: "Minimal Bears is non-profit and crowd-sourced, and so it relies on contributions like yours for content for people to practise with.",
-            tutorial: `If you press "continue", you will be given a tutorial on how to use the Record page. It takes approximately 2 minutes. You will not be able to leave the tutorial once you begin.`,
+            heading: "Witaj w Nagraj się",
+            intro: "Możesz tutaj nagrać słówka w języku polskim tak, by osoby uczące się polskiego mogły ćwiczyć pary minimalne za pomocą Twojego nagrania.",
+            contributions: "Minimal Bears jest non profitowe i zbiera dane za pomocą crowd-sourcingu, a zatem polega na Twoim wkładzie w zawartość. ",
+            tutorial: `Po naciśnięciu Kontynuuj pojawi się instruktaż jak użyć opcji Nagraj się. Zajmie to około 2 minuty. Nie możesz opuścić instruktażu po tym, gdy już się zacznie.`,
             buttonLabel: "Dalej"
         },
         startLabel: {

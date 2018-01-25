@@ -34,7 +34,8 @@ const UserProfile = React.createClass({
         return {
             language: 'eng',
             contrast: 'all',
-            period: 'week'
+            period: 'week',
+            themeIndex: 0
         }
     },
     
@@ -56,6 +57,15 @@ const UserProfile = React.createClass({
     setContrast(event) {
         const contrast = event.target.value
         this.setState({ contrast: contrast})
+    },
+    
+    toggleTheme(event) {
+        // only for development purposes...
+        if (this.state.themeIndex === 0) {
+            this.setState({ themeIndex: 1 })
+        } else {
+            this.setState({ themeIndex: 0 })
+        }
     },
     
     render() {
@@ -90,8 +100,20 @@ const UserProfile = React.createClass({
                     <label>
                         <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} />Year view
                     </label>
+                    <br/>
+                    <input
+                        id="toggleTheme"
+                        type="checkbox"
+                        onChange={this.toggleTheme}
+                        style={{width: "15px", verticalAlign: "middle"}}
+                    />
+                    <label
+                        htmlFor="toggleTheme"
+                        style={{verticalAlign: "middle", fontSize: "10px"}}>
+                        Change theme! (This checkbox is for development purposes only)
+                    </label>
             {/* CHARTS */}
-                    <Charts language={this.state.language} contrast={this.state.contrast} period={this.state.period} />
+                    <Charts language={this.state.language} contrast={this.state.contrast} period={this.state.period} themeIndex={this.state.themeIndex} />
                 </div>
                 <TwitterButton className="button" id="twitterButton" element="div" url={url}>
                         {" Share us on Twitter"}
