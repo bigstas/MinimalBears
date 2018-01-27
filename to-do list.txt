@@ -36,3 +36,5 @@ For Beta:
 
 For full release:
 1. forgotten password retrieval
+2. check email address exists (e.g. they have to click a link in their email to be able to register)
+3. spam-filter the Contact Us page (use an "I am not a robot" check)

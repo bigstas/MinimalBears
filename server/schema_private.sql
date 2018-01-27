@@ -67,7 +67,8 @@ CREATE TABLE private.message (
     id serial PRIMARY KEY,
     account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE,
     stamp timestamp NOT NULL DEFAULT now(),
-    message text NOT NULL
+    message text NOT NULL,
+    topic text NOT NULL
 );
 
 -- Authentication functions --
@@ -230,14 +231,14 @@ CREATE FUNCTION public.new_refresh_token(try_password text)
     $$;
 
 -- submit a message from the user (TODO: check this!)
-CREATE FUNCTION public.send_message(message text)
+CREATE FUNCTION public.send_message(message text, topic text)
     RETURNS void
     LANGUAGE SQL
     SECURITY DEFINER
     VOLATILE
     AS $$
-        INSERT INTO private.message (account, stamp, message)
-        VALUES (current_setting('jwt.claims.id')::integer, now(), message);
+        INSERT INTO private.message (account, stamp, message, topic)
+        VALUES (current_setting('jwt.claims.id')::integer, now(), message, topic);
     $$;
 
 -- Account maintenance functions --
@@ -389,7 +390,7 @@ GRANT SELECT ON TABLE public.audio_submission TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;
 GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
-GRANT EXECUTE ON FUNCTION public.send_message(text) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.send_message(text, text) TO loggedin;
 
 -- Guests can sign up or log in
 GRANT EXECUTE ON FUNCTION public.signup(text, text, text, text, text[], text) TO guest;

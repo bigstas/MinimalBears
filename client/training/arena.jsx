@@ -277,14 +277,8 @@ const statsMutation = gql`mutation ($input: AnswerQuestionInput!) {
     }
 }` // what is clientMutationId for?
 
-// Variables must be defined when the function is called
 const statsMutationConfig = {
-    name: 'statsMutation',
-    options: (ownProps) => ({
-        variables: {
-            // TODO... put variables in here? Or remove options here as it is unnecessary (they are defined elsewhere)
-        }
-    })
+    name: 'statsMutation'
 }
 
 export default compose(

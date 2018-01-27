@@ -26,17 +26,19 @@ const Contact = React.createClass({
     
     submit() {
         if (this.state.topic !== null && this.state.message !== "") {
-            alert("Your message has been submitted!")
             this.props.messageMutation({
                     variables: {
                         input: { 
-                            message: this.state.message
+                            message: this.state.message,
+                            topic: this.state.topic
             }}}).then( (response) => {
                     console.log('message submitted to the database')
                     console.log(response)
+                    alert("Your message has been submitted!")
             }).catch( (error) => {
                     console.log('message submission error')
                     console.log(error)
+                    alert("There has been an error, and we have not been able to process your message. Please try again later.")
             })
         }
     },
