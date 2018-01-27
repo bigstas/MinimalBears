@@ -522,9 +522,10 @@ const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: In
 // if we take all the queries we need at the start and calculate based on them, rather than 
 // making new queries as the user changes what they want to view on the page.
 const periodMapper = {
-    week:  ['day', 7],
-    month: ['day', 30],
-    year:  ['month', 12]
+    /* 1 smaller than the number of days/months involved, as today/this month is 0 days/months ago. */
+    week:  ['day', 6],
+    month: ['day', 29],
+    year:  ['month', 11]
 }   
 const allStatsQueryConfig = { 
     name: 'allStats',

@@ -75,6 +75,7 @@ const UserProfile = React.createClass({
         let languageOptions = ["Please wait..."]
         if (!this.props.practiceLanguages.loading) {
             languageOptions = this.props.practiceLanguages.getPracticeLanguages.nodes
+            console.log(languageOptions)
         }
         
         return (
@@ -133,7 +134,7 @@ const practiceLanguagesQueryConfig = {
     options: (ownProps) => ({
         variables: {
             unit: 'day',
-            number: 100
+            number: 364
         }
     })
 }
