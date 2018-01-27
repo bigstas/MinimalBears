@@ -275,14 +275,14 @@ const statsMutation = gql`mutation ($input: AnswerQuestionInput!) {
     answerQuestion (input: $input) {
         clientMutationId
     }
-}` // "integer" is the id of the new row
+}` // what is clientMutationId for?
 
 // Variables must be defined when the function is called
 const statsMutationConfig = {
     name: 'statsMutation',
     options: (ownProps) => ({
         variables: {
-            // ... put variables in here!!
+            // TODO... put variables in here? Or remove options here as it is unnecessary (they are defined elsewhere)
         }
     })
 }

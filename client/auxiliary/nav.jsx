@@ -31,21 +31,19 @@ const Dropdown = React.createClass({
         alert("You are logging out :)")
         // NOTE: for some reason when you click Log Out and then immediately click Log In, sometimes nothing happens.
         // It appears that this is when the mouse has not moved from the Log Out position, and you need to roll the mouse out and back in and then the pointer changes to show that it is clickable again.
-        // This may be something to fix.
+        // TODO: This may be something to fix.
     },
     
     render() {
-        let authElement, registerElement, suggestWords, contactUs
+        let authElement, registerElement, contactUs
         if (this.props.username) {
             authElement = <div className='dropdownElement' onClick={this.logOut}><Translate content="nav.logout" /></div>
             registerElement = <span /> // "empty" element
-            suggestWords = <div className='dropdownElement'><Link className='plainLink' to="/suggest">Suggest words</Link></div>
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
             // TODO: should this link not be available if you are currently on the login page?
             authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
             registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
-            suggestWords = <span /> // "empty" element
             contactUs = <span />
         }
             
@@ -58,12 +56,8 @@ const Dropdown = React.createClass({
         
         return (
             <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-            {/*<div className='dropdownElement'><em>Settings coming soon in Beta</em></div>
-                <div className='dropdownElement'><Link className='dropdownText' to="/profile">Profile</Link></div>
-                <hr />*/}
                 {authElement}
                 {registerElement}
-                {suggestWords}
                 {moderationElement}
                 {contactUs}
                 <hr />
