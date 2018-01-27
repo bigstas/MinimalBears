@@ -23,11 +23,16 @@ For Beta:
     - need to put in testing code for other files
 14. use of more efficient and better-scaling db calls (Guy)
 15. profile with user data, like statistics (mostly Staś)
-    - charts mostly ready client-side on Profile page
-    - will need to arrange for data about users' activity to be logged in the db for this to be useful
+    - last statistic - how much people have contributed recordings
 16. DONE
 17. DONE
 18. DONE
 19. DONE
 20. DONE
 21. DONE
+22. style fixing
+    - fix that damned React-select box's sizing madness!
+
+
+For full release:
+1. forgotten password retrieval

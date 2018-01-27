@@ -2,27 +2,32 @@ import counterpart from 'counterpart'
 
 counterpart.registerTranslations('fra', {
     notfound: {
-        title: "Your webpage was not found.",
-        text: "Sad bear face. Check you input the URL correctly."
+        title: "La page n'était pas trouvée.",
+        text: "Dommage. Verifiez si vous avez correctement entré l'URL."
     },
     nav: {
         home: "Page principale",
         about: "A propos",
-        train: "Entraîner",
-        record: "Record",
-        guest: "Guest",
+        train: "S'entraîner",
+        record: "S'enregistrer",
+        guest: "Invité",
         profile: "Profil",
-        settings: "Settings"
+        settings: "Paramètres",
+        login: "Se connecter",
+        logout: "Se déconnecter",
+        register: "Créer votre compte",
+        moderation: "Modération",
+        contactUs: "Nous contacter"
     },
     home: {
-        welcome: "Bienvenue",
-        intro: " is an app that will help you learn new sounds in foreign languages.",
-        continue: "Continue as guest",
-        signIn: "Sign In",
-        register: "Registrer"
+        welcome: "Bienvenu",
+        intro: " est une application qui vous aidera à apprendre de nouveaux sons dans des langues étrangères.",
+        continue: "Continuer en tant qu'invité",
+        signIn: "Se connecter",
+        register: "Créer votre compte"
     },
     about: {
-        bearCaption: "Brown Bear has done thorough research",
+        bearCaption: "Ours Brun à fait des recherches approfondies",
         whatIs: {
             heading: "Qu'est-ce que c'est Minimal Bears?",
             p1: "C'est possible que vous ayez remarqué que les étudiants adultes de n'importe quelle langue parlent avec un accent étranger, même après des années d'apprentissage et de pratique. Ça peut être une barrière à la communication, et souvent peut faire paraître qu'ils parlent moins bien que dans la realité.",
@@ -45,145 +50,187 @@ counterpart.registerTranslations('fra', {
             heading: "Quelles sortes de résultats puis-j'attendre?",
             p1: `Avant l'entraînement. les étudiants de langues étrangères réussissent à distinguer les sons proches <a target="_blank" href="http://www.minimalbears.com/articles/rl_japanese_slightly_better_than_chance.pdf">à peine mieux que s'ils choisissent les mots au hasard</a>, même s'ils ont vécu dans le pays dans lequelle on parle cette langue plusieurs années. Cependent, une améloration majeure à été vérifiée <a target="_blank" href="http://www.minimalbears.com/articles/th_francophones.pdf">après seulement 90 minutes d'entraînement</a> selon cette méthode.`,
             p2: `L'amélioration a été vérifiée auprès des gens ayant des langues maternelles diverses, et apprenant des langues variées. La méthode a été prouvée pour des étudiants d'anglais ayant comme langue maternelle <a target="_blank" href="%(Korean)s">le coréen</a>, <a target="_blank" href="%(Japanese)s">le japonais</a>, <a target="_blank" href="%(Cantonese)s">le cantonais</a>, <a target="_blank" href="%(Mandarin)s">le mandarin</a>, <a target="_blank" href="%(French)s">le français</a>, <a target="_blank" href="%(Arabic)s">l'arabe</a>, <a target="_blank" href="%(German)s">l'aleman</a>, <a target="_blank" href="%(Portuguese)s">le portuguais</a>, <a target="_blank" href="%(Finnish)s">le finlandais</a>, <a target="_blank" href="%(Greek)s">le grec</a>, et <a target="_blank" href="%(Catalan)s">le catalan</a>; pour <a target="_blank" href="%(ChineseKorean)s">des étudiants de coréen ayant comme langue maternelle le chinois</a>; et <a target="_blank" href="%(EnglishArabic)s">des étudiants ayant comme langue maternelle l'anglais apprenant l'arabe</a>, <a target="_blank" href="%(EnglishKorean)s">le coréen</a>, et <a target="_blank" href="%(EnglishMandarin)s">le mandarin</a>.`,
-            p3: `Researchers have found that people trained by this method have long-term improvements that only diminish very slightly over time. One team found that learners performed significantly better, <a target="_blank" href="%(sixMonths)s">even when tested 6 months later</a>, without any training in the interim.`,
-            p4: `In addition to improvements in the perception and production of sounds, learners also reported <a target="_blank" href="%(confidence)s">increased confidence</a>, as in this quote from a learner:`,
-            p5: `"I feel a lot more confidence compared to before training. I have more confidence saying it and listening to it. In general I have more confidence with the language."`,
-            p6: `So regardless of your mother tongue, the language you are learning, or your <a target="_blank" href="%(proficiency)s">level of proficiency</a>, HVPT can help to improve your language skills.`
+            p3: `Les chercheurs ont trouvé que les gens entraînés par cette méthode voient une amélioration sur le long terme, qui ne diminuent que légèrement au fil du temps. Une équipe a trouvé que les étudiants ont obtenu de bien meilleurs résultats <a target="_blank" href="%(sixMonths)s">même lorsqu'ils ont été testés six mois après l'entraînement</a>, sans aucune révision.`,
+            p4: `En plus des améliorations dans la perception et la production des sons, les étudiants ont aussi rapporté une <a target="_blank" href="%(confidence)s">augmentation de confiance</a>, comme montre cette citation d'un étudiant:`,
+            p5: `"Je me sens plus confiant par rapport à avant l'entraînement. J'ai plus de confiance lorsque je parle et j'écoute [la langue]. En général, je me sens plus à l'aise avec la langue."`,
+            p6: `Donc quelles que soient votre langue maternelle, la langue que vous apprenez, et votre <a target="_blank" href="%(proficiency)s">niveau de compétence</a>, EPHV peut vous aider à améliorer vos habilités linguistiques.`
         },
         whyWorks: {
-            heading: "Why does it work so well?",
-            p1: "There are three key features that make HVPT such an effective method: <strong>lack of context</strong>, <strong>varied speakers</strong>, and <strong>immediate feedback</strong>. All of them are present in Minimal Bears.",
+            heading: "Pourquoi est-ce que ça marche si bien?",
+            p1: "Il y a trois caractéristiques clés qui font que EPHV est une méthode tellement efficace: <strong>manque de contexte</strong>; <strong>locuteurs variés</strong>; et <strong>correction immédiate</strong>. Tous ces éléments sont présents dans Minimal Bears.",
             context: {
-                heading: "Lack of context",
-                p1: `For most minimal pairs, we can use the context as a guide. For example, suppose a learner struggles to distinguish "mouse" and "mouth". If they heard someone say "You took the words right out of my mouth", they're unlikely to start looking for a mouse!`,
-                p2: `As a result, simply engaging in conversation with native speakers of the language does not guarantee improvement.{/*TODO add link*/} With Minimal Bears, you can't rely on the context, which means you have to focus on the sounds to distinguish the words. This improves your listening skills.`
+                heading: "Manque de contexte",
+                p1: `Pour la plupart des paires minimales, on peut se guider selon le contexte. Par exemple, supposons qu'il y ait un étudiant qui a du difficulté en entendre la différence entre "sang" et "son". TODO: Finir!!`,
+                p2: `Par conséquent, simplement s'engager dans les conversations avec des locuteurs de langue maternelle ne garantit pas l'amélioration de la perception des sons. En utilisant Minimal Bears, on ne peut pas dépendre du contexte, donc il est nécessaire d'écouter les sons mêmes pour les distinguer. Ça améliore votre compétences d'écoute.`
             },
             varied: {
-                heading: "Varied speakers",
-                p1: `If you only hear one person's pronunciation, you might struggle when listening to someone new. It would seem reasonable that listening to many people should be better than listening to just one. This common sense idea is also <a target="_blank" href="%(supported)s">supported by research</a>. With Minimal Bears, you can practise with recordings crowd-sourced from around the world.`
+                heading: "Locuteurs variés",
+                p1: `Si on est habitué à la prononciation d'une seule personne, il est possible qu'écouter une autre soit encore difficile. Il semble raisonnable qu'écouter différentes personnes soit mieux qu'écouter juste une. Cette idée est <a target="_blank" href="%(supported)s">soutenu par la recherche</a>. Avec Minimal Bears, on peut pratiquer avec des enregistrements reçus de la part de volontaires de partout dans le monde.`
             },
             feedback: {
-                heading: "Immediate feedback",
-                p1: "The importance of quick, unambiguous feedback for learning is one of behavioural science's most well-supported findings. However, in a social environment, small errors in pronouncing or distinguishing foreign sounds are rarely corrected in the moment. Minimal Bears allows you to immediately perceive any errors, resulting in rapid progress."
+                heading: "Correction immédiate",
+                p1: "L'importance d'une évaluation rapide et non ambigüe est une des découvertes les mieux argumentées de la science du comportement. Cependant, dans un environment social, les petites erreurs de prononciation ou de distinction des sons sont rarement corrigées sur le moment. Minimal Bears vous permet de percevoir les erreurs immédiatement, entrainant un progrès rapide."
             } 
         },
         whichLangs: {
-            heading: "Which languages can I practise?",
-            p1_start: "The range of languages on Minimal Bears is continually growing, thanks to the contributions from our members. Go to the ",
-            p1_link: "Train page",
-            p1_end: " to see what languages are currently available.",
-            p2: "The site's interface is also becoming available in an increasing number of languages, so that more people can make use of it."
+            heading: "Quelle langues puis-je pratiquer?",
+            p1_start: "L'éventail de langues disponibles sur Minimal Bears croît tout le temps, grâce aux contributions de nos membres. Allez à la ",
+            p1_link: "page d'entraînement",
+            p1_end: " pour voir quelles langues sont disponibles actuellement.",
+            p2: "L'interface du site web est, elle aussi, disponible en de plus en plus langues, pour que plus de monde puisse l'utiliser."
         },
         getStarted: {
-            heading: "Great! How do I get started?",
-            p1_start: "Go to the ",
-            p1_link: "Train page",
-            p1_end: ", choose your language and contrast to train, and get practising!"
+            heading: "Super! Comment est-ce que je peux commencer?",
+            p1_start: "Allez à la ",
+            p1_link: "page d'entraînement",
+            p1_end: ", choisissez votre langue à pratiquer, et voilà!"
         },
         contribute: {
-            heading: "Is there a way I can contribute?",
-            p1_start: "The audio for Minimal Bears is crowd-sourced, like Wikipedia. In order to expand the range of content (different contrasts from different languages, spoken by different people), we rely on words recorded by volunteers. If you'd like to contribute, go to the ",
-            p1_link: "Record page",
-            p1_end: " and get talking!"
+            heading: "Y-a-t-il un moyen de contribuer au projet?",
+            p1_start: "L'audio pour Minimal Bears est reçu par participation volontaire, comme Wikipedia. Pour accroître la gamme de contenu (des contrastes des langues différentes, diction par des personnes différentes), nous dépendons des mots enregistrées par les volontaires. Si vous voulez contribuer, allez à la ",
+            p1_link: "page d'enregistrement",
+            p1_end: " et parlez!"
         }
     },
     loading: {
-        loading: 'Chargeant...'
+        loading: 'Chargement en cours...'
     },
-    train: {
-        chooseLanguage: "Choose the language you want to train",
-        chooseContrast: "Choose which contrast you want to train",
-        changeLanguage: "Change language",
-        sorryNoContrasts: "Sorry, we don't have enough audio ready for this language. We're working on it!",
-        score: "Score",
-        language: {
-            eng: "Anglais",
-            deu: "Aleman",
-            pol: "Polonais"
-        },
-        contrast: {
-            1: {
-                name: "ee/i",
-                examples: {
-                    0: "sheep/ship",
-                    1: "read/rid",
-                    2: "feast/fist"
-                }
-            },
-            3: {
-                name: "i/e",
-                examples: {
-                    0: "hill/hell",
-                    1: "rid/red",
-                    2: "middle/meddle"
-                }
-            },
-            11: {
-                name: "l/r", 
-                examples: {
-                    0: "law/raw",
-                    1: "late/rate",
-                    2: "light/right"
-                }
-            },
-            2: {
-                name: "s/th",
-                examples: {
-                    0: "mouse/mouth",
-                    1: "sum/thumb",
-                    2: "sing/thing"
-                }
+    auth: {
+        email: "Courrier électronique:",
+        username: "Nom d'utilisateur:",
+        password: "Mot de passe:",
+        confirmPassword: "Confirmer votre mot de passe:",
+        register: {
+            joinTitle: "Créer un compte",
+            joining: "Créer un compte vous permet de suivre votre progrès, participer aux enregistrements, et recevoir des suggestions concernant les sons à pratiquer.",
+            emailError: "courrier électronique invalide",
+            usernameError: "nom d'utilisateur pas disponible",
+            passwordError: "les deux mots de passe ne sont pas les mêmes",
+            nativeLanguage: "Langue maternelle:",
+            languageError: "selectionner votre langue maternelle",
+            noResults: "Pas de résultat",
+            notInTheList: "Ma langue n'est pas dans la liste",
+            joinButtonLabel: "Créer mon compte",
+            loginLink: "Vous avez déjà un compte? Connectez-vous.",
+            tooltip: "Pourquoi nous vous le demandons:<br>Vous pouvez participer au projet en enregistrant des mots dans votre langue maternelle. Connaître votre langue maternelle nous aidera à vous demander les mots dans la langue appropriée. Nous ne partageons vos données avec personne.",
+            errors: {
+                serverError: "Nous ne pouvons pas vous connecter au serveur. Vérifiez votre connection internet.",
+                duplicateEmail: "Cette addresse de courrier électronique existe déjà dans notre système. Si vous avez déjà un compte, connectez-vous avec vos identifiants.",
+                duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
             }
         },
-        progressLabel: {
-            begin: "Begin",
-            playAgain: "Listen again",
-            next: "Next",
-            goAgain: "Play again"
+        login: {
+            loginTitle: "Log in.",
+            loggingIn: "Vous connecter vous permettera de sauvegarder et suivre votre progrès.",
+            emailError: "Veuillez écrire votre addresse de courrier électronique.",
+            passwordError: "Oups! Mot de passe ou addresse électronique incorrects.",
+            loginButtonLabel: "Se connecter",
+            joinLink: "Besoin d'un compte? Créez-en un."
+        }
+    },
+    train: {
+        chooseLanguage: "Choisissez la langue à pratiquer",
+        chooseContrast: "Choisissez le contraste que vous souhaitez pratiquer",
+        changeLanguage: "Modifier la langue",
+        sorryNoContrasts: "Désolé, nous n'avons pas de fichiers audio disponibles pour cette langue. Nous y travaillons!",
+        score: "Points",
+        language: {
+            eng: "Anglais",
+            deu: "Alemand",
+            pol: "Polonais"
         },
+        progressLabel: {
+            begin: "Commencer",
+            playAgain: "Ecouter encore",
+            next: "Suivant",
+            goAgain: "Recommencer"
+        },
+        viewStats: "Voir les statistiques",
         correct: "Correct!",
-        wrong: "Oops!"
+        wrong: "Oups!"
+    },
+    norecord: {
+        title: "Pour commencer, créez un compte!",
+        onlyLoggedIn: "Seulement les utilisateurs connectés peuvent s'enregistrer.",
+        login: "Connectez-vous",
+        loginReason: "! :)",
+        noAccount: "Vous n'avez pas de compte? ",
+        signup: "Enregistrez-vous",
+        noSuchLanguage: "Nous n'utilisons pas encore votre langue comme langue d'entraînement.",
+        noRecordingsNeeded: "Nous utilisons votre langue comme langue d'entraînement, mais nous n'avons pas besoin d'enregistrements en ce moment."
     },
     record: {
-        startLabel: {
-            record: "Record",
-            done: "Done",
-            next: "Next",
-            reRecordAll: "Re-record All",
-            tooltip1: "Record all the words,",
-            tooltip2: "one after the other."
+        preRecord: {
+            heading: "Bienvenu sur la page d'enregistrement",
+            intro: "Ici, vous pouvez vous enregistrer en disant des mots dans votre langue maternelle afin que les étudiants de votre langue puissent améliorer leur capacité d'écoute grâce à vos enregistrements.",
+            contributions: "Minimal Bears est un projet bénévole dévélopé grâce à l'aide de ses participants.",
+            tutorial: `Si vous cliquez "continuer", vous serez guidé au travers des étapes pour vous enregistrer. Cela dure à peu près deux minutes.`,
+            buttonLabel: "Continuer"
         },
-        stopTooltip: "Click here to stop recording.",
-        playbackAll: "Playback All",
-        playbackAllTooltip: "Play all the audio.",
-        submit: "Submit",
-        submitTooltip: "If you are ready, send all the audio to the database.",
-        reRecordTooltip: "Re-record this word",
-        playbackTooltip: "Play back",
+        startLabel: {
+            record: "S'enregistrer",
+            done: "Prêt",
+            next: "Suivant",
+            reRecordAll: "Tout enregistrer de nouveau",
+            tooltip1: "Enregistrer tous les mots,",
+            tooltip2: "l'un après l'autre."
+        },
+        stopTooltip: "Cliquez ici pour arrêter l'enregistrement.",
+        playbackAll: "Tout écouter",
+        playbackAllTooltip: "Ecouter tous les enregistrements.",
+        submit: "Valider",
+        submitTooltip: "Si vous êtes prêt, envoyer tous les enregistrements à notre base de données.",
+        reRecordTooltip: "Enregistrer de nouveau ce mot",
+        playbackTooltip: "Ecouter",
         tutorial: {
             buttons: {
-                back: "Back",
-                close: "Close",
-                last: "Done",
-                next: "Next",
+                back: "Précédent",
+                close: "Fermer",
+                last: "Prêt",
+                next: "Suivant",
                 skip: "Skip"
             },
             step0: {
-                title: 'The Record button',
-                text: "Press this to record. Then, press it to record the next thing."
+                title: 'La liste de mots',
+                text: "Voilà la liste de mots à enregistrer. L'objectif de cette page est d'enregistrer des français de langue maternelle prononcer des mots, afin que les étudiants de français puisse pratiquer leur capacité d'écoute en utilisant ces enregistrements dans l'application."
             },
             step1: {
-                title: 'The Stop button',
-                text: 'Press this to stop recording.',
+                title: "Le bouton d'enregistrement",
+                text: "Cliquez ici pour vous enregistrer. Ensuite, cliquez de nouveau pour l'enregistrement suivant."
             },
             step2: {
-                title: 'Play back all',
-                text: 'Play back all that you have recorded so far, in sequence.'
+                title: "Le bouton d'arrêt",
+                text: "Cliquez ici pour arrêter l'enregistrement.",
             },
             step3: {
-                title: 'Submit',
-                text: "When you're ready, submit the audio you have recorded."
+                title: 'Ecoutez le mot',
+                text: "Chaque mot que vous avez enregistré peut être écouté individuellement afin de vérifier qu'il est correct."
+            },
+            step4: {
+                title: 'Enregistrer le mot de nouveau',
+                text: "Si vous pensez qu'il est nécessaire de le corriger, vous pouvez enregister le mot de nouveau en cliquant ici."
+            },
+            step5: {
+                title: 'Tout écouter',
+                text: "Vous pouvez aussi écouter tout que vous avez enregistré jusqu'à maintenant, l'un après l'autre."
+            },
+            step6: {
+                title: 'Valider',
+                text: "Quand vous êtes prêt, validez vos enregistrements."
+            },
+            step7: {
+                title: 'Aide',
+                text: "Si vous souhaitez revoir le tutoriel, cliquez seulement sur ce bouton."
             }
         }
+    },
+    edit: {
+        playAll: "Ecouter",
+        playClip: "Ecouter l'extrait",
+        zoomIn: "Zoomer",
+        zoomOut: "Dézoomer",
+        acceptFull: "Accepter l'enregistrement",
+        acceptSegment: "Accepter l'extrait",
+        reject: "Rejeter"
     }
 })
