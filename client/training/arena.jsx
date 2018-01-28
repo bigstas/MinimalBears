@@ -1,5 +1,10 @@
 // Arena object and children for 'Train' page
 // Ta Da sound recorded by Mike Koenig (license: Attribution 3.0)
+/* Licences:
+- incorrect.wav originally called 322931__rhodesmas__incorrect-01.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
+- correct.wav originally called 322930__rhodesmas__success-03.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
+- finish.wav originally called 322929__rhodesmas__success-04.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
+*/
 
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
@@ -122,10 +127,10 @@ const Arena = React.createClass({
                 counter: (this.state.counter < this.state.maxRounds) ? this.state.counter +1 : this.state.maxRounds,
             })
             if (correct) {
-                const snd = new Audio("correct bell short.wav")
+                const snd = new Audio("correct.wav")
                 snd.play()
             } else {
-                const snd = new Audio("quack wrong quieter.wav")
+                const snd = new Audio("incorrect.wav")
                 snd.play()
             }
             // Below: TODO - CHECK if this is the right audio to use!! (and the right pair, & the right correct)
@@ -195,7 +200,7 @@ const Arena = React.createClass({
     
     render() {
         if (this.state.mode === "restart") {
-            const snd = new Audio("Ta Da quieter.wav")
+            const snd = new Audio("finish.wav")
             snd.play()
             
             return <DonePanel handleClick={this.handleProgressClick} 

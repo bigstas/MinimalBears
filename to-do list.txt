@@ -15,7 +15,6 @@ For Beta:
     - Arabic: postpone for Full Release (or later), Staś may be able to organise this
     - Lithuanian: started, Staś to do/organise
     - Georgian: postpone for Full Release, Staś is organising this
-    - Bahasa Indonesia/Melayu: no leads as of yet
 4. DONE
 5. CANCELLED (now using only Edit page, no Moderation page)
 6. CANCELLED (expansion into further languages will be centrally controlled)
@@ -27,7 +26,7 @@ For Beta:
     - great free open-source icon libraries to check out: http://mariodelvalle.github.io/CaptainIconWeb/; http://mapsk.in/
 9. DONE
 10. DONE
-11. new/better sounds for feedback (Gergő)
+11. DONE
 12. DONE? (improvement in user experience on Arena page (mostly Gergő))
 13. testing code (code that checks everything is working correctly) (Guy and Staś)
     - Jest is online with dummy.test.js
@@ -50,3 +49,5 @@ For full release:
 2. check email address exists (e.g. they have to click a link in their email to be able to register)
 3. spam-filter the Contact Us page (use an "I am not a robot" check)
 4. leaderboard of how much people have practised? (as part of stats)
+5. social media sharing buttons
+6. contrast selector button "bug": make sure the contrasts start rolling when the page loads with the mouse over one of the buttons
