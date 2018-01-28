@@ -132,6 +132,11 @@ const AuthJoinPage = React.createClass({
 
                         <form onSubmit={ this.onSubmit }>
                             <table>
+                                <colgroup>
+                                   <col span="1" style={{width: "50%"}} />
+                                   <col span="1" style={{width: "50%"}} />
+                                </colgroup>
+                                
                                 <tbody>
                                 {/* Email error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p></td></tr>
@@ -173,7 +178,7 @@ const AuthJoinPage = React.createClass({
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style={{textAlign: "left"}}>
+                                        <td style={{textAlign: "left", paddingTop: "15px"}}>
                                             <input
                                                 id="customLanguageInput"
                                                 type="checkbox"

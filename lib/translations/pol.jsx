@@ -96,7 +96,7 @@ counterpart.registerTranslations('pol', {
         loading: 'Trwa ładowanie strony...'
     },
     auth: {
-        email: "Email:",
+        email: "Adres emailowy:",
         username: "Nazwa użytownika:",
         password: "Hasło:",
         confirmPassword: "Potwierdź hasło:",
@@ -109,10 +109,10 @@ counterpart.registerTranslations('pol', {
             nativeLanguage: "Język ojczysty:",
             languageError: "select your native language",
             noResults: "No results found",
-            notInTheList: "My language is not in the list",
+            notInTheList: "Mój język nie jest na liśćie",
             joinButtonLabel: "Załącz się",
             loginLink: "Masz już konto? Zaloguj.",
-            tooltip: "Dlaczego my się pytamy: You can contribute to the project by recording your voice saying words in your native language. Knowing your native accent will allow us to ask you for words in the appropriate language. We do not share your data with anyone.",
+            tooltip: "Dlaczego my się pytamy: <br>You can contribute to the project by recording your voice saying words in your native language. <br>Knowing your native language will allow us to ask you for words in the appropriate language. <br>Nie dzielimy się Twoimi danami z nikim.",
             errors: {
                 serverError: "We cannot connect to the server! Check your internet connection.",
                 duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",

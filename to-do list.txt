@@ -1,10 +1,21 @@
 For Beta:
 1. DONE
-2. finalised text on About page (Staś and Guy)
-    - second draft to be reviewed - DONE
+2. finalised text on About page (Guy)
     - final check of links / inclusion of more links
 3. internationalisation (mostly Staś)
-    - need translations into various languages 
+    - Polish: almost done, Staś to do/organise
+    - French: DONE (except any changes to page), Guy to check
+    - Spanish: not started; Staś to do/organise
+    - German: not started; Guy to do/organise
+    - Russian: not started; Staś has a contact
+    - Chinese: not started; Staś has contacts
+    - Hungarian: not started; Gergő to do
+    - Farsi: About page done, Staś to organise
+    - Japanese: postpone for Full Release? (Since none of us understand Japanese, so it will be difficult to handle requests in Japanese.) Staś' brother can do this
+    - Arabic: postpone for Full Release (or later), Staś may be able to organise this
+    - Lithuanian: started, Staś to do/organise
+    - Georgian: postpone for Full Release, Staś is organising this
+    - Bahasa Indonesia/Melayu: no leads as of yet
 4. DONE
 5. CANCELLED (now using only Edit page, no Moderation page)
 6. CANCELLED (expansion into further languages will be centrally controlled)
@@ -30,11 +41,12 @@ For Beta:
 19. DONE
 20. DONE
 21. DONE
-22. style fixing
-    - fix that damned React-select box's sizing madness!
+22. DONE
+23. "Joining allows you to keep track of your progress, contribute recordings, and ***receive suggestions*** for what you should practise next." Receive suggestions? What are we going to to do about this?
 
 
 For full release:
 1. forgotten password retrieval
 2. check email address exists (e.g. they have to click a link in their email to be able to register)
 3. spam-filter the Contact Us page (use an "I am not a robot" check)
+4. leaderboard of how much people have practised? (as part of stats)

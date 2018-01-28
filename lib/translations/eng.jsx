@@ -115,7 +115,7 @@ counterpart.registerTranslations('eng', {
             notInTheList: "My language is not in the list",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in.",
-            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native accent will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone.",
+            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native language will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone.",
             errors: {
                 serverError: "We cannot connect to the server! Check your internet connection.",
                 duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
