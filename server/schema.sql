@@ -63,11 +63,23 @@ CREATE INDEX ON item (language);
 
 -- Audio recordings
 CREATE TABLE audio (
-    file text PRIMARY KEY,
-    speaker integer NOT NULL,  -- will reference user id
+    file text PRIMARY KEY,  -- filename
+    speaker text NOT NULL,  -- will reference account username
     item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 CREATE INDEX ON audio (item);
+
+-- Unmoderated audio recordings
+-- (no inheritance -- that would require repeating the indexes and foreign keys, anyway)
+CREATE TABLE audio_submission (
+    file text PRIMARY KEY,  -- filename
+    speaker text NOT NULL,  -- will reference account username
+    item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX ON audio_submission (item);
+
+-- For unique file names
+CREATE SEQUENCE audio_file;
 
 -- Minimal pairs
 CREATE TABLE pair (
@@ -114,15 +126,6 @@ CREATE TRIGGER check_language_trigger BEFORE INSERT OR UPDATE
     FOR EACH ROW
     EXECUTE PROCEDURE check_language();
 
--- Submissions of audio recordings
-CREATE TABLE audio_submission (
-  file bytea NOT NULL,
-  speaker integer NOT NULL,  -- will reference user id
-  item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  id serial PRIMARY KEY
-);
-CREATE INDEX ON audio_submission (item);
-
 -- Util functions --
 
 CREATE FUNCTION public.get_contrast_id(pair_id integer)
@@ -165,6 +168,26 @@ CREATE FUNCTION public.get_item_language_id(item_id integer)
         WHERE id = item_id
     $$;
 
+CREATE FUNCTION get_text (item_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT homophones[1]  -- TODO choose a random homophone?
+        FROM item
+        WHERE id = item_id
+    $$;
+
+CREATE FUNCTION public.get_item_id(submission_file text)
+    RETURNS integer
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT item
+        FROM audio_submission
+        WHERE file = submission_file
+    $$;
+
 -- Get list of possible items, from a given string
 -- (if this function is used often, homophones should be put into their own table, not as an array)
 CREATE FUNCTION get_items_from_string(string text)
@@ -180,14 +203,23 @@ CREATE FUNCTION get_items_from_string(string text)
 -- User functions --
 
 -- For a user to submit their audio recordings
-CREATE FUNCTION submit_audio(file bytea, speaker integer, item integer)
-    RETURNS integer
+-- This records a file being saved outside the database
+CREATE FUNCTION submit_audio(file text, speaker text, item integer)
+    RETURNS void
     LANGUAGE SQL
-    VOLATILE 
+    VOLATILE
     AS $$
         INSERT INTO audio_submission (file, speaker, item)
         VALUES (file, speaker, item)
-        RETURNING id;
+    $$;
+
+-- Get a new file name
+CREATE FUNCTION next_audio()
+    RETURNS integer
+    LANGUAGE SQL
+    VOLATILE
+    AS $$
+        SELECT nextval('audio_file')
     $$;
 
 -- Get the list of contrasts for a given language, each with a random set of examples
@@ -206,16 +238,6 @@ CREATE TYPE contrast_with_examples AS (
     id integer,
     examples text_pair[]
 );
-
-CREATE FUNCTION get_text (item_id integer)
-    RETURNS text
-    LANGUAGE SQL
-    STABLE
-    AS $$
-        SELECT homophones[1]  -- TODO choose a random homophone?
-        FROM item
-        WHERE id = item_id
-    $$;
 
 CREATE FUNCTION get_random_examples(contrast_id integer, number integer)
     RETURNS text_pair[]
@@ -329,5 +351,4 @@ CREATE FUNCTION get_items_to_record(language_id text, number integer)
         LIMIT number
     $$;
 
--- TODO moderate audio submissions
 -- TODO allow moderator to extend contrast, pair, item...

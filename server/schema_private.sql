@@ -10,10 +10,9 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Users, including emails and passwords
 CREATE TABLE private.account (
-    id serial PRIMARY KEY,
+    username text PRIMARY KEY,
     email text NOT NULL UNIQUE CHECK (email ~* '^\S+@\S+\.\S+$'),
     password_hash text NOT NULL,
-    username text NOT NULL UNIQUE,
     refresh text NOT NULL DEFAULT MD5(random()::text),  -- code for refreshing JWT tokens without a password
     interface text NOT NULL REFERENCES public.language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     custom_native text,  -- native languages we're not aware of (free text)
@@ -22,37 +21,50 @@ CREATE TABLE private.account (
 
 -- Users' native languages (can have more than one)
 CREATE TABLE private.native (
-    account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    account text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     language text NOT NULL REFERENCES public.language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     UNIQUE (account, language)
 );
 CREATE INDEX ON private.native (account);
 
+-- Moderators
+CREATE TABLE private.moderator (
+    account text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    language text NOT NULL REFERENCES public.language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    PRIMARY KEY (account, language)
+);
+CREATE INDEX ON private.moderator (account);
+CREATE INDEX ON private.moderator (language);
+
 -- Make audio recordings refer to accounts
 ALTER TABLE public.audio
     ADD CONSTRAINT audio_speaker_fkey
     FOREIGN KEY (speaker)
-    REFERENCES private.account(id)
+    REFERENCES private.account(username)
     ON UPDATE CASCADE ON DELETE RESTRICT;
 ALTER TABLE public.audio_submission
     ADD CONSTRAINT audio_submission_speaker_fkey
     FOREIGN KEY (speaker)
-    REFERENCES private.account(id)
+    REFERENCES private.account(username)
     ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Account information except for password hash and refresh token
 CREATE VIEW private.account_info AS (
-    SELECT id, email, username, interface, custom_native, tutorial,
+    SELECT username, email, interface, custom_native, tutorial,
         (SELECT ARRAY(
             SELECT language FROM private.native
-            WHERE private.native.account = private.account.id
-        )) AS native
+            WHERE private.native.account = private.account.username
+        )) AS native,
+        (SELECT ARRAY(
+            SELECT language FROM private.moderator
+            WHERE private.moderator.account = private.account.username
+        )) AS moderator
     FROM private.account
 );
 
 -- Users' practice sessions (one row per answered question)
 CREATE TABLE private.practice (
-    account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    account text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     stamp timestamp NOT NULL DEFAULT now(),
     pair integer NOT NULL REFERENCES public.pair(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     audio text NOT NULL REFERENCES public.audio(file) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -63,44 +75,12 @@ CREATE INDEX ON private.practice (account);
 -- (currently no check that the audio's item is one element of the pair)
 
 -- Authentication functions --
--- These allow controlled access to the private schema
-
--- Create a new user account
--- (the password will be stored hashed, for security)
-CREATE FUNCTION public.signup(email text, password text, username text, interface text, native_array text[], custom_native text)
-    RETURNS integer
-    LANGUAGE plpgsql
-    SECURITY DEFINER
-    VOLATILE
-    AS $$
-        DECLARE
-            new_account private.account;
-            native_lang text;
-        BEGIN
-	        INSERT INTO private.account (email, password_hash, username, interface, custom_native) VALUES (
-                email,
-                crypt(password, gen_salt('bf')),
-                username,
-                interface,
-                custom_native
-            )
-            RETURNING * INTO new_account;
-            
-            FOREACH native_lang IN ARRAY native_array
-            LOOP
-                INSERT INTO private.native (account, language)
-                VALUES (new_account.id, native_lang);
-            END LOOP;
-        
-            RETURN new_account.id;
-        END;
-    $$;
     
 -- The JWT type which will be signed by PostGraphQL 
--- The role can be accessed using current_setting('jwt.claims.id')::integer
+-- The role can be accessed using current_setting('jwt.claims.id')
 CREATE TYPE public.json_web_token AS (
     role text,
-    id integer
+    username text
 );
 
 -- Refresh tokens allow a JWT to be refreshed without entering a password
@@ -109,7 +89,61 @@ CREATE TYPE public.token_pair AS (
     refresh text
 );
 
-CREATE FUNCTION private.check_password(account_id integer, try_password text)
+CREATE FUNCTION private.generate_jwt()
+    RETURNS json_web_token
+    LANGUAGE plpgsql
+    STABLE
+    AS $$
+        DECLARE
+            my_username text := current_setting('jwt.claims.username');
+            n_moderator bigint;
+        BEGIN
+            SELECT count(*) INTO n_moderator
+               FROM private.moderator
+               WHERE account = current_setting('jwt.claims.username')
+
+            IF n_moderator = 0
+            THEN
+                RETURN ('loggedin', my_username)::json_web_token;
+            ELSE
+                RETURN ('moderator', my_username)::json_web_token;
+            END IF;
+        END;
+    $$;
+
+-- Create a new user account
+-- (the password will be stored hashed, for security)
+CREATE FUNCTION public.signup(username text, email text, password text, interface text, native_array text[], custom_native text)
+    RETURNS token_pair
+    LANGUAGE plpgsql
+    SECURITY DEFINER
+    VOLATILE
+    AS $$
+        DECLARE
+            new_account private.account;
+            native_lang text;  -- loop variable
+        BEGIN
+            INSERT INTO private.account (username, email, password_hash, interface, custom_native) VALUES (
+                username,
+                email,
+                crypt(password, gen_salt('bf')),
+                interface,
+                custom_native
+            )
+            RETURNING * INTO new_account;
+            
+            FOREACH native_lang IN ARRAY native_array
+            LOOP
+                INSERT INTO private.native (account, language)
+                VALUES (username, native_lang);
+            END LOOP;
+            
+            RETURN (('loggedin', username)::json_web_token,
+                    new_account.refresh)::token_pair;
+        END;
+    $$;
+
+CREATE FUNCTION private.check_password(try_username text, try_password text)
     RETURNS private.account
     LANGUAGE plpgsql
     STRICT
@@ -121,7 +155,7 @@ CREATE FUNCTION private.check_password(account_id integer, try_password text)
         BEGIN
             SELECT * INTO found_account
                 FROM private.account
-                WHERE id = account_id;
+                WHERE username = try_username;
             IF found_account.password_hash = crypt(try_password, found_account.password_hash)
             THEN
                 RETURN found_account;
@@ -131,8 +165,8 @@ CREATE FUNCTION private.check_password(account_id integer, try_password text)
         END;
     $$;
 
--- Check password and generate a JWT
-CREATE FUNCTION public.authenticate(account_id integer, try_password text)
+-- Check password and generate a JWT and a refresh token
+CREATE FUNCTION public.authenticate(try_username text, try_password text)
     RETURNS token_pair
     LANGUAGE plpgsql
     STRICT
@@ -142,8 +176,8 @@ CREATE FUNCTION public.authenticate(account_id integer, try_password text)
         DECLARE
             found_account private.account;
         BEGIN
-            found_account := private.check_password(account_id, try_password);
-            RETURN (('loggedin', found_account.id)::json_web_token,
+            found_account := private.check_password(try_username, try_password);
+            RETURN (private.generate_jwt(),
                     found_account.refresh)::token_pair;
         END;
     $$;
@@ -152,21 +186,9 @@ CREATE FUNCTION public.authenticate_from_email(try_email text, try_password text
     RETURNS token_pair
     LANGUAGE SQL
     STRICT
-    SECURITY DEFINER
     VOLATILE  -- so that the function is treated as a mutation, not a query
     AS $$
-        SELECT public.authenticate((SELECT id FROM private.account WHERE email = try_email),
-                                   try_password);
-    $$;
-
-CREATE FUNCTION public.authenticate_from_username(try_username text, try_password text)
-    RETURNS token_pair
-    LANGUAGE SQL
-    STRICT
-    SECURITY DEFINER
-    VOLATILE  -- so that the function is treated as a mutation, not a query
-    AS $$
-        SELECT public.authenticate((SELECT id FROM private.account WHERE username = try_username),
+        SELECT public.authenticate((SELECT username FROM private.account WHERE email = try_email),
                                    try_password);
     $$;
 
@@ -180,15 +202,15 @@ CREATE FUNCTION public.refresh(refresh_token text)
     AS $$
         DECLARE
             found_account private.account;
-            my_id integer := current_setting('jwt.claims.id');
+            my_username text := current_setting('jwt.claims.username');
         BEGIN
             SELECT * INTO found_account
                 FROM private.account
-                WHERE id = my_id;
+                WHERE username = my_username;
             
             IF found_account.refresh = refresh_token
             THEN
-                RETURN ('loggedin', my_id)::json_web_token;
+                RETURN private.generate_jwt();
             ELSE
                 RAISE EXCEPTION 'Invalid refresh token';
             END IF;
@@ -206,10 +228,10 @@ CREATE FUNCTION public.new_refresh_token(try_password text)
     AS $$
         DECLARE
             found_account private.account;
-            my_id integer := current_setting('jwt.claims.id');
+            my_username text := current_setting('jwt.claims.username');
             new_token text := MD5(random()::text);
         BEGIN
-            found_account := private.check_password(my_id, try_password);
+            found_account := private.check_password(my_username, try_password);
             
             UPDATE private.account
                 SET refresh = new_token
@@ -230,7 +252,7 @@ CREATE FUNCTION public.get_account_info()
     AS $$
         SELECT *
         FROM private.account_info
-        WHERE id = current_setting('jwt.claims.id')::integer
+        WHERE username = current_setting('jwt.claims.username')
     $$;
 
 -- Record that a user has completed the tutorial for the record page
@@ -242,7 +264,7 @@ CREATE FUNCTION public.complete_tutorial()
     AS $$
         UPDATE private.account
         SET tutorial = TRUE
-        WHERE id = current_setting('jwt.claims.id')::integer
+        WHERE username = current_setting('jwt.claims.username')
     $$;
 
 -- Training and stats functions --
@@ -255,7 +277,7 @@ CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean
     VOLATILE
     AS $$
         INSERT INTO private.practice (account, pair, audio, correct)
-        VALUES (current_setting('jwt.claims.id')::integer, pair, audio, correct);
+        VALUES (current_setting('jwt.claims.username'), pair, audio, correct);
     $$;
 
 -- number and average for each contrast, and in total, for a chosen period of time
@@ -263,17 +285,18 @@ CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean
 -- names and types to match count and sum functions
 CREATE TYPE public.stats AS (
     stamp timestamp,
-    contrast text,
+    contrast text,  -- name
     count bigint,
     sum bigint
 );
 
 CREATE TYPE private.contrast_practice AS (
-    contrast integer,
+    contrast integer,  -- id
     stamp timestamp,
     correct boolean
 );
 
+-- Get all practices for the current user, in a period of time
 CREATE FUNCTION public.get_practices(unit text, number integer)
     RETURNS SETOF private.contrast_practice
     LANGUAGE SQL
@@ -284,12 +307,13 @@ CREATE FUNCTION public.get_practices(unit text, number integer)
             date_trunc(unit, stamp) AS stamp,
             correct
         FROM private.practice
-        WHERE account = current_setting('jwt.claims.id')::integer
+        WHERE account = current_setting('jwt.claims.username')
             AND stamp > date_trunc(unit, now()) - number * ('1 ' || unit)::interval
     $$;
 -- TODO timezone?
 -- SET TIME ZONE TO ... ;
 
+-- Stats for one language, for periods of time
 CREATE FUNCTION public.get_all_stats(language_id text, unit text, number integer)
     RETURNS SETOF stats
     LANGUAGE SQL
@@ -304,6 +328,7 @@ CREATE FUNCTION public.get_all_stats(language_id text, unit text, number integer
         GROUP BY stamp, contrast
     $$;
 
+-- Performance for one contrast
 CREATE FUNCTION public.get_contrast_avg(contrast_id integer, unit text, number integer)
     RETURNS numeric
     LANGUAGE SQL
@@ -323,48 +348,169 @@ CREATE FUNCTION public.get_practice_languages(unit text, number integer)
         FROM public.get_practices(unit, number)
     $$;
 
+CREATE FUNCTION public.get_num_audio()
+    RETURNS bigint
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT count(*)
+        FROM public.audio
+        WHERE speaker = current_setting('jwt.claims.username')
+    $$;
+
+-- Moderation functions --
+
+-- Throw an error if the current user is not a moderator for the language
+-- Otherwise, do nothing
+CREATE FUNCTION public.check_moderator(language_id text)
+    RETURNS void
+    LANGUAGE plpgsql
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        BEGIN
+            IF EXISTS (
+               SELECT *
+               FROM private.moderator
+               WHERE language = language_id
+                   AND account = current_setting('jwt.claims.username')
+            ) 
+            THEN
+            ELSE
+               RAISE EXCEPTION 'Not a moderator for this language';
+            END IF;
+        END;
+    $$;
+
+CREATE FUNCTION public.check_moderator_for_file(file text)
+    RETURNS void
+    LANGUAGE plpgsql
+    STABLE
+    AS $$
+        DECLARE
+            item_id integer;
+            language_id text;
+        BEGIN
+            item_id := public.get_item_id(file);
+            language_id := public.get_item_language_id(item_id);
+            public.check_moderator(language_id);
+        END;
+    $$;
+
+-- Get some audio files that need to be moderated
+CREATE FUNCTION public.get_audio_submissions(language_id text, number integer)
+    RETURNS SETOF audio_submission
+    LANGUAGE plpgsql
+    STABLE
+    AS $$
+        BEGIN
+            private.check_moderator(language_id);
+            SELECT *
+                FROM public.audio_submission
+                WHERE public.get_item_language_id(item) = language_id
+                LIMIT number;
+        END;
+    $$;
+-- if there are many submissions across many languages,
+-- it might be worth defining an index on audio_submission for the language
+-- however, get_item_language_id would have to be falsely labelled as IMMUTABLE
+-- this is okay as long as there are never mistakes in an item's language
+
+-- Move a file from public.audio_submission to public.audio
+CREATE FUNCTION public.accept_audio_submission(file text)
+    RETURNS void
+    LANGUAGE plpgsql
+    VOLATILE
+    AS $$
+        DECLARE
+            this_audio audio_submission;
+        BEGIN
+            private.check_moderator_for_file(file)
+            DELETE FROM public.audio_submission
+               WHERE file = file
+               RETURNING * INTO this_audio;
+            INSERT INTO public.audio *
+                VALUES this_audio;
+        END;
+    $$;
+
+-- Remove a file
+CREATE FUNCTION public.reject_audio_submission(file text)
+    RETURNS void
+    LANGUAGE plpgsql
+    VOLATILE
+    AS $$
+        BEGIN
+            private.check_moderator_for_file(file);
+            DELETE
+                FROM public.audio_submission
+                WHERE id = audio_submission_id;
+        END;
+    $$;
+
 -- Permissions --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO "admin";
 
 -- All users can read public information
-GRANT USAGE ON SCHEMA public TO guest, loggedin;
-GRANT SELECT ON TABLE public.audio TO guest, loggedin;
-GRANT SELECT ON TABLE public.contrast TO guest, loggedin;
-GRANT SELECT ON TABLE public.item TO guest, loggedin;
-GRANT SELECT ON TABLE public.language TO guest, loggedin;
-GRANT SELECT ON TABLE public.pair TO guest, loggedin;
-GRANT SELECT ON TABLE public.interface_language TO guest, loggedin;
-GRANT SELECT ON TABLE public.training_language TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_text(integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_random_examples(integer, integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(text, integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_random_audio(integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrast_id(integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_contrast_name(integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_language_id(integer) TO guest, loggedin;
-GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO guest, loggedin;
+GRANT USAGE ON SCHEMA public TO anyuser;
+GRANT SELECT ON TABLE public.audio TO anyuser;
+GRANT SELECT ON TABLE public.contrast TO anyuser;
+GRANT SELECT ON TABLE public.item TO anyuser;
+GRANT SELECT ON TABLE public.language TO anyuser;
+GRANT SELECT ON TABLE public.pair TO anyuser;
+GRANT SELECT ON TABLE public.interface_language TO anyuser;
+GRANT SELECT ON TABLE public.training_language TO anyuser;
+-- Util
+GRANT EXECUTE ON FUNCTION public.get_contrast_id(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_contrast_name(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_contrast_language_id(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_item_language_id(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_text(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_item_id(text) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO anyuser;
+-- Training
+GRANT EXECUTE ON FUNCTION public.get_random_examples(integer, integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(text, integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_random_audio(integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO anyuser;
 
--- Logged in users can submit new recordings, and use the refresh code
-GRANT EXECUTE ON FUNCTION public.complete_tutorial() TO loggedin;
-GRANT EXECUTE ON FUNCTION public.get_items_to_record(text, integer) TO loggedin;
+-- Logged in users
+-- Authentication
+GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
+-- General account management
 GRANT EXECUTE ON FUNCTION public.get_account_info() TO loggedin;
+GRANT EXECUTE ON FUNCTION public.complete_tutorial() TO loggedin;
+-- Training
 GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO loggedin;
+-- Stats
 GRANT EXECUTE ON FUNCTION public.get_practices(text, integer) TO loggedin;
-GRANT EXECUTE ON FUNCTION public.submit_audio(bytea, integer, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_all_stats(text, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_contrast_avg(integer, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_practice_languages(text, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.get_num_audio() TO loggedin;
+-- Recordings (most functionality to be done on the server, not the client?)
+GRANT EXECUTE ON FUNCTION public.get_items_to_record(text, integer) TO loggedin;
 GRANT INSERT ON TABLE public.audio_submission TO loggedin;
 GRANT SELECT ON TABLE public.audio_submission TO loggedin;
-GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;
-GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
-GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
+GRANT USAGE ON SEQUENCE public.audio_file TO loggedin;
+GRANT EXECUTE ON FUNCTION public.submit_audio(text, text, integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.next_audio() TO loggedin;
 
 -- Guests can sign up or log in
 GRANT EXECUTE ON FUNCTION public.signup(text, text, text, text, text[], text) TO guest;
-GRANT EXECUTE ON FUNCTION public.authenticate(integer, text) TO guest;
+GRANT EXECUTE ON FUNCTION public.authenticate(text, text) TO guest;
 GRANT EXECUTE ON FUNCTION public.authenticate_from_email(text, text) TO guest;
-GRANT EXECUTE ON FUNCTION public.authenticate_from_username(text, text) TO guest;
+
+-- Moderators can approve and reject audio
+-- (most functionality to be done on the server, not the client?)
+GRANT INSERT ON TABLE public.audio TO moderator;
+GRANT DELETE ON TABLE public.audio_submission TO moderator;
+GRANT EXECUTE ON FUNCTION public.check_moderator(text) TO moderator;
+GRANT EXECUTE ON FUNCTION public.check_moderator_for_file(text) TO moderator;
+GRANT EXECUTE ON FUNCTION public.get_audio_submissions(text, integer) TO moderator;
+GRANT EXECUTE ON FUNCTION public.accept_audio_submission(text) TO moderator;
+GRANT EXECUTE ON FUNCTION public.reject_audio_submission(text) TO moderator;
