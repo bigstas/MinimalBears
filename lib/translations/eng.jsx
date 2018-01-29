@@ -27,7 +27,45 @@ counterpart.registerTranslations('eng', {
         intro: "<strong>Minimal Bears</strong> is an app that will help you learn new sounds in foreign languages.",
         continue: "Try it out",
         signIn: "Sign In",
-        register: "Register"
+        register: "Register",
+        profile: {
+            weekView: "Week view",
+            monthView: "Month view",
+            yearView: "Year view",
+            allContrasts: "All contrasts",
+            charts: {    
+                pieChartTitle: "Number of practices by contrast for this period",
+                barChartTitle: "Success rate by contrast for this period",
+                performanceLegendLabel: "Performance",
+                performanceYaxisLabel: "Success rate (percent)",
+                practiceLegendLabel: "Practice",
+                practiceYaxisLabel: "Practice (reps)",
+                weekdays: {
+                    0: 'Sunday',
+                    1: 'Monday',
+                    2: 'Tuesday',
+                    3: 'Wednesday',
+                    4: 'Thursday',
+                    5: 'Friday',
+                    6: 'Saturday'
+                },
+                months: {
+                    0: 'Jan',
+                    1: 'Feb',
+                    2: 'Mar',
+                    3: 'Apr',
+                    4: 'May',
+                    5: 'Jun',
+                    6: 'Jul',
+                    7: 'Aug',
+                    8: 'Sep',
+                    9: 'Oct',
+                    10: 'Nov',
+                    11: 'Dec'
+                },
+                overall: "overall"
+            }
+        }
     },
     about: {
         bearCaption: "Brown Bear has done thorough research",
@@ -228,6 +266,8 @@ counterpart.registerTranslations('eng', {
         }
     },
     edit: {
+        heading: "Moderation",
+        thisRecording: "This recording: ",
         playAll: "Play",
         playClip: "Play clip",
         zoomIn: "Zoom in",

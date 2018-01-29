@@ -14,7 +14,6 @@ const NoRecordPage = props => {
         return (
             <div className="panel animated fadeIn">
                 <Translate component="h1" content="norecord.title" />
-                {/*TODO tidy Link*/}
                 <p><Translate content="norecord.onlyLoggedIn" /><Link to="/login"><Translate content="norecord.login" /></Link><Translate content="norecord.loginReason" /></p>
                 <p><Translate content="norecord.noAccount" /><Link to="/register"><Translate content="norecord.signup" /></Link>!</p>
             </div>

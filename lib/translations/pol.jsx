@@ -24,7 +24,45 @@ counterpart.registerTranslations('pol', {
         intro: "<strong>Minimal Bears</strong> to aplikacja, która pozwoli Ci udoskonalić wymowę obcych języków.",
         continue: "Kontynuuj jako gość",
         signIn: "Wloguj",
-        register: "Zapisz się"
+        register: "Zapisz się",
+        profile: {
+            weekView: "Podgląd tygodniowy",
+            monthView: "Podgląd miesięczny",
+            yearView: "Podgląd roczny",
+            allContrasts: "Wszystkie kontrasty",
+            charts: {
+                pieChartTitle: "Number of practices by contrast for this period",
+                barChartTitle: "Procent poprawnych odpowiedzi przez ten okres",
+                performanceLegendLabel: "Procent poprawnie",
+                performanceYaxisLabel: "Poziom poprawności (procent)",
+                practiceLegendLabel: "Ilość ćwiczeń",
+                practiceYaxisLabel: "Ćwiczenia (razy)",
+                weekdays: {
+                    0: 'Niedziela',
+                    1: 'Poniedziałek',
+                    2: 'Wtorek',
+                    3: 'Środa',
+                    4: 'Czwartek',
+                    5: 'Piątek',
+                    6: 'Sobota'
+                },
+                months: {
+                    0: 'Stycznia',
+                    1: 'Lutego',
+                    2: 'Marca',
+                    3: 'Kwietnia',
+                    4: 'Maja',
+                    5: 'Czerwca',
+                    6: 'Lipca',
+                    7: 'Sierpnia',
+                    8: 'Wrzesnia',
+                    9: 'Października',
+                    10: 'Listopada',
+                    11: 'Grudnia'
+                },
+                overall: "razem"
+            }
+        }
     },
     about: {
         bearCaption: "Brązowy Miś zrobił swoje badania",

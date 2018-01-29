@@ -38,6 +38,7 @@ For Beta:
 23. Moderation audio editing
 24. Getting & displaying basic user information (i.e. username, native language, interface language)
 25. "Crawl" through the repo looking for TODO's
+26. More word pairs (esp. Polish and German)
 
 
 For full release:

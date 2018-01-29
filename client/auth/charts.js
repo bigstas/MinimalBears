@@ -1,5 +1,7 @@
 import React from 'react'
 import LoadingPage from '../auxiliary/loading'
+import counterpart from 'counterpart'
+import Translate from 'react-translate-component'
 // other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
 import { Bar, Pie } from 'react-chartjs-2' // Charts
 import { graphql } from 'react-apollo'
@@ -128,35 +130,13 @@ function mapNodesToChartData(data, period, contrast) {
 }
 
 function mapChartDataToLabelledMixChartData(period, bins) {
-    const dayMapper = {
-        0: 'Sunday',
-        1: 'Monday',
-        2: 'Tuesday',
-        3: 'Wednesday',
-        4: 'Thursday',
-        5: 'Friday',
-        6: 'Saturday'
-    }
-    const monthMapper = {
-        0: 'Jan',
-        1: 'Feb',
-        2: 'Mar',
-        3: 'Apr',
-        4: 'May',
-        5: 'Jun',
-        6: 'Jul',
-        7: 'Aug',
-        8: 'Sep',
-        9: 'Oct',
-        10: 'Nov',
-        11: 'Dec'
-    }
     let now = new Date()
     const labelFunctions = {
-        week:  (daysAgo) => dayMapper[mod(now.getDay()-daysAgo, 7)],
+        week:  (daysAgo) => counterpart.translate([ "home", "profile", "charts", "weekdays", mod(now.getDay()-daysAgo, 7).toString() ]), //dayMapper[mod(now.getDay()-daysAgo, 7)],
         month: (daysAgo) => {
-            now.setDate(now.getDate()-daysAgo)
-            return ( now.getDate().toString() + " " + monthMapper[now.getMonth()] )
+            let date = new Date()
+            date.setDate(date.getDate()-daysAgo)
+            return ( date.getDate().toString() + " " + counterpart.translate([ "home", "profile", "charts", "months", date.getMonth().toString() ]) )
         },
         year: (monthsAgo) => monthMapper[mod(now.getMonth()-monthsAgo, 12)]
     }
@@ -166,7 +146,6 @@ function mapChartDataToLabelledMixChartData(period, bins) {
     let mixBarValues =  []
     let mixLineValues = []
     for (let binsAgo=bins.length-1; binsAgo>=0; binsAgo--) {
-        let now = new Date()
         const label = labelFunction(binsAgo)
         mixLabels.push(label)
         if (bins[binsAgo][0] === 0) {
@@ -215,7 +194,7 @@ function extractChartRawData(period, data, contrast) {
         fullCount += arr[0]
         total += arr[1]
     }
-    barLabels.push('overall')
+    barLabels.push( counterpart.translate([ "home", "profile", "charts", "overall"]) )
     barValues.push(Math.round(100*total/fullCount))
     // debug logs
     console.log(barLabels)
@@ -290,7 +269,7 @@ function makeChartData(period, data, contrast) {
             labels: mixData.mixLabels,
             datasets: [{
                 type:'line',
-                label: 'Performance',
+                label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
                 data: mixData.mixLineValues,
                 fill: false,
                 borderColor: '#EC932F',
@@ -303,7 +282,8 @@ function makeChartData(period, data, contrast) {
             },
             {
                 type: 'bar',
-                label: 'Practice',
+                /* TODO: counterpart not updating on change of language */
+                label: counterpart.translate(["home", "profile", "charts", "practiceLegendLabel"]),
                 data: mixData.mixBarValues,
                 fill: false,
                 backgroundColor: '#71B37C',
@@ -404,63 +384,70 @@ const pieOptions = {
         }
     }
 }
-    
-const mixOptions = {
-    responsive: true,
-    tooltips: {
-        mode: 'label'
-    },
-    elements: {
-        line: {
-            fill: false
-        }
-    },
-    scales: {
-        xAxes: [{
-            display: true,
-            scaleLabel: {
-                display: true,
-                labelString: 'Time ago'
-            },
-            gridLines: { display: false },
-            labels: { show: true }
-        }],
-        yAxes: [{
-            type: 'linear',
-            display: true,
-            position: 'left',
-            id: 'y-axis-1',
-            scaleLabel: {
-                display: true,
-                labelString: 'Practice (reps)'
-            },
-            ticks: {
-                suggestedMin: 0,    // minimum will be 0, unless there is a lower value
-                suggestedMax: 10    // maximum will be 10 for now (TODO: handle this programmatically... or at least test it!)
-            },
-            gridLines: { display: false },
-            labels: { show: true }
+
+// This is a function that returns an object rather than just an object's definition, as if it is the latter
+// then it evaluates too early, before counterpart has a chance to set the interface language, and it tries
+// to find the translation for language 'en' (and fails - we are using three-letter language codes).
+function generateMixOptions() {
+    return {
+        responsive: true,
+        tooltips: {
+            mode: 'label'
         },
-        {
-            type: 'linear',
-            display: true,
-            position: 'right',
-            id: 'y-axis-2',
-            scaleLabel: {
-                display: true,
-                labelString: 'Success rate (%)'
-            },
-            ticks: {
-                suggestedMin: 50,    // minimum will be 50, unless there is a lower value
-                suggestedMax: 100
-            },
-            gridLines: {
-                display: false
-            },
-            labels: {
-                show: true
+        elements: {
+            line: {
+                fill: false
             }
-        }]
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time ago'
+                },
+                gridLines: { display: false },
+                labels: { show: true }
+            }],
+            yAxes: [{
+                type: 'linear',
+                display: true,
+                position: 'left',
+                id: 'y-axis-1',
+                scaleLabel: {
+                    display: true,
+                    /* TODO - debug this wierdness */
+                    labelString: /*(<Translate content="home.profile.charts.practiceYaxisLabel" />)*/ counterpart.translate(["home", "profile", "charts", "practiceYaxisLabel"])
+                },
+                ticks: {
+                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value
+                    suggestedMax: 10    // maximum will be 10 for now (TODO: handle this programmatically... or at least test it!)
+                },
+                gridLines: { display: false },
+                labels: { show: true }
+            },
+            {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                id: 'y-axis-2',
+                scaleLabel: {
+                    display: true,
+                    /* TODO - debug this wierdness */
+                    labelString: counterpart.translate(["home", "profile", "charts", "performanceYaxisLabel"])
+                },
+                ticks: {
+                    suggestedMin: 50,    // minimum will be 50, unless there is a lower value
+                    suggestedMax: 100
+                },
+                gridLines: {
+                    display: false
+                },
+                labels: {
+                    show: true
+                }
+            }]
+        }
     }
 }
 
@@ -478,14 +465,14 @@ const Charts = React.createClass({
             return ( <p>No training occured for this language and contrast in this period</p> )
         }
                     
-        let pieChart, mixChart, barChart, pieChartTitle, mixChartTitle, barChartTitle
+        let pieChart, mixChart, barChart, mixChartTitle
         
         const pieChartData = chartData.pieChartData[this.props.themeIndex]
         const mixChartData = chartData.mixChartData[this.props.themeIndex]
         const barChartData = chartData.barChartData[this.props.themeIndex]
 
         pieChart = <Pie data={pieChartData} options={pieOptions} />
-        mixChart = <Bar data={mixChartData} options={mixOptions} />
+        mixChart = <Bar data={mixChartData} options={generateMixOptions()} />
         barChart = <Bar data={barChartData} options={barOptions} />
 
         if ( this.props.contrast === 'all') {
@@ -499,9 +486,9 @@ const Charts = React.createClass({
             <div>
                 {mixChartTitle}
                 {mixChart}
-                <h3>Number of practices by contrast for this period</h3>
+                <Translate component="h3" content="home.profile.charts.pieChartTitle" />
                 {pieChart}
-                <h3>Success rate by contrast for this period</h3>
+                <Translate component="h3" content="home.profile.charts.barChartTitle" />
                 {barChart}
             </div>
         )

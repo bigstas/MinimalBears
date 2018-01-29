@@ -93,13 +93,13 @@ const UserProfile = React.createClass({
                     <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" value={this.state.contrast} />
             {/* RADIO BUTTONS */}
                     <label>
-                        <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} />Week view
+                        <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} /><Translate content="home.profile.weekView" />
                     </label>
                     <label>
-                        <input type="radio" value="month" checked={this.state.period === 'month'} onChange={this.handlePeriodChange} />Month view
+                        <input type="radio" value="month" checked={this.state.period === 'month'} onChange={this.handlePeriodChange} /><Translate content="home.profile.monthView" />
                     </label>
                     <label>
-                        <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} />Year view
+                        <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} /><Translate content="home.profile.yearView" />
                     </label>
                     <br/>
                     <input
@@ -116,9 +116,6 @@ const UserProfile = React.createClass({
             {/* CHARTS */}
                     <Charts language={this.state.language} contrast={this.state.contrast} period={this.state.period} themeIndex={this.state.themeIndex} />
                 </div>
-                <TwitterButton className="button" id="twitterButton" element="div" url={url}>
-                        {" Share us on Twitter"}
-                </TwitterButton>
             </div>
         )
     }

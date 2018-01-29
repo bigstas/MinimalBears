@@ -113,8 +113,8 @@ const EditingPage = React.createClass({
         
         return(
             <div className='panel animated fadeIn' id='edit'>
-                <p>Welcome to the editing page!</p>
-                <p>This recording: {this.state.src[this.state.whichSrc]}</p> {/* The idea is that the moderator should be able to see what word was supposed to be being recorded, otherwise we could have silly errors! */}
+                <Translate component="h1" content="edit.heading" />
+                <p><Translate content="edit.thisRecording" />{this.state.src[this.state.whichSrc]}</p> {/* The idea is that the moderator should be able to see what word was supposed to be being recorded, otherwise we could have silly errors! */}
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
                 <div style={{display: "block"}}>
                     <div className="authbtn" onClick={this.playOrPause} ><Translate content="edit.playAll" /></div>

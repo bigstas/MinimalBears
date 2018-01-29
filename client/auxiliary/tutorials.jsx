@@ -1,7 +1,6 @@
 import React from 'react'
 import Joyride from 'react-joyride'
 import Translate from 'react-translate-component'
-import counterpart from 'counterpart'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
     
