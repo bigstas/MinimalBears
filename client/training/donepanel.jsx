@@ -25,19 +25,18 @@ const DonePanel = React.createClass({
             ["bear4.png", "Remember to share with your friends!"], 
             ["bear6.png", "Bears never forget!"]
         ]
-        const pic = random(bearPics)
-        console.log(pic)
-        // For some reason, this is running twice - it seems that the page is re-rendering twice. TODO - should only re-render once.
-        // Note: it appears from the console.log that the first time, the data output of graphql does not contain the key contrastAverage, whereas the second time it does contain it (with a value of null).
-        // Is this why it's refreshing? What is going on here?
         
         const statsButton = (this.props.loggedIn ? 
             <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
             <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.viewStats"} /></div>
         )
         
+        if (this.props.contrastAverage.loading) { return <span></span> }
         console.log(this.props.contrastAverage)
-        const contrastAverage = this.props.contrastAverage.getContrastAvg
+        const contrastAverage = Math.round(100*this.props.contrastAverage.getContrastAvg)
+        // debug logs
+        const pic = random(bearPics)
+        console.log(pic)
         
         return (
             <div className="panel animated fadeIn">
@@ -64,15 +63,17 @@ const DonePanel = React.createClass({
     }
 })
 
-const contrastAverageQuery = gql`query($contrastId:Int){
-getContrastAvg(contrastId: $contrastId)
+const contrastAverageQuery = gql`query($contrastId:Int, $unit: String, $number: Int){
+    getContrastAvg(contrastId: $contrastId, unit: $unit, number: $number)
 }`
 
 const contrastAverageQueryConfig = {
     name: 'contrastAverage',
     options: (ownProps) => ({
         variables: {
-            contrastId: ownProps.activeContrastId
+            contrastId: ownProps.activeContrastId,
+            unit: 'year',
+            number: 1
         }
     })
 }

@@ -5,21 +5,13 @@
 - correct.wav originally called 322930__rhodesmas__success-03.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
 - finish.wav originally called 322929__rhodesmas__success-04.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
 */
-
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import Translate from 'react-translate-component'
 import DonePanel from './donepanel'
-
-// new gql way of getting data...
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
-// random function not used in this file anymore as the random selection is done on the server. TODO - Remove this function?
-function random(myArray) {
-    const rand = myArray[Math.floor(Math.random() * myArray.length)]
-    return rand
-}
 
 // Progress bar
 const ProgressBar = React.createClass({
@@ -34,10 +26,7 @@ const ProgressBar = React.createClass({
 
 // Progress button
 const ProgressButton = React.createClass({
-    
     render() {
-        // Uses CSS animate.css library. Syntax is:
-        // className={'someClass otherClass classesThatHaveNothingToDoWithTheLibrary animated classThatTellsYouWhichWayYouWantToAnimateFromTheLibrary'}
         let btnClass = 'button progressButton animated rubberBand' // could do styling depending on mode if we want
         let label
         if      (this.props.mode === "wait")     { label = "train.progressLabel.begin" }
@@ -133,7 +122,7 @@ const Arena = React.createClass({
                 const snd = new Audio("incorrect.wav")
                 snd.play()
             }
-            // Below: TODO - CHECK if this is the right audio to use!! (and the right pair, & the right correct)
+            // send statistic to the database (right or wrong answer, audio, pair, timestamp)
             this.props.statsMutation({
                 variables: {
                     input: { 
@@ -207,8 +196,7 @@ const Arena = React.createClass({
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
                        activeContrastId={this.props.activeContrastId}
-                       average="80" /> 
-            /* TODO - average should actually refer to some statistic */
+                    /> 
         } else {
             if (this.state.mode === "done") {
                 setTimeout(this.restart, 1500) // wait for a moment before showing the results page

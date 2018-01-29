@@ -114,7 +114,7 @@ counterpart.registerTranslations('pol', {
             loginLink: "Masz już konto? Zaloguj.",
             tooltip: "Dlaczego my się pytamy: <br>You can contribute to the project by recording your voice saying words in your native language. <br>Knowing your native language will allow us to ask you for words in the appropriate language. <br>Nie dzielimy się Twoimi danami z nikim.",
             errors: {
-                serverError: "We cannot connect to the server! Check your internet connection.",
+                serverError: "Nie możemy Cię połączyć z serwerem! Sprawdź Twoje połączenie internetowe.",
                 duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
                 duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
             }

@@ -1,6 +1,6 @@
 // Question mark image taken from wikimedia commons (open source)
 
-import { Navigation, Link } from 'react-router'
+import { Navigation, Link, browserHistory } from 'react-router'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -98,15 +98,19 @@ const AuthJoinPage = React.createClass({
             .then((response) => {
                 const newUserId = response.data.signup.integer
                 console.log(newUserId)
-                // TODO log in and change page (instead of alert)
-                alert('New user created with id ' + newUserId + ' and username ' + this.state.username)
+                console.log('New user created with id ' + newUserId + ' and username ' + this.state.username)
+                // TODO log in (below)
+                // uncomment below and insert JWT to auto-login
+                //this.props.callbackUser( /* JWT goes in here!! */)
+                // change page (navigates to Home)
+                browserHistory.push('/')
             }).catch((error) => {
                 // TODO test this to see whether the translation is working! (How to do this??)
                 if (error.networkError) {
                     alert( counterpart.translate(["auth", "register", "errors", "serverError"]) )
                 } else {
                     // Apart from network errors, the only error we would expect is a duplicate email address -- OR USERNAME (TODO)
-                    // TODO this is throwing email errors when it should be throwing email errors (i.e. when you use the same username, it tells you to change the email address)
+                    // TODO this is throwing email errors when it should be throwing username errors (i.e. when you use the same username, it tells you to change the email address)
                     alert( counterpart.translate(["auth", "register", "errors", "duplicateEmail"]) )  // TODO add link
                     console.log(error.graphQLErrors[0].message)
                 }

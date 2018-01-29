@@ -29,9 +29,6 @@ const Dropdown = React.createClass({
     logOut() {
         this.props.callbackLogOut()
         alert("You are logging out :)")
-        // NOTE: for some reason when you click Log Out and then immediately click Log In, sometimes nothing happens.
-        // It appears that this is when the mouse has not moved from the Log Out position, and you need to roll the mouse out and back in and then the pointer changes to show that it is clickable again.
-        // TODO: This may be something to fix.
     },
     
     render() {
@@ -41,7 +38,6 @@ const Dropdown = React.createClass({
             registerElement = <span /> // "empty" element
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
-            // TODO: should this link not be available if you are currently on the login page?
             authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
             registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
             contactUs = <span />

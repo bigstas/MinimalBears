@@ -56,7 +56,6 @@ const LanguageSelector = React.createClass({
      */
     render() {
         if (this.props.data.loading) { return <LoadingPage /> }
-        // TODO: the change from allLanguages to allTrainingLanguages - does this have to change the way the Translate works (it was working differently before - see the translations files for details)?
         const options = this.props.data.allTrainingLanguages.nodes.map(language =>
             ({text: <Translate content={"train.language."+language.id.toString()} />,
               id: language.id,

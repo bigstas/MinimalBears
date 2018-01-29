@@ -17,7 +17,6 @@ const RecordPageTutorial = React.createClass({
                            '#submitButton',  //6
                            '#tutorialButton']   //7
         
-        // TODO add callback for completing the tutorial
         return(
             <Joyride
                 ref={c => (this.joyride = c)}
