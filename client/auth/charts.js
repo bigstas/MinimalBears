@@ -138,7 +138,7 @@ function mapChartDataToLabelledMixChartData(period, bins) {
             date.setDate(date.getDate()-daysAgo)
             return ( date.getDate().toString() + " " + counterpart.translate([ "home", "profile", "charts", "months", date.getMonth().toString() ]) )
         },
-        year: (monthsAgo) => monthMapper[mod(now.getMonth()-monthsAgo, 12)]
+        year: (monthsAgo) =>  counterpart.translate([ "home", "profile", "charts", "months", mod(now.getMonth()-monthsAgo, 12).toString() ]) // monthMapper[mod(now.getMonth()-monthsAgo, 12)]
     }
     const labelFunction = labelFunctions[period]
     
@@ -212,7 +212,7 @@ function extractChartRawData(period, data, contrast) {
 }
 
 
-function makeChartData(period, data, contrast) {
+function makeChartData(period, data, contrast, blank) {
     // period is "week", "month", or "year"
     // data is the raw data object passed from the database
     console.log(data) 
@@ -325,7 +325,7 @@ function makeChartData(period, data, contrast) {
         barChartData: [{
             labels: barData.barLabels,
             datasets: [{
-                label: 'Percent correct',
+                label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
                 backgroundColor: 'rgba(255,99,132,0.2)',
                 borderColor: 'rgba(255,99,132,1)',
                 borderWidth: 1,
@@ -337,7 +337,7 @@ function makeChartData(period, data, contrast) {
         {
             labels: barData.barLabels,
             datasets: [{
-                label: 'Percent correct',
+                label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
                 backgroundColor: 'rgba(255,99,132,0.2)',
                 borderColor: 'rgba(255,99,132,1)',
                 borderWidth: 1,
@@ -350,20 +350,22 @@ function makeChartData(period, data, contrast) {
     return chartdata
 }
 
-const barOptions = {
-    maintainAspectRatio: true,
-    legend: { display: false },
-    scales: {
-        yAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: 'Percent correct'
-            },
-            ticks: {
-                suggestedMin: 40,    // minimum will be 40, unless there is a lower value
-                suggestedMax: 100
-            }
-        }]
+function generateBarOptions() {
+    return {
+        maintainAspectRatio: true,
+        legend: { display: false },
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
+                },
+                ticks: {
+                    suggestedMin: 40,    // minimum will be 40, unless there is a lower value
+                    suggestedMax: 100
+                }
+            }]
+        }
     }
 }
 
@@ -416,8 +418,7 @@ function generateMixOptions() {
                 id: 'y-axis-1',
                 scaleLabel: {
                     display: true,
-                    /* TODO - debug this wierdness */
-                    labelString: /*(<Translate content="home.profile.charts.practiceYaxisLabel" />)*/ counterpart.translate(["home", "profile", "charts", "practiceYaxisLabel"])
+                    labelString: counterpart.translate(["home", "profile", "charts", "practiceYaxisLabel"])
                 },
                 ticks: {
                     suggestedMin: 0,    // minimum will be 0, unless there is a lower value
@@ -452,6 +453,20 @@ function generateMixOptions() {
 }
 
 const Charts = React.createClass({
+    getInitialState() {
+        // This is hacky. And elegant?
+        // The Charts object listens for changes, then runs this which changes the state, so that the counterpart functions re-run and the labels are updated. 
+        // It doesn't matter what the state actually is.
+        return({ blank: "foo" })
+    },
+    
+    localeChanged(newLocale) {
+        this.setState({ 
+            // just anything, so long as it's different between languages so that the state changes
+            blank: counterpart.translate('home.welcome')
+        })
+    },
+    
     render() {
         if (this.props.allStats.loading) {
             return( <LoadingPage /> )
@@ -459,7 +474,7 @@ const Charts = React.createClass({
         
         const allStats = this.props.allStats.getAllStats
         console.log(allStats)
-        const chartData = makeChartData(this.props.period, allStats, this.props.contrast)
+        const chartData = makeChartData(this.props.period, allStats, this.props.contrast, this.state.blank)
         console.log(chartData)
         if (chartData === false) {
             return ( <p>No training occured for this language and contrast in this period</p> )
@@ -473,13 +488,13 @@ const Charts = React.createClass({
 
         pieChart = <Pie data={pieChartData} options={pieOptions} />
         mixChart = <Bar data={mixChartData} options={generateMixOptions()} />
-        barChart = <Bar data={barChartData} options={barOptions} />
+        barChart = <Bar data={barChartData} options={generateBarOptions()} />
 
         if ( this.props.contrast === 'all') {
-            mixChartTitle = <h3>Practice and success rate for all contrasts</h3>            
+            mixChartTitle = <Translate component="h3" content="home.profile.charts.mixChartTitleAllContrasts" /> //<h3>Practice and success rate for all contrasts</h3>            
         } else {
-            const titleString = "Practice and success rate for contrast " + this.props.contrast
-            mixChartTitle = <h3>{titleString}</h3>
+            //const titleString = "Practice and success rate for contrast " + this.props.contrast
+            mixChartTitle = <h3><Translate content="home.profile.charts.mixChartTitleSomeContrast" />{this.props.contrast}</h3>
         }
 
         return (
@@ -492,7 +507,17 @@ const Charts = React.createClass({
                 {barChart}
             </div>
         )
+    },
+    
+    componentDidMount: function() {
+        // event listener: listens to locale changes
+        counterpart.onLocaleChange(this.localeChanged)
+    },
+    componentWillUnmount: function() {
+        // stop listening to locale changes
+        counterpart.offLocaleChange(this.localeChanged)
     }
+        
 })
 
 const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: Int) {

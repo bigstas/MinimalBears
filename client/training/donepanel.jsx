@@ -19,16 +19,11 @@ const DonePanel = React.createClass({
     },
     
     render() {
-        const bearPics = [
-            ["bear2.png", "There's no greater power than the power of Hi 5."], 
-            ["bear3.png", "Give a bear a fish, and it will be your friend for a day."], 
-            ["bear4.png", "Remember to share with your friends!"], 
-            ["bear6.png", "Bears never forget!"]
-        ]
+        const bearPics = ["bear2.png", "bear3.png", "bear4.png", "bear6.png"]
         
         const statsButton = (this.props.loggedIn ? 
-            <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.viewStats"} /></Link></div> :
-            <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.viewStats"} /></div>
+            <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.donePanel.viewStats"} /></Link></div> :
+            <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.donePanel.viewStats"} /></div>
         )
         
         if (this.props.contrastAverage.loading) { return <span></span> }
@@ -40,21 +35,22 @@ const DonePanel = React.createClass({
         
         return (
             <div className="panel animated fadeIn">
-                <img id="endImage" src={pic[0]} />
-                <p className="caption"><em>{pic[1]}</em></p>
+                <img id="endImage" src={pic} />
+                {/*<p className="caption"><em>{pic[1]}</em></p> /* TODO? Do we want captions? */}
                 <div>
                     <div className="endDiv" id="resultsDiv">
                         <div className="endDiv">
-                            <p className="hugeNumberTitle">Your score:</p>
+                            <p className="hugeNumberTitle"><Translate content="train.donePanel.yourScore" /></p>
                             <p className="hugeNumber">{this.props.score}%</p>
                         </div>
                         <div className="endDiv">
-                            <p className="hugeNumberTitle">Your average:</p>
+                            <p className="hugeNumberTitle"><Translate content="train.donePanel.yourAverage" /></p>
                             <p className="hugeNumber">{contrastAverage}%</p>
                         </div>
                     </div>
                     <div className="endDiv" id="buttonDiv">
-                        <div className="button endButton" onClick={this.props.handleClick}>Play again</div>
+                        {/* TODO: these two are styling differently on hover, they should style the same */}
+                        <div className="button endButton" onClick={this.props.handleClick}><Translate content="train.donePanel.playAgain" /></div>
                         {statsButton}
                     </div>
                 </div>

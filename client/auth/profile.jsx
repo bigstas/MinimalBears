@@ -21,7 +21,7 @@ const TopBand = React.createClass({
                 <div id='overview'>
                     <h2 className="animated bounce">{this.props.username}</h2>
                     {/* TODO: "kudos" etc. shuold be populated from database */}
-                    <p>Recordings submitted: 19 <br/>Recordings accepted: 12 <br/>Total kudos: 43</p>
+                    <p><Translate content="home.profile.recordingsSubmitted" />19 <br/><Translate content="home.profile.recordingsAccepted" />12 <br/><Translate content="home.profile.recordingsPending" />4 <br/><Translate content="home.profile.totalKudos" />43</p>
                 </div>
             </div>
         )
@@ -91,6 +91,7 @@ const UserProfile = React.createClass({
                         })}
                     </select>
                     <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" value={this.state.contrast} />
+                    <br/>
             {/* RADIO BUTTONS */}
                     <label>
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} /><Translate content="home.profile.weekView" />

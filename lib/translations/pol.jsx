@@ -26,11 +26,17 @@ counterpart.registerTranslations('pol', {
         signIn: "Wloguj",
         register: "Zapisz się",
         profile: {
+            recordingsSubmitted: "Nagrania nagrane: ",
+            recordingsAccepted: "Nagrania zaakceptowane: ",
+            recordingsPending: "Oczekujące moderacji: ",
+            totalKudos: "Punkty nagrywania: ",
             weekView: "Podgląd tygodniowy",
             monthView: "Podgląd miesięczny",
             yearView: "Podgląd roczny",
             allContrasts: "Wszystkie kontrasty",
             charts: {
+                mixChartTitleAllContrasts: "Practice and success rate na wszystkie kontrasty",
+                mixChartTitleSomeContrast: "Practice and success rate na kontrast ",
                 pieChartTitle: "Number of practices by contrast for this period",
                 barChartTitle: "Procent poprawnych odpowiedzi przez ten okres",
                 performanceLegendLabel: "Procent poprawnie",
@@ -47,18 +53,18 @@ counterpart.registerTranslations('pol', {
                     6: 'Sobota'
                 },
                 months: {
-                    0: 'Stycznia',
-                    1: 'Lutego',
-                    2: 'Marca',
-                    3: 'Kwietnia',
-                    4: 'Maja',
-                    5: 'Czerwca',
-                    6: 'Lipca',
-                    7: 'Sierpnia',
-                    8: 'Wrzesnia',
-                    9: 'Października',
-                    10: 'Listopada',
-                    11: 'Grudnia'
+                    0: 'Styczeń',
+                    1: 'Luty',
+                    2: 'Marzec',
+                    3: 'Kwiecień',
+                    4: 'Maj',
+                    5: 'Czerwiec',
+                    6: 'Lipiec',
+                    7: 'Sierpień',
+                    8: 'Wrzesień',
+                    9: 'Październik',
+                    10: 'Listopad',
+                    11: 'Grudzień'
                 },
                 overall: "razem"
             }
@@ -183,9 +189,14 @@ counterpart.registerTranslations('pol', {
             next: "Następne",
             goAgain: "Zagraj jeszcze raz"
         },
-        viewStats: "View Stats",
         correct: "Dobrze!",
-        wrong: "Źle!"
+        wrong: "Źle!",
+        donePanel: {
+            playAgain: "Zagraj znowu",
+            viewStats: "Zobacz statystyki",
+            yourScore: "Twój wynik:",
+            yourAverage: "Twoja średnia:"
+        }
     },
     norecord: {
         title: "Join the club first!",

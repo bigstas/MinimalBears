@@ -29,11 +29,17 @@ counterpart.registerTranslations('eng', {
         signIn: "Sign In",
         register: "Register",
         profile: {
+            recordingsSubmitted: "Recordings submitted: ",
+            recordingsAccepted: "Recordings accepted: ",
+            recordingsPending: "Pending moderation: ",
+            totalKudos: "Total Kudos: ",
             weekView: "Week view",
             monthView: "Month view",
             yearView: "Year view",
             allContrasts: "All contrasts",
-            charts: {    
+            charts: {
+                mixChartTitleAllContrasts: "Practice and success rate for all contrasts",
+                mixChartTitleSomeContrast: "Practice and success rate for contrast ",
                 pieChartTitle: "Number of practices by contrast for this period",
                 barChartTitle: "Success rate by contrast for this period",
                 performanceLegendLabel: "Performance",
@@ -186,9 +192,14 @@ counterpart.registerTranslations('eng', {
             next: "Next",
             goAgain: "Play again"
         },
-        viewStats: "View Stats",
         correct: "Correct!",
-        wrong: "Oops!"
+        wrong: "Oops!",
+        donePanel: {
+            playAgain: "Play again",
+            viewStats: "View Stats",
+            yourScore: "Your score:",
+            yourAverage: "Your average:"
+        }
     },
     norecord: {
         title: "Join the club first!",
