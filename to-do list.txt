@@ -19,19 +19,13 @@ For Beta:
 5. CANCELLED (now using only Edit page, no Moderation page)
 6. CANCELLED (expansion into further languages will be centrally controlled)
 7. DONE
-8. any images to be added (Gergő)
-    - a logo
-    - a placeholder image for the profile page? (tbd)
-    - any changes to the favicon?
-    - great free open-source icon libraries to check out: http://mariodelvalle.github.io/CaptainIconWeb/; http://mapsk.in/
+8. DONE (for Beta)
 9. DONE
 10. DONE
 11. DONE
-12. DONE? (improvement in user experience on Arena page (mostly Gergő))
-13. testing code (code that checks everything is working correctly) (Guy and Staś)
-    - Jest is online with dummy.test.js
-    - need to put in testing code for other files
-14. use of more efficient and better-scaling db calls (Guy)
+12. DONE
+13. POSTPONED
+14. DONE
 15. profile with user data, like statistics (mostly Staś)
     - last statistic - how much people have contributed recordings
 16. DONE
@@ -41,13 +35,17 @@ For Beta:
 20. DONE
 21. DONE
 22. DONE
-23. "Joining allows you to keep track of your progress, contribute recordings, and ***receive suggestions*** for what you should practise next." Receive suggestions? What are we going to to do about this?
+23. Moderation audio editing
+24. Getting & displaying basic user information (i.e. username, native language, interface language)
+25. "Crawl" through the repo looking for TODO's
 
 
 For full release:
 1. forgotten password retrieval
 2. check email address exists (e.g. they have to click a link in their email to be able to register)
 3. spam-filter the Contact Us page (use an "I am not a robot" check)
-4. leaderboard of how much people have practised? (as part of stats)
-5. social media sharing buttons
-6. contrast selector button "bug": make sure the contrasts start rolling when the page loads with the mouse over one of the buttons
+4. social media sharing buttons?
+5. contrast selector button "bug": make sure the contrasts start rolling when the page loads with the mouse over one of the buttons
+6. testing code (code that checks everything is working correctly) (Guy and Staś)
+    - Jest is online with dummy.test.js
+    - need to put in testing code for other files

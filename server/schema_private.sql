@@ -62,22 +62,12 @@ CREATE TABLE private.practice (
 CREATE INDEX ON private.practice (account);
 -- (currently no check that the audio's item is one element of the pair)
 
--- TODO: check this definition!
-CREATE TABLE private.message (
-    id serial PRIMARY KEY,
-    account integer NOT NULL REFERENCES private.account(id) ON UPDATE CASCADE,
-    stamp timestamp NOT NULL DEFAULT now(),
-    message text NOT NULL,
-    topic text NOT NULL
-);
 
 -- Authentication functions --
 -- These allow controlled access to the private schema
 
 -- Create a new user account
 -- (the password will be stored hashed, for security)
--- TODO: we should have something that says whether they're a moderator or not, so that the app can decide
--- whether we give them access to moderation or not
 CREATE FUNCTION public.signup(email text, password text, username text, interface text, native_array text[], custom_native text)
     RETURNS integer
     LANGUAGE plpgsql
@@ -230,16 +220,6 @@ CREATE FUNCTION public.new_refresh_token(try_password text)
         END;
     $$;
 
--- submit a message from the user (TODO: check this!)
-CREATE FUNCTION public.send_message(message text, topic text)
-    RETURNS void
-    LANGUAGE SQL
-    SECURITY DEFINER
-    VOLATILE
-    AS $$
-        INSERT INTO private.message (account, stamp, message, topic)
-        VALUES (current_setting('jwt.claims.id')::integer, now(), message, topic);
-    $$;
 
 -- Account maintenance functions --
 
@@ -375,7 +355,7 @@ GRANT EXECUTE ON FUNCTION public.get_contrast_language_id(integer) TO guest, log
 GRANT EXECUTE ON FUNCTION public.get_language_id(integer) TO guest, loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_from_string(text) TO guest, loggedin;
 
--- Logged in users can submit new recordings, use the refresh code, and leave messages
+-- Logged in users can submit new recordings and use the refresh code
 GRANT EXECUTE ON FUNCTION public.complete_tutorial() TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_to_record(text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_account_info() TO loggedin;
@@ -390,7 +370,6 @@ GRANT SELECT ON TABLE public.audio_submission TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_submission_id_seq TO loggedin;
 GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
-GRANT EXECUTE ON FUNCTION public.send_message(text, text) TO loggedin;
 
 -- Guests can sign up or log in
 GRANT EXECUTE ON FUNCTION public.signup(text, text, text, text, text[], text) TO guest;

@@ -102,7 +102,7 @@ counterpart.registerTranslations('pol', {
         confirmPassword: "Potwierdź hasło:",
         register: {
             joinTitle: "Załącz się.",
-            joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
+            joining: "Joining allows you to keep track of your progress and contribute recordings.",
             emailError: "Błędny adres emailowy.",
             usernameError: "Ta nazwa użytownika jest już w użytku. Proszę wybrać inną.",
             passwordError: "Twoje hasło musi być takie same w obu polach.",
@@ -232,5 +232,11 @@ counterpart.registerTranslations('pol', {
         acceptFull: "Akceptuj całość",
         acceptSegment: "Akceptuje kawałek",
         reject: "Odrzuć"
+    },
+    contact: {
+        heading: "Skontaktuj się",
+        text: "Można się skontaktować z twórcami tej aplikacji korzystając z poniżej podanych adresów emailowych. Please don't hesitate to tell us about any bugs you find or any features you would like to see included.",
+        programming: "Programowanie: ",
+        artwork: "Grafika: "
     }
 })

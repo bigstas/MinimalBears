@@ -102,7 +102,7 @@ counterpart.registerTranslations('fra', {
         confirmPassword: "Confirmer votre mot de passe:",
         register: {
             joinTitle: "Créer un compte",
-            joining: "Créer un compte vous permet de suivre votre progrès, participer aux enregistrements, et recevoir des suggestions concernant les sons à pratiquer.",
+            joining: "Créer un compte vous permet de suivre votre progrès et participer aux enregistrements.",
             emailError: "courrier électronique invalide",
             usernameError: "nom d'utilisateur pas disponible",
             passwordError: "les deux mots de passe ne sont pas les mêmes",
@@ -232,5 +232,11 @@ counterpart.registerTranslations('fra', {
         acceptFull: "Accepter l'enregistrement",
         acceptSegment: "Accepter l'extrait",
         reject: "Rejeter"
+    },
+    contact: {
+        heading: "Contactez-nous",
+        text: "You can contact the developers using the following email addresses. Please don't hesitate to tell us about any bugs you find or any features you would like to see included.",
+        programming: "Programming: ",
+        artwork: "Artwork: "
     }
 })

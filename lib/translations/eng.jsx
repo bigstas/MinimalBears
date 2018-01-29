@@ -105,7 +105,7 @@ counterpart.registerTranslations('eng', {
         confirmPassword: "Confirm password:",
         register: {
             joinTitle: "Join.",
-            joining: "Joining allows you to keep track of your progress, contribute recordings, and receive suggestions for what you should practise next.",
+            joining: "Joining allows you to keep track of your progress and contribute recordings.",
             emailError: "invalid email address",
             usernameError: "username unavailable",
             passwordError: "password mismatch",
@@ -236,9 +236,10 @@ counterpart.registerTranslations('eng', {
         acceptSegment: "Accept clip",
         reject: "Reject"
     },
-    suggest: {
-        mainMessage: "On this page, you can suggest either new contrasts for a given language, or new word pairs for a given contrast. Please choose which you would like to suggest below.",
-        contrasts: "contrasts",
-        words: "words"
+    contact: {
+        heading: "Contact Us",
+        text: "You can contact the developers using the following email addresses. Please don't hesitate to tell us about any bugs you find or any features you would like to see included.",
+        programming: "Programming: ",
+        artwork: "Artwork: "
     }
 })

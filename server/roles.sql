@@ -16,9 +16,3 @@ GRANT guest TO admin;
 CREATE ROLE loggedin
     NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
 GRANT loggedin TO admin;
-
--- moderators have access to all that loggedin have, plus to the moderation functions/tables
--- TODO: check this!
-CREATE ROLE moderator
-    NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
-GRANT moderator TO admin;
