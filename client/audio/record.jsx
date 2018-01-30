@@ -596,8 +596,12 @@ let ItemsWrapper = React.createClass({
     render() {
         // TODO: this stuff requires thorough testing
         if (this.props.username) {
-            if (this.props.accountInfoLoading) { return <LoadingPage /> }
-            else if (this.props.items.loading) { return <LoadingPage /> }
+            // TODO: the effect of this is that the loading page refreshes, as it's being loaded by the parent before this.
+            // Trying only to load it here (not in the parent at all) does get rid of the refreshing issue
+            // (which looks a bit funny, but nothing terrible, for the user), but introduces a graphql error
+            // as it automatically tries to run the query for the items even though it's still waiting for 
+            // the props necessary to run it. Would be nice to clear up these two minor issues.
+            if (this.props.items.loading) { return <LoadingPage /> }
             
             const firstNodes = this.props.items.allItems.nodes.slice(0,10)
             console.log(firstNodes)
@@ -662,10 +666,7 @@ ItemsWrapper = compose(
 // (native language) to its itemQuery
 const AccountDetailsWrapper = React.createClass({
     render() {
-        if (this.props.accountInfo.loading) {
-            // userId is passed to AccountDetailsWrapper as this.props.userId, but it is also available from the query.. which to use?
-            return <ItemsWrapper accountInfoLoading={true} hasSeenTutorial={null} nativeLanguage={null} userId={this.props.userId} username={this.props.username} />
-        }
+        if (this.props.accountInfo.loading) { return <LoadingPage /> }
         const accountInfo = this.props.accountInfo.getAccountInfo
         console.log(accountInfo)
         const hasSeenTutorial = accountInfo.tutorial
@@ -675,7 +676,7 @@ const AccountDetailsWrapper = React.createClass({
         // TODO: also deal with custom native languages...
         
         // userId is passed to AccountDetailsWrapper as this.props.userId, but it is also available from the query.. which to use? Also this.props.username... TODO make a decision
-        return <ItemsWrapper accountInfoLoading={false} hasSeenTutorial={hasSeenTutorial} nativeLanguage={nativeLanguage} userId={this.props.userId} username={this.props.username} />
+        return <ItemsWrapper hasSeenTutorial={hasSeenTutorial} nativeLanguage={nativeLanguage} userId={this.props.userId} username={this.props.username} />
     } 
 })
 
