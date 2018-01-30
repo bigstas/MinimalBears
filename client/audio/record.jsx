@@ -583,8 +583,8 @@ const PreRecord = React.createClass({
     }
 })
 
-// TODO define an SQL function for this
-const WrappedRecordPage = React.createClass({
+// TODO define an SQL function for this (Guy) -- sorry, for what? (Staś)
+let ItemsWrapper = React.createClass({
     getInitialState() {
         return { readyToGo: false }
     },
@@ -594,32 +594,38 @@ const WrappedRecordPage = React.createClass({
     },
     
     render() {
-        // TODO Look up the user's language
+        // TODO: this stuff requires thorough testing
         if (this.props.username) {
-            if (this.props.items.loading || this.props.accountInfo.loading) { return <LoadingPage /> }
-
+            if (this.props.accountInfoLoading) { return <LoadingPage /> }
+            else if (this.props.items.loading) { return <LoadingPage /> }
+            
             const firstNodes = this.props.items.allItems.nodes.slice(0,10)
             console.log(firstNodes)
             const firstWords = firstNodes.map( function(item) {
                 return [item.homophones, item.id]
             })
             console.log(firstNodes)
-
-            console.log(this.props.accountInfo.getAccountInfo)
-            const hasSeenTutorial = this.props.accountInfo.getAccountInfo.tutorial
             
-            if (!this.state.readyToGo && !hasSeenTutorial) { 
+            // TODO: if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
+            if (this.props.nativeLanguage === null ) {
+                // null: the user has a rare native language (not on the list in our database), so we're not recording audio for their language
+                // TODO: this should give a similar result if we are not recording your native language yet
+                // (that would require a new SQL function that returns that list of languages)
+                return <NoRecord loggedIn={true} reason="noSuchLanguage" />
+            }
+            
+            if (!this.state.readyToGo && !this.props.hasSeenTutorial) { 
                 return <PreRecord callback={this.makeReady} />
             } else {
-                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} hasSeenTutorial={hasSeenTutorial} />
+                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} hasSeenTutorial={this.props.hasSeenTutorial} />
             }
         }
-        // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
     }
 })
 
-const itemQuery = gql`query ($languageId: String!) {
+// give the ItemsWrapper its queries and mutations
+const itemQuery = gql`query ($languageId: String!) { 
     allItems (orderBy: ID_ASC, condition: {language: $languageId}) {
         nodes {
             id
@@ -630,12 +636,48 @@ const itemQuery = gql`query ($languageId: String!) {
 }`
 const itemQueryConfig = {
     name: 'items',
-    options: {
+    options: (ownProps) => ({
         variables: {
-            languageId: 'eng'  // TODO check user's native languages / if one, choose / if more than one, display a selector
+            languageId: ownProps.nativeLanguage
         }
-    }
+    })
 }
+const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
+    submitAudio (input: $input) {
+        integer
+    }
+}` // "integer" is the id of the new row
+
+// Variables must be defined when the function is called
+const audioMutationConfig = {
+    name: 'audioMutation'
+}
+ItemsWrapper = compose(
+    graphql(itemQuery, itemQueryConfig),
+    graphql(audioMutation, audioMutationConfig))
+(ItemsWrapper)
+
+
+// the AccountDetailsWrapper fetches the account details so that the ItemsWrapper can pass props
+// (native language) to its itemQuery
+const AccountDetailsWrapper = React.createClass({
+    render() {
+        if (this.props.accountInfo.loading) {
+            // userId is passed to AccountDetailsWrapper as this.props.userId, but it is also available from the query.. which to use?
+            return <ItemsWrapper accountInfoLoading={true} hasSeenTutorial={null} nativeLanguage={null} userId={this.props.userId} username={this.props.username} />
+        }
+        const accountInfo = this.props.accountInfo.getAccountInfo
+        console.log(accountInfo)
+        const hasSeenTutorial = accountInfo.tutorial
+        const username = accountInfo.username
+        // TODO: if there is more than one native language, display a selector
+        let nativeLanguage = accountInfo.native.length > 0 ? accountInfo.native[0] : null
+        // TODO: also deal with custom native languages...
+        
+        // userId is passed to AccountDetailsWrapper as this.props.userId, but it is also available from the query.. which to use? Also this.props.username... TODO make a decision
+        return <ItemsWrapper accountInfoLoading={false} hasSeenTutorial={hasSeenTutorial} nativeLanguage={nativeLanguage} userId={this.props.userId} username={this.props.username} />
+    } 
+})
 
 const accountInfoQuery = gql`query{
     getAccountInfo {
@@ -652,19 +694,4 @@ const accountInfoQueryConfig = {
     name: 'accountInfo'
 }
 
-const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
-    submitAudio (input: $input) {
-        integer
-    }
-}` // "integer" is the id of the new row
-
-// Variables must be defined when the function is called
-const audioMutationConfig = {
-    name: 'audioMutation'
-}
-
-export default compose(
-    graphql(itemQuery, itemQueryConfig),
-    graphql(accountInfoQuery, accountInfoQueryConfig),
-    graphql(audioMutation, audioMutationConfig))
-(WrappedRecordPage)
+export default graphql(accountInfoQuery, accountInfoQueryConfig)(AccountDetailsWrapper)

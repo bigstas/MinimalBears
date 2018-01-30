@@ -42,6 +42,8 @@ CREATE VIEW training_language AS (
     WHERE training
 );
 
+-- TODO: a function to look up what languages we are currently recording audio for
+
 -- Contrasts in the above languages
 CREATE TABLE contrast (
     language text NOT NULL REFERENCES language (id) ON UPDATE CASCADE ON DELETE RESTRICT,
