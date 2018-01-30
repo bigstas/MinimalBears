@@ -123,7 +123,6 @@ const Nav = React.createClass({
                         onMouseUp={this.mouseUpHandler}
                         callbackLogOut={this.props.callbackLogOut}
                         username={this.props.username}
-                        userId={this.props.userId}
                     /> :
                     <span />
                 }

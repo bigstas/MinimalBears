@@ -1,17 +1,14 @@
 import React from 'react'
 import jwtDecode from 'jwt-decode'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-
 import Nav from './auxiliary/nav'
     
-const AppBody = React.createClass({    
+
+const AppBodyChild = React.createClass({
     getInitialState() {
-        // this.state.user to be a string when there is a signed-in user; otherwise, false (bool)
         return {
-            activeLanguageId: null,
-            username: null,
-            userId: null
+            activeLanguageId: null
         }
     },
     
@@ -19,6 +16,63 @@ const AppBody = React.createClass({
         this.setState({
             activeLanguageId: langId
         })
+    },
+    
+    render() {
+        let username = false
+        let userId = null
+        if (this.props.isLoggedIn) {
+            if (this.props.data.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
+            username = this.props.data.getAccountInfo.username
+            userId =   this.props.data.getAccountInfo.id
+        }
+        console.log("Username is: " + username)
+            
+        return (
+            <div id="app-container">
+                <Nav callbackLogOut={this.props.logOut} username={username} />
+                {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props.
+                username should come from query due to being wrapped by graphql for wrapped case; otherwise username is bool: false.
+                userId should no longer be necessary. */}
+                {React.cloneElement(
+                    this.props.children, 
+                    {
+                        username: username,
+                        userId: userId,
+                        activeLanguageId: this.state.activeLanguageId, 
+                        callbackLanguage: this.setLanguage,
+                        callbackUser: this.props.setUser,
+                        callbackLogOut: this.props.logOut
+                    }
+                )}
+            </div>
+        )
+    }
+})
+
+// AppBodyChild will be wrapped in AppBody if user is logged in, this setup comes before the wrapping
+// Calling graphql on this turns it into a function which returns a React element (needed below)
+const accountInfoQuery = graphql(gql`query{
+    getAccountInfo {
+        id
+        username
+        interface
+        native
+        customNative
+        tutorial
+    }
+}`)
+// Try this out without config, then the name defaults to "data". Then could delete this.
+const accountInfoQueryConfig = {
+    name: 'accountInfo'
+}
+
+const AppBody = React.createClass({    
+    getInitialState() {
+        const raw_jwt = localStorage.getItem('token')
+        return {
+            isLoggedIn: !!raw_jwt // true if there is a jwt in local storage, false otherwise
+        }
     },
     
     setUser(raw_jwt) {
@@ -31,8 +85,7 @@ const AppBody = React.createClass({
             // If the token is still valid:
             // Set the state, to change the app
             this.setState({
-                username: "Placeholder Username",  // TODO
-                userId: jwt.id
+                isLoggedIn: true
             })
             // Store the token in memory, to be added to request headers
             localStorage.setItem('token', raw_jwt)
@@ -50,8 +103,7 @@ const AppBody = React.createClass({
         // Clear everything from setUser (state, memory, refreshing)
         console.log('logging out')
         this.setState({
-            username: null,
-            userId: null
+            isLoggedIn: false
         })
         localStorage.removeItem('token')
         localStorage.removeItem('refreshToken')
@@ -92,24 +144,20 @@ const AppBody = React.createClass({
     },
     
     render() {
-        return (
-            <div id="app-container" >
-                <Nav username={this.state.username}
-                    userId={this.state.userId}
-                    callbackLogOut={this.logOut}
-                />
-                {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props */}
-                {React.cloneElement(
-                    this.props.children, 
-                    {activeLanguageId: this.state.activeLanguageId, 
-                        username: this.state.username,
-                        userId: this.state.userId,
-                        callbackLanguage: this.setLanguage,
-                        callbackUser: this.setUser,
-                        callbackLogOut: this.logOut}
-                )}
-            </div>
-        )
+        let Child = <AppBodyChild children={this.props.children} setUser={this.props.setUser} logOut={this.props.logOut} isLoggedIn={this.state.isLoggedIn} />
+              
+        if (this.state.isLoggedIn) {
+            // wrapped version
+            console.log(Child)
+            // below returns a function, we need to return a React element
+            //Child = graphql(accountInfoQuery, accountInfoQueryConfig)(Child)
+            const ChildWithData = accountInfoQuery(Child)
+            console.log(ChildWithData)
+            return ChildWithData
+        } else {
+            // unwrapped version
+            return Child
+        }
     }
 })
 
@@ -118,7 +166,6 @@ const refresh = gql`mutation($input:RefreshInput!) {
         jsonWebToken
     }
 }`
-
 const refreshConfig = {
     name: 'refresh'
 }
