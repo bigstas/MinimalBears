@@ -35,9 +35,9 @@ counterpart.registerTranslations('pol', {
             yearView: "Podgląd roczny",
             allContrasts: "Wszystkie kontrasty",
             charts: {
-                mixChartTitleAllContrasts: "Practice and success rate na wszystkie kontrasty",
-                mixChartTitleSomeContrast: "Practice and success rate na kontrast ",
-                pieChartTitle: "Number of practices by contrast for this period",
+                mixChartTitleAllContrasts: "*Practice and success rate na wszystkie kontrasty",
+                mixChartTitleSomeContrast: "*Practice and success rate na kontrast ",
+                pieChartTitle: "*Number of practices by contrast for this period",
                 barChartTitle: "Procent poprawnych odpowiedzi przez ten okres",
                 performanceLegendLabel: "Procent poprawnie",
                 performanceYaxisLabel: "Poziom poprawności (procent)",
@@ -146,21 +146,21 @@ counterpart.registerTranslations('pol', {
         confirmPassword: "Potwierdź hasło:",
         register: {
             joinTitle: "Załącz się.",
-            joining: "Joining allows you to keep track of your progress and contribute recordings.",
+            joining: "*Joining allows you to keep track of your progress and contribute recordings.",
             emailError: "Błędny adres emailowy.",
             usernameError: "Ta nazwa użytownika jest już w użytku. Proszę wybrać inną.",
             passwordError: "Twoje hasło musi być takie same w obu polach.",
             nativeLanguage: "Język ojczysty:",
-            languageError: "select your native language",
-            noResults: "No results found",
+            languageError: "*select your native language",
+            noResults: "*No results found",
             notInTheList: "Mój język nie jest na liśćie",
             joinButtonLabel: "Załącz się",
             loginLink: "Masz już konto? Zaloguj.",
-            tooltip: "Dlaczego my się pytamy: <br>You can contribute to the project by recording your voice saying words in your native language. <br>Knowing your native language will allow us to ask you for words in the appropriate language. <br>Nie dzielimy się Twoimi danami z nikim.",
+            tooltip: "*Dlaczego my się pytamy: <br>You can contribute to the project by recording your voice saying words in your native language. <br>Knowing your native language will allow us to ask you for words in the appropriate language. <br>Nie dzielimy się Twoimi danami z nikim.",
             errors: {
                 serverError: "Nie możemy Cię połączyć z serwerem! Sprawdź Twoje połączenie internetowe.",
-                duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
-                duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
+                duplicateEmail: "*This email address already exists in our system. If you've already registered, please log in!",
+                duplicateUsername: "*Oops! Somebody has already taken this username. Please choose another."
             }
         },
         login: {
@@ -199,14 +199,14 @@ counterpart.registerTranslations('pol', {
         }
     },
     norecord: {
-        title: "Join the club first!",
-        onlyLoggedIn: "Only logged-in users can create recordings. ",
-        login: "Log in",
-        loginReason: " to join the fun! :)",
-        noAccount: "Don't have an account? ",
-        signup: "Sign up",
-        noSuchLanguage: "We aren't using your language as a training language yet.",
-        noRecordingsNeeded: "We are using your language as a training language, but there is nothing that we need recorded at the moment."
+        title: "*Join the club first!",
+        onlyLoggedIn: "*Only logged-in users can create recordings. ",
+        login: "*Log in",
+        loginReason: "* to join the fun! :)",
+        noAccount: "*Don't have an account? ",
+        signup: "*Sign up",
+        noSuchLanguage: "*We aren't using your language as a training language yet.",
+        noRecordingsNeeded: "*We are using your language as a training language, but there is nothing that we need recorded at the moment."
     },
     record: {
         preRecord: {
@@ -284,7 +284,7 @@ counterpart.registerTranslations('pol', {
     },
     contact: {
         heading: "Skontaktuj się",
-        text: "Można się skontaktować z twórcami tej aplikacji korzystając z poniżej podanych adresów emailowych. Please don't hesitate to tell us about any bugs you find or any features you would like to see included.",
+        text: "Można się skontaktować z twórcami tej aplikacji korzystając z poniżej podanych adresów emailowych. *Please don't hesitate to tell us about any bugs you find or any features you would like to see included.",
         programming: "Programowanie: ",
         artwork: "Grafika: "
     }

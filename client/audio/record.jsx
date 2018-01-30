@@ -466,6 +466,7 @@ next: ${next}`)
                                                                   speaker: this.props.userId,
                                                                   item: itemId }}})
                     .then( (response) => {
+                        // TODO if everything submits correctly, thank the user and load a fresh set of words
                         console.log('submitted')
                         console.log(response)
                     }).catch( (error) => {
@@ -476,25 +477,21 @@ next: ${next}`)
                 reader.readAsBinaryString(blob) // convert blob to string
             }, this)
         }
-        // TODO if everything submits correctly, thank the user and load a fresh set of words
+        
         // TODO if there is an error, ask the user to try again
     },
     
     restartTutorial() {
         /* Resets the tutorial and plays it back from the beginning, regardless of where they stopped the tutorial before
          */
-        // accessing child's refs requires "joyride" twice - once for parent's ref to child, once for child's ref to Joyride object
-        this.joyride.joyride.reset(true)
+        // use of withRefs on Tutorial page makes it possible to access refs of an Apollo-wrapped object
+        console.log(this.refs.joyride.refs.wrappedInstance.joyride)
+        this.refs.joyride.refs.wrappedInstance.joyride.reset(true)
     },
-    
     render() {
-        // TODO extra screen to explain the page if the user has not been here before
-        // placeholder - TODO: use a db lookup for the user
-        const hasSeenTutorial = false
-        
         return (
             <div>
-                <Tutorial autorun={!hasSeenTutorial} ref={c => (this.joyride = c)} />
+                <Tutorial autorun={!this.props.hasSeenTutorial} ref="joyride" />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 
@@ -599,7 +596,7 @@ const WrappedRecordPage = React.createClass({
     render() {
         // TODO Look up the user's language
         if (this.props.username) {
-            if (this.props.items.loading) { return <LoadingPage /> }
+            if (this.props.items.loading || this.props.accountInfo.loading) { return <LoadingPage /> }
 
             const firstNodes = this.props.items.allItems.nodes.slice(0,10)
             console.log(firstNodes)
@@ -608,16 +605,16 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            // TODO: this "preparatory page" should not render if the user has seen the tutorial already,
-            // so it should be something like
-            // if (!this.state.readyToGo && !this.props.hasSeenTutorial)
-            if (!this.state.readyToGo) { 
+            console.log(this.props.accountInfo.getAccountInfo)
+            const hasSeenTutorial = this.props.accountInfo.getAccountInfo.tutorial
+            
+            if (!this.state.readyToGo && !hasSeenTutorial) { 
                 return <PreRecord callback={this.makeReady} />
             } else {
-                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} />
+                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} hasSeenTutorial={hasSeenTutorial} />
             }
         }
-        // else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
+        // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
     }
 })
@@ -631,7 +628,6 @@ const itemQuery = gql`query ($languageId: String!) {
         }
     }
 }`
-
 const itemQueryConfig = {
     name: 'items',
     options: {
@@ -639,6 +635,21 @@ const itemQueryConfig = {
             languageId: 'eng'  // TODO check user's native languages / if one, choose / if more than one, display a selector
         }
     }
+}
+
+const accountInfoQuery = gql`query{
+    getAccountInfo {
+        id
+        email
+        username
+        interface
+        native
+        customNative
+        tutorial
+    }
+}`
+const accountInfoQueryConfig = {
+    name: 'accountInfo'
 }
 
 const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
@@ -654,5 +665,6 @@ const audioMutationConfig = {
 
 export default compose(
     graphql(itemQuery, itemQueryConfig),
+    graphql(accountInfoQuery, accountInfoQueryConfig),
     graphql(audioMutation, audioMutationConfig))
 (WrappedRecordPage)
