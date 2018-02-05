@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import Nav from './auxiliary/nav'
     
 
-const AppBodyChild = React.createClass({
+const UserAppBody = React.createClass({
     getInitialState() {
         return {
             activeLanguageId: null
@@ -20,11 +20,12 @@ const AppBodyChild = React.createClass({
     
     render() {
         let username = false
+        // TODO: remove all userId references in app
         let userId = null
-        if (this.props.isLoggedIn) {
-            if (this.props.data.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
-            username = this.props.data.getAccountInfo.username
-            userId =   this.props.data.getAccountInfo.id
+        if (this.props.accountInfo) {
+            if (this.props.accountInfo.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
+            username = this.props.accountInfo.getAccountInfo.username
+            userId =   this.props.accountInfo.getAccountInfo.id
         }
         console.log("Username is: " + username)
             
@@ -50,9 +51,9 @@ const AppBodyChild = React.createClass({
     }
 })
 
-// AppBodyChild will be wrapped in AppBody if user is logged in, this setup comes before the wrapping
+// UserAppBody will be wrapped in AppBody if user is logged in, this setup comes before the wrapping
 // Calling graphql on this turns it into a function which returns a React element (needed below)
-const accountInfoQuery = graphql(gql`query{
+const accountInfoQuery = gql`query{
     getAccountInfo {
         id
         username
@@ -61,11 +62,13 @@ const accountInfoQuery = graphql(gql`query{
         customNative
         tutorial
     }
-}`)
+}`
 // Try this out without config, then the name defaults to "data". Then could delete this.
 const accountInfoQueryConfig = {
     name: 'accountInfo'
 }
+const SignedInAppBody = graphql(accountInfoQuery, accountInfoQueryConfig)(UserAppBody)
+
 
 const AppBody = React.createClass({    
     getInitialState() {
@@ -144,20 +147,14 @@ const AppBody = React.createClass({
     },
     
     render() {
-        let Child = <AppBodyChild children={this.props.children} setUser={this.props.setUser} logOut={this.props.logOut} isLoggedIn={this.state.isLoggedIn} />
-              
+        let AppBodyClass
+        
         if (this.state.isLoggedIn) {
-            // wrapped version
-            console.log(Child)
-            // below returns a function, we need to return a React element
-            //Child = graphql(accountInfoQuery, accountInfoQueryConfig)(Child)
-            const ChildWithData = accountInfoQuery(Child)
-            console.log(ChildWithData)
-            return ChildWithData
+            AppBodyClass = SignedInAppBody
         } else {
-            // unwrapped version
-            return Child
+            AppBodyClass = UserAppBody
         }
+        return <AppBodyClass children={this.props.children} setUser={this.props.setUser} logOut={this.props.logOut} />
     }
 })
 

@@ -66,7 +66,8 @@ counterpart.registerTranslations('pol', {
                     10: 'Listopad',
                     11: 'Grudzień'
                 },
-                overall: "razem"
+                overall: "razem",
+                noTrainingOccurred: "*No training occured for this language and contrast in this period."
             }
         }
     },
