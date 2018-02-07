@@ -375,12 +375,21 @@ nav ul li a, nav ul li p {
     padding-right: 5px;
     font-size: 1.5vw;
 }
-/* #statsButton: This could be cleaned up by reconsidering the way classes are handled in the CSS as a whole. */ 
-#statsButton {
+/* #statsButton & #statsButtonDisabled: This could be cleaned up by reconsidering the way classes are handled in the CSS as a whole. */ 
+/* TODO: this changes colour on hover when you hover on the actual link (<a></a>), but not when you hover on the parent div, which is the required behaviour to be in line with the rest of the app. This is easy to miss if you're not paying attention, so it's "okay for now" but ultimately need fixing. */
+#statsButton a { 
+    text-decoration: none;
+    color: lightyellow;
+}
+#statsButton a:hover { color: black; }
+/*#statsButtonLink {
+    text-decoration: none;
+}*/
+#statsButtonDisabled {
     opacity: 0.5;
     cursor: default;
 }
-#statsButton:hover {
+#statsButtonDisabled:hover {
     /* no change of font colour or background colour */
     color: lightyellow; 
     background-color: #FFA22E;

@@ -460,8 +460,8 @@ next: ${next}`)
                     // reader.result contains the contents of blob as a string
                     const blobString = btoa(reader.result)  // Make the byte string friendly (base-64 encoding)
                     console.log(blobString.length)
-                    console.log(this.props.userId)
                     console.log(itemId)
+                    // TODO: replace this.props.userId - we are not using this anymore. (What is is going to be replaced with here?)
                     _this.props.submitAudio({variables: {input: { file: blobString,
                                                                   speaker: this.props.userId,
                                                                   item: itemId }}})

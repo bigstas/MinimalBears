@@ -26,11 +26,11 @@ const DonePanel = React.createClass({
             <span></span>)
         
         const statsButton = (this.props.loggedIn ? 
-            <div className="button endButton">
-                <Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.donePanel.viewStats"} /></Link>
+            <div id="statsButton" className="button endButton">
+                <Link id="statsButtonLink" to="/"><Translate content={"train.donePanel.viewStats"} /></Link>
             </div> :
             <div>
-                <div id="statsButton" className="button endButton" data-tip data-for='statsTooltip' data-delay-show='0'>
+                <div id="statsButtonDisabled" className="button endButton" data-tip data-for='statsTooltip' data-delay-show='0'>
                     <Translate content={"train.donePanel.viewStats"} />
                 </div>
                 <ReactTooltip id="statsTooltip" place="left" type="light" effect="solid" multiline={false}>
@@ -49,7 +49,6 @@ const DonePanel = React.createClass({
         return (
             <div className="panel animated fadeIn">
                 <img id="endImage" src={pic} />
-                {/*<p className="caption"><em>{pic[1]}</em></p> /* TODO? Do we want captions? */}
                 <div>
                     <div className="endDiv" id="resultsDiv">
                         <div className="endDiv">
@@ -59,7 +58,6 @@ const DonePanel = React.createClass({
                         {averageDiv}
                     </div>
                     <div className="endDiv" id="buttonDiv">
-                        {/* TODO: these two are styling differently on hover, they should style the same */}
                         <div className="button endButton" onClick={this.props.handleClick}><Translate content="train.donePanel.playAgain" /></div>
                         {statsButton}
                     </div>

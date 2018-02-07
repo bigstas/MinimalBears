@@ -147,6 +147,7 @@ const Arena = React.createClass({
         if (this.state.mode === "wait" || this.state.mode === "feedback" || this.state.mode === "restart") {
             // If the data has been returned:
             if (!this.props.questions.loading) { // TODO move this check earlier on; it shouldn't be possible to click the button when there's no data
+            // -- so what should display when there is no data? The loading page?
                 /* Get all the pairs for a given contrast. Select a pair randomly.
                  * Take a homophone of each item in the pair, to use as a label for the WordOption buttons.
                  * Take an audio file corresponding to the correct item. Play it, and save it in state for potential replays.
@@ -163,14 +164,6 @@ const Arena = React.createClass({
                                currentQuestion.second],
                     correctAnswer: currentQuestion.correct
                 })
-                
-                // if we're in "restart" mode, we also need to reset some things
-                if (this.state.mode === "restart") {
-                    this.setState({
-                        counter: 0,
-                        score: 0
-                    })
-                }
             }
         }
         else if (this.state.mode === "ask") {
@@ -183,23 +176,32 @@ const Arena = React.createClass({
         }
     },
     
-    restart() {
+    showDonePanel() {
         this.setState({ mode: "restart" })
-    },  // TODO do we need this mode?
+    },
+    
+    restart() {
+        // first, refetch the query for new training examples
+        this.props.questions.refetch()
+        // then, reset the counter and score
+        this.setState({ counter: 0, score: 0 })
+        // finally, start up the game again
+        this.handleProgressClick()
+    },
     
     render() {
         if (this.state.mode === "restart") {
             const snd = new Audio("finish.wav")
             snd.play()
             
-            return <DonePanel handleClick={this.handleProgressClick} 
+            return <DonePanel handleClick={this.restart} 
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
                        activeContrastId={this.props.activeContrastId}
                     /> 
         } else {
             if (this.state.mode === "done") {
-                setTimeout(this.restart, 1500) // wait for a moment before showing the results page
+                setTimeout(this.showDonePanel, 1500) // wait for a moment before showing the results page
             }
             return (
                 <div className='panel animated fadeIn' id='arena'>
