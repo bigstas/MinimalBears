@@ -1,5 +1,6 @@
 import React from 'react'
 import Translate from 'react-translate-component'
+import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -10,10 +11,6 @@ function random(myArray) {
 }
 
 const DonePanel = React.createClass({
-    getInitialState() {
-        return { clicked: false }
-    },
-    
     mustBeLoggedIn() {
         alert("You must be logged in to view stats!")
     },
@@ -21,9 +18,25 @@ const DonePanel = React.createClass({
     render() {
         const bearPics = ["bear2.png", "bear3.png", "bear4.png", "bear6.png"]
         
+        const averageDiv = (this.props.loggedIn ? 
+            <div className="endDiv">
+                <p className="hugeNumberTitle"><Translate content="train.donePanel.yourAverage" /></p>
+                <p className="hugeNumber">{contrastAverage}%</p>
+            </div> : 
+            <span></span>)
+        
         const statsButton = (this.props.loggedIn ? 
-            <div className="button endButton"><Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.donePanel.viewStats"} /></Link></div> :
-            <div className="button endButton" onClick={this.mustBeLoggedIn}><Translate content={"train.donePanel.viewStats"} /></div>
+            <div className="button endButton">
+                <Link className='plainLink' to="/" style={{color: "lightyellow"}}><Translate content={"train.donePanel.viewStats"} /></Link>
+            </div> :
+            <div>
+                <div id="statsButton" className="button endButton" data-tip data-for='statsTooltip' data-delay-show='0'>
+                    <Translate content={"train.donePanel.viewStats"} />
+                </div>
+                <ReactTooltip id="statsTooltip" place="left" type="light" effect="solid" multiline={false}>
+                    <Translate component="p" content="train.donePanel.statsTooltip" />
+                </ReactTooltip>
+            </div>
         )
         
         if (this.props.contrastAverage.loading) { return <span></span> }
@@ -43,10 +56,7 @@ const DonePanel = React.createClass({
                             <p className="hugeNumberTitle"><Translate content="train.donePanel.yourScore" /></p>
                             <p className="hugeNumber">{this.props.score}%</p>
                         </div>
-                        <div className="endDiv">
-                            <p className="hugeNumberTitle"><Translate content="train.donePanel.yourAverage" /></p>
-                            <p className="hugeNumber">{contrastAverage}%</p>
-                        </div>
+                        {averageDiv}
                     </div>
                     <div className="endDiv" id="buttonDiv">
                         {/* TODO: these two are styling differently on hover, they should style the same */}

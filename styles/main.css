@@ -375,6 +375,16 @@ nav ul li a, nav ul li p {
     padding-right: 5px;
     font-size: 1.5vw;
 }
+/* #statsButton: This could be cleaned up by reconsidering the way classes are handled in the CSS as a whole. */ 
+#statsButton {
+    opacity: 0.5;
+    cursor: default;
+}
+#statsButton:hover {
+    /* no change of font colour or background colour */
+    color: lightyellow; 
+    background-color: #FFA22E;
+}
 
 
 /* ================================== */

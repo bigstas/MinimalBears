@@ -187,8 +187,7 @@ counterpart.registerTranslations('pol', {
         progressLabel: {
             begin: "Zacznij",
             playAgain: "Usłysz znowu",
-            next: "Następne",
-            goAgain: "Zagraj jeszcze raz"
+            next: "Następne"
         },
         correct: "Dobrze!",
         wrong: "Źle!",
@@ -196,7 +195,8 @@ counterpart.registerTranslations('pol', {
             playAgain: "Zagraj znowu",
             viewStats: "Zobacz statystyki",
             yourScore: "Twój wynik:",
-            yourAverage: "Twoja średnia:"
+            yourAverage: "Twoja średnia:",
+            statsTooltip: "*You must be logged in to view stats."
         }
     },
     norecord: {

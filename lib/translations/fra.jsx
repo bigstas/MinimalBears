@@ -142,12 +142,17 @@ counterpart.registerTranslations('fra', {
         progressLabel: {
             begin: "Commencer",
             playAgain: "Ecouter encore",
-            next: "Suivant",
-            goAgain: "Recommencer"
+            next: "Suivant"
         },
-        viewStats: "Voir les statistiques",
         correct: "Correct!",
-        wrong: "Oups!"
+        wrong: "Oups!",
+        donePanel: {
+            playAgain: "Recommencer",
+            viewStats: "Voir les statistiques",
+            yourScore: "*Your score:",
+            yourAverage: "*Your average:",
+            statsTooltip: "Il faut se connecter pour voir les statistiques."
+        }
     },
     norecord: {
         title: "Pour commencer, créez un compte!",

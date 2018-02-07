@@ -190,8 +190,7 @@ counterpart.registerTranslations('eng', {
         progressLabel: {
             begin: "Begin",
             playAgain: "Listen again",
-            next: "Next",
-            goAgain: "Play again"
+            next: "Next"
         },
         correct: "Correct!",
         wrong: "Oops!",
@@ -199,7 +198,8 @@ counterpart.registerTranslations('eng', {
             playAgain: "Play again",
             viewStats: "View Stats",
             yourScore: "Your score:",
-            yourAverage: "Your average:"
+            yourAverage: "Your average:",
+            statsTooltip: "You must be logged in to view stats."
         }
     },
     norecord: {
