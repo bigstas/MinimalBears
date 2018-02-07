@@ -477,7 +477,7 @@ const Charts = React.createClass({
         const chartData = makeChartData(this.props.period, allStats, this.props.contrast, this.state.blank)
         console.log(chartData)
         if (chartData === false) {
-            return ( <p>No training occured for this language and contrast in this period</p> )
+            return ( <Translate component="p" content="home.profile.charts.noTrainingOccurred" /> )
         }
                     
         let pieChart, mixChart, barChart, mixChartTitle

@@ -69,7 +69,8 @@ counterpart.registerTranslations('eng', {
                     10: 'Nov',
                     11: 'Dec'
                 },
-                overall: "overall"
+                overall: "overall",
+                noTrainingOccurred: "No training occured for this language and contrast in this period"
             }
         }
     },
