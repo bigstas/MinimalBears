@@ -91,6 +91,10 @@ const Nav = React.createClass({
         window.addEventListener('mousedown', this.pageClick, false)
     },
     
+    componentWillUnmount() {
+        window.removeEventListener('mousedown', this.pageClick)
+    },
+    
     pageClick: function (e) {
         if (this.mouseIsDownOnDropdown) { return } 
         else { this.setState({ dropdown: false }) }

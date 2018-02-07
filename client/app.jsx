@@ -24,6 +24,7 @@ const UserAppBody = React.createClass({
         let userId = null
         if (this.props.accountInfo) {
             if (this.props.accountInfo.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
+            console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
             userId =   this.props.accountInfo.getAccountInfo.id
         }
@@ -61,11 +62,17 @@ const accountInfoQuery = gql`query{
         native
         customNative
         tutorial
+        email
     }
 }`
 // Try this out without config, then the name defaults to "data". Then could delete this.
 const accountInfoQueryConfig = {
-    name: 'accountInfo'
+    name: 'accountInfo',
+    options: {
+        // This doesn't fix the problem with logout, and we may want to move to "no-cache".
+        // In the current version of Apollo, "no-cache" seems to not be an option.
+        fetchPolicy: "standby"
+    }
 }
 const SignedInAppBody = graphql(accountInfoQuery, accountInfoQueryConfig)(UserAppBody)
 
@@ -86,12 +93,12 @@ const AppBody = React.createClass({
         const timestamp = (new Date).getTime()
         if (!!jwt && timestamp < jwt.exp * 1000) {
             // If the token is still valid:
+            // Store the token in memory, to be added to request headers
+            localStorage.setItem('token', raw_jwt)
             // Set the state, to change the app
             this.setState({
                 isLoggedIn: true
             })
-            // Store the token in memory, to be added to request headers
-            localStorage.setItem('token', raw_jwt)
             // Automatically refresh the token
             this.refreshTimer = setInterval(this.refresh, 1000*60*20)  // Refresh every 20 minutes
             console.log('timer set up')
@@ -154,7 +161,7 @@ const AppBody = React.createClass({
         } else {
             AppBodyClass = UserAppBody
         }
-        return <AppBodyClass children={this.props.children} setUser={this.props.setUser} logOut={this.props.logOut} />
+        return <AppBodyClass children={this.props.children} setUser={this.setUser} logOut={this.logOut} />
     }
 })
 
