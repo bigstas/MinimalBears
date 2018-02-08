@@ -232,6 +232,8 @@ counterpart.registerTranslations('eng', {
         playbackAll: "Playback All",
         playbackAllTooltip: "Play all the audio.",
         submit: "Submit",
+        success: "Thank you! Your recordings have been stored in our database.",
+        error: "Unfortunately, an error has occurred while trying to store your recordings. Please try again later.",
         submitTooltip: "If you are ready, send all the audio to the database.",
         reRecordTooltip: "Re-record this word",
         playbackTooltip: "Play back",

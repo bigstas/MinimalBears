@@ -184,6 +184,8 @@ counterpart.registerTranslations('fra', {
         playbackAll: "Tout écouter",
         playbackAllTooltip: "Ecouter tous les enregistrements.",
         submit: "Valider",
+        success: "*Thank you! Your recordings have been stored in our database.",
+        error: "*Unfortunately, an error has occurred while trying to store your recordings. Please try again later.",
         submitTooltip: "Si vous êtes prêt, envoyer tous les enregistrements à notre base de données.",
         reRecordTooltip: "Enregistrer de nouveau ce mot",
         playbackTooltip: "Ecouter",

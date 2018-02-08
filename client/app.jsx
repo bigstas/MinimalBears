@@ -22,11 +22,13 @@ const UserAppBody = React.createClass({
         let username = false
         // TODO: remove all userId references in app
         let userId = null
+        let tutorial = false
         if (this.props.accountInfo) {
             if (this.props.accountInfo.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
             console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
             userId =   this.props.accountInfo.getAccountInfo.id
+            tutorial = this.props.accountInfo.getAccountInfo.tutorial
         }
         console.log("Username is: " + username)
             
@@ -41,6 +43,7 @@ const UserAppBody = React.createClass({
                     {
                         username: username,
                         userId: userId,
+                        hasSeenTutorial: tutorial,
                         activeLanguageId: this.state.activeLanguageId, 
                         callbackLanguage: this.setLanguage,
                         callbackUser: this.props.setUser,

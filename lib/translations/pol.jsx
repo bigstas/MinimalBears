@@ -229,6 +229,8 @@ counterpart.registerTranslations('pol', {
         playbackAll: "Odtwórz wszystko",
         playbackAllTooltip: "Odtwórz wszystkie nagrania.",
         submit: "Wyślij",
+        success: "*Thank you! Your recordings have been stored in our database.",
+        error: "*Unfortunately, an error has occurred while trying to store your recordings. Please try again later.",
         submitTooltip: "Gdy jesteś gotowy/a, wyślij wszystkie nagrania do bazy danych.",
         reRecordTooltip: "Nagraj to słowo od nowa",
         playbackTooltip: "Odtwórz słowo",

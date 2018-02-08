@@ -9,6 +9,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
+import counterpart from 'counterpart'
 import Tutorial from '../auxiliary/tutorials'
 import NoRecordPage from './norecord'
 
@@ -339,7 +340,7 @@ const WordRow = React.createClass({
     }
 })
 
-
+// TODO: if you click through on the record button too fast, the whole thing is buggy and messes up in a few ways. (Just try it out.)
 const RecordPage = React.createClass({
     /* A React element for the entire page body (below the Nav).
      * props: recordingWords, submitAudio
@@ -448,6 +449,8 @@ next: ${next}`)
             // error message // TODO should this ever be possible?
             console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
         } else {
+            let success = true
+            
             const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
             blobPackets.map( (packet) => {
                 const itemId = packet[0][1]
@@ -469,15 +472,32 @@ next: ${next}`)
                         console.log('submitted')
                         console.log(response)
                     }).catch( (error) => {
+                        success = false
                         console.log('error')
                         console.log(error)
                     })
                 });
                 reader.readAsBinaryString(blob) // convert blob to string
             }, this)
+            
+            if (success) {
+                alert(counterpart.translate("record.success"))
+                // refetch the words that populate the page
+                this.props.refetchCallback()
+                // reset to original state
+                this.setState({
+                    audioBlobs: [],
+                    audioURLs: [],
+                    mode: "wait",
+                    focus: 0,
+                    next: 0
+                })
+                // remount all the items
+                this.mountItems()
+            } else {
+                alert(counterpart.translate("record.error"))
+            }
         }
-        // TODO if everything submits correctly, thank the user and load a fresh set of words
-        // TODO if there is an error, ask the user to try again
     },
     
     restartTutorial() {
@@ -488,13 +508,9 @@ next: ${next}`)
     },
     
     render() {
-        // TODO extra screen to explain the page if the user has not been here before
-        // placeholder - TODO: use a db lookup for the user
-        const hasSeenTutorial = false
-        
         return (
             <div>
-                <Tutorial autorun={!hasSeenTutorial} ref={c => (this.joyride = c)} />
+                <Tutorial autorun={!this.props.hasSeenTutorial} ref={c => (this.joyride = c)} />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next} 
                             max={this.props.recordingWords.length -1} 
@@ -534,7 +550,8 @@ next: ${next}`)
         )
     },
     
-    componentDidMount() {
+    mountItems() {
+        // To be called when component initially mounts (componentDidMount), and when new items are loaded.
         /* Add event listeners to all the <audio> elements.
          * They listen for when the audio finishes playing ("ended").
          * We use this to make the audio carry on playing in playbackAll mode.
@@ -546,6 +563,7 @@ next: ${next}`)
             const element = this.refs[myRef]
             console.log('adding listener to index ' + index.toString())
             const nextIndex = index +1
+            // TODO: do the old event listeners need to be destroyed when this function is run a second time?
             element.addEventListener("ended",  // trigger when playing ends
                 () => {
                     console.log('inside handler')
@@ -564,6 +582,10 @@ next: ${next}`)
                 })
             return element
         }, this)
+    },
+    
+    componentDidMount() {
+        this.mountItems()
     },
         
     componentWillUnmount() {
@@ -596,6 +618,12 @@ const WrappedRecordPage = React.createClass({
         this.setState({ readyToGo: true })
     },
     
+    refetchQuery() {
+        // TODO - is this working? How do we know if it's working? 
+        // It seems to be "working" at the moment by giving the same items for a second time...
+        this.props.items.refetch()
+    },
+    
     render() {
         // TODO Look up the user's language
         if (this.props.username) {
@@ -608,16 +636,13 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            // TODO: this "preparatory page" should not render if the user has seen the tutorial already,
-            // so it should be something like
-            // if (!this.state.readyToGo && !this.props.hasSeenTutorial)
-            if (!this.state.readyToGo) { 
+            if (!this.state.readyToGo && !this.props.hasSeenTutorial) { 
                 return <PreRecord callback={this.makeReady} />
             } else {
-                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} userId={this.props.userId} />
+                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} refetchCallback={this.refetchQuery} hasSeenTutorial={this.props.hasSeenTutorial} userId={this.props.userId} />
             }
         }
-        // else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
+        // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
     }
 })

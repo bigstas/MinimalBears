@@ -44,9 +44,8 @@ For Beta:
 For full release:
 1. forgotten password retrieval
 2. check email address exists (e.g. they have to click a link in their email to be able to register)
-3. spam-filter the Contact Us page (use an "I am not a robot" check)
-4. social media sharing buttons?
-5. contrast selector button "bug": make sure the contrasts start rolling when the page loads with the mouse over one of the buttons
-6. testing code (code that checks everything is working correctly) (Guy and Staś)
+3. social media sharing buttons?
+4. contrast selector button "bug": make sure the contrasts start rolling when the page loads with the mouse over one of the buttons
+5. testing code (code that checks everything is working correctly) (Guy and Staś)
     - Jest is online with dummy.test.js
     - need to put in testing code for other files
