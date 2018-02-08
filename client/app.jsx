@@ -74,7 +74,8 @@ const accountInfoQueryConfig = {
     options: {
         // This doesn't fix the problem with logout, and we may want to move to "no-cache".
         // In the current version of Apollo, "no-cache" seems to not be an option.
-        fetchPolicy: "standby"
+        // Commented out as it was causing crashes for Gergő.
+        //fetchPolicy: "standby"
     }
 }
 const SignedInAppBody = graphql(accountInfoQuery, accountInfoQueryConfig)(UserAppBody)
