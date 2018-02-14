@@ -1,6 +1,6 @@
 import React from 'react'
 import jwtDecode from 'jwt-decode'
-import { graphql, compose } from 'react-apollo'
+import { withApollo, graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Nav from './auxiliary/nav'
     
@@ -118,13 +118,16 @@ const AppBody = React.createClass({
     
     logOut() {
         // Clear everything from setUser (state, memory, refreshing)
-        console.log('logging out')
-        this.setState({
-            isLoggedIn: false
-        })
-        localStorage.removeItem('token')
         localStorage.removeItem('refreshToken')
+        localStorage.removeItem('token')
         clearInterval(this.refreshTimer)
+        console.log('logging out')
+        // second argument is a callback that setState will call when it is finished
+        this.setState( { isLoggedIn: false }, this.props.client.resetStore() )
+        // Behaviour seems right, but GraphQL permission denied errors are being called (due to above line)
+        // on get_account_info, get_practice_languages, and get_all_stats (twice).
+        // TODO - find the reason for the error, and fix so that no error gets raised.
+        console.log("Logout successful")
     },
     
     refresh() {
@@ -181,4 +184,4 @@ const refreshConfig = {
     name: 'refresh'
 }
 
-export default graphql(refresh, refreshConfig)(AppBody)
+export default withApollo(graphql(refresh, refreshConfig)(AppBody))

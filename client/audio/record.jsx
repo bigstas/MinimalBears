@@ -1,3 +1,6 @@
+/* Licenses:
+submittedAudio.wav originally called 320654__rhodesmas__level-up-02.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
+*/
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
@@ -476,6 +479,8 @@ next: ${next}`)
         // update the page with a fresh set of words to record
         Promise.all(promiseArray)
         .then( (responses) => {
+            const snd = new Audio("submittedAudio.wav")
+            snd.play()
             alert(counterpart.translate("record.success"))
             // refetch the words that populate the page
             this.props.refetchCallback()
@@ -650,7 +655,7 @@ const itemQueryConfig = {
             // TODO this should take the whole array and do something with it server-side, instead of just taking the first element
             // e.g. check user's native languages / if one, choose / if more than one, display a selector
             // -- but this should be informed by what languages we can actually record for!
-            languageId: ownProps.native[0],  
+            languageId: ownProps.username ? ownProps.native[0] : 'eng',  
             number: 10
         }
     })
