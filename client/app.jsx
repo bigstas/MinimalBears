@@ -19,6 +19,7 @@ const UserAppBody = React.createClass({
     },
     
     render() {
+        let native = null
         let username = false
         // TODO: remove all userId references in app
         let userId = null
@@ -29,6 +30,7 @@ const UserAppBody = React.createClass({
             username = this.props.accountInfo.getAccountInfo.username
             userId =   this.props.accountInfo.getAccountInfo.id
             tutorial = this.props.accountInfo.getAccountInfo.tutorial
+            native =   this.props.accountInfo.getAccountInfo.native
         }
         console.log("Username is: " + username)
             
@@ -44,6 +46,7 @@ const UserAppBody = React.createClass({
                         username: username,
                         userId: userId,
                         hasSeenTutorial: tutorial,
+                        native: native,
                         activeLanguageId: this.state.activeLanguageId, 
                         callbackLanguage: this.setLanguage,
                         callbackUser: this.props.setUser,

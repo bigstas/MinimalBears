@@ -609,8 +609,6 @@ const WrappedRecordPage = React.createClass({
     },
     
     refetchQuery() {
-        // TODO - is this working? How do we know if it's working? 
-        // It seems to be "working" at the moment by giving the same items for a second time...
         this.props.items.refetch()
     },
     
@@ -619,7 +617,7 @@ const WrappedRecordPage = React.createClass({
         if (this.props.username) {
             if (this.props.items.loading) { return <LoadingPage /> }
 
-            const firstNodes = this.props.items.allItems.nodes.slice(0,10)
+            const firstNodes = this.props.items.getItemsToRecord.nodes.slice(0,10)
             console.log(firstNodes)
             const firstWords = firstNodes.map( function(item) {
                 return [item.homophones, item.id]
@@ -637,8 +635,8 @@ const WrappedRecordPage = React.createClass({
     }
 })
 
-const itemQuery = gql`query ($languageId: String!) {
-    allItems (orderBy: ID_ASC, condition: {language: $languageId}) {
+const itemQuery = gql`query ($languageId: String!, $number: Int!) {
+    getItemsToRecord(languageId: $languageId, number: $number) {
         nodes {
             id
             language
@@ -646,14 +644,17 @@ const itemQuery = gql`query ($languageId: String!) {
         }
     }
 }`
-
 const itemQueryConfig = {
     name: 'items',
-    options: {
+    options: (ownProps) => ({
         variables: {
-            languageId: 'eng'  // TODO check user's native languages / if one, choose / if more than one, display a selector
+            // TODO this should take the whole array and do something with it server-side, instead of just taking the first element
+            // e.g. check user's native languages / if one, choose / if more than one, display a selector
+            // -- but this should be informed by what languages we can actually record for!
+            languageId: ownProps.native[0],  
+            number: 10
         }
-    }
+    })
 }
 
 const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
