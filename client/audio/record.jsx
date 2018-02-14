@@ -552,7 +552,7 @@ next: ${next}`)
          * Also, create a list of <audio> elements for future reference.
          */
         console.log(this.refs)
-        this.props.recordingWords.map(function(word, index) {  // Not actually using the words, just the index
+        this.audioElements = this.props.recordingWords.map(function(word, index) {  // Not actually using the words, just the index
             const myRef = "audio" + index.toString()
             const element = this.refs[myRef]
             console.log('adding listener to index ' + index.toString())
@@ -573,6 +573,7 @@ next: ${next}`)
                     })
                 }
             })
+            return element
         }, this)
         // TODO: do the event listeners ever need to be replaced?
     },
