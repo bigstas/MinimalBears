@@ -445,59 +445,53 @@ next: ${next}`)
     },
     
     dispatchAudio () {
-        if (this.props.recordingWords.length !== this.state.audioURLs.length) {
-            // error message // TODO should this ever be possible?
-            console.log("Error: The number of this.props.recordingWords (which is " + this.props.recordingWords.toString() + ") is not equal to the number of this.state.audioURLs (which is " + this.state.audioURLs.toString() + "). This means that _.zip cannot work, and the audio cannot be dispatched.")
-        } else {
-            let success = true
-            
-            const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
-            blobPackets.map( (packet) => {
-                const itemId = packet[0][1]
-                const blob = packet[1]
-                // Asynchronously read the file
-                // the "loadend" event will trigger once readAsBinaryString is complete
+        const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
+        const promiseArray = blobPackets.map( (packet) => {
+            const itemId = packet[0][1]
+            const blob = packet[1]
+            // The only way to read content from a Blob is to use a FileReader (https://developer.mozilla.org/en-US/docs/Web/API/Blob)
+            // a FileReader reads the Blob asynchronously
+            // the "loadend" event will trigger once readAsBinaryString is complete
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader()
                 const _this = this  // to use inside function...
                 reader.addEventListener("loadend", () => {
                     // reader.result contains the contents of blob as a string
                     const blobString = btoa(reader.result)  // Make the byte string friendly (base-64 encoding)
                     console.log(blobString.length)
+                    console.log(this.props.userId)
                     console.log(itemId)
-                    // TODO: replace this.props.userId - we are not using this anymore. (What is is going to be replaced with here?)
                     _this.props.submitAudio({variables: {input: { file: blobString,
                                                                   speaker: this.props.userId,
                                                                   item: itemId }}})
                     .then( (response) => {
-                        console.log('submitted')
-                        console.log(response)
+                        resolve(response)
                     }).catch( (error) => {
-                        success = false
-                        console.log('error')
-                        console.log(error)
+                        reject(error)
                     })
                 });
                 reader.readAsBinaryString(blob) // convert blob to string
-            }, this)
-            
-            if (success) {
-                alert(counterpart.translate("record.success"))
-                // refetch the words that populate the page
-                this.props.refetchCallback()
-                // reset to original state
-                this.setState({
-                    audioBlobs: [],
-                    audioURLs: [],
-                    mode: "wait",
-                    focus: 0,
-                    next: 0
-                })
-                // remount all the items
-                this.mountItems()
-            } else {
-                alert(counterpart.translate("record.error"))
-            }
-        }
+            })
+        }, this)
+        
+        // If all files were successfully sent to the server,
+        // update the page with a fresh set of words to record
+        Promise.all(promiseArray)
+        .then( (responses) => {
+            alert(counterpart.translate("record.success"))
+            // refetch the words that populate the page
+            this.props.refetchCallback()
+            // reset to original state
+            this.setState({
+                audioBlobs: [],
+                audioURLs: [],
+                mode: "wait",
+                focus: 0,
+                next: 0
+            })
+        }).catch( (error) => {
+            alert(counterpart.translate("record.error"))
+        })
     },
     
     restartTutorial() {
@@ -550,42 +544,37 @@ next: ${next}`)
         )
     },
     
-    mountItems() {
-        // To be called when component initially mounts (componentDidMount), and when new items are loaded.
-        /* Add event listeners to all the <audio> elements.
+    componentDidMount() {
+        /* To be called when component initially mounts (componentDidMount), and when new items are loaded.
+         * Add event listeners to all the <audio> elements.
          * They listen for when the audio finishes playing ("ended").
          * We use this to make the audio carry on playing in playbackAll mode.
          * Also, create a list of <audio> elements for future reference.
          */
         console.log(this.refs)
-        this.audioElements = this.props.recordingWords.map(function(c, index) {  // Not actually using the words, just the index
+        this.props.recordingWords.map(function(word, index) {  // Not actually using the words, just the index
             const myRef = "audio" + index.toString()
             const element = this.refs[myRef]
             console.log('adding listener to index ' + index.toString())
             const nextIndex = index +1
-            // TODO: do the old event listeners need to be destroyed when this function is run a second time?
-            element.addEventListener("ended",  // trigger when playing ends
-                () => {
-                    console.log('inside handler')
-                    if (this.state.mode === 'playbackAll' && nextIndex < this.state.audioURLs.length) {
-                        // If we're playing back all, and there are more files to come 
-                        console.log('playbackAll, playing next file')
-                        this.playback(nextIndex)  // play the next file
-                    } else {
-                        // Reset the state
-                        const done = (this.state.audioURLs.length === this.props.recordingWords.length)
-                        this.setState({
-                            mode:  done ? "done" : "wait",
-                            focus: this.state.next
-                        })
-                    }
-                })
-            return element
+            // trigger when playing ends
+            element.addEventListener("ended", () => {
+                console.log('inside handler')
+                if (this.state.mode === 'playbackAll' && nextIndex < this.state.audioURLs.length) {
+                    // If we're playing back all, and there are more files to come 
+                    console.log('playbackAll, playing next file')
+                    this.playback(nextIndex)  // play the next file
+                } else {
+                    // Reset the state
+                    const done = (this.state.audioURLs.length === this.props.recordingWords.length)
+                    this.setState({
+                        mode:  done ? "done" : "wait",
+                        focus: this.state.next
+                    })
+                }
+            })
         }, this)
-    },
-    
-    componentDidMount() {
-        this.mountItems()
+        // TODO: do the event listeners ever need to be replaced?
     },
         
     componentWillUnmount() {
