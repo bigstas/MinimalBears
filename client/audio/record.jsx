@@ -334,13 +334,11 @@ const WordRow = React.createClass({
                 <ReRecord index={this.props.index} mode={this.props.mode} next={this.props.next} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
                 <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
                 <p style={{display: "inline", cursor: "default"}}>{this.props.word}</p>
-                {/*TODO allow an optional comment to follow the word*/}
             </div>
         )
     }
 })
 
-// TODO: if you click through on the record button too fast, the whole thing is buggy and messes up in a few ways. (Just try it out.)
 const RecordPage = React.createClass({
     /* A React element for the entire page body (below the Nav).
      * props: recordingWords, submitAudio
@@ -409,7 +407,7 @@ const RecordPage = React.createClass({
         if (clearAll)       {
             stateUpdate.audioURLs = []
             stateUpdate.audioBlobs = []
-            for (i = 0 ; i < this.state.audioURLs.length ; i ++ ) {
+            for (let i = 0 ; i < this.state.audioURLs.length ; i ++ ) {
                 URL.revokeObjectURL(this.state.audioURLs[i])
             }
         }
@@ -497,8 +495,10 @@ next: ${next}`)
     restartTutorial() {
         /* Resets the tutorial and plays it back from the beginning, regardless of where they stopped the tutorial before
          */
-        // accessing child's refs requires "joyride" twice - once for parent's ref to child, once for child's ref to Joyride object
-        this.joyride.joyride.reset(true)
+        // this.joyride - joyride's Apollo wrapper, set in refs below, in render()
+        // this.joyride.refs - the ref set on the joyride object, it ends up referring to the Apollo wrapper
+        // (so then you have to go through wrappedInstance etc.)
+        this.joyride.refs.wrappedInstance.joyride.reset(true)
     },
     
     render() {
@@ -613,7 +613,6 @@ const WrappedRecordPage = React.createClass({
     },
     
     render() {
-        // TODO Look up the user's language
         if (this.props.username) {
             if (this.props.items.loading) { return <LoadingPage /> }
 
