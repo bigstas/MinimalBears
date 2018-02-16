@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode'
 import { withApollo, graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Nav from './auxiliary/nav'
-    
+import Translate from 'react-translate-component'
 
 const UserAppBody = React.createClass({
     getInitialState() {
@@ -25,7 +25,7 @@ const UserAppBody = React.createClass({
         let userId = null
         let tutorial = false
         if (this.props.accountInfo) {
-            if (this.props.accountInfo.loading) { return <div>Loading</div> } // TODO: prettify / rationalise
+            if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
             console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
             userId =   this.props.accountInfo.getAccountInfo.id

@@ -234,6 +234,7 @@ counterpart.registerTranslations('eng', {
         submit: "Submit",
         success: "Thank you! Your recordings have been stored in our database.",
         error: "Unfortunately, an error has occurred while trying to store your recordings. Please try again later.",
+        leaveHook: "Are you sure you want to leave this page? Your unsubmitted recordings will be lost.",
         submitTooltip: "If you are ready, send all the audio to the database.",
         reRecordTooltip: "Re-record this word",
         playbackTooltip: "Play back",

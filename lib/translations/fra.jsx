@@ -186,6 +186,7 @@ counterpart.registerTranslations('fra', {
         submit: "Valider",
         success: "*Thank you! Your recordings have been stored in our database.",
         error: "*Unfortunately, an error has occurred while trying to store your recordings. Please try again later.",
+        leaveHook: "*Are you sure you want to leave this page? Your unsubmitted recordings will be lost.",
         submitTooltip: "Si vous êtes prêt, envoyer tous les enregistrements à notre base de données.",
         reRecordTooltip: "Enregistrer de nouveau ce mot",
         playbackTooltip: "Ecouter",

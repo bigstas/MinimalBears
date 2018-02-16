@@ -3,7 +3,7 @@ submittedAudio.wav originally called 320654__rhodesmas__level-up-02.wav, taken f
 */
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
-import { Link } from 'react-router'
+import { Link, withRouter } from 'react-router'
 import update from 'immutability-helper'
 // For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
 import ReactTooltip from 'react-tooltip'
@@ -581,6 +581,13 @@ next: ${next}`)
             return element
         }, this)
         // TODO: do the event listeners ever need to be replaced?
+        
+        // set route leave hook - asks you whether you want to leave ifyou have unsaved recordings
+        this.props.router.setRouteLeaveHook(this.props.route, () => {
+            if (this.state.audioURLs.length > 0) {
+                return (counterpart.translate("record.leaveHook"))
+            }
+        })
     },
         
     componentWillUnmount() {
@@ -631,7 +638,13 @@ const WrappedRecordPage = React.createClass({
             if (!this.state.readyToGo && !this.props.hasSeenTutorial) { 
                 return <PreRecord callback={this.makeReady} />
             } else {
-                return <RecordPage recordingWords={firstWords} submitAudio={this.props.audioMutation} refetchCallback={this.refetchQuery} hasSeenTutorial={this.props.hasSeenTutorial} userId={this.props.userId} />
+                return <RecordPage recordingWords={firstWords} 
+                           submitAudio={this.props.audioMutation} 
+                           refetchCallback={this.refetchQuery} 
+                           hasSeenTutorial={this.props.hasSeenTutorial} 
+                           userId={this.props.userId} 
+                           router={this.props.router} route={this.props.route}
+                        />
             }
         }
         // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
@@ -675,4 +688,4 @@ const audioMutationConfig = {
 export default compose(
     graphql(itemQuery, itemQueryConfig),
     graphql(audioMutation, audioMutationConfig))
-(WrappedRecordPage)
+(withRouter(WrappedRecordPage))
