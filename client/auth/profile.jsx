@@ -14,16 +14,15 @@ const TopBand = React.createClass({
      */
     render() {
         return (
-            <div id='topband'>
+            <div id='topProfile'>
+                <h2 id='name' className="animated bounce">Welcome {this.props.username}!</h2>
                 <div className='userpic' id='userpicProfile'>
-                    <p style={{color: '#cccccc'}}>Some <br/> picture <br/> here...?</p>
-                </div>
+                    </div>
                 <div id='overview'>
-                    <h2 className="animated bounce">{this.props.username}</h2>
                     {/* TODO: "kudos" etc. shuold be populated from database */}
-                    <p><Translate content="home.profile.recordingsSubmitted" />19 <br/><Translate content="home.profile.recordingsAccepted" />12 <br/><Translate content="home.profile.recordingsPending" />4 <br/><Translate content="home.profile.totalKudos" />43</p>
-                </div>
-            </div>
+                    <p><Translate content="home.profile.recordingsSubmitted" />19 <br/><Translate content="home.profile.recordingsAccepted" />12 <br/><Translate content="home.profile.recordingsPending" />4 <br/><Translate content="home.profile.totalKudos" />43</p> <br/>
+                </div> 
+            </div> 
         )
     }
 })
@@ -81,39 +80,39 @@ const UserProfile = React.createClass({
         return (
             <div className='panel animated fadeIn' id='profile'>
             {/* TOP REGION */}
-                <TopBand username={this.props.username} />
+                <TopBand username={this.props.username} /> <br/>
                 <div id='graphsDiv'>
             {/* DROPDOWNS */}
-                    <select onChange={this.setLanguage}>
+                    <select id='dropDownC' onChange={this.setLanguage}>
                         {languageOptions.map(function(c, index) {
                             const content = 'train.language.' + c
                             return <Translate component='option' content={content} key={index} value={c} />
                         })}
                     </select>
-                    <ContrastDropdown language={this.state.language} callback={this.setContrast} ref="contrastDropdown" value={this.state.contrast} />
+                    <ContrastDropdown  language={this.state.language} callback={this.setContrast} ref="contrastDropdown" value={this.state.contrast} />
                     <br/>
             {/* RADIO BUTTONS */}
-                    <label>
+                    <label className='chartTitle'>
                         <input type="radio" value="week" checked={this.state.period === 'week'} onChange={this.handlePeriodChange} /><Translate content="home.profile.weekView" />
                     </label>
-                    <label>
+                    <label className='chartTitle'>
                         <input type="radio" value="month" checked={this.state.period === 'month'} onChange={this.handlePeriodChange} /><Translate content="home.profile.monthView" />
                     </label>
-                    <label>
+                    <label className='chartTitle'>
                         <input type="radio" value="year" checked={this.state.period === 'year'} onChange={this.handlePeriodChange} /><Translate content="home.profile.yearView" />
                     </label>
                     <br/>
-                    <input
+                   { /* <input
                         id="toggleTheme"
                         type="checkbox"
                         onChange={this.toggleTheme}
                         style={{width: "15px", verticalAlign: "middle"}}
                     />
-                    <label
+                   <label
                         htmlFor="toggleTheme"
                         style={{verticalAlign: "middle", fontSize: "10px"}}>
                         Change theme! (This checkbox is for development purposes only)
-                    </label>
+                    </label> */ }
             {/* CHARTS */}
                     <Charts language={this.state.language} contrast={this.state.contrast} period={this.state.period} themeIndex={this.state.themeIndex} />
                 </div>

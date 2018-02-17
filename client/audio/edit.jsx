@@ -113,18 +113,20 @@ const EditingPage = React.createClass({
         
         return(
             <div className='panel animated fadeIn' id='edit'>
-                <Translate component="h1" content="edit.heading" />
+                <Translate  id='moderationHead' component="h1" content="edit.heading" />
                 <p><Translate content="edit.thisRecording" />{this.state.src[this.state.whichSrc]}</p> {/* The idea is that the moderator should be able to see what word was supposed to be being recorded, otherwise we could have silly errors! */}
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
-                <div style={{display: "block"}}>
+                <div id='topButtons' style={{display: "block"}}>
                     <div className="authbtn" onClick={this.playOrPause} ><Translate content="edit.playAll" /></div>
                     <div className="authbtn" onClick={this.playClip} ><Translate content="edit.playClip" /></div>
                     <div className="authbtn" onClick={this.zoom.bind(this, true)} ><Translate content="edit.zoomIn" /></div>
                     <div className="authbtn" onClick={this.zoom.bind(this, false)} ><Translate content="edit.zoomOut" /></div>
                 </div>
+                <div id='bottomButtons' style={{display: "block"}}>
                 <div className="authbtn" onClick={this.handleSubmit.bind(this, false)} ><Translate content="edit.acceptFull" /></div>
                 <div className="authbtn" onClick={this.handleSubmit.bind(this, true)} ><Translate content="edit.acceptSegment" /></div>
                 <div className="authbtn" onClick={this.handleReject} ><Translate content="edit.reject" /></div>
+                    </div>
             </div>
         )
     }

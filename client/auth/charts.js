@@ -238,13 +238,13 @@ function makeChartData(period, data, contrast, blank) {
                 /* How would this work? How would this be handled programmatically? */
                 /* What is the default behaviour? Testing and further development required. */
                 backgroundColor: [
-                    '#ff0000',
-                    '#00ff00',
+                    '#E56207',
+                    '#25CF4C',
                     'yellow'
                 ],
                 hoverBackgroundColor: [
-                    '#dd0000',
-                    '#00dd00',
+                    '#F56808',
+                    '#28D947',
                     '#FFCE56'
                 ]
             }]
@@ -272,12 +272,12 @@ function makeChartData(period, data, contrast, blank) {
                 label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
                 data: mixData.mixLineValues,
                 fill: false,
-                borderColor: '#EC932F',
-                backgroundColor: '#EC932F', // only affects the legend's background (for lines)
-                pointBorderColor: '#EC932F',
-                pointBackgroundColor: '#EC932F',
-                pointHoverBackgroundColor: '#EC932F',
-                pointHoverBorderColor: '#EC932F',
+                borderColor: '#F56808',
+                backgroundColor: '#F56808', // only affects the legend's background (for lines)
+                pointBorderColor: '#F56808',
+                pointBackgroundColor: '#F56808',
+                pointHoverBackgroundColor: '#FBA704',
+                pointHoverBorderColor: '#FBA704',
                 yAxisID: 'y-axis-2'
             },
             {
@@ -286,10 +286,10 @@ function makeChartData(period, data, contrast, blank) {
                 label: counterpart.translate(["home", "profile", "charts", "practiceLegendLabel"]),
                 data: mixData.mixBarValues,
                 fill: false,
-                backgroundColor: '#71B37C',
-                borderColor: '#71B37C',
-                hoverBackgroundColor: '#71B37C',
-                hoverBorderColor: '#71B37C',
+                backgroundColor: '#25CF4C',
+                borderColor: '#29E353',
+                hoverBackgroundColor: '#28D947',
+                hoverBorderColor: '#25CF4C',
                 yAxisID: 'y-axis-1'
             }]
         }, 
@@ -326,11 +326,11 @@ function makeChartData(period, data, contrast, blank) {
             labels: barData.barLabels,
             datasets: [{
                 label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
+                backgroundColor: 'rgba(245,165,8,0.2)',
+                borderColor: 'rgba(245,104,8,1)',
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                hoverBorderColor: 'rgba(255,99,132,1)',
+                hoverBackgroundColor: 'rgba(245,165,8,0.4)',
+                hoverBorderColor: 'rgba(245,104,8,1)',
                 data: barData.barValues
             }]
         },
@@ -338,11 +338,11 @@ function makeChartData(period, data, contrast, blank) {
             labels: barData.barLabels,
             datasets: [{
                 label: counterpart.translate(["home", "profile", "charts", "performanceLegendLabel"]),
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
+                backgroundColor: 'rgba(245,165,8,0.2)',
+                borderColor: 'rgba(245,104,8)',
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                hoverBorderColor: 'rgba(255,99,132,1)',
+                hoverBackgroundColor: 'rgba(245,165,8,0.4)',
+                hoverBorderColor: 'rgba(245,104,8)',
                 data: barData.barValues            
             }]
         }]
@@ -408,7 +408,11 @@ function generateMixOptions() {
                     display: true,
                     labelString: 'Time ago'
                 },
-                gridLines: { display: false },
+                gridLines: { display: true,
+                            zeroLineWidth:2,
+                            zeroLineColor:'rgba(245,165,8,0.2)',
+                            color:'rgba(245,165,8,0.2)'
+                           },
                 labels: { show: true }
             }],
             yAxes: [{
@@ -424,7 +428,11 @@ function generateMixOptions() {
                     suggestedMin: 0,    // minimum will be 0, unless there is a lower value
                     suggestedMax: 10    // maximum will be 10 for now (TODO: handle this programmatically... or at least test it!)
                 },
-                gridLines: { display: false },
+                gridLines: { display: true,
+                             zeroLineWidth:2,
+                            zeroLineColor:'rgba(245,165,8,0.2)',
+                            color:'rgba(245,165,8,0.2)'
+                           },
                 labels: { show: true }
             },
             {
