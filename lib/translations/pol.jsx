@@ -281,6 +281,7 @@ counterpart.registerTranslations('pol', {
         }
     },
     edit: {
+        noEdit: "*This page is only available for those who are moderators. As you are not a moderator, you cannot use this page.",
         playAll: "Odtwórz całe",
         playClip: "Odtwórz kawałek",
         zoomIn: "Zbliż",

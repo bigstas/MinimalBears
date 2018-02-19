@@ -284,6 +284,7 @@ counterpart.registerTranslations('eng', {
         }
     },
     edit: {
+        noEdit: "This page is only available for those who are moderators. As you are not a moderator, you cannot use this page.",
         heading: "Moderation",
         thisRecording: "This recording: ",
         playAll: "Play",
