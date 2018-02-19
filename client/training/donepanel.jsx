@@ -47,7 +47,7 @@ const DonePanel = React.createClass({
         console.log(pic)
         
         return (
-            <div className="panel animated fadeIn">
+            <div id='endPanel' className="panel animated fadeIn">
                 <img id="endImage" src={pic} />
                 <div>
                     <div className="endDiv" id="resultsDiv">
