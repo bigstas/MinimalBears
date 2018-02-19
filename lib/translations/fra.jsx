@@ -155,6 +155,9 @@ counterpart.registerTranslations('fra', {
         }
     },
     norecord: {
+        recordSelector: {
+            selectRecordingLanguage: "*Since you have more than one native language, please choose which one you would like to record."
+        },
         title: "Pour commencer, créez un compte!",
         onlyLoggedIn: "Seulement les utilisateurs connectés peuvent s'enregistrer.",
         login: "Connectez-vous",

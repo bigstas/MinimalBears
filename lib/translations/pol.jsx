@@ -200,6 +200,9 @@ counterpart.registerTranslations('pol', {
         }
     },
     norecord: {
+        recordSelector: {
+            selectRecordingLanguage: "*Since you have more than one native language, please choose which one you would like to record."
+        },
         title: "*Join the club first!",
         onlyLoggedIn: "*Only logged-in users can create recordings. ",
         login: "*Log in",
