@@ -49,3 +49,4 @@ For full release:
 5. testing code (code that checks everything is working correctly) (Guy and Staś)
     - Jest is online with dummy.test.js
     - need to put in testing code for other files
+6. update to react-router version 4 (from current 3), and make navigation to login page etc. 

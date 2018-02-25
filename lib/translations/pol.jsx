@@ -200,6 +200,9 @@ counterpart.registerTranslations('pol', {
         }
     },
     norecord: {
+        recordSelector: {
+            selectRecordingLanguage: "*Since you have more than one native language, please choose which one you would like to record."
+        },
         title: "*Join the club first!",
         onlyLoggedIn: "*Only logged-in users can create recordings. ",
         login: "*Log in",
@@ -278,6 +281,7 @@ counterpart.registerTranslations('pol', {
         }
     },
     edit: {
+        noEdit: "*This page is only available for those who are moderators. As you are not a moderator, you cannot use this page.",
         playAll: "Odtwórz całe",
         playClip: "Odtwórz kawałek",
         zoomIn: "Zbliż",

@@ -2,6 +2,15 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import Peaks from 'peaks.js'
 
+const NoEditPage = React.createClass({
+    render() {
+        return (
+            <div className='panel animated fadeIn' id='preRecord'>
+                <Translate component="p" content="edit.noEdit" />
+            </div>
+        )
+    }
+})
 
 const PeaksObject = React.createClass({
     render() {
@@ -110,6 +119,9 @@ const EditingPage = React.createClass({
     
     render() {
         console.log(this.state.whichSrc)
+        // TODO: should be based on a query of some sort
+        const userIsModerator = true
+        if (!userIsModerator) { return <NoEditPage /> }
         
         return(
             <div className='panel animated fadeIn' id='edit'>

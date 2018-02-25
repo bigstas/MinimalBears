@@ -14,7 +14,7 @@ import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
 import Tutorial from '../auxiliary/tutorials'
-import NoRecordPage from './norecord'
+import { PreRecord, RecordSelector, NoRecordPage } from './norecord'
 
     
 // Note that we use 'meteor/maxencecornet:audio-recorder',
@@ -596,28 +596,21 @@ next: ${next}`)
     }
 })
 
-const PreRecord = React.createClass({
-    render() {
-        return (
-            <div className='panel animated fadeIn' id='preRecord'>
-                <Translate component='h1' content='record.preRecord.heading' />
-                <Translate component='p'  content='record.preRecord.intro' />
-                <Translate component='p'  content='record.preRecord.contributions' />
-                <Translate component='p'  content='record.preRecord.tutorial' />
-                <div className="button" onClick={this.props.callback}><Translate content='record.preRecord.buttonLabel' /></div>
-            </div>
-        )
-    }
-})
-
 // TODO define an SQL function for this
 const WrappedRecordPage = React.createClass({
     getInitialState() {
-        return { readyToGo: false }
+        return { 
+            pressedStartTutorialButton: false,
+            recordingLanguage: null // TODO: actually query form database
+        }
     },
     
-    makeReady() {
-        this.setState({ readyToGo: true })
+    selectLanguage(option) {
+        this.setState({ recordingLanguage: option })
+    },
+    
+    startTutorial() {
+        this.setState({ pressedStartTutorialButton: true })
     },
     
     refetchQuery() {
@@ -635,8 +628,11 @@ const WrappedRecordPage = React.createClass({
             })
             console.log(firstNodes)
 
-            if (!this.state.readyToGo && !this.props.hasSeenTutorial) { 
-                return <PreRecord callback={this.makeReady} />
+            if (!this.state.recordingLanguage) {
+                // if they haven't recorded in any language before, display a selector
+                return <RecordSelector callback={this.selectLanguage} />
+            } else if (!this.state.pressedStartTutorialButton && !this.props.hasSeenTutorial) { 
+                return <PreRecord callback={this.startTutorial} />
             } else {
                 return <RecordPage recordingWords={firstWords} 
                            submitAudio={this.props.audioMutation} 

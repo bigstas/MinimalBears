@@ -155,6 +155,9 @@ counterpart.registerTranslations('fra', {
         }
     },
     norecord: {
+        recordSelector: {
+            selectRecordingLanguage: "*Since you have more than one native language, please choose which one you would like to record."
+        },
         title: "Pour commencer, créez un compte!",
         onlyLoggedIn: "Seulement les utilisateurs connectés peuvent s'enregistrer.",
         login: "Connectez-vous",
@@ -233,6 +236,7 @@ counterpart.registerTranslations('fra', {
         }
     },
     edit: {
+        noEdit: "*This page is only available for those who are moderators. As you are not a moderator, you cannot use this page.",
         playAll: "Ecouter",
         playClip: "Ecouter l'extrait",
         zoomIn: "Zoomer",
