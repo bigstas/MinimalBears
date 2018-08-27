@@ -7,19 +7,15 @@ import secret from './jwt_secret'
 // We can add this using Meteor's WebApp.connectHandlers
 // See http://meteorpedia.com/read/REST_API#WebApp.connectHandlers%20and%20connect
 // Note that we can't use Picker here, because we only want this middleware for one route
-WebApp.connectHandlers.use(//'/graphql',
-    // Specify database and role, and use 'public' schema (by default)
-    postgraphql('postgres://admin@localhost:5432/minimal_bears', 'public', {
+WebApp.connectHandlers.use(
+    postgraphql('postgres://admin@localhost:5432/minimal_bears', 'public', {  // Specify database, role, schema
         graphiql: true,
         graphqlRoute: '/graphql',
         graphiqlRoute: '/graphiql',
         bodySizeLimit: '5MB',
-        jwtSecret: secret,  // This will be used to verify tokens in the Authorization header, and signing JWT tokens you return in procedures.
-        jwtPgTypeIdentifier: 'public.json_web_token',  // Postgres type identifier for the compound type which will be signed as a JWT token if found as the return type of a procedure
-        pgDefaultRole: 'guest',  // If no role was provided in a provided JWT token, this role will be used
-        //dynamicJson: true,  // Setting this to true enables dynamic JSON which will allow you to use any JSON as input and get any arbitrary JSON as output. By default JSON types are just a JSON string
-        //disableQueryLog: true,
-        //watchPg: true,  // Setting this to true will update the GraphQL API if the Postgres schema changes
+        jwtSecret: secret,  // Used to sign tokens and verify tokens in the Authorization header
+        jwtPgTypeIdentifier: 'public.json_web_token',  // Postgres type to be signed as a JWT
+        pgDefaultRole: 'guest',  // If no role is provided in a JWT, this role will be used
         disableDefaultMutations: true
     })
 )

@@ -2,12 +2,12 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'SQL_ASCII';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
+SET standard_conforming_strings = ON;
+SET check_function_bodies = FALSE;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 SET default_tablespace = '';
-SET default_with_oids = false;
+SET default_with_oids = FALSE;
 
 -- Security --
 
@@ -27,10 +27,12 @@ CREATE TABLE language (
     id text PRIMARY KEY,
     name text NOT NULL,
     interface bool NOT NULL,  -- whether available as the interface language
-    training bool NOT NULL  -- whether available as a training language
+    training bool NOT NULL,  -- whether available as a training language
+    recording bool NOT NULL  -- whether we are looking for recordings
 );
 CREATE INDEX ON language (interface);
 CREATE INDEX ON language (training);
+CREATE INDEX ON language (recording);
 
 CREATE VIEW interface_language AS (
     SELECT * FROM language
@@ -42,7 +44,10 @@ CREATE VIEW training_language AS (
     WHERE training
 );
 
--- TODO: a function to look up what languages we are currently recording audio for
+CREATE VIEW recording_language AS (
+    SELECT * FROM language
+    WHERE recording
+);
 
 -- Contrasts in the above languages
 CREATE TABLE contrast (
@@ -65,11 +70,27 @@ CREATE INDEX ON item (language);
 
 -- Audio recordings
 CREATE TABLE audio (
-    file text PRIMARY KEY,
-    speaker integer NOT NULL,  -- will reference user id
-    item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
+    file text PRIMARY KEY,  -- filename
+    speaker text NOT NULL,  -- will reference account username
+    item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    stamp timestamp NOT NULL,
+    approved boolean  -- null for new submissions
 );
 CREATE INDEX ON audio (item);
+CREATE INDEX ON audio (item, approved);
+CREATE INDEX ON audio (speaker);
+CREATE INDEX ON audio (speaker, stamp);
+
+-- Audio moderation
+CREATE TABLE audio_moderation (
+    file text REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT,
+    moderator text NOT NULL,  -- will reference account username
+    stamp timestamp NOT NULL,
+    approved boolean NOT NULL
+);
+
+-- For unique file names
+CREATE SEQUENCE audio_file;
 
 -- Minimal pairs
 CREATE TABLE pair (
@@ -116,15 +137,6 @@ CREATE TRIGGER check_language_trigger BEFORE INSERT OR UPDATE
     FOR EACH ROW
     EXECUTE PROCEDURE check_language();
 
--- Submissions of audio recordings
-CREATE TABLE audio_submission (
-  file bytea NOT NULL,
-  speaker integer NOT NULL,  -- will reference user id
-  item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  id serial PRIMARY KEY
-);
-CREATE INDEX ON audio_submission (item);
-
 -- Util functions --
 
 CREATE FUNCTION public.get_contrast_id(pair_id integer)
@@ -167,6 +179,26 @@ CREATE FUNCTION public.get_item_language_id(item_id integer)
         WHERE id = item_id
     $$;
 
+CREATE FUNCTION get_text (item_id integer)
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT homophones[1]  -- TODO choose a random homophone?
+        FROM item
+        WHERE id = item_id
+    $$;
+
+CREATE FUNCTION public.get_item_id(file text)
+    RETURNS integer
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT item
+        FROM audio
+        WHERE file = file
+    $$;
+
 -- Get list of possible items, from a given string
 -- (if this function is used often, homophones should be put into their own table, not as an array)
 CREATE FUNCTION get_items_from_string(string text)
@@ -182,14 +214,23 @@ CREATE FUNCTION get_items_from_string(string text)
 -- User functions --
 
 -- For a user to submit their audio recordings
-CREATE FUNCTION submit_audio(file bytea, speaker integer, item integer)
+-- This records a file being saved (outside the database)
+CREATE FUNCTION submit_audio(file text, speaker text, item integer)
+    RETURNS void
+    LANGUAGE SQL
+    VOLATILE
+    AS $$
+        INSERT INTO audio (file, speaker, item, stamp)
+        VALUES (file, speaker, item, now())
+    $$;
+
+-- Get a new file name
+CREATE FUNCTION next_audio()
     RETURNS integer
     LANGUAGE SQL
-    VOLATILE 
+    VOLATILE
     AS $$
-        INSERT INTO audio_submission (file, speaker, item)
-        VALUES (file, speaker, item)
-        RETURNING id;
+        SELECT nextval('audio_file')
     $$;
 
 -- Get the list of contrasts for a given language, each with a random set of examples
@@ -208,16 +249,6 @@ CREATE TYPE contrast_with_examples AS (
     id integer,
     examples text_pair[]
 );
-
-CREATE FUNCTION get_text (item_id integer)
-    RETURNS text
-    LANGUAGE SQL
-    STABLE
-    AS $$
-        SELECT homophones[1]  -- TODO choose a random homophone?
-        FROM item
-        WHERE id = item_id
-    $$;
 
 CREATE FUNCTION get_random_examples(contrast_id integer, number integer)
     RETURNS text_pair[]
@@ -264,6 +295,7 @@ CREATE FUNCTION get_random_audio(item_id integer)
         SELECT file
         FROM audio
         WHERE item = item_id
+            AND approved = TRUE
         ORDER BY RANDOM()
     $$;
 
@@ -285,7 +317,7 @@ CREATE FUNCTION get_questions(contrast_id integer, number integer)
                WHERE contrast = contrast_id
                ORDER BY RANDOM()
             LOOP
-                -- we will only return a file for one item in th pair,
+                -- we will only return a file for one item in the pair,
                 -- but both items should have at least one file
                 first_file := get_random_audio(this_pair.first);
                 second_file := get_random_audio(this_pair.second);
@@ -311,6 +343,7 @@ CREATE FUNCTION get_questions(contrast_id integer, number integer)
     $$;
 
 -- Get items to record, choosing those that have not been recorded many times
+-- TODO don't get items that the user has already recorded
 CREATE FUNCTION get_items_to_record(language_id text, number integer)
     RETURNS SETOF item
     LANGUAGE SQL
@@ -323,13 +356,14 @@ CREATE FUNCTION get_items_to_record(language_id text, number integer)
             SELECT count(*)
             FROM audio
             WHERE item = item.id
+                AND approved = TRUE
         ) + 0.9 * (
             SELECT count(*)
-            FROM audio_submission
+            FROM audio
             WHERE item = item.id 
+                AND approved IS NULL
         )
         LIMIT number
     $$;
 
--- TODO moderate audio submissions
 -- TODO allow moderator to extend contrast, pair, item...
