@@ -400,7 +400,7 @@ CREATE FUNCTION public.check_moderator_for_file(file text)
 
 -- Get some audio files that need to be moderated
 CREATE FUNCTION public.get_audio_submissions(language_id text, number integer)
-    RETURNS SETOF audio_submission
+    RETURNS SETOF audio
     LANGUAGE plpgsql
     STABLE
     AS $$
@@ -497,5 +497,4 @@ GRANT INSERT ON TABLE public.audio TO moderator;
 GRANT EXECUTE ON FUNCTION public.check_moderator(text) TO moderator;
 GRANT EXECUTE ON FUNCTION public.check_moderator_for_file(text) TO moderator;
 GRANT EXECUTE ON FUNCTION public.get_audio_submissions(text, integer) TO moderator;
-GRANT EXECUTE ON FUNCTION public.accept_audio_submission(text) TO moderator;
-GRANT EXECUTE ON FUNCTION public.reject_audio_submission(text) TO moderator;
+GRANT EXECUTE ON FUNCTION public.moderate_audio(text, boolean) TO moderator;
