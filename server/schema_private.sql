@@ -100,7 +100,7 @@ CREATE FUNCTION private.generate_jwt()
         BEGIN
             SELECT count(*) INTO n_moderator
                FROM private.moderator
-               WHERE account = current_setting('jwt.claims.username')
+               WHERE account = current_setting('jwt.claims.username');
 
             IF n_moderator = 0
             THEN
@@ -394,7 +394,7 @@ CREATE FUNCTION public.check_moderator_for_file(file text)
         BEGIN
             item_id := public.get_item_id(file);
             language_id := public.get_item_language_id(item_id);
-            public.check_moderator(language_id);
+            SELECT public.check_moderator(language_id);
         END;
     $$;
 
@@ -405,7 +405,7 @@ CREATE FUNCTION public.get_audio_submissions(language_id text, number integer)
     STABLE
     AS $$
         BEGIN
-            private.check_moderator(language_id);
+            SELECT public.check_moderator(language_id);
             SELECT *
                 FROM public.audio
                 WHERE public.get_item_language_id(item) = language_id
@@ -425,7 +425,7 @@ CREATE FUNCTION public.moderate_audio(file text, approved boolean)
     VOLATILE
     AS $$
         BEGIN
-            private.check_moderator_for_file(file);
+            SELECT public.check_moderator_for_file(file);
             UPDATE public.audio
                 SET approved = approved
                 WHERE file = file;
