@@ -1,5 +1,6 @@
 // File system
 import fs from 'fs'
+import child from 'child_process'
 import path from 'path'
 import process from 'process'
 // GraphQL
@@ -85,3 +86,21 @@ Or can we do something similar for the local query?
 
 */
 
+// to call the below, use Meteor.call('moveFilesAround')
+Meteor.methods({
+    'moveFilesAround'() {
+        // could use "spawn", "fork", "exec", or "execFile"
+        // "fork" may be better for performance as it won't block other tasks
+        // (Node is single-threaded)
+        const passingFiles = ['goodfile.wav', 'nicefile.wav', 'correctfile.wav']
+        for (let filename of passingFiles) {
+            child.execFile('mv', ['/Users/stanislawpstrokonski/Desktop/_TEST/pending/' + filename, '/Users/stanislawpstrokonski/Desktop/_TEST/approved/'], (error, stdout, stderr) => {
+                if (error) {
+                    console.log("MinBears error:", stderr)
+                } else {
+                    console.log('MinBears stdout:', stdout)
+                }
+            })
+        }
+    }
+})
