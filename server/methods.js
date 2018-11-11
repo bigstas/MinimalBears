@@ -4,7 +4,7 @@ import path from 'path'
 import process from 'process'
 // GraphQL
 import gql from 'graphql-tag'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import ApolloClient from 'apollo-boost'
 // The PostGraphQL server defines an HTTP endpoint to access the database
 // To access the database in this way, the web server needs to make HTTP requests
 // (The web server sends an HTTP request to itself, then redirects this to PostGraphQL)
@@ -22,8 +22,9 @@ import fetch from 'isomorphic-fetch'
 // https://www.apollographql.com/docs/react/reference/index.html
 
 // Create a database client
-const networkInterface = createNetworkInterface({ uri: Meteor.absoluteUrl('graphql') })
-const client = new ApolloClient({networkInterface})
+const client = new ApolloClient({
+    uri: Meteor.absoluteUrl('graphql')
+})
 
 // cwd:
 // C:\Users\Guy\git\bigstas\MinimalBears\.meteor\local\build\programs\server

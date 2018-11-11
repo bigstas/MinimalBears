@@ -4,29 +4,35 @@ import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
 import Routes from './routes'
 import React from 'react'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import ApolloClient from 'apollo-boost'
+import { HttpLink } from 'apollo-link-http'
+import { ApolloLink, from } from 'apollo-link'
 import { ApolloProvider } from 'react-apollo'
 
 // Connect to the database using Apollo
 // Add middleware that adds a Json Web Token (JWT) to the request header
-const networkInterface = createNetworkInterface({ uri: '/graphql' })
-networkInterface.use([{
-    applyMiddleware(req, next) {
-        if (!req.options.headers) {
-            req.options.headers = {}  // Create the header object if needed.
-        }
-        const token = localStorage.getItem('token')
-        if (token) {
-            req.options.headers['authorization'] = 'Bearer ' + token
-        }
-        next()
-    }
-}])
 
-// Create an Apollo client that will connect to the database
-const client = new ApolloClient({
-    networkInterface
+const httpLink = new HttpLink({ uri: '/graphql' });
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+  // add the authorization to the headers
+  const token = localStorage.getItem('token')
+  operation.setContext(({ headers = {} }) => ({
+    headers: {
+      ...headers,
+      authorization: 'Bearer ' + token || null,
+    } 
+  }));
+
+  return forward(operation);
 })
+
+const client = new ApolloClient({
+  link: from([
+    authMiddleware,
+    httpLink
+  ]),
+});
 
 // <ApolloProvider> allows React to connect to Apollo
 // <Routes> allows client-side routing

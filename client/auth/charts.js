@@ -212,7 +212,7 @@ function extractChartRawData(period, data, contrast) {
 }
 
 
-function makeChartData(period, data, contrast, blank) {
+function makeChartData(period, data, contrast) {
     // period is "week", "month", or "year"
     // data is the raw data object passed from the database
     console.log(data) 
@@ -460,20 +460,10 @@ function generateMixOptions() {
     }
 }
 
-const Charts = React.createClass({
-    getInitialState() {
-        // This is hacky. And elegant?
-        // The Charts object listens for changes, then runs this which changes the state, so that the counterpart functions re-run and the labels are updated. 
-        // It doesn't matter what the state actually is.
-        return({ blank: "foo" })
-    },
-    
+class Charts extends React.Component {
     localeChanged(newLocale) {
-        this.setState({ 
-            // just anything, so long as it's different between languages so that the state changes
-            blank: counterpart.translate('home.welcome')
-        })
-    },
+        this.forceUpdate()
+    }
     
     render() {
         if (this.props.allStats.loading) {
@@ -482,7 +472,7 @@ const Charts = React.createClass({
         
         const allStats = this.props.allStats.getAllStats
         console.log(allStats)
-        const chartData = makeChartData(this.props.period, allStats, this.props.contrast, this.state.blank)
+        const chartData = makeChartData(this.props.period, allStats, this.props.contrast)
         console.log(chartData)
         if (chartData === false) {
             return ( <Translate component="p" content="home.profile.charts.noTrainingOccurred" /> )
@@ -515,18 +505,18 @@ const Charts = React.createClass({
                 {barChart}
             </div>
         )
-    },
+    }
     
-    componentDidMount: function() {
+    componentDidMount() {
         // event listener: listens to locale changes
         counterpart.onLocaleChange(this.localeChanged)
-    },
-    componentWillUnmount: function() {
+    }
+    componentWillUnmount() {
         // stop listening to locale changes
         counterpart.offLocaleChange(this.localeChanged)
     }
         
-})
+}
 
 const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: Int) {
   getAllStats(languageId: $languageId, unit: $unit, number: $number) {

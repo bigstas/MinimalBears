@@ -57,7 +57,7 @@ const AudioContext = window.AudioContext || window.webkitAudioContext
 const URL = window.URL || window.webkitURL
 
 
-const StartButton = React.createClass({
+function StartButton(props) {
     /* The main button.
      * Press to start recording and go through all of the words. This puts the page in record mode.
      * Press while recording to move on to the next word.
@@ -65,297 +65,279 @@ const StartButton = React.createClass({
      * If all the words have been recorded, this button will clear all the recordings and restart recording from the beginning.
      * props: mode, next, max, callback
      */
+     
+    // display props
+    const disabled = !((props.mode === "wait") || (props.mode === "record") || (props.mode === "done"))
+    let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+    let label = "record.startLabel.record" // default value
     
-    render() {
-        // display props
-        const disabled = !((this.props.mode === "wait") || (this.props.mode === "record") || (this.props.mode === "done"))
-        let className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
-        let label = "record.startLabel.record" // default value
-        
-        // callback arguments
-        const stop = (this.props.mode === "record")
-        let start = true     // default value
-        let mode  = "record" // default value
-        let next
-        let clearAll = false // default value
-        
-        if (this.props.mode === "wait") { 
-            // start recording or continue where we left off
-            next = this.props.next 
-        } 
-        else if (this.props.mode === "record") {
-            // go on to the next item
-            next = this.props.next +1
-            if (this.props.next === this.props.max) {
-                // we're already on the last item
-                start = false
-                mode  = "done"
-                label = "record.startLabel.done"
-            } else {
-                // we're somewhere in the middle
-                label = "record.startLabel.next"
-            }
-        } 
-        else if (this.props.mode === "done") {
-            // we've finished recording, and now starting recording from scratch
-            next = 0
-            label = "record.startLabel.reRecordAll"
-            clearAll = true
+    // callback arguments
+    const stop = (props.mode === "record")
+    let start = true     // default value
+    let mode  = "record" // default value
+    let next
+    let clearAll = false // default value
+    
+    if (props.mode === "wait") { 
+        // start recording or continue where we left off
+        next = props.next 
+    } 
+    else if (props.mode === "record") {
+        // go on to the next item
+        next = props.next +1
+        if (props.next === props.max) {
+            // we're already on the last item
+            start = false
+            mode  = "done"
+            label = "record.startLabel.done"
+        } else {
+            // we're somewhere in the middle
+            label = "record.startLabel.next"
         }
-        
-        // for this button, focus and next are the same
-        const focus = next
-        return (
-            <div>
-                <div className={className} id='startButton'
-                    data-tip data-for='startTooltip' data-delay-show='1000'
-                    onClick={disabled ? null : () => this.props.callback( stop, start, mode, focus, next, clearAll )}>
-                        <Translate content={label} />
-                </div>
-                <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
-                    <p style={{textAlign:'center'}}><Translate content="record.startLabel.tooltip1" /><br /><Translate content="record.startLabel.tooltip2" /></p>
-                </ReactTooltip>
-            </div>
-        )
+    } 
+    else if (props.mode === "done") {
+        // we've finished recording, and now starting recording from scratch
+        next = 0
+        label = "record.startLabel.reRecordAll"
+        clearAll = true
     }
-})
+    
+    // for this button, focus and next are the same
+    const focus = next
+    return (
+        <div>
+            <div className={className} id='startButton'
+                data-tip data-for='startTooltip' data-delay-show='1000'
+                onClick={disabled ? null : () => props.callback( stop, start, mode, focus, next, clearAll )}>
+                    <Translate content={label} />
+            </div>
+            <ReactTooltip id='startTooltip' place="bottom" type="light" effect="solid" multiline={true}>
+                <p style={{textAlign:'center'}}><Translate content="record.startLabel.tooltip1" /><br /><Translate content="record.startLabel.tooltip2" /></p>
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const StopButton = React.createClass({
+function StopButton(props) {
     /* Press this button to stop the recording at the current word.
      * Currently configured so that the current word's recording *will* be saved, and focus will move on to the next word.
      * Available in record mode. Sends page to wait mode or done mode (depending on whether everything has been recorded or not).
      * props: mode, next, max, callback
      */
     
-    render() {
-        // display props
-        const disabled = (this.props.mode !== "record")
-        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
-        
-        // callback arguments
-        const stop = true     // always
-        const start = false   // always
-        let mode  = "wait"  // default value
-        const next  = this.props.next +1
-        const focus = next // for this button, focus and next are the same
-        
-        if (this.props.next === this.props.max) {
-            mode = "done"
-        }
-        
-        return (
-            <div>
-                <div className={className} id='stopIc' data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next )}>
-                    <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
-                </div>
-                <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
-                    <Translate content="record.stopTooltip" component="p" />
-                </ReactTooltip>
-            </div>
-        )
+    // display props
+    const disabled = (props.mode !== "record")
+    const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+    
+    // callback arguments
+    const stop = true     // always
+    const start = false   // always
+    let mode  = "wait"  // default value
+    const next  = props.next +1
+    const focus = next // for this button, focus and next are the same
+    
+    if (props.next === props.max) {
+        mode = "done"
     }
-})
+    
+    return (
+        <div>
+            <div className={className} id='stopIc' data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>props.callback( stop, start, mode, focus, next )}>
+                <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
+            </div>
+            <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
+                <Translate content="record.stopTooltip" component="p" />
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const PlayAllButton = React.createClass({
+function PlayAllButton(props) {
     /* Press this button to play back all the audio.
      * Available in done mode (i.e. when all the words have been recorded).
      * props: recordedSoFar, mode, playAllFunction
      */
     
-    render() {
-        // display props
-        const disabled = !(this.props.recordedSoFar > 0 && (this.props.mode === "wait" || this.props.mode === "done" ))
-        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
-        
-        return (
-            <div>
-                <div className={className} id='playAllButton'
-                    data-tip data-for='playAllTooltip' data-delay-show='500'
-                    onClick={disabled ? null : this.props.playAllFunction}>
-                        <Translate content="record.playbackAll" />
-                </div>
-                <ReactTooltip id='playAllTooltip' place="bottom" type="light" effect="solid">
-                    <Translate content="record.playbackAllTooltip" component="p" />
-                </ReactTooltip>
+    // display props
+    const disabled = !(props.recordedSoFar > 0 && (props.mode === "wait" || props.mode === "done" ))
+    const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled')
+    
+    return (
+        <div>
+            <div className={className} id='playAllButton'
+                data-tip data-for='playAllTooltip' data-delay-show='500'
+                onClick={disabled ? null : props.playAllFunction}>
+                    <Translate content="record.playbackAll" />
             </div>
-        )
-    }
-})
+            <ReactTooltip id='playAllTooltip' place="bottom" type="light" effect="solid">
+                <Translate content="record.playbackAllTooltip" component="p" />
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const SubmitButton = React.createClass({
+function SubmitButton(props) {
     /* Press this button to submit the audio to the database. 
      * Enabled when in done mode (i.e. when all the words have been recorded).
      * props: mode, submitAudio
      */
-    render() {
-        const disabled = !(this.props.mode === "done")
-        const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
-        return (
-            <div>
-                <div className={className} id='submitButton'
-                    data-tip data-for='submitTooltip' data-delay-show='500'
-                    onClick={disabled ? null : this.props.submitAudio}>
-                        <Translate content="record.submit" />
-                </div>
-                <ReactTooltip id='submitTooltip' place="bottom" type="light" effect="solid">
-                    <Translate content="record.submitTooltip" component="p" />
-                </ReactTooltip>
+    const disabled = !(props.mode === "done")
+    const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
+    return (
+        <div>
+            <div className={className} id='submitButton'
+                data-tip data-for='submitTooltip' data-delay-show='500'
+                onClick={disabled ? null : props.submitAudio}>
+                    <Translate content="record.submit" />
             </div>
-        )
-    }
-})
+            <ReactTooltip id='submitTooltip' place="bottom" type="light" effect="solid">
+                <Translate content="record.submitTooltip" component="p" />
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const TutorialButton = React.createClass({
+function TutorialButton(props) {
     /* Press this button to start the tutorial. */
-    render() {
-        return (
-            <div className='topRowButton topRowButtonEnabled' id='tutorialButton' onClick={this.props.restartTutorial}>?</div>
-        )
-    }
-})
+    return (
+        <div className='topRowButton topRowButtonEnabled' id='tutorialButton' onClick={props.restartTutorial}>?</div>
+    )
+}
 
-
-const TopRow = React.createClass({
+function TopRow(props) {
     /* The top row of buttons.
      * Includes: start, stop, play all, submit.
      * props: mode, callback, next, max, playbackAll, recordedSoFar, submitAudio
      */
-    render() {
-        return (
-            <div id='topRow'>
-                <StartButton   mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
-                <StopButton    mode={this.props.mode} callback={this.props.callback} next={this.props.next} max={this.props.max} />
-                <PlayAllButton mode={this.props.mode} playAllFunction={this.props.playbackAll} recordedSoFar={this.props.recordedSoFar} />
-                <SubmitButton  mode={this.props.mode} submitAudio={this.props.submitAudio} />
-                <TutorialButton restartTutorial={this.props.restartTutorial} />
-            </div>
-        )
-    }
-})
+    return (
+        <div id='topRow'>
+            <StartButton   mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
+            <StopButton    mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
+            <PlayAllButton mode={props.mode} playAllFunction={props.playbackAll} recordedSoFar={props.recordedSoFar} />
+            <SubmitButton  mode={props.mode} submitAudio={props.submitAudio} />
+            <TutorialButton restartTutorial={props.restartTutorial} />
+        </div>
+    )
+}
 
-const ReRecord = React.createClass({
+function ReRecord(props) {
     /* Button for re-recording a single word.
-     * Available when there is no recording going on at the moment (wait mode or done mode) and this word has alreay been recorded (this.props.srcExists === true);
+     * Available when there is no recording going on at the moment (wait mode or done mode) and this word has alreay been recorded (props.srcExists === true);
      * or if the word in question is being re-recorded (active === true), in which case you press this button to stop the re-recording.
      * Returns to the mode we started from when you're done recording (i.e. either wait mode or done mode).
      * props: mode, focused, srcExists, index, next, 
      */
-    render() {
-        // the button is "active" if it is currently re-recording
-        let active = ((this.props.mode === "reRecordSingleToWait" || this.props.mode === "reRecordSingleToDone") && this.props.focused)
-        let disabled = !(this.props.srcExists && 
-                            (this.props.mode === "wait" || this.props.mode === "done" || active)
-                         )
-        let icon = "record.png" // icon: red circle - press to record
-        let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
-        let tooltipId = 'rerecordTooltip' + this.props.index.toString()
-        
-        // callback arguments - default values, i.e. when not currently re-recording
-        let stop  = false
-        let start = true
-        let focus = this.props.index
-        let next  = null  // next shouldn't change
-        let mode  = "reRecordSingleToWait"
-        if (this.props.mode === "done") { mode = "reRecordSingleToDone" }
-        
-        // arguments when this row is being re-recorded
-        if (active) {
-            icon = "done.png" // icon: green tick - press to finish the recording
-            stop  = true
-            start = false
-            focus = this.props.next
-            className = 'wordRowButton reRecordActive'
-            // Go back to previous mode, either wait mode or done mode, as encoded in the prop
-            if      (this.props.mode === "reRecordSingleToWait") { mode = "wait" }
-            else if (this.props.mode === "reRecordSingleToDone") { mode = "done" }
-            else {
-                // throw an error! (better than this one)
-                console.log("incorrect mode passed: current mode is " + this.props.mode)
-            }
+    
+    // the button is "active" if it is currently re-recording
+    let active = ((props.mode === "reRecordSingleToWait" || props.mode === "reRecordSingleToDone") && props.focused)
+    let disabled = !(props.srcExists && 
+                        (props.mode === "wait" || props.mode === "done" || active)
+                     )
+    let icon = "record.png" // icon: red circle - press to record
+    let className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
+    let tooltipId = 'rerecordTooltip' + props.index.toString()
+    
+    // callback arguments - default values, i.e. when not currently re-recording
+    let stop  = false
+    let start = true
+    let focus = props.index
+    let next  = null  // next shouldn't change
+    let mode  = "reRecordSingleToWait"
+    if (props.mode === "done") { mode = "reRecordSingleToDone" }
+    
+    // arguments when this row is being re-recorded
+    if (active) {
+        icon = "done.png" // icon: green tick - press to finish the recording
+        stop  = true
+        start = false
+        focus = props.next
+        className = 'wordRowButton reRecordActive'
+        // Go back to previous mode, either wait mode or done mode, as encoded in the prop
+        if      (props.mode === "reRecordSingleToWait") { mode = "wait" }
+        else if (props.mode === "reRecordSingleToDone") { mode = "done" }
+        else {
+            // throw an error! (better than this one)
+            console.log("incorrect mode passed: current mode is " + props.mode)
         }
-        
-        // The first in the list needs to be highlighted for the tutorial
-        let id
-        if (this.props.index === 0) { id = "firstReRecordWord" }
-        else { id = null }
-        
-        return (
-            <div style={{display: 'inline-block'}}>
-                <div className={className} id={id} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.callback( stop, start, mode, focus, next ) }>
-                    <img className='buttonIcon' id='recordIcon' src={icon} />
-                </div>
-                <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
-                    <Translate content="record.reRecordTooltip" component="p" />
-                </ReactTooltip>
-            </div>
-        )
     }
-})
+    
+    // The first in the list needs to be highlighted for the tutorial
+    let id
+    if (props.index === 0) { id = "firstReRecordWord" }
+    else { id = null }
+    
+    return (
+        <div style={{display: 'inline-block'}}>
+            <div className={className} id={id} key={props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>props.callback( stop, start, mode, focus, next ) }>
+                <img className='buttonIcon' id='recordIcon' src={icon} />
+            </div>
+            <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
+                <Translate content="record.reRecordTooltip" component="p" />
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const PlaybackOne = React.createClass({
-    /* Button for playing back a single word. Can only use this if there is audio available for this index (this.props.srcExists === true).
+function PlaybackOne(props) {
+    /* Button for playing back a single word. Can only use this if there is audio available for this index (props.srcExists === true).
      * props: srcExists, mode, index
      */
-    render() {
-        const disabled = !(this.props.srcExists && (this.props.mode === "wait" || this.props.mode === "done"))
-        const className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
-        const tooltipId = 'playbackTooltip' + this.props.index.toString()
-        
-        // The first in the list needs to be highlighted for the tutorial
-        let id
-        if (this.props.index === 0) { id="firstPlaybackWord" }
-        else { id = null }
-        
-        return (
-            <div style={{display: 'inline-block'}}>
-                <div className={className} id={id} key={this.props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>this.props.playbackFunction(this.props.index, false)}>
-                    <img className='buttonIcon' id='playIcon' src='play.png' />
-                </div>
-                <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
-                    <Translate content="record.playbackTooltip" component="p" />
-                </ReactTooltip>
+    const disabled = !(props.srcExists && (props.mode === "wait" || props.mode === "done"))
+    const className = (disabled ? 'wordRowButton transparent' : 'wordRowButton wordRowButtonEnabled')
+    const tooltipId = 'playbackTooltip' + props.index.toString()
+    
+    // The first in the list needs to be highlighted for the tutorial
+    let id
+    if (props.index === 0) { id="firstPlaybackWord" }
+    else { id = null }
+    
+    return (
+        <div style={{display: 'inline-block'}}>
+            <div className={className} id={id} key={props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>props.playbackFunction(props.index, false)}>
+                <img className='buttonIcon' id='playIcon' src='play.png' />
             </div>
-        )
-    }
-})
+            <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
+                <Translate content="record.playbackTooltip" component="p" />
+            </ReactTooltip>
+        </div>
+    )
+}
 
-const WordRow = React.createClass({
+function WordRow(props) {
     /* A row below the top row. There is the same number of these as there are words to record.
      * Includes: re-record, playback, word. All inside a div that lights up on rollover, or when focused.
      * props: focused, index, mode, next, srcExists, callback, playbackFunction, word
      */
-    render() {
-        const rowClassName = this.props.focused === true ? "wordRowFocused" : "wordRow"
-        
-        // The first in the list needs to be highlighted for the tutorial
-        let id
-        if (this.props.index === 0) { id="firstWord" }
-        else { id = null }
-        
-        return (
-            <div id={id} className={rowClassName}>
-                <ReRecord index={this.props.index} mode={this.props.mode} next={this.props.next} srcExists={this.props.srcExists} callback={this.props.callback} focused={this.props.focused} />
-                <PlaybackOne index={this.props.index} mode={this.props.mode} srcExists={this.props.srcExists} playbackFunction={this.props.playbackFunction}  />
-                <p style={{display: "inline", cursor: "default"}}>{this.props.word}</p>
-            </div>
-        )
-    }
-})
+    const rowClassName = props.focused === true ? "wordRowFocused" : "wordRow"
+    
+    // The first in the list needs to be highlighted for the tutorial
+    let id
+    if (props.index === 0) { id="firstWord" }
+    else { id = null }
+    
+    return (
+        <div id={id} className={rowClassName}>
+            <ReRecord index={props.index} mode={props.mode} next={props.next} srcExists={props.srcExists} callback={props.callback} focused={props.focused} />
+            <PlaybackOne index={props.index} mode={props.mode} srcExists={props.srcExists} playbackFunction={props.playbackFunction}  />
+            <p style={{display: "inline", cursor: "default"}}>{props.word}</p>
+        </div>
+    )
+}
 
-const RecordPage = React.createClass({
+class RecordPage extends React.Component {
     /* A React element for the entire page body (below the Nav).
      * props: recordingWords, submitAudio
      */
-    
-    getInitialState () {
-        return {
+    constructor(props) {
+    	super(props)
+    	this.state = {
             audioURLs: [],  // List of the recorded audio (as object URLs)
             audioBlobs: [],  // List of the recorded audio (as blobs)
             mode: "wait",   // wait, record, done, reRecordSingleToWait, reRecordSingleToDone, playback, playbackAll
             focus: 0,  // which item is under focus
             next: 0    // the first item that is not yet recorded
-        }
-    },
+    	}
+    }
     
     componentWillMount() {
         // Set up audio context (which contains audio nodes)
@@ -368,7 +350,7 @@ const RecordPage = React.createClass({
             // Create the recorder node (connected to the audio node)
             this.recorder = new Recorder(this.source)
         })
-    },
+    }
     
     cutRecording () {
         /* Stop the recorder, save the data with a URL, clear the recorder
@@ -377,7 +359,7 @@ const RecordPage = React.createClass({
         this.recorder.stop()
         this.recorder.exportWAV(blob => this.makeUrl(currentIndex, blob))
         this.recorder.clear()
-    },
+    }
     
     makeUrl (index, blob) {
         /* Function passed to exportWav (above)
@@ -390,7 +372,7 @@ const RecordPage = React.createClass({
             audioURLs: update(this.state.audioURLs, {[index]: {$set: url }}),
             audioBlobs: update(this.state.audioBlobs, {[index]: {$set: blob }})
         })
-    },
+    }
     
     recordCallback (stop, start, mode, focus, next, clearAll=false) {
         /* This is a callback function for buttons that control recording.
@@ -420,7 +402,7 @@ start: ${start}
 mode: ${mode}
 focus: ${focus}
 next: ${next}`)
-    },
+    }
     
     playbackAll() {
         /* Playback all recorded audio
@@ -429,7 +411,7 @@ next: ${next}`)
         // The state will make the event listeners play the rest
         this.setState({ mode: 'playbackAll' })
         this.playback(0)
-    },
+    }
     
     playback(index) {
         // Plays the audio element with a given index.
@@ -443,7 +425,7 @@ next: ${next}`)
         } else {
             console.log("audio URL out of range: " + index.toString())
         }
-    },
+    }
     
     dispatchAudio () {
         const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
@@ -455,14 +437,13 @@ next: ${next}`)
             // the "loadend" event will trigger once readAsBinaryString is complete
             return new Promise((resolve, reject) => {
                 const reader = new FileReader()
-                const _this = this  // to use inside function...
                 reader.addEventListener("loadend", () => {
                     // reader.result contains the contents of blob as a string
                     const blobString = btoa(reader.result)  // Make the byte string friendly (base-64 encoding)
                     console.log(blobString.length)
                     console.log(this.props.userId)
                     console.log(itemId)
-                    _this.props.submitAudio({variables: {input: { file: blobString,
+                    this.props.submitAudio({variables: {input: { file: blobString,
                                                                   speaker: this.props.userId,
                                                                   item: itemId }}})
                     .then( (response) => {
@@ -495,7 +476,7 @@ next: ${next}`)
         }).catch( (error) => {
             alert(counterpart.translate("record.error"))
         })
-    },
+    }
     
     restartTutorial() {
         /* Resets the tutorial and plays it back from the beginning, regardless of where they stopped the tutorial before
@@ -504,7 +485,7 @@ next: ${next}`)
         // this.joyride.refs - the ref set on the joyride object, it ends up referring to the Apollo wrapper
         // (so then you have to go through wrappedInstance etc.)
         this.joyride.refs.wrappedInstance.joyride.reset(true)
-    },
+    }
     
     render() {
         return (
@@ -547,7 +528,7 @@ next: ${next}`)
                 </div>
             </div>
         )
-    },
+    }
     
     componentDidMount() {
         /* To be called when component initially mounts (componentDidMount), and when new items are loaded.
@@ -588,34 +569,35 @@ next: ${next}`)
                 return (counterpart.translate("record.leaveHook"))
             }
         })
-    },
+    }
         
     componentWillUnmount() {
         // destroy the audioContext when the page closes - frees up resources, ensures that we are below the limit for the number of audio contexts if the page is returned to many times (the limit is 6)
         this.audioContext.close()
     }
-})
+}
 
 // TODO define an SQL function for this
-const WrappedRecordPage = React.createClass({
-    getInitialState() {
-        return { 
+class WrappedRecordPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             pressedStartTutorialButton: false,
             recordingLanguage: null // TODO: actually query form database
-        }
-    },
+		}
+	}
     
     selectLanguage(option) {
         this.setState({ recordingLanguage: option })
-    },
+    }
     
     startTutorial() {
         this.setState({ pressedStartTutorialButton: true })
-    },
+    }
     
     refetchQuery() {
         this.props.items.refetch()
-    },
+    }
     
     render() {
         if (this.props.username) {
@@ -646,7 +628,7 @@ const WrappedRecordPage = React.createClass({
         // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
         else { return <NoRecordPage loggedIn={false} /> }
     }
-})
+}
 
 const itemQuery = gql`query ($languageId: String!, $number: Int!) {
     getItemsToRecord(languageId: $languageId, number: $number) {

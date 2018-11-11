@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
 
-const Selector = React.createClass({
+function Selector(props) {
     /* A series of buttons from which the user can choose one
      * 
      * Required props:
@@ -21,58 +21,54 @@ const Selector = React.createClass({
      * Note that selectionMessage, options text, and extraText will be passed
      * as the content of Translate components 
      */
-    render() {
-        return (
-            <div className='panel animated fadeIn' id='selector'>
-                <Translate content={this.props.selectionMessage} component="p" style={{textAlign:"center"}} />
-                {this.props.options.map(option =>
-                    <div className='button chooseOption' key={option.id} 
-                        onMouseEnter={!!this.props.mouseEnter ? this.props.mouseEnter : null} 
-                        onMouseLeave={!!this.props.mouseLeave ? this.props.mouseLeave : null} 
-                        onClick={()=>this.props.callback(option.id)}>
-                        {option.text}
-                        <br/>
-                        {!!option.example ? <a className="selectorExample">{option.example}</a> : <span></span>}
-                    </div>
-                )}
+    return (
+        <div className='panel animated fadeIn' id='selector'>
+            <Translate content={props.selectionMessage} component="p" style={{textAlign:"center"}} />
+            {props.options.map(option =>
+                <div className='button chooseOption' key={option.id} 
+                    onMouseEnter={!!props.mouseEnter ? props.mouseEnter : null} 
+                    onMouseLeave={!!props.mouseLeave ? props.mouseLeave : null} 
+                    onClick={()=>props.callback(option.id)}>
+                    {option.text}
+                    <br/>
+                    {!!option.example ? <a className="selectorExample">{option.example}</a> : <span></span>}
+                </div>
+            )}
 
-                {!!this.props.extraText ? 
-                    <div className='button' id='extraButton' onClick={this.props.extraCallback}>
-                        <Translate content={this.props.extraText} />
-                    </div> :
-                    <div>{/*empty div*/}</div> 
-                }
-            </div>
-        )
-    }
-})
+            {!!props.extraText ? 
+                <div className='button' id='extraButton' onClick={props.extraCallback}>
+                    <Translate content={props.extraText} />
+                </div> :
+                <div>{/*empty div*/}</div> 
+            }
+        </div>
+    )
+}
 
-const LanguageSelector = React.createClass({
+function LanguageSelector(props) {
     /* Choose a language
      * 
      * Required props:
      * data - result of a query for all languages
      * callback - function based on the language ID
      */
-    render() {
-        if (this.props.data.loading) { return <LoadingPage /> }
-        const options = this.props.data.allTrainingLanguages.nodes.map(language =>
-            ({text: <Translate content={"train.language."+language.id.toString()} />,
-              id: language.id,
-              example: false})
-        )
-        
-        return (
-            <Selector
-                selectionMessage="train.chooseLanguage"
-                options={options}
-                callback={this.props.callback}
-            />
-        )
-    }
-})
+    if (props.data.loading) { return <LoadingPage /> }
+    const options = props.data.allTrainingLanguages.nodes.map(language =>
+        ({text: <Translate content={"train.language."+language.id.toString()} />,
+          id: language.id,
+          example: false})
+    )
+    
+    return (
+        <Selector
+            selectionMessage="train.chooseLanguage"
+            options={options}
+            callback={props.callback}
+        />
+    )
+}
 
-const ContrastSelector = React.createClass({
+class ContrastSelector extends React.Component {
     /* Choose a contrast for a language. Only contrasts which have at least one pair are displayed.
      * 
      * Required props:
@@ -80,23 +76,26 @@ const ContrastSelector = React.createClass({
      * callback - function based on the contrast ID
      * extraCallback - function to return to choosing a language
      */
-    getInitialState() {
-        return { exampleCounter: 0 }
-    },
+	constructor(props) {
+		super(props)
+		this.state = {
+			exampleCounter: 0
+		}
+    }
 
     switchExample() {
         let newCounter = this.state.exampleCounter+1
         if (newCounter > 2) { newCounter = 0 }
         this.setState({ exampleCounter: newCounter })
-    },
+    }
         
     handleMouseEnter() {
-        this.timerID = setInterval(this.switchExample, 1500)
-    },
+        this.timerID = setInterval(this.switchExample.bind(this), 1500)
+    }
         
     handleMouseLeave() {
         clearInterval(this.timerID)
-    },
+    }
     
     render() {
         if (this.props.data.loading) { return <LoadingPage /> }
@@ -116,15 +115,15 @@ const ContrastSelector = React.createClass({
                 callback={this.props.callback}
                 extraText='train.changeLanguage'
                 extraCallback={this.props.extraCallback}
-                mouseEnter={this.handleMouseEnter} mouseLeave={this.handleMouseLeave}
+                mouseEnter={this.handleMouseEnter.bind(this)} mouseLeave={this.handleMouseLeave.bind(this)}
             />
         )
-    },
+    }
     
     componentWillUnmount() {
         clearInterval(this.timerID)
     }
-})
+}
 
 const languageQuery = gql`query {
     allTrainingLanguages {

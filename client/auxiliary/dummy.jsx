@@ -8,13 +8,13 @@ function sum(a,b) {
     
 // A dummy class for testing during development
 
-const MyClass = React.createClass({
+class MyClass extends React.Component {
     
     doStuff() {
         const thing = {file: "1", speaker: "Guido", item: 16}
         this.props.audioMutation({variables: {input: thing}})
         console.log('done!')
-    },
+    }
     
     render() {
         // As the props come from an asynchronous query, we cannot assume everything is there
@@ -29,7 +29,7 @@ const MyClass = React.createClass({
         // Render either way:
         return <button onClick={this.doStuff}>Click me!</button>
     }
-})
+}
 
 
 const getUser = gql`query {

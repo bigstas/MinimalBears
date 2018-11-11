@@ -75,3 +75,7 @@ HINT:  Is another postmaster (PID 682) running in data directory "/usr/local/var
 The PID will be given in the first line of the response.
 3. Then you need to run the kill command: [anywhere]$ kill 682  // or whatever number the PID is
 4. Now you can run postgres again as normal: [anywhere]$ postgres -D /usr/local/var/postgres/
+
+11/11/2018 - to get graphql to stop complaining about different versions
+- added "resolutions" to package.json
+- ran "meteor npx yarn install"

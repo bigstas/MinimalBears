@@ -14,38 +14,34 @@ import gql from 'graphql-tag'
 
 
 // Progress bar
-const ProgressBar = React.createClass({
-    render() {
-        return (
-            <div id="progressBar">
-                <div id="progressBarFillFluid" style={this.props.style}></div>
-            </div>
-        )
-    }
-})
+function ProgressBar(props) {
+    return (
+        <div id="progressBar">
+            <div id="progressBarFillFluid" style={props.style}></div>
+        </div>
+    )
+}
 
 // Progress button
-const ProgressButton = React.createClass({
-    render() {
-        let btnClass = 'button progressButton animated rubberBand' // could do styling depending on mode if we want
-        let label
-        if      (this.props.mode === "wait")     { label = "train.progressLabel.begin" }
-        else if (this.props.mode === "ask")      { label = "train.progressLabel.playAgain" }
-        else if (this.props.mode === "feedback") { label = "train.progressLabel.next" }
-        {/*else if (this.props.mode === "done")     { label = "train.progressLabel.goAgain" }*/}
-        return (
-            <div className={btnClass} onClick={this.props.handle}><Translate content={label} /></div>
-        )
-    }
-})
+function ProgressButton(props) {
+    let btnClass = 'button progressButton animated rubberBand' // could do styling depending on mode if we want
+    let label
+    if      (props.mode === "wait")     { label = "train.progressLabel.begin" }
+    else if (props.mode === "ask")      { label = "train.progressLabel.playAgain" }
+    else if (props.mode === "feedback") { label = "train.progressLabel.next" }
+    {/*else if (props.mode === "done")     { label = "train.progressLabel.goAgain" }*/}
+    return (
+        <div className={btnClass} onClick={props.handle}><Translate content={label} /></div>
+    )
+}
 
 // Button for responding to a recording
-const WordOption = React.createClass({ 
+class WordOption extends React.Component { 
     handleClick() {
         if (this.props.mode === "ask") {
             this.props.callbackParent() // you only want things to happen in 'ask' mode, as outside of that mode these buttons shouldn't do anything
         }
-    },
+    }
     
     render() {
         let text = ""
@@ -75,7 +71,7 @@ const WordOption = React.createClass({
             <div 
             id={id}
             className={wordOptionClass}
-            onClick={this.handleClick}>
+            onClick={this.handleClick.bind(this)}>
                 {useTranslate ? 
                     <Translate content={text} /> :
                     text
@@ -83,13 +79,14 @@ const WordOption = React.createClass({
             </div>
         )
     }
-})
+}
 
 
 // The arena - where the action happens  
-const Arena = React.createClass({
-    getInitialState() {
-        return {
+class Arena extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
             counter: 0,
             maxRounds: 2,   // this number is set low during development - it should be increased for release
             score: 0,
@@ -99,7 +96,7 @@ const Arena = React.createClass({
             currentAudio: null,
             textList: ["placeholder", "more placeholder"]
         }
-    },
+    }
     
     // After the user chooses an option during training
     onWordChosen(chosenIndex) {
@@ -137,7 +134,7 @@ const Arena = React.createClass({
                 console.log(error)
             })
         }
-    },
+    }
     
     handleProgressClick() {
         /* This method is what happens when the user presses the central "progress" button.
@@ -174,11 +171,11 @@ const Arena = React.createClass({
         else {
             // throw some sort of error...?
         }
-    },
+    }
     
     showDonePanel() {
         this.setState({ mode: "restart" })
-    },
+    }
     
     restart() {
         // first, refetch the query for new training examples
@@ -187,21 +184,21 @@ const Arena = React.createClass({
         this.setState({ counter: 0, score: 0 })
         // finally, start up the game again
         this.handleProgressClick()
-    },
+    }
     
     render() {
         if (this.state.mode === "restart") {
             const snd = new Audio("finish.wav")
             snd.play()
             
-            return <DonePanel handleClick={this.restart} 
+            return <DonePanel handleClick={this.restart.bind(this)}
                        loggedIn={!!this.props.username}
                        score={100*this.state.score/this.state.maxRounds}
                        activeContrastId={this.props.activeContrastId}
                     /> 
         } else {
             if (this.state.mode === "done") {
-                setTimeout(this.showDonePanel, 1500) // wait for a moment before showing the results page
+                setTimeout(this.showDonePanel.bind(this), 1500) // wait for a moment before showing the results page
             }
             return (
                 <div className='panel animated fadeIn' id='arena'>
@@ -216,7 +213,7 @@ const Arena = React.createClass({
                     
                     <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
                     
-                    {this.state.mode !== "done" ? <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick} /> : <span />}
+                    {this.state.mode !== "done" ? <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick.bind(this)} /> : <span />}
 
                     {/* Buttons for choosing options */ }
                     <div id='optionContainer' className="container">
@@ -237,7 +234,7 @@ const Arena = React.createClass({
             )
         }
     }
-})
+}
 
 
 /* The 'graphql' function will create a wrapper for a class,

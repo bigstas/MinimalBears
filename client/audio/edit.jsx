@@ -2,17 +2,15 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import Peaks from 'peaks.js'
 
-const NoEditPage = React.createClass({
-    render() {
-        return (
-            <div className='panel animated fadeIn' id='preRecord'>
-                <Translate component="p" content="edit.noEdit" />
-            </div>
-        )
-    }
-})
+function NoEditPage(props) {
+    return (
+        <div className='panel animated fadeIn' id='preRecord'>
+            <Translate component="p" content="edit.noEdit" />
+        </div>
+    )
+}
 
-const PeaksObject = React.createClass({
+class PeaksObject extends React.Component {
     render() {
         this.myAudioContext = new AudioContext()
         console.log("this.props.src is " + this.props.src)
@@ -22,10 +20,19 @@ const PeaksObject = React.createClass({
                 <audio id='mainAudio' ref={this.mainAudioRef} src={this.props.src} controls={false} />
             </div>
         )
-    },
+    }
     
-    audioContainerRef(el) {this.audioContainer = el; console.log('define audioContainer ref'); console.log(el)},
-    mainAudioRef(el) {this.mainAudio = el; console.log('define mainAudio ref'); console.log(el)},
+    audioContainerRef(el) {
+    	this.audioContainer = el
+    	console.log('define audioContainer ref')
+    	console.log(el)
+    }
+    
+    mainAudioRef(el) {
+    	this.mainAudio = el
+    	console.log('define mainAudio ref')
+    	console.log(el)
+	}
     
     updatePeaksObject() {
         console.log(this.mainAudio.src)
@@ -53,9 +60,11 @@ const PeaksObject = React.createClass({
             overviewHighlightRectangleColor: 'grey',
             logger: console.error.bind(console)
         })
-    },
+    }
     
-    componentDidMount() { this.mainAudio.addEventListener('loadeddata', this.updatePeaksObject) },
+    componentDidMount() {
+    	this.mainAudio.addEventListener('loadeddata', this.updatePeaksObject)
+	}
     
     shouldComponentUpdate(nextProps, nextState) {
         this.mainAudio.src = nextProps.src
@@ -63,23 +72,24 @@ const PeaksObject = React.createClass({
         this.instance.destroy()
         
         return false
-    },
+    }
     
     componentWillUnmount() { 
         this.instance.destroy() 
         // TODO: below requires testing - is it being destroyed?
         this.myAudioContext.close()
     }
-})
+}
 
 
-const EditingPage = React.createClass({
-    getInitialState() { 
-        return ({ 
+class EditingPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             src: ["alex bid.wav", "fran win.wav"],
             whichSrc: 0
-        }) 
-    },
+		}
+	}
     
     handleSubmit(segment) {
         // TODO: this should be passed to the database rather than just logged
@@ -92,12 +102,12 @@ const EditingPage = React.createClass({
         }
         this.setState({ whichSrc: this.state.whichSrc +1 })
         alert("On to the next audio clip!")
-    },
+    }
     
     handleReject() {
         this.setState({ whichSrc: this.state.whichSrc +1 })
         // some sort of dialogue box concerning why the audio has been rejected?
-    },
+    }
     
     playOrPause() {
         if(this.refs.PeaksObject.mainAudio.paused) {
@@ -105,17 +115,17 @@ const EditingPage = React.createClass({
         } else {
             this.refs.PeaksObject.instance.player.pause()
         }
-    },
+    }
     
     playClip() {
         const segments = this.refs.PeaksObject.instance.segments.getSegments()
         this.refs.PeaksObject.instance.player.playSegment(segments[0])
-    },
+    }
     
     zoom(zoomIn) {
         if (zoomIn) { this.refs.PeaksObject.instance.zoom.zoomIn() }
         else        { this.refs.PeaksObject.instance.zoom.zoomOut() }
-    },
+    }
     
     render() {
         console.log(this.state.whichSrc)
@@ -142,6 +152,6 @@ const EditingPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 export default EditingPage

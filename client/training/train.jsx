@@ -3,14 +3,19 @@ import Arena from './arena'
 import { ConnectedLanguageSelector, ConnectedContrastSelector } from './selector'
 
 // combines Arena (where training happens) with Selector (where you choose language and contrast)
-const TrainPage = React.createClass({
-    getInitialState() {
-        return { activeContrastId: null }
-    },
+class TrainPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			activeContrastId: null
+		}
+    }
     
     setContrast(contrastId) {
-        this.setState({ activeContrastId: contrastId })
-    },
+        this.setState({
+        	activeContrastId: contrastId
+        })
+    }
     
     render() {
         let activeComponent
@@ -24,7 +29,7 @@ const TrainPage = React.createClass({
         } else if (this.props.activeLanguageId != null) {
             // Contrast has not been chosen, but language has
             activeComponent = <ConnectedContrastSelector activeLanguageId={this.props.activeLanguageId}
-                                                         callback={this.setContrast}
+                                                         callback={this.setContrast.bind(this)}
                                                          extraCallback={() => this.props.callbackLanguage(null)} />
         } else {
             // Neither language nor contrast has been chosen 
@@ -32,6 +37,6 @@ const TrainPage = React.createClass({
         }
         return activeComponent
     }
-})
+}
 
 export default TrainPage

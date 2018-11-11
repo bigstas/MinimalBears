@@ -8,40 +8,39 @@ import ContrastDropdown from './contrastdropdown'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
 
 
-const TopBand = React.createClass({
+function TopBand(props) {
     /* The title strip at the top of the page, with no graphs in it.
      * This is a static element (no methods).
      */
-    render() {
-        return (
-            <div id='topProfile'>
-                <h2 id='name' className="animated bounce">Welcome {this.props.username}!</h2>
-                <div className='userpic' id='userpicProfile'>
-                    </div>
-                <div id='overview'>
-                    {/* TODO: "kudos" etc. shuold be populated from database */}
-                    <p><Translate content="home.profile.recordingsSubmitted" />19 <br/><Translate content="home.profile.recordingsAccepted" />12 <br/><Translate content="home.profile.recordingsPending" />4 <br/><Translate content="home.profile.totalKudos" />43</p> <br/>
-                </div> 
+    return (
+        <div id='topProfile'>
+            <h2 id='name' className="animated bounce">Welcome {props.username}!</h2>
+            <div className='userpic' id='userpicProfile'>
+                </div>
+            <div id='overview'>
+                {/* TODO: "kudos" etc. shuold be populated from database */}
+                <p><Translate content="home.profile.recordingsSubmitted" />19 <br/><Translate content="home.profile.recordingsAccepted" />12 <br/><Translate content="home.profile.recordingsPending" />4 <br/><Translate content="home.profile.totalKudos" />43</p> <br/>
             </div> 
-        )
-    }
-})
+        </div> 
+    )
+}
 
 
-const UserProfile = React.createClass({
-    getInitialState() {
-        return {
+class UserProfile extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             language: 'eng',
             contrast: 'all',
             period: 'week',
             themeIndex: 0
-        }
-    },
+		}
+	}
     
     handlePeriodChange(event) {
         const period = event.target.value
         this.setState({ period: period })
-    },
+    }
     
     setLanguage(event) {
         const language = event.target.value
@@ -51,12 +50,12 @@ const UserProfile = React.createClass({
                 contrast: 'all'
             })
         }
-    },
+    }
     
     setContrast(event) {
         const contrast = event.target.value
         this.setState({ contrast: contrast})
-    },
+    }
     
     toggleTheme(event) {
         // only for development purposes...
@@ -65,7 +64,7 @@ const UserProfile = React.createClass({
         } else {
             this.setState({ themeIndex: 0 })
         }
-    },
+    }
     
     render() {
         // for social media buttons
@@ -119,7 +118,7 @@ const UserProfile = React.createClass({
             </div>
         )
     }
-})
+}
 
 const practiceLanguagesQuery = gql`query ($unit: String, $number: Int) {
   getPracticeLanguages(unit: $unit, number: $number) {

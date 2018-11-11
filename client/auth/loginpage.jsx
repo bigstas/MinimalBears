@@ -14,15 +14,16 @@ function validateEmail(email) {
     return re.test(email)
 }
 
-const AuthLoginPage = React.createClass({
-    getInitialState() {
-        return {
+class AuthLoginPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             emailValue: "",
             passwordValue: "",
             emailError: false,
             passwordError: false
         }
-    },
+    }
     
     handleChange(event) {
         let field = event.target.name
@@ -40,7 +41,7 @@ const AuthLoginPage = React.createClass({
             }) 
         }
         else {alert ("something is wrong")}
-    },
+    }
     
     handleSubmit(event) {
         /* If the email is not a valid expression (according to regexp above), show an error in red on the page. Otherwise, check the database. (TODO)
@@ -87,14 +88,14 @@ const AuthLoginPage = React.createClass({
             console.log(error)
             // TODO unexpected error (e.g. network error)...
         })
-    },
+    }
     
     handleKeyPress(event) {
         if(event.key == 'Enter') {
             console.log('enter press here! ')
             this.handleSubmit(event)
         }
-    },
+    }
     
     render() {
         return (
@@ -135,7 +136,7 @@ const AuthLoginPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 const login = gql`mutation ($input: AuthenticateFromEmailInput!) {
     authenticateFromEmail(input: $input) {

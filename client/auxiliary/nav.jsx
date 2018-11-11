@@ -4,37 +4,35 @@ import { Link, IndexLink } from 'react-router'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
-const BetaSign = React.createClass({
-    render() {
-        const styles = {
-            color: 'white',
-            fontSize: '8px',
-            textAlign: 'center',
-            backgroundColor: 'black',
-            position: 'relative',
-            bottom: '10px'
-        }
-        return (
-            <div style={styles}>BETA</div>
-        )
+function BetaSign(props) {
+    const styles = {
+        color: 'white',
+        fontSize: '8px',
+        textAlign: 'center',
+        backgroundColor: 'black',
+        position: 'relative',
+        bottom: '10px'
     }
-})
+    return (
+        <div style={styles}>BETA</div>
+    )
+}
 
-const Dropdown = React.createClass({
+class Dropdown extends React.Component {
     handleClick (newLocale) {
         // Sets locale for <Translate> components.
         counterpart.setLocale(newLocale)
-    },
+    }
     
     logOut() {
         this.props.callbackLogOut()
         alert("You are logging out :)")
-    },
+    }
     
     render() {
         let authElement, registerElement, contactUs
         if (this.props.username) {
-            authElement = <div className='dropdownElement' onClick={this.logOut}><Translate content="nav.logout" /></div>
+            authElement = <div className='dropdownElement' onClick={this.logOut.bind(this)}><Translate content="nav.logout" /></div>
             registerElement = <span /> // "empty" element
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
@@ -74,39 +72,40 @@ const Dropdown = React.createClass({
             </div>
         )
     }
-})
+}
 
-const Nav = React.createClass({
-    getInitialState () {
-        return {
-            dropdown: false
+class Nav extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+            dropdown: false,  // Whether the dropdown is displayed
+            mouseIsDownOnDropdown: false  // Whether the dropdown is being clicked on
         }
-    },
+    }
     
     dropdownTrue () {
         this.setState({ dropdown: true })
-    },
+    }
     
-    componentDidMount: function () {
-        window.addEventListener('mousedown', this.pageClick, false)
-    },
+    componentDidMount() {
+        window.addEventListener('mousedown', this.pageClick.bind(this), false)
+    }
     
     componentWillUnmount() {
-        window.removeEventListener('mousedown', this.pageClick)
-    },
+        window.removeEventListener('mousedown', this.pageClick.bind(this))
+    }
     
-    pageClick: function (e) {
+    pageClick(e) {
         if (this.mouseIsDownOnDropdown) { return } 
         else { this.setState({ dropdown: false }) }
-    },
-
-    // it's funny because this.mouseIsDownOnDropdown is never initialised
-    mouseDownHandler: function () {
-        this.mouseIsDownOnDropdown = true
-    },
-    mouseUpHandler: function () {
-        this.mouseIsDownOnDropdown = false
-    },
+    }
+    
+    mouseDownHandler() {
+    	this.setState({ mouseIsDownOnDropdown: true })
+    }
+    mouseUpHandler() {
+    	this.setState({ mouseIsDownOnDropdown: false })
+    }
     
     render() { 
         return (
@@ -117,14 +116,14 @@ const Nav = React.createClass({
                         <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
                         <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
                         <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>
-                        <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue}><img src="cogwheels.png" style={{height: '40px'}} /></li>
+                        <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue.bind(this)}><img src="cogwheels.png" style={{height: '40px'}} /></li>
                         <li style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ?
                     <Dropdown
-                        onMouseDown={this.mouseDownHandler}
-                        onMouseUp={this.mouseUpHandler}
+                        onMouseDown={this.mouseDownHandler.bind(this)}
+                        onMouseUp={this.mouseUpHandler.bind(this)}
                         callbackLogOut={this.props.callbackLogOut}
                         username={this.props.username}
                     /> :
@@ -133,6 +132,6 @@ const Nav = React.createClass({
             </div>
         )
     }
-})
+}
 
 export default Nav

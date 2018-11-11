@@ -17,9 +17,10 @@ function validateEmail(email) {
     return re.test(email)
 }
 
-const AuthJoinPage = React.createClass({
-    getInitialState() {
-        return {
+class AuthJoinPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             username: "",
             emailValue: "",
             passwordValue: "",
@@ -31,14 +32,14 @@ const AuthJoinPage = React.createClass({
             passwordError: false,
             languageError: false
         }
-    },
+    }
     
     toggleCustomLanguage() {
         this.setState({ 
             inputCustomLanguage: !this.state.inputCustomLanguage,
             customNativeLanguage: null
         })
-    },
+    }
     
     handleChange(event) {
         let field = event.target.name
@@ -49,7 +50,7 @@ const AuthJoinPage = React.createClass({
         else if (field === "confirmPassword") { this.setState({confirmPassword: event.target.value}) }
         else if (field === "customNativeLanguage") { this.setState({ customNativeLanguage: event.target.value }) }
         else {alert ("something is wrong")}
-    },
+    }
     
     getDropdownValue(selectedOptions) {
         let values = []
@@ -60,7 +61,7 @@ const AuthJoinPage = React.createClass({
         console.log(`values: ` + values)
         console.log(`Selected: label ${selectedOptions.label} and value ${selectedOptions.value}`)
         console.log(`Stringified: ` + JSON.stringify(selectedOptions, null, 4))
-    },
+    }
     
     handleSubmit(event) {
         /* If the email is not a valid expression (according to regexp above), shows an error in red text on the page.
@@ -116,7 +117,7 @@ const AuthJoinPage = React.createClass({
                 }
             })
         }
-    },
+    }
     
     render() {
         // TODO get list from database
@@ -228,7 +229,7 @@ const AuthJoinPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 
 const signup = gql`mutation ($input: SignupInput!) {

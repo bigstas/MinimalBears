@@ -4,82 +4,80 @@ import { Link } from 'react-router'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'
     
-const About = React.createClass({
-    render() {
-        const opts = {
-            position: 'absolute',
-            height: '400px',
-            width: '100%',
-            playerVars: { // https://developers.google.com/youtube/player_parameters
-                autoplay: 0
-            }
+function About(props) {
+    const opts = {
+        position: 'absolute',
+        height: '400px',
+        width: '100%',
+        playerVars: { // https://developers.google.com/youtube/player_parameters
+            autoplay: 0
         }
-        
-        return (
-            <div className='panel animated fadeIn' id='about'>
-                <Translate content="about.whatIs.heading" component='h2' /> {/*What is Minimal Bears?*/}
-                <div style={{display: "inline-block", float: "right", margin: "10px 1em 0 10px"}}>
-                    <img src="bear.png" />
-                    <p style={{display: "block", margin: "0px", textAlign: "center", fontSize: "13px", color: "#97989f"}}><em><Translate content="about.bearCaption" /></em></p>
-                </div>
-                
-                <Translate component="p" content="about.whatIs.p1" />
-                <Translate component="p" content="about.whatIs.p2" unsafe />
-                {/* p3 is split into three parts, this is the only way that we can put the link into the text with translation */}
-                <p><Translate content="about.whatIs.p3_start" unsafe />
-                <Link to='/train'><Translate content="about.whatIs.p3_link" /></Link>
-                <Translate content="about.whatIs.p3_end" /></p>
-                
-                <Translate component="h2" content="about.howWorks.heading" />
-                <Translate component="p" content="about.howWorks.p1" unsafe />
-                <Translate component="p" content="about.howWorks.p2" with={{url1: "http://www.minimalbears.com/articles/th_francophones.pdf", url2: "http://www.minimalbears.com/articles/proficiency_doesnt_matter.pdf", url3: "http://www.minimalbears.com/articles/rl_japanese_speech_production.pdf", url4: "http://languagelog.ldc.upenn.edu/nll/?p=328"}} unsafe />
-                <Translate component="p" content="about.howWorks.p3" />
-                
-                <Translate component="h2" content="about.whyUse.heading" />
-                <Translate component="p" content="about.whyUse.p1" />
-                
-                {/* TODO: this video does not fit dimensions neatly. Ideally, we want width to be 100%, and height to scale with width. */}
-                {/* For details and options, see https://github.com/troybetz/react-youtube */}
-                <YouTube
-                    videoId="m1TnzCiUSI0"
-                    opts={opts}
-                    onReady={this._onReady}
-                />
-                
-                <Translate component="h2" content="about.results.heading" />
-                <Translate component="p" content="about.results.p1" unsafe />
-                <Translate component="p" content="about.results.p2" with={{Korean: "http://asa.scitation.org/doi/abs/10.1121/1.4945716", Japanese: "http://www.minimalbears.com/articles/rl_japanese_acoustic_cue.pdf", Cantonese: "http://www.minimalbears.com/articles/ae_cantonese.PDF", Mandarin: "http://www.minimalbears.com/articles/10vowels_mandarin.pdf", French: "http://www.minimalbears.com/articles/th_francophones.pdf", Arabic: "http://www.minimalbears.com/articles/vowels_arabic.pdf", German: "http://www.minimalbears.com/articles/vowels_german&spanish.pdf", Portuguese: "http://www.minimalbears.com/articles/VOT_brazilian_portuguese.pdf", Finnish: "http://asa.scitation.org/doi/abs/10.1121/1.2934625", Greek: "http://minimalbears.com/articles/eei_greek.pdf", Catalan: "http://www.minimalbears.com/articles/stops&vowels_catalan.pdf", ChineseKorean: "http://asa.scitation.org/doi/abs/10.1121/1.4970670", EnglishArabic: "http://www.minimalbears.com/articles/english_learners_of_arabic.pdf", EnglishKorean: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf", EnglishMandarin: "http://www.minimalbears.com/articles/english_learners_of_mandarin.pdf"}}  unsafe />
-                <Translate component="p" content="about.results.p3" with={{sixMonths: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518835/"}} unsafe />
-                <Translate component="p" content="about.results.p4" with={{confidence: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf"}} unsafe />
-                <div style={{paddingLeft: "15%", paddingRight: "15%"}}>
-                    <p><em><Translate content="about.results.p5" /></em></p>
-                </div>
-                <Translate component="p" content="about.results.p6" with={{proficiency: "http://www.minimalbears.com/articles/proficiency_level_cantonese.pdf"}} unsafe />
-                
-                <Translate component="h2" content="about.whyWorks.heading" />
-                <Translate component="p" content="about.whyWorks.p1" unsafe />
-                <Translate component="h3" content="about.whyWorks.context.heading" />
-                <Translate component="p" content="about.whyWorks.context.p1" unsafe />
-                <Translate component="p" content="about.whyWorks.context.p2" />
-                <Translate component="h3" content="about.whyWorks.varied.heading" />
-                <Translate component="p" content="about.whyWorks.varied.p1" with={{supported: "http://www.minimalbears.com/articles/low&high_variability_cantonese.pdf"}} unsafe />
-                {/*TODO put all links here <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518834/"> <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509365/">*/}
-                <Translate component="h3" content="about.whyWorks.feedback.heading" />
-                <Translate component="p" content="about.whyWorks.feedback.p1" />
-                
-                <Translate component="h2" content="about.whichLangs.heading" />
-                <p><Translate content="about.whichLangs.p1_start" /><Link to="/train"><Translate content="about.whichLangs.p1_link" /></Link><Translate content="about.whichLangs.p1_end" /></p>
-                <Translate component="p" content="about.whichLangs.p2" />
-                
-                <Translate component="h2" content="about.getStarted.heading" />
-                <p><Translate content="about.getStarted.p1_start" /><Link to="/train"><Translate content="about.getStarted.p1_link" /></Link><Translate content="about.getStarted.p1_end" /></p>
-                
-                <Translate component="h2" content="about.contribute.heading" />
-                <p><Translate content="about.contribute.p1_start" /><Link to="/record"><Translate content="about.contribute.p1_link" /></Link><Translate content="about.contribute.p1_end" /></p>
-            </div>
-        )
     }
-})
+    
+    return (
+        <div className='panel animated fadeIn' id='about'>
+            <Translate content="about.whatIs.heading" component='h2' /> {/*What is Minimal Bears?*/}
+            <div style={{display: "inline-block", float: "right", margin: "10px 1em 0 10px"}}>
+                <img src="bear.png" />
+                <p style={{display: "block", margin: "0px", textAlign: "center", fontSize: "13px", color: "#97989f"}}><em><Translate content="about.bearCaption" /></em></p>
+            </div>
+            
+            <Translate component="p" content="about.whatIs.p1" />
+            <Translate component="p" content="about.whatIs.p2" unsafe />
+            {/* p3 is split into three parts, this is the only way that we can put the link into the text with translation */}
+            <p><Translate content="about.whatIs.p3_start" unsafe />
+            <Link to='/train'><Translate content="about.whatIs.p3_link" /></Link>
+            <Translate content="about.whatIs.p3_end" /></p>
+            
+            <Translate component="h2" content="about.howWorks.heading" />
+            <Translate component="p" content="about.howWorks.p1" unsafe />
+            <Translate component="p" content="about.howWorks.p2" with={{url1: "http://www.minimalbears.com/articles/th_francophones.pdf", url2: "http://www.minimalbears.com/articles/proficiency_doesnt_matter.pdf", url3: "http://www.minimalbears.com/articles/rl_japanese_speech_production.pdf", url4: "http://languagelog.ldc.upenn.edu/nll/?p=328"}} unsafe />
+            <Translate component="p" content="about.howWorks.p3" />
+            
+            <Translate component="h2" content="about.whyUse.heading" />
+            <Translate component="p" content="about.whyUse.p1" />
+            
+            {/* TODO: this video does not fit dimensions neatly. Ideally, we want width to be 100%, and height to scale with width. */}
+            {/* For details and options, see https://github.com/troybetz/react-youtube */}
+            <YouTube
+                videoId="m1TnzCiUSI0"
+                opts={opts}
+                onReady={this._onReady}
+            />
+            
+            <Translate component="h2" content="about.results.heading" />
+            <Translate component="p" content="about.results.p1" unsafe />
+            <Translate component="p" content="about.results.p2" with={{Korean: "http://asa.scitation.org/doi/abs/10.1121/1.4945716", Japanese: "http://www.minimalbears.com/articles/rl_japanese_acoustic_cue.pdf", Cantonese: "http://www.minimalbears.com/articles/ae_cantonese.PDF", Mandarin: "http://www.minimalbears.com/articles/10vowels_mandarin.pdf", French: "http://www.minimalbears.com/articles/th_francophones.pdf", Arabic: "http://www.minimalbears.com/articles/vowels_arabic.pdf", German: "http://www.minimalbears.com/articles/vowels_german&spanish.pdf", Portuguese: "http://www.minimalbears.com/articles/VOT_brazilian_portuguese.pdf", Finnish: "http://asa.scitation.org/doi/abs/10.1121/1.2934625", Greek: "http://minimalbears.com/articles/eei_greek.pdf", Catalan: "http://www.minimalbears.com/articles/stops&vowels_catalan.pdf", ChineseKorean: "http://asa.scitation.org/doi/abs/10.1121/1.4970670", EnglishArabic: "http://www.minimalbears.com/articles/english_learners_of_arabic.pdf", EnglishKorean: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf", EnglishMandarin: "http://www.minimalbears.com/articles/english_learners_of_mandarin.pdf"}}  unsafe />
+            <Translate component="p" content="about.results.p3" with={{sixMonths: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518835/"}} unsafe />
+            <Translate component="p" content="about.results.p4" with={{confidence: "http://www.minimalbears.com/articles/english_learners_of_korean.pdf"}} unsafe />
+            <div style={{paddingLeft: "15%", paddingRight: "15%"}}>
+                <p><em><Translate content="about.results.p5" /></em></p>
+            </div>
+            <Translate component="p" content="about.results.p6" with={{proficiency: "http://www.minimalbears.com/articles/proficiency_level_cantonese.pdf"}} unsafe />
+            
+            <Translate component="h2" content="about.whyWorks.heading" />
+            <Translate component="p" content="about.whyWorks.p1" unsafe />
+            <Translate component="h3" content="about.whyWorks.context.heading" />
+            <Translate component="p" content="about.whyWorks.context.p1" unsafe />
+            <Translate component="p" content="about.whyWorks.context.p2" />
+            <Translate component="h3" content="about.whyWorks.varied.heading" />
+            <Translate component="p" content="about.whyWorks.varied.p1" with={{supported: "http://www.minimalbears.com/articles/low&high_variability_cantonese.pdf"}} unsafe />
+            {/*TODO put all links here <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518834/"> <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509365/">*/}
+            <Translate component="h3" content="about.whyWorks.feedback.heading" />
+            <Translate component="p" content="about.whyWorks.feedback.p1" />
+            
+            <Translate component="h2" content="about.whichLangs.heading" />
+            <p><Translate content="about.whichLangs.p1_start" /><Link to="/train"><Translate content="about.whichLangs.p1_link" /></Link><Translate content="about.whichLangs.p1_end" /></p>
+            <Translate component="p" content="about.whichLangs.p2" />
+            
+            <Translate component="h2" content="about.getStarted.heading" />
+            <p><Translate content="about.getStarted.p1_start" /><Link to="/train"><Translate content="about.getStarted.p1_link" /></Link><Translate content="about.getStarted.p1_end" /></p>
+            
+            <Translate component="h2" content="about.contribute.heading" />
+            <p><Translate content="about.contribute.p1_start" /><Link to="/record"><Translate content="about.contribute.p1_link" /></Link><Translate content="about.contribute.p1_end" /></p>
+        </div>
+    )
+}
 
 export default About
 

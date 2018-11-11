@@ -5,18 +5,19 @@ import gql from 'graphql-tag'
 import Nav from './auxiliary/nav'
 import Translate from 'react-translate-component'
 
-const UserAppBody = React.createClass({
-    getInitialState() {
-        return {
+class UserAppBody extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
             activeLanguageId: null
         }
-    },
+    }
     
     setLanguage(langId) {
         this.setState({
             activeLanguageId: langId
         })
-    },
+    }
     
     render() {
         let native = null
@@ -48,7 +49,7 @@ const UserAppBody = React.createClass({
                         hasSeenTutorial: tutorial,
                         native: native,
                         activeLanguageId: this.state.activeLanguageId, 
-                        callbackLanguage: this.setLanguage,
+                        callbackLanguage: this.setLanguage.bind(this),
                         callbackUser: this.props.setUser,
                         callbackLogOut: this.props.logOut
                     }
@@ -56,7 +57,7 @@ const UserAppBody = React.createClass({
             </div>
         )
     }
-})
+}
 
 // UserAppBody will be wrapped in AppBody if user is logged in, this setup comes before the wrapping
 // Calling graphql on this turns it into a function which returns a React element (needed below)
@@ -84,13 +85,14 @@ const accountInfoQueryConfig = {
 const SignedInAppBody = graphql(accountInfoQuery, accountInfoQueryConfig)(UserAppBody)
 
 
-const AppBody = React.createClass({    
-    getInitialState() {
+class AppBody extends React.Component {
+	constructor(props) {
+		super(props)
         const raw_jwt = localStorage.getItem('token')
-        return {
+        this.state = {
             isLoggedIn: !!raw_jwt // true if there is a jwt in local storage, false otherwise
         }
-    },
+    }
     
     setUser(raw_jwt) {
         const jwt = jwtDecode(raw_jwt)
@@ -114,7 +116,7 @@ const AppBody = React.createClass({
             // If the token is no longer valid, log out to clear information
             this.logOut()
         }
-    },
+    }
     
     logOut() {
         // Clear everything from setUser (state, memory, refreshing)
@@ -128,7 +130,7 @@ const AppBody = React.createClass({
         // on get_account_info, get_practice_languages, and get_all_stats (twice).
         // TODO - find the reason for the error, and fix so that no error gets raised.
         console.log("Logout successful")
-    },
+    }
     
     refresh() {
         // Get a new token using the refresh code
@@ -152,7 +154,7 @@ const AppBody = React.createClass({
                 this.logOut()
             }
         })
-    },
+    }
     
     componentWillMount() {
         const raw_jwt = localStorage.getItem('token')
@@ -161,7 +163,7 @@ const AppBody = React.createClass({
             this.setUser(raw_jwt)
             this.refresh()
         }
-    },
+    }
     
     render() {
         let AppBodyClass
@@ -171,9 +173,9 @@ const AppBody = React.createClass({
         } else {
             AppBodyClass = UserAppBody
         }
-        return <AppBodyClass children={this.props.children} setUser={this.setUser} logOut={this.logOut} />
+        return <AppBodyClass children={this.props.children} setUser={this.setUser.bind(this)} logOut={this.logOut.bind(this)} />
     }
-})
+}
 
 const refresh = gql`mutation($input:RefreshInput!) {
     refresh(input:$input) {
