@@ -73,24 +73,68 @@ CREATE TABLE audio (
     file text PRIMARY KEY,  -- filename
     speaker text NOT NULL,  -- will reference account username
     item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    stamp timestamp NOT NULL,
-    approved boolean  -- null for new submissions
+    stamp timestamp NOT NULL
 );
 CREATE INDEX ON audio (item);
-CREATE INDEX ON audio (item, approved);
 CREATE INDEX ON audio (speaker);
-CREATE INDEX ON audio (speaker, stamp);
+
+-- For unique file names
+CREATE SEQUENCE audio_file;
 
 -- Audio moderation
 CREATE TABLE audio_moderation (
     file text REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT,
     moderator text NOT NULL,  -- will reference account username
     stamp timestamp NOT NULL,
-    approved boolean NOT NULL
+    approved boolean NOT NULL,
+    PRIMARY KEY (moderator, stamp)
+);
+CREATE INDEX ON audio_moderation (file);
+CREATE INDEX ON audio_moderation (moderator);
+
+-- Audio editing
+CREATE TABLE audio_edit (
+    file text REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT,
+    moderator text NOT NULL,  -- will reference account username
+    stamp timestamp NOT NULL,
+    from_start interval,  -- trim the start and end of the audio file
+    from_end interval,
+    volume double precision,  -- scale the volume of the audio file
+    PRIMARY KEY (moderator, stamp)
 );
 
--- For unique file names
-CREATE SEQUENCE audio_file;
+-- Moderated audio recordings
+CREATE VIEW approved_audio AS (
+    SELECT
+        audio.file,
+        audio.speaker,
+        audio.item,
+        audio.stamp,
+        latest_moderation.moderator,
+        latest_moderation.stamp as moderator_stamp
+    FROM audio
+    INNER JOIN (
+        SELECT
+        DISTINCT ON (file)
+        *
+        FROM audio_moderation
+        ORDER BY file, stamp
+    ) latest_moderation
+    ON audio.file = latest_moderation.file
+    WHERE approved = TRUE
+);
+
+CREATE VIEW pending_audio AS (
+    SELECT
+        audio.file,
+        audio.speaker,
+        audio.item,
+        audio.stamp
+    FROM audio
+    LEFT JOIN audio_moderation
+    ON audio.file = audio_moderation.file
+    WHERE audio_moderation.approved = NULL
+);
 
 -- Minimal pairs
 CREATE TABLE pair (
@@ -293,9 +337,8 @@ CREATE FUNCTION get_random_audio(item_id integer)
     STABLE
     AS $$
         SELECT file
-        FROM audio
+        FROM approved_audio
         WHERE item = item_id
-            AND approved = TRUE
         ORDER BY RANDOM()
     $$;
 
@@ -354,14 +397,12 @@ CREATE FUNCTION get_items_to_record(language_id text, number integer)
         WHERE language = language_id
         ORDER BY (
             SELECT count(*)
-            FROM audio
+            FROM approved_audio
             WHERE item = item.id
-                AND approved = TRUE
         ) + 0.9 * (
             SELECT count(*)
-            FROM audio
-            WHERE item = item.id 
-                AND approved IS NULL
+            FROM pending_audio
+            WHERE item = item.id
         )
         LIMIT number
     $$;

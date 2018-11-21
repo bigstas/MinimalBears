@@ -23,7 +23,7 @@ CREATE TABLE private.account (
 CREATE TABLE private.native (
     account text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     language text NOT NULL REFERENCES public.language(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    UNIQUE (account, language)
+    PRIMARY KEY (account, language)
 );
 CREATE INDEX ON private.native (account);
 
@@ -73,6 +73,13 @@ CREATE TABLE private.practice (
 );
 CREATE INDEX ON private.practice (account);
 -- (currently no check that the audio's item is one element of the pair)
+
+CREATE TABLE private.guest_practice (
+    stamp timestamp NOT NULL DEFAULT now(),
+    pair integer NOT NULL REFERENCES public.pair(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    audio text NOT NULL REFERENCES public.audio(file) ON UPDATE CASCADE ON DELETE RESTRICT,
+    correct boolean NOT NULL
+);
 
 -- Authentication functions --
     
@@ -272,12 +279,23 @@ CREATE FUNCTION public.complete_tutorial()
 -- Record a user's answer to a question
 CREATE FUNCTION public.answer_question(pair integer, audio text, correct boolean)
     RETURNS void
-    LANGUAGE SQL
+    LANGUAGE plpgsql
     SECURITY DEFINER
     VOLATILE
     AS $$
-        INSERT INTO private.practice (account, pair, audio, correct)
-        VALUES (current_setting('jwt.claims.username'), pair, audio, correct);
+        -- requires PGSQL v9.6 (otherwise need to catch error)
+        DECLARE
+            username text := current_setting('jwt.claims.username', TRUE);
+        BEGIN
+            IF username IS NOT NULL
+            THEN
+                INSERT INTO private.practice (account, pair, audio, correct)
+                VALUES (username, pair, audio, correct);
+            ELSE
+                INSERT INTO private.guest_practice (pair, audio, correct)
+                VALUES (pair, audio, correct);
+            END IF;
+        END
     $$;
 
 -- number and average for each contrast, and in total, for a chosen period of time
@@ -407,9 +425,8 @@ CREATE FUNCTION public.get_audio_submissions(language_id text, number integer)
         BEGIN
             SELECT public.check_moderator(language_id);
             SELECT *
-                FROM public.audio
+                FROM public.pending_audio
                 WHERE public.get_item_language_id(item) = language_id
-                    AND approved IS NULL
                 LIMIT number;
         END;
     $$;
@@ -426,13 +443,12 @@ CREATE FUNCTION public.moderate_audio(file text, approved boolean)
     AS $$
         BEGIN
             SELECT public.check_moderator_for_file(file);
-            UPDATE public.audio
-                SET approved = approved
-                WHERE file = file;
             INSERT INTO public.audio_moderation (file, moderator, stamp, approved)
                 VALUES (file, current_setting('jwt.claims.username'), now(), approved);
         END;
     $$;
+
+-- TODO Edit an audio file
 
 -- Permissions --
 -- TODO update (and be careful about audio functions that need to be called server-side...)
@@ -462,6 +478,7 @@ GRANT EXECUTE ON FUNCTION public.get_random_examples(integer, integer) TO anyuse
 GRANT EXECUTE ON FUNCTION public.get_contrasts_with_examples(text, integer) TO anyuser;
 GRANT EXECUTE ON FUNCTION public.get_random_audio(integer) TO anyuser;
 GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO anyuser;
+GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO anyuser;
 
 -- Logged in users
 -- Authentication
@@ -470,8 +487,6 @@ GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
 -- General account management
 GRANT EXECUTE ON FUNCTION public.get_account_info() TO loggedin;
 GRANT EXECUTE ON FUNCTION public.complete_tutorial() TO loggedin;
--- Training
-GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO loggedin;
 -- Stats
 GRANT EXECUTE ON FUNCTION public.get_practices(text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_all_stats(text, text, integer) TO loggedin;
