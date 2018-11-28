@@ -448,7 +448,35 @@ CREATE FUNCTION public.moderate_audio(file text, approved boolean)
         END;
     $$;
 
--- TODO Edit an audio file
+-- Edit an audio file (update metadata relevant to edit)
+CREATE FUNCTION public.edit_audio(file text, from_start interval, from_end interval, volume double precision)
+    RETURNS void
+    LANGUAGE plpgsql
+    VOLATILE
+    AS $$
+        BEGIN
+            SELECT public.check_moderator_for_file(file);
+            INSERT INTO public.audio_edit (file, moderator, stamp, from_start, from_end, volume)
+                VALUES (file, current_setting('jwt.claims.username'), now(), from_start, from_end, volume);
+        END;
+    $$;
+
+CREATE TABLE private.audio_complaint (
+    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    audio text NOT NULL REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE private.pair_complaint (
+    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    pair integer NOT NULL REFERENCES pair (id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE private.item_complaint (
+    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- TODO add functions for above
 
 -- Permissions --
 -- TODO update (and be careful about audio functions that need to be called server-side...)

@@ -85,9 +85,9 @@ CREATE SEQUENCE audio_file;
 CREATE TABLE audio_moderation (
     file text REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT,
     moderator text NOT NULL,  -- will reference account username
-    stamp timestamp NOT NULL,
+    stamp timestamp NOT NULL DEFAULT now(),
     approved boolean NOT NULL,
-    PRIMARY KEY (moderator, stamp)
+    PRIMARY KEY (file, moderator, stamp)
 );
 CREATE INDEX ON audio_moderation (file);
 CREATE INDEX ON audio_moderation (moderator);
@@ -100,7 +100,7 @@ CREATE TABLE audio_edit (
     from_start interval,  -- trim the start and end of the audio file
     from_end interval,
     volume double precision,  -- scale the volume of the audio file
-    PRIMARY KEY (moderator, stamp)
+    PRIMARY KEY (file, moderator, stamp)
 );
 
 -- Moderated audio recordings
