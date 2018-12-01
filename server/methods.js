@@ -1,8 +1,6 @@
 // File system
 import fs from 'fs'
 import child from 'child_process'
-import path from 'path'
-import process from 'process'
 // GraphQL
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-boost'
@@ -102,5 +100,47 @@ Meteor.methods({
                 }
             })
         }
+    }
+})
+
+// TODO: the below maybe doesn't need to work like the rest of the app because it's not throught react-apollo?
+// INSERT INTO public.audio_edit (file, moderator, stamp, from_start, from_end, volume)
+const moderationMutation = gql`mutation ($input: EditAudioInput!) {
+    editAudio (input: $input) {
+        clientMutaitonId
+    }
+}` // returns void, so follow what e.g. completeTutorialMutation does
+
+const moderationMutationConfig = {
+    name: 'moderationMutation',
+    options: {
+        variables: {
+            input: {
+                clientMutaitonId: "0" /* not used but gql appears to demand it */
+            }
+        }
+    }
+}
+
+// call this like so: Meteor.call('trimAudio', start, duration)
+Meteor.methods({
+    'trimAudio'(start, duration) { // TODO: put parameters in here
+        // Note how these two options on how to spin off a child process differ in syntax:
+        // child.execFile(file[, args][, options][, callback])
+        // child.exec(command[, node options][, callback])
+        const inputFile = "/Users/stanislawpstrokonski/Desktop/software/MinimalBears/public/finish.wav"
+        const outputFile = "/Users/stanislawpstrokonski/Desktop/output0000.wav"
+        child.exec( `ffmpeg -ss ${start} -i ${inputFile} -t ${duration} ${outputFile}`,
+            (error, stdout, stderr) => { // callback -- after trimming, call the SQL or log the error
+                if(error) {
+                    console.log("MinBears error:", stderr)
+                    console.log(error)
+                    //console.log("stdout:", stdout)
+                } else {
+                    console.log("MinBears Success! Successfully trimmed the file.")
+                    // TODO: call the SQL!
+                    // ... but how? Above is the react-apollo setup for it
+                }
+        })
     }
 })
