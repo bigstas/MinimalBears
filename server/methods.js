@@ -124,23 +124,36 @@ const moderationMutationConfig = {
 
 // call this like so: Meteor.call('trimAudio', start, duration)
 Meteor.methods({
-    'trimAudio'(start, duration) { // TODO: put parameters in here
+    'editAudio'(volume=1, trim={ start: 0, duration: null }) { // TODO: put parameters in here
         // Note how these two options on how to spin off a child process differ in syntax:
         // child.execFile(file[, args][, options][, callback])
         // child.exec(command[, node options][, callback])
         const inputFile = "/Users/stanislawpstrokonski/Desktop/software/MinimalBears/public/finish.wav"
+        const tmpFile = "/Users/stanislawpstrokonski/Desktop/tmpAudio.wav"
         const outputFile = "/Users/stanislawpstrokonski/Desktop/output0000.wav"
-        child.exec( `ffmpeg -ss ${start} -i ${inputFile} -t ${duration} ${outputFile}`,
-            (error, stdout, stderr) => { // callback -- after trimming, call the SQL or log the error
-                if(error) {
-                    console.log("MinBears error:", stderr)
-                    console.log(error)
-                    //console.log("stdout:", stdout)
-                } else {
-                    console.log("MinBears Success! Successfully trimmed the file.")
-                    // TODO: call the SQL!
-                    // ... but how? Above is the react-apollo setup for it
-                }
+        if(trim.duration === null) {
+            trim.duration = 1000 // ...is this sensible?
+        }
+        // TODO: also catch any other weird eventualities like negative durations
+        child.exec( `ffmpeg -ss ${trim.start} -i ${inputFile} -t ${trim.duration} ${tmpFile}`, (error, stdout, stderr) => {
+            // callback -- after trimming, adjust volume, or log any errors
+            if(error) {
+                console.log("MinBears error while trimming:", stderr)
+                console.log(error)
+            } else {
+                console.log("trim successful!")
+                child.exec( `ffmpeg -i ${tmpFile} -filter:a "volume=${volume}" ${outputFile}`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log("MinBears error while adjusting volume:", stderr)
+                        console.log(error)
+                    } else {
+                        console.log("volume adjustment successful!")
+                        // TODO: call the SQL!
+                        // ... but how? Above is the react-apollo setup for it
+                        console.log("closing child processes")
+                    }
+                })
+            }
         })
     }
 })
