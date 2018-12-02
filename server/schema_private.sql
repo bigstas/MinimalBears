@@ -1,4 +1,4 @@
--- Private schema (for user information) --
+﻿-- Private schema (for user information) --
 
 -- Note that row level security is only available from v9.5 (https://github.com/postgraphql/postgraphql/blob/master/examples/forum/TUTORIAL.md)
 -- Only allow access to user data through functions
@@ -462,17 +462,18 @@ CREATE FUNCTION public.edit_audio(file text, from_start interval, from_end inter
     $$;
 
 CREATE TABLE private.audio_complaint (
-    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+-- note that "user" is an SQL reserved word, can't call any column that
+    username text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     audio text NOT NULL REFERENCES audio (file) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 CREATE TABLE private.pair_complaint (
-    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    username text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     pair integer NOT NULL REFERENCES pair (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 CREATE TABLE private.item_complaint (
-    user text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
+    username text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
     item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
