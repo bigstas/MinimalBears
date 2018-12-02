@@ -122,35 +122,88 @@ const moderationMutationConfig = {
     }
 }
 
-// call this like so: Meteor.call('trimAudio', start, duration)
+// call this like so: Meteor.call('trimAudio', volume, trim)
+// TODO: could refactor this so it doesn't call both edits if it doesn't have to
 Meteor.methods({
-    'editAudio'(volume=1, trim={ start: 0, duration: null }) { // TODO: put parameters in here
+    'editAudio'(volume=1, trim={ start: 0, duration: null }) {
         // Note how these two options on how to spin off a child process differ in syntax:
         // child.execFile(file[, args][, options][, callback])
         // child.exec(command[, node options][, callback])
         const inputFile = "/Users/stanislawpstrokonski/Desktop/software/MinimalBears/public/finish.wav"
         const tmpFile = "/Users/stanislawpstrokonski/Desktop/tmpAudio.wav"
         const outputFile = "/Users/stanislawpstrokonski/Desktop/output0000.wav"
-        if(trim.duration === null) {
-            trim.duration = 1000 // ...is this sensible?
-        }
-        // TODO: also catch any other weird eventualities like negative durations
-        child.exec( `ffmpeg -ss ${trim.start} -i ${inputFile} -t ${trim.duration} ${tmpFile}`, (error, stdout, stderr) => {
-            // callback -- after trimming, adjust volume, or log any errors
+        let duration // total input file duration
+        // FIRST, find out the file duration
+        child.exec( `ffprobe -i ${inputFile} -show_entries format=duration -v quiet -of csv="p=0"`, (error, stdout, stderr) => {
             if(error) {
-                console.log("MinBears error while trimming:", stderr)
+                // note that either or both of the stderr and error parameters may contain error messages
+                console.log(`Minbears error while getting duration of ${inputFile}:`, stderr)
                 console.log(error)
             } else {
-                console.log("trim successful!")
-                child.exec( `ffmpeg -i ${tmpFile} -filter:a "volume=${volume}" ${outputFile}`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log("MinBears error while adjusting volume:", stderr)
+                duration = stdout; // type is string
+                console.log("duration:", duration);
+                if(trim.duration === null || trim.duration === undefined) {
+                    trim.duration = Infinity // ...is this sensible?
+                }
+                // TODO: also catch any other weird eventualities like negative durations
+                // SECOND, trim the file, and save it as a temporary file
+                child.exec( `ffmpeg -ss ${trim.start} -i ${inputFile} -t ${trim.duration} ${tmpFile}`, (error, stdout, stderr) => {
+                    // callback -- after trimming, adjust volume, or log any errors
+                    if(error) {
+                        console.log(`MinBears error while trimming ${inputFile} with start ${trim.start} and duration ${trim.duration}:`, stderr)
                         console.log(error)
                     } else {
-                        console.log("volume adjustment successful!")
-                        // TODO: call the SQL!
-                        // ... but how? Above is the react-apollo setup for it
-                        console.log("closing child processes")
+                        console.log("trim successful!")
+                        // THIRD, adjust the volume
+                        // see https://trac.ffmpeg.org/wiki/AudioVolume
+                        // can also set volume by decibel level
+                        // could also normalise the volume (see the same webpage above)
+                        child.exec( `ffmpeg -i ${tmpFile} -filter:a "volume=${volume}" ${outputFile}`, (error, stdout, stderr) => {
+                            if (error) {
+                                console.log(`MinBears error while adjusting volume of ${inputFile} to ${volume}:`, stderr)
+                                console.log(error)
+                            } else {
+                                console.log("volume adjustment successful!")
+                                // FOURTH, update the editing table with the new information
+                                // TODO: do this properly with the right parameters and everything
+                                const fromEnd = duration - (trim.start + trim.duration)
+                                console.log("fromStart, trim.duration, fromEnd")
+                                console.log(trim.start, trim.duration, fromEnd)
+                                // below gives permission denied unless you're logged in as moderator
+                                // TODO: try this, logged in as moderator
+                                /*client.query({
+                                    query: gql`
+                                        mutation ($input: EditAudioInput!) {
+                                            editAudio (input: $input) {
+                                                clientMutationId
+                                            }
+                                        }
+                                    `,
+                                    variables: {
+                                        input: {
+                                            clientMutaitonId: "edit mutation",
+                                            file: inputFile, // TODO: probably only want the name, not the path as this will give
+                                            fromStart: {
+                                                seconds: trim.start
+                                            },
+                                            fromEnd: {
+                                                seconds: fromEnd
+                                            },
+                                            volume: volume
+                                        }
+                                    }
+                                }).then((res) => {
+                                    // FINALLY, callback (on the client??)
+                                    // TODO: now send some sort of message to the front end to say that everything has been completed...
+                                    console.log('success')
+                                    console.log(res)  
+                                }).catch((err) => {
+                                    console.log('error')
+                                    console.log(err)
+                                })*/
+                                console.log("closing child processes")
+                            }
+                        })
                     }
                 })
             }
