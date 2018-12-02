@@ -283,6 +283,10 @@ nav ul li a, nav ul li p {
     padding: 5px;
     z-index: 10;
 }
+#flagdropdown {
+    position: absolute;
+    bottom: 30px;
+}
 /* Options within the dropdown menu coming from the gear symbol. */
 .dropdownElement {
     cursor: pointer;
@@ -301,7 +305,11 @@ nav ul li a, nav ul li p {
 /* ============ arena.js ============ */
 /* ================================== */
 
-#arena { height: 380px; } /* Only the Arena panel needs a limited height - other pages can stretch more */
+#arena { 
+    height: 380px; /* Only the Arena panel needs a limited height - other pages can stretch more */
+    position: absolute; /* allows absolute positioning of flagger in bottom corner */
+    z-index: 10; /* otherwise the things inside this div are unresponsive */
+}
 
 /* The text at the top of the arena page, that says 'guess the words' or else 'congratulations!'.  */
 #arenaMessage {
@@ -328,6 +336,11 @@ nav ul li a, nav ul li p {
     display: block;
 }
 
+#flagger{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
 /* The buttons change colour depending on whether they were selected or not, and whether the user was right or not. */
 #wordOptionCorrect   { background-color: green; }
 #wordOptionWrong     { background-color: red; }

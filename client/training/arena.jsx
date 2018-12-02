@@ -6,7 +6,6 @@
 - finish.wav originally called 322929__rhodesmas__success-04.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
 */
 import React from 'react'
-import { createContainer } from 'meteor/react-meteor-data'
 import Translate from 'react-translate-component'
 import DonePanel from './donepanel'
 import { graphql, compose } from 'react-apollo'
@@ -81,6 +80,86 @@ class WordOption extends React.Component {
     }
 }
 
+class FlagDropdown extends React.Component {
+    // TODO: make these functions proper, sending mutations to the complaints table
+    handleBadAudio() {
+        console.log("bad audio")
+    }
+    handleBadPair() {
+        console.log("bad pair")
+    }
+    handleBadItem(position) {
+        console.log(`bad item on the ${position}`)
+    }
+
+    render() {
+        // TODO: do this through props instead
+        const leftword = 'wean'
+        const rightword = 'win'
+        return (
+            <div className="dropdownDiv" id="flagdropdown" onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
+                <div>What is the problem?</div>
+                <div className="dropdownElement" onClick={this.handleBadAudio.bind(this)}>Flag audio</div>
+                <div className="dropdownElement" onClick={this.handleBadPair.bind(this)}>Flag pair</div>
+                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'left')}>Flag word: {leftword}</div>
+                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'right')}>Flag word: {rightword}</div>
+            </div>
+        )
+    }
+}
+
+// problem flagger
+class Flagger extends React.Component {
+    constructor(props) {
+        super(props) // TODO: is this really necessary for this element??
+        this.state = {
+            dropdown: false,
+            mouseIsDownOnDropdown: false
+        }
+    }
+
+    // TODO: below is repeated code from the Nav -- is there a way to extract this code elsewhere
+    // so that the code isn't repeated?
+    toggleDropdown() {
+        this.setState({ dropdown: !this.state.dropdown })
+    }
+    componentDidMount() {
+        window.addEventListener('mousedown', this.pageClick.bind(this), false)
+    }
+    componentWillUnmount() {
+        window.removeEventListener('mousedown', this.pageClick.bind(this))
+    }
+    pageClick(e) {
+        if (this.state.mouseIsDownOnDropdown) { return } 
+        else { this.setState({ dropdown: false }) }
+    }
+    mouseDownHandler(nextFunction) {
+        this.setState({ mouseIsDownOnDropdown: true })
+        nextFunction()
+    }
+    mouseUpHandler() {
+    	this.setState({ mouseIsDownOnDropdown: false })
+    }
+
+    render() {
+        return (
+            <div>
+                <div id="flagger"
+                    onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))}
+                    onMouseUp={this.mouseUpHandler.bind(this)}>
+                        Flag
+                </div>
+                {this.state.dropdown ? 
+                    <FlagDropdown 
+                        onMouseDown={this.mouseDownHandler.bind(this,()=>{})}
+                        onMouseUp={this.mouseUpHandler.bind(this)}
+                    /> : 
+                    <span />
+                }
+            </div>
+        )
+    }
+}
 
 // The arena - where the action happens  
 class Arena extends React.Component {
@@ -214,6 +293,8 @@ class Arena extends React.Component {
                     <ProgressBar style={{ width: ( (this.state.counter/this.state.maxRounds) *100 ).toString() + "%", borderRadius: "20px", transitionDuration: "1.5s" }} />
                     
                     {this.state.mode !== "done" ? <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick.bind(this)} /> : <span />}
+                    {/* TODO: whether this is on the screen or not should depend on the mode */}
+                    <Flagger />
 
                     {/* Buttons for choosing options */ }
                     <div id='optionContainer' className="container">

@@ -79,8 +79,7 @@ class Nav extends React.Component {
 		super(props)
 		this.state = {
             dropdown: false,  // Whether the dropdown is displayed
-            mouseIsDownOnDropdown: false,  // Whether the dropdown is being clicked on
-            justClickedSettingsIcon: false
+            mouseIsDownOnDropdown: false  // Whether the dropdown is being clicked on
         }
     }
     
