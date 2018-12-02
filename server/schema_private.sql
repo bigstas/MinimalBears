@@ -461,6 +461,7 @@ CREATE FUNCTION public.edit_audio(file text, from_start interval, from_end inter
         END;
     $$;
 
+-- Complaint/flagging tables
 CREATE TABLE private.audio_complaint (
 -- note that "user" is an SQL reserved word, can't call any column that
     username text NOT NULL REFERENCES private.account(username) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -477,7 +478,37 @@ CREATE TABLE private.item_complaint (
     item integer NOT NULL REFERENCES item (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- TODO add functions for above
+-- Complaint/flagging functions (for above)
+CREATE FUNCTION public.submit_audio_complaint(file text)
+    RETURNS void
+    LANGUAGE SQL
+    VOLATILE
+    AS $$
+        -- TODO: check that the file exists
+        INSERT INTO private.audio_complaint (username, audio)
+            VALUES (current_setting('jwt.claims.username'), file)
+    $$;
+
+CREATE FUNCTION public.submit_pair_complaint(pair integer)
+    RETURNS void
+    LANGUAGE SQL
+    VOLATILE
+    AS $$
+        -- TODO: check that the pair exists
+        INSERT INTO private.pair_complaint (username, pair)
+            VALUES (current_setting('jwt.claims.username'), pair)
+    $$;
+
+CREATE FUNCTION public.submit_item_complaint(item integer)
+    RETURNS void
+    LANGUAGE SQL
+    VOLATILE
+    AS $$
+        -- TODO: check that the item exists
+        INSERT INTO private.item_complaint (username, item)
+            VALUES (current_setting('jwt.claims.username'), item)
+    $$;
+
 
 -- Permissions --
 -- TODO update (and be careful about audio functions that need to be called server-side...)
@@ -494,6 +525,7 @@ GRANT SELECT ON TABLE public.language TO anyuser;
 GRANT SELECT ON TABLE public.pair TO anyuser;
 GRANT SELECT ON TABLE public.interface_language TO anyuser;
 GRANT SELECT ON TABLE public.training_language TO anyuser;
+GRANT SELECT ON TABLE public.approved_audio TO anyuser;
 -- Util
 GRANT EXECUTE ON FUNCTION public.get_contrast_id(integer) TO anyuser;
 GRANT EXECUTE ON FUNCTION public.get_contrast_name(integer) TO anyuser;
@@ -529,6 +561,10 @@ GRANT SELECT ON TABLE public.audio TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_file TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(text, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.next_audio() TO loggedin;
+-- Flagging issues
+GRANT EXECUTE ON FUNCTION public.submit_audio_complaint(text) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.submit_pair_complaint(integer) TO loggedin;
+GRANT EXECUTE ON FUNCTION public.submit_item_complaint(integer) TO loggedin;
 
 -- Guests can sign up or log in
 GRANT EXECUTE ON FUNCTION public.signup(text, text, text, text, text[], text) TO guest;
