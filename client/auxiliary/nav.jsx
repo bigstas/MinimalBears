@@ -79,12 +79,13 @@ class Nav extends React.Component {
 		super(props)
 		this.state = {
             dropdown: false,  // Whether the dropdown is displayed
-            mouseIsDownOnDropdown: false  // Whether the dropdown is being clicked on
+            mouseIsDownOnDropdown: false,  // Whether the dropdown is being clicked on
+            justClickedSettingsIcon: false
         }
     }
     
-    dropdownTrue () {
-        this.setState({ dropdown: true })
+    toggleDropdown() {
+        this.setState({ dropdown: !this.state.dropdown })
     }
     
     componentDidMount() {
@@ -96,12 +97,13 @@ class Nav extends React.Component {
     }
     
     pageClick(e) {
-        if (this.mouseIsDownOnDropdown) { return } 
+        if (this.state.mouseIsDownOnDropdown) { return } 
         else { this.setState({ dropdown: false }) }
     }
     
-    mouseDownHandler() {
-    	this.setState({ mouseIsDownOnDropdown: true })
+    mouseDownHandler(nextFunction) {
+        this.setState({ mouseIsDownOnDropdown: true })
+        nextFunction()
     }
     mouseUpHandler() {
     	this.setState({ mouseIsDownOnDropdown: false })
@@ -116,13 +118,17 @@ class Nav extends React.Component {
                         <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
                         <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
                         <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>
-                        <li style={{float: 'right', cursor: 'pointer'}} onClick={this.dropdownTrue.bind(this)}><img src="cogwheels.png" style={{height: '40px'}} /></li>
+                        <li style={{float: 'right', cursor: 'pointer'}} 
+                            onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))} 
+                            onMouseUp={this.mouseUpHandler.bind(this)}>
+                                <img src="cogwheels.png" style={{height: '40px'}} />
+                        </li>
                         <li style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
                 {this.state.dropdown ?
                     <Dropdown
-                        onMouseDown={this.mouseDownHandler.bind(this)}
+                        onMouseDown={this.mouseDownHandler.bind(this,()=>{})}
                         onMouseUp={this.mouseUpHandler.bind(this)}
                         callbackLogOut={this.props.callbackLogOut}
                         username={this.props.username}
