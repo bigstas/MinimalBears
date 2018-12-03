@@ -193,6 +193,7 @@ CREATE FUNCTION public.authenticate_from_email(try_email text, try_password text
     RETURNS token_pair
     LANGUAGE SQL
     STRICT
+    SECURITY DEFINER
     VOLATILE  -- so that the function is treated as a mutation, not a query
     AS $$
         SELECT public.authenticate((SELECT username FROM private.account WHERE email = try_email),
