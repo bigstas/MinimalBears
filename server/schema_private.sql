@@ -309,7 +309,7 @@ CREATE TYPE public.stats AS (
     sum bigint
 );
 
-CREATE TYPE private.contrast_practice AS (
+CREATE TYPE public.contrast_practice AS (
     contrast integer,  -- id
     stamp timestamp,
     correct boolean
@@ -317,7 +317,7 @@ CREATE TYPE private.contrast_practice AS (
 
 -- Get all practices for the current user, in a period of time
 CREATE FUNCTION public.get_practices(unit text, number integer)
-    RETURNS SETOF private.contrast_practice
+    RETURNS SETOF contrast_practice
     LANGUAGE SQL
     SECURITY DEFINER
     STABLE
@@ -483,9 +483,9 @@ CREATE TABLE private.item_complaint (
 CREATE FUNCTION public.submit_audio_complaint(file text)
     RETURNS void
     LANGUAGE SQL
+    SECURITY DEFINER
     VOLATILE
     AS $$
-        -- TODO: check that the file exists
         INSERT INTO private.audio_complaint (username, audio)
             VALUES (current_setting('jwt.claims.username'), file)
     $$;
@@ -493,9 +493,9 @@ CREATE FUNCTION public.submit_audio_complaint(file text)
 CREATE FUNCTION public.submit_pair_complaint(pair integer)
     RETURNS void
     LANGUAGE SQL
+    SECURITY DEFINER
     VOLATILE
     AS $$
-        -- TODO: check that the pair exists
         INSERT INTO private.pair_complaint (username, pair)
             VALUES (current_setting('jwt.claims.username'), pair)
     $$;
@@ -503,23 +503,21 @@ CREATE FUNCTION public.submit_pair_complaint(pair integer)
 CREATE FUNCTION public.submit_item_complaint(item integer)
     RETURNS void
     LANGUAGE SQL
+    SECURITY DEFINER
     VOLATILE
     AS $$
-        -- TODO: check that the item exists
         INSERT INTO private.item_complaint (username, item)
             VALUES (current_setting('jwt.claims.username'), item)
     $$;
 
 
 -- Permissions --
--- TODO update (and be careful about audio functions that need to be called server-side...)
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO "admin";
 
 -- All users can read public information
 GRANT USAGE ON SCHEMA public TO anyuser;
-GRANT SELECT ON TABLE public.audio TO anyuser;
 GRANT SELECT ON TABLE public.contrast TO anyuser;
 GRANT SELECT ON TABLE public.item TO anyuser;
 GRANT SELECT ON TABLE public.language TO anyuser;
@@ -555,10 +553,10 @@ GRANT EXECUTE ON FUNCTION public.get_all_stats(text, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_contrast_avg(integer, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_practice_languages(text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_num_audio() TO loggedin;
--- Recordings (most functionality to be done on the server, not the client?)
+-- Recordings
+GRANT SELECT ON TABLE public.recording_language TO loggedin;
 GRANT EXECUTE ON FUNCTION public.get_items_to_record(text, integer) TO loggedin;
 GRANT INSERT ON TABLE public.audio TO loggedin;
-GRANT SELECT ON TABLE public.audio TO loggedin;
 GRANT USAGE ON SEQUENCE public.audio_file TO loggedin;
 GRANT EXECUTE ON FUNCTION public.submit_audio(text, text, integer) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.next_audio() TO loggedin;
@@ -573,9 +571,14 @@ GRANT EXECUTE ON FUNCTION public.authenticate(text, text) TO guest;
 GRANT EXECUTE ON FUNCTION public.authenticate_from_email(text, text) TO guest;
 
 -- Moderators can approve and reject audio
--- (most functionality to be done on the server, not the client?)
-GRANT INSERT ON TABLE public.audio TO moderator;
+GRANT SELECT ON TABLE public.audio TO moderator;
+GRANT SELECT ON TABLE public.pending_audio TO moderator;
+GRANT SELECT ON TABLE public.audio_moderation TO moderator;
+GRANT INSERT ON TABLE public.audio_moderation TO moderator;
+GRANT SELECT ON TABLE public.audio_edit TO moderator;
+GRANT INSERT ON TABLE public.audio_edit TO moderator;
 GRANT EXECUTE ON FUNCTION public.check_moderator(text) TO moderator;
 GRANT EXECUTE ON FUNCTION public.check_moderator_for_file(text) TO moderator;
 GRANT EXECUTE ON FUNCTION public.get_audio_submissions(text, integer) TO moderator;
 GRANT EXECUTE ON FUNCTION public.moderate_audio(text, boolean) TO moderator;
+GRANT EXECUTE ON FUNCTION public.edit_audio(text, interval, interval, double precision) TO moderator;
