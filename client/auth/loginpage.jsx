@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import { browserHistory } from 'react-router'
+import decodeError from '../auxiliary/errors';
 
 // TODO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
     
@@ -85,12 +86,10 @@ class AuthLoginPage extends React.Component {
                 })
             }
         }).catch((error) => {
-            console.log(error)
-            if (error = "[GraphQL error]: Message: Password does not match, Location: [object Object], Path: authenticateFromEmail") {
-                console.log("password error") // TODO how to handle this vs. above attempt to catch password error?
-                // steps to reproduce: try logging in as asher@example.com with any password
-            }
-            // TODO unexpected error (e.g. network error)... -- what needs to be done in that case??
+            alert(decodeError(error))
+            // TODO how to handle this vs. above attempt to catch password error?
+            // is it even possible for the then function not to return a jwt, leading to this.state.passwordError === true?
+            // steps to reproduce: try logging in as asher@example.com with any password
         })
     }
     

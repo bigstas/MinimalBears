@@ -1,5 +1,4 @@
 // Question mark image taken from wikimedia commons (open source)
-
 import { Navigation, Link, browserHistory } from 'react-router'
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
@@ -9,7 +8,8 @@ import counterpart from 'counterpart'
 import ReactTooltip from 'react-tooltip'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
-import LoadingPage from '../auxiliary/loading';
+import LoadingPage from '../auxiliary/loading'
+import decodeError from '../auxiliary/errors'
 
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
@@ -107,15 +107,7 @@ class AuthJoinPage extends React.Component {
                 // change page (navigates to Home)
                 browserHistory.push('/')
             }).catch((error) => {
-                // TODO test this to see whether the translation is working! (How to do this??)
-                if (error.networkError) {
-                    alert( counterpart.translate(["auth", "register", "errors", "serverError"]) )
-                } else {
-                    // Apart from network errors, the only error we would expect is a duplicate email address -- OR USERNAME (TODO)
-                    // TODO this is throwing email errors when it should be throwing username errors (i.e. when you use the same username, it tells you to change the email address)
-                    alert( counterpart.translate(["auth", "register", "errors", "duplicateEmail"]) )  // TODO add link
-                    console.log(error.graphQLErrors[0].message)
-                }
+                alert(decodeError(error))
             })
         }
     }
@@ -163,7 +155,7 @@ class AuthJoinPage extends React.Component {
                                     <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="password" name="confirmPassword" onChange={this.handleChange} /></td></tr>
                                 {/* Native language error message (usually .style.display=none) */}
                                     <tr><td colSpan="2" className="tdError"><p className={this.state.languageError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.languageError" /></p></td></tr>
-                                {/* Choose native language TODO: use database */}
+                                {/* Choose native language */}
                                     <tr>
                                         <td className="tdText">
                                             <p style={{display: "inline"}}>

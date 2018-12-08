@@ -148,6 +148,14 @@ counterpart.registerTranslations('eng', {
         username: "Username:",
         password: "Password:",
         confirmPassword: "Confirm password:",
+        errors: {
+            serverError: "We cannot connect to the server! Check your internet connection.",
+            duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
+            duplicateUsername: "Oops! Somebody has already taken this username. Please choose another.",
+            passwordNoMatch: "Your password appears to be incorrect",
+            passwordTooShort: "Your password must be at least TODO characters long and contain none of the following characters: TODO.",
+            generalError: "You could not be registered due to an error."
+        },
         register: {
             joinTitle: "Join.",
             joining: "Joining allows you to keep track of your progress and contribute recordings.",
@@ -160,12 +168,7 @@ counterpart.registerTranslations('eng', {
             notInTheList: "My language is not in the list",
             joinButtonLabel: "Join now",
             loginLink: "Have an account? Log in.",
-            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native language will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone.",
-            errors: {
-                serverError: "We cannot connect to the server! Check your internet connection.",
-                duplicateEmail: "This email address already exists in our system. If you've already registered, please log in!",
-                duplicateUsername: "Oops! Somebody has already taken this username. Please choose another."
-            }
+            tooltip: "Why we ask this:<br>You can contribute to the project by recording your voice<br>saying words in your native language.<br>Knowing your native language will allow us to<br>ask you for words in the appropriate language.<br>We do not share your data with anyone."
         },
         login: {
             loginTitle: "Log in.",
