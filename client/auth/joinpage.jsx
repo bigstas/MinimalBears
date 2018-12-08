@@ -2,13 +2,14 @@
 
 import { Navigation, Link, browserHistory } from 'react-router'
 import React from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
 import ReactTooltip from 'react-tooltip'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
+import LoadingPage from '../auxiliary/loading';
 
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
@@ -54,8 +55,8 @@ class AuthJoinPage extends React.Component {
     
     getDropdownValue = (selectedOptions) => { // arrow function keeps "this" as class
         let values = []
-        selectedOptions.map(function(c, index) {
-            values.push(c.value)
+        selectedOptions.map(function(option, index) {
+            values.push(option.value)
         })
         this.setState({ nativeLanguage: values })
         console.log(`values: ` + values)
@@ -120,11 +121,12 @@ class AuthJoinPage extends React.Component {
     }
     
     render() {
-        // TODO get list from database
-        // TODO translate language names
-        const optionList = [{value: "eng", label: "English"},
-                            {value: "deu", label: "Deutsch"},
-                            {value: "pol", label: "Polski"}]
+        if (this.props.allLanguages.loading) {
+            return <LoadingPage />
+        } 
+        const optionList = this.props.allLanguages.allLanguages.nodes.map((row) => {
+            return { value: row.id, label: row.name }
+        })
         
         return (
             <div className='panel animated fadeIn'>
@@ -231,16 +233,32 @@ class AuthJoinPage extends React.Component {
     }
 }
 
+const allLanguages = gql`query {
+    allLanguages {
+        nodes {
+            name
+            id
+        }
+    }
+}`
+const allLanguagesConfig = {
+    name: 'allLanguages'
+}
 
 const signup = gql`mutation ($input: SignupInput!) {
     signup(input:$input) {
         clientMutationId
     }
-}` // "integer" is the id of the new row
+}`
 
 // Variables must be defined when the function is called
 const signupConfig = {
     name: 'signup'
 }
 
-export default graphql(signup, signupConfig)(AuthJoinPage)
+//export default graphql(signup, signupConfig)(AuthJoinPage)
+
+export default compose(
+    graphql(signup, signupConfig),
+    graphql(allLanguages, allLanguagesConfig)
+)(AuthJoinPage)

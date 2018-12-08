@@ -51,3 +51,6 @@ For full release:
     - Jest is online with dummy.test.js
     - need to put in testing code for other files
 6. update to react-router version 4 (from current 3), and make navigation to login page etc. 
+7. cross-browser compatibility
+8. cross-device compatibility
+9. styling to "flow" as size of browser window varies
