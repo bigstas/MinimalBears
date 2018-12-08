@@ -19,7 +19,7 @@ function validateEmail(email) {
 
 class AuthJoinPage extends React.Component {
 	constructor(props) {
-		super(props)
+        super(props)
 		this.state = {
             username: "",
             emailValue: "",
@@ -34,14 +34,14 @@ class AuthJoinPage extends React.Component {
         }
     }
     
-    toggleCustomLanguage() {
+    toggleCustomLanguage = () => { // arrow function keeps "this" defined as class
         this.setState({ 
             inputCustomLanguage: !this.state.inputCustomLanguage,
             customNativeLanguage: null
         })
     }
     
-    handleChange(event) {
+    handleChange = (event) => { // arrow function keeps "this" defined as class
         let field = event.target.name
         //console.log("event.target.name : " + event.target.name)   // for debugging
         if      (field === "username") { this.setState({username:      event.target.value}) }
@@ -52,7 +52,7 @@ class AuthJoinPage extends React.Component {
         else {alert ("something is wrong")}
     }
     
-    getDropdownValue(selectedOptions) {
+    getDropdownValue = (selectedOptions) => { // arrow function keeps "this" as class
         let values = []
         selectedOptions.map(function(c, index) {
             values.push(c.value)
@@ -63,7 +63,7 @@ class AuthJoinPage extends React.Component {
         console.log(`Stringified: ` + JSON.stringify(selectedOptions, null, 4))
     }
     
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         /* If the email is not a valid expression (according to regexp above), shows an error in red text on the page.
          * If password does not match confirmed password, shows a similar error.
          * Otherwise, do something with the email and password values.

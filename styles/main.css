@@ -286,6 +286,7 @@ nav ul li a, nav ul li p {
 #flagdropdown {
     position: absolute;
     bottom: 30px;
+    font-size: small;
 }
 /* Options within the dropdown menu coming from the gear symbol. */
 .dropdownElement {
