@@ -90,7 +90,7 @@ class AuthLoginPage extends React.Component {
                 console.log("password error") // TODO how to handle this vs. above attempt to catch password error?
                 // steps to reproduce: try logging in as asher@example.com with any password
             }
-            // TODO unexpected error (e.g. network error)...
+            // TODO unexpected error (e.g. network error)... -- what needs to be done in that case??
         })
     }
     

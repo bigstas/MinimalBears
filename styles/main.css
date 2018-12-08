@@ -301,6 +301,28 @@ nav ul li a, nav ul li p {
     color: #5E3808;
 }
 
+/* custom animation written by yours truly by the power of MATHS */
+/* TODO - actually use this somewhere (probably in the dropdowns) */
+@keyframes boing {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+    10% {
+      transform: scale3d(1.16, 1.16, 1.16);
+    }
+    35% {
+      transform: scale3d(0.94, 0.94, 0.94);
+    }
+    60% {
+      transform: scale3d(1.02, 1.02, 1.02);
+    }
+    85% {
+      transform: scale3d(0.99, 0.99, 0.99);
+    }
+    to {
+      transform: scale3d(1, 1, 1);
+    }
+  }
 
 /* ================================== */
 /* ============ arena.js ============ */
@@ -586,9 +608,6 @@ nav ul li a, nav ul li p {
     /* centering */
     margin-left: auto;
     margin-right: auto;
-    /*-webkit-animation-name: example; /* Chrome, Safari, Opera 
-    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera 
-    -webkit-animation-iteration-count: infinite; */
     animation-name: spin1;
     animation-duration: 2.5s;
     animation-timing-function: linear;
@@ -596,6 +615,10 @@ nav ul li a, nav ul li p {
 }
 /* Chrome, Safari, Opera */
 @-webkit-keyframes spin1 {
+    0%   {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg)}
+}
+@keyframes spin1 { /* other browsers */
     0%   {-webkit-transform: rotate(0deg);}
     100% {-webkit-transform: rotate(360deg)}
 }
