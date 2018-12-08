@@ -79,13 +79,17 @@ class AuthLoginPage extends React.Component {
                 // change page (currently navigates to Home)
                 browserHistory.push('/')
             } else {
-                this.setState({
+                this.setState({ // TODO: this isn't working, see below catch(error)
                     emailError: false,
                     passwordError: true
                 })
             }
         }).catch((error) => {
             console.log(error)
+            if (error = "[GraphQL error]: Message: Password does not match, Location: [object Object], Path: authenticateFromEmail") {
+                console.log("password error") // TODO how to handle this vs. above attempt to catch password error?
+                // steps to reproduce: try logging in as asher@example.com with any password
+            }
             // TODO unexpected error (e.g. network error)...
         })
     }

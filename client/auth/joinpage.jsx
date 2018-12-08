@@ -234,7 +234,7 @@ class AuthJoinPage extends React.Component {
 
 const signup = gql`mutation ($input: SignupInput!) {
     signup(input:$input) {
-        integer
+        clientMutationId
     }
 }` // "integer" is the id of the new row
 
