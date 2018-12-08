@@ -302,7 +302,11 @@ nav ul li a, nav ul li p {
 }
 
 /* custom animation written by yours truly by the power of MATHS */
-/* TODO - actually use this somewhere (probably in the dropdowns) */
+.minbears-boing {
+    animation-name: boing;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(.5,0,.5,1);
+}
 @keyframes boing {
     from {
       transform: scale3d(1, 1, 1);

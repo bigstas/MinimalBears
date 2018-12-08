@@ -49,7 +49,7 @@ class Dropdown extends React.Component {
         }
         
         return (
-            <div className='dropdownDiv' onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
+            <div className={this.props.className} onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
                 {authElement}
                 {registerElement}
                 {moderationElement}
@@ -78,13 +78,25 @@ class Nav extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-            dropdown: false,  // Whether the dropdown is displayed
+            dropdown: false,  // Whether the dropdown is displayed: true, false, or 'destroy'
             mouseIsDownOnDropdown: false  // Whether the dropdown is being clicked on
         }
     }
     
     toggleDropdown() {
-        this.setState({ dropdown: !this.state.dropdown })
+        if (this.state.dropdown === true) {
+            this.destroyDropdown()
+        } else if (this.state.dropdown === false) {
+            this.setState({ dropdown: true })
+        }
+    }
+    destroyDropdown() {
+        if (this.state.dropdown === true) {
+            this.setState({ dropdown: 'destroy' })
+            setTimeout(()=>{ // give it time to animate
+                this.setState({ dropdown: false, mouseIsDownOnDropdown: false })
+            }, 400)
+        }
     }
     
     componentDidMount() {
@@ -97,7 +109,7 @@ class Nav extends React.Component {
     
     pageClick(e) {
         if (this.state.mouseIsDownOnDropdown) { return } 
-        else { this.setState({ dropdown: false }) }
+        else { this.destroyDropdown() }
     }
     
     mouseDownHandler(nextFunction) {
@@ -105,7 +117,7 @@ class Nav extends React.Component {
         nextFunction()
     }
     mouseUpHandler() {
-    	this.setState({ mouseIsDownOnDropdown: false })
+        this.setState({ mouseIsDownOnDropdown: false })
     }
     
     render() { 
@@ -125,14 +137,20 @@ class Nav extends React.Component {
                         <li style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
-                {this.state.dropdown ?
+                {!this.state.dropdown ? <span /> :
+                this.state.dropdown === 'destroy' ?
                     <Dropdown
+                        className={'dropdownDiv animated zoomOut'}
+                        onMouseDown={()=>{}} onMouseUp={()=>{}} callbackLogOut={()=>{}}
+                        username={this.props.username}
+                    /> :
+                    <Dropdown
+                        className={'dropdownDiv minbears-boing'}
                         onMouseDown={this.mouseDownHandler.bind(this,()=>{})}
                         onMouseUp={this.mouseUpHandler.bind(this)}
                         callbackLogOut={this.props.callbackLogOut}
                         username={this.props.username}
-                    /> :
-                    <span />
+                    />
                 }
             </div>
         )
