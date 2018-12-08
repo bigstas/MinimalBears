@@ -281,6 +281,44 @@ CREATE FUNCTION public.get_account_info()
         WHERE username = current_setting('jwt.claims.username')
     $$;
 
+-- TODO: want to be able to get all usernames to be able to tell a joining user whether their username is unique in real time
+-- probably don't want to do the same with email addresses, as this is more sensitive information
+
+CREATE TYPE public.recording_history AS (
+    recorded bigint,
+    approved bigint,
+    rejected bigint -- calculate pending client-side by recorded - (approved + rejected)
+);
+
+-- Get user's audio recording history (to tell them, out of appreciation)
+-- TODO - requires testing
+CREATE FUNCTION public.get_account_recording_history()
+    RETURNS public.recording_history
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        DECLARE
+            my_username text := current_setting('jwt.claims.username');
+            recorded bigint;
+        BEGIN
+            SELECT COUNT(*) AS "recorded",
+            SUM( CASE
+                WHEN audio_moderation.approved = 'true' THEN 1
+                ELSE 0
+                END
+            ) AS "approved",
+            SUM( CASE
+                WHEN audio_moderation.approved = 'false' THEN 1
+                ELSE 0
+                END
+            ) AS "rejected"
+            FROM audio INNER JOIN audio_moderation
+            ON audio.file = audio_moderation.file
+            WHERE audio.speaker=my_username;
+        END
+    $$;
+
 -- Record that a user has completed the tutorial for the record page
 CREATE FUNCTION public.complete_tutorial()
     RETURNS void
