@@ -150,39 +150,21 @@ CREATE FUNCTION public.signup(username text, email text, password text, interfac
         END;
     $$;
 
--- NOTE: three errors were debugged using the below (dubious?) annotated code
--- but then there was one that I didn't know how to solve:
--- [GraphQL error]: Message: Password does not match, Location: [object Object], Path: authenticateFromEmail
--- this error has occurred in other circumstances as well - look in the login.jsx file for more
 CREATE FUNCTION private.check_password(try_username text, try_password text)
     RETURNS private.account
     LANGUAGE plpgsql
     STRICT
     SECURITY DEFINER
-    --STABLE
-    -- <debug attempt stage 2>, responding to:
-    -- [GraphQL error]: Message: SET is not allowed in a non-volatile function, Location: [object Object], Path: authenticateFromEmail
-    VOLATILE
-    -- </debug attempt>
+    STABLE
     AS $$
         DECLARE
             found_account private.account;
         BEGIN
-            --SELECT * INTO found_account
-            -- <debug attempt stage 3>, responding to:
-            -- [GraphQL error]: Message: row expansion via "*" is not supported here, Location: [object Object], Path: authenticateFromEmail
-            SELECT (username, email, password_hash, refresh, interface, custom_native, tutorial)
-                INTO found_account
-            -- </debug attempt>
+            SELECT * INTO found_account
                 FROM private.account
                 WHERE username = try_username;
             IF found_account.password_hash = crypt(try_password, found_account.password_hash)
             THEN
-                -- <debug attempt stage 1>, responding to:
-                -- [GraphQL error]: Message: unrecognized configuration parameter "jwt.claims.username", Location: [object Object], Path: authenticateFromEmail
-                -- following advice from https://github.com/graphile/postgraphile/issues/353
-                SET "jwt.claims.username" TO try_username;
-                -- </debug attempt>
                 RETURN found_account;
             ELSE
                 RAISE EXCEPTION 'Password does not match';
