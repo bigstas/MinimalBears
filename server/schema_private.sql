@@ -96,26 +96,33 @@ CREATE TYPE public.token_pair AS (
     refresh text
 );
 
-CREATE FUNCTION private.generate_jwt()
+CREATE FUNCTION private.generate_jwt_for_user(username text)
     RETURNS json_web_token
     LANGUAGE plpgsql
     STABLE
     AS $$
         DECLARE
-            my_username text := current_setting('jwt.claims.username');
             n_moderator bigint;
         BEGIN
             SELECT count(*) INTO n_moderator
                FROM private.moderator
-               WHERE account = current_setting('jwt.claims.username');
+               WHERE account = username;
 
             IF n_moderator = 0
             THEN
-                RETURN ('loggedin', my_username)::json_web_token;
+                RETURN ('loggedin', username)::json_web_token;
             ELSE
-                RETURN ('moderator', my_username)::json_web_token;
+                RETURN ('moderator', username)::json_web_token;
             END IF;
         END;
+    $$;
+
+CREATE FUNCTION private.generate_jwt()
+    RETURNS json_web_token
+    LANGUAGE sql
+    STABLE
+    AS $$
+        SELECT private.generate_jwt_for_user(current_setting('jwt.claims.username'));
     $$;
 
 -- Create a new user account
@@ -184,7 +191,7 @@ CREATE FUNCTION public.authenticate(try_username text, try_password text)
             found_account private.account;
         BEGIN
             found_account := private.check_password(try_username, try_password);
-            RETURN (private.generate_jwt(),
+            RETURN (private.generate_jwt_for_user(try_username),
                     found_account.refresh)::token_pair;
         END;
     $$;
