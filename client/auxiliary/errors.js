@@ -1,3 +1,5 @@
+import counterpart from 'counterpart'
+
 decodeError = function(error) {
     if (!error) return null
     let type
