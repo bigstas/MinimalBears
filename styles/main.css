@@ -304,7 +304,7 @@ nav ul li a, nav ul li p {
 /* custom animation written by yours truly by the power of MATHS */
 .minbears-boing {
     animation-name: boing;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     animation-timing-function: cubic-bezier(.5,0,.5,1);
 }
 @keyframes boing {
