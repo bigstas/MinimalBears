@@ -19,7 +19,7 @@
     "meteor-node-stubs": "^0.2.5",
     "peaks.js": "^0.8.1",
     "pg": "^6.4.2",
-    "postgraphql": "^4.0.0-alpha2.33",
+    "postgraphile": "^4.0.0-beta.3",
     "react": "^16.6.0",
     "react-addons-pure-render-mixin": "^15.4.2",
     "react-apollo": "^2.2.4",

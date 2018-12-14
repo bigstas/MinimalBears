@@ -68,6 +68,7 @@ class AuthLoginPage extends React.Component {
         this.props.login({variables: {input: {tryEmail: this.state.emailValue,
                                               tryPassword: this.state.passwordValue}}})
         .then((response) => {
+            console.dir(response)
             const {jwt, refresh} = response.data.authenticateFromEmail.tokenPair
             if (!!jwt) {
                 this.setState({
@@ -86,6 +87,7 @@ class AuthLoginPage extends React.Component {
                 })
             }
         }).catch((error) => {
+            console.log(error)
             alert(decodeError(error))
             // TODO how to handle this vs. above attempt to catch password error?
             // is it even possible for the then function not to return a jwt, leading to this.state.passwordError === true?

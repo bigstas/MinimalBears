@@ -1,6 +1,6 @@
 // Access the data under www.minimalbears.com/graphql
 
-import postgraphql from 'postgraphql'
+import postgraphql from 'postgraphile' //'postgraphql'
 import secret from './jwt_secret'
 
 // PostGraphQL provides 'connect'-style middleware to process queries

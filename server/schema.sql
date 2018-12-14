@@ -25,7 +25,7 @@ ALTER DEFAULT PRIVILEGES GRANT ALL ON TYPES TO admin;
 -- Languages (both those being learnt and those for the user interface)
 CREATE TABLE language (
     id text PRIMARY KEY,
-    name text NOT NULL,
+    name text NOT NULL, -- TODO we should also not have two languages of the same name!
     interface bool NOT NULL,  -- whether available as the interface language
     training bool NOT NULL,  -- whether available as a training language
     recording bool NOT NULL  -- whether we are looking for recordings
