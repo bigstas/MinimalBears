@@ -71,6 +71,7 @@ class AuthLoginPage extends React.Component {
             console.dir(response)
             const {jwt, refresh} = response.data.authenticateFromEmail.tokenPair
             if (!!jwt) {
+                console.log("we can see the jwt")
                 this.setState({
                     emailError: false,
                     passwordError: false
@@ -80,6 +81,7 @@ class AuthLoginPage extends React.Component {
                 
                 // change page (currently navigates to Home)
                 browserHistory.push('/')
+                console.log("got to the end of the things that need doing on loginpage")
             } else {
                 this.setState({ // TODO: this isn't working, see below catch(error)
                     emailError: false,

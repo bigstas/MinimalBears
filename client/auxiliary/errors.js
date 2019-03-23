@@ -3,7 +3,7 @@ import counterpart from 'counterpart'
 decodeError = function(error) {
     if (!error) return null
     let type
-    if (error.networkError) type = "network"
+    if (error.networkError) type = "networkError"
     if (error.graphQLErrors) {
         let type
         // there's probably a neater way to handle these errors than the below, as these are human-readable rather than codes
@@ -12,7 +12,7 @@ decodeError = function(error) {
         else if (err === `duplicate key value violates unique constraint "account_pkey"`) type = "duplicateUsername"
         else if (err === `Password does not match`) type = "passwordNoMatch"
     }
-    else type = "general"
+    else type = "generalError"
     return counterpart.translate(["auth", "errors", type])
 }
 

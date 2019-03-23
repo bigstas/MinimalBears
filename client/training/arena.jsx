@@ -87,22 +87,34 @@ class FlagDropdown extends React.Component {
     }
     handleBadPair() {
         console.log("bad pair")
+        this.props.pairComplaint({
+            variables: {
+                input: {
+                    pair: this.props.pairId
+                }
+            }
+        })
     }
     handleBadItem(position) {
         console.log(`bad item on the ${position}`)
+        /*
+        this.props.itemComplaint({
+            variables: {
+                input: {
+                    item: this.props.itemId
+                }
+            }
+        })*/
     }
 
     render() {
-        // TODO: do this through props instead
-        const leftword = 'wean'
-        const rightword = 'win'
         return (
             <div className="dropdownDiv" id="flagdropdown" onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
                 <div>What is the problem?</div>
                 <div className="dropdownElement" onClick={this.handleBadAudio.bind(this)}>Flag audio</div>
-                <div className="dropdownElement" onClick={this.handleBadPair.bind(this)}>Flag pair</div>
-                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'left')}>Flag word: {leftword}</div>
-                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'right')}>Flag word: {rightword}</div>
+                <div className="dropdownElement" onClick={this.handleBadPair.bind(this)}>Flag pair: {this.props.leftword}, {this.props.rightword}</div>
+                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'left')}>Flag word: {this.props.leftword}</div>
+                <div className="dropdownElement" onClick={this.handleBadItem.bind(this,'right')}>Flag word: {this.props.rightword}</div>
             </div>
         )
     }
@@ -153,6 +165,8 @@ class Flagger extends React.Component {
                     <FlagDropdown 
                         onMouseDown={this.mouseDownHandler.bind(this,()=>{})}
                         onMouseUp={this.mouseUpHandler.bind(this)}
+                        leftword={this.props.leftword} rightword={this.props.rightword}
+                        pairId={this.props.pairId}
                     /> : 
                     <span />
                 }
@@ -294,7 +308,13 @@ class Arena extends React.Component {
                     
                     {this.state.mode !== "done" ? <ProgressButton  mode={this.state.mode} handle={this.handleProgressClick.bind(this)} /> : <span />}
                     {/* TODO: whether this is on the screen or not should depend on the mode */}
-                    <Flagger />
+                    {(this.state.mode === "ask" || this.state.mode === "feedback") ?
+                        <Flagger 
+                            leftword={this.state.textList[0]} rightword={this.state.textList[1]}
+                            pairId={this.props.questions.getQuestions.nodes[this.state.counter].pair}
+                            /> :
+                        <span />
+                    }
 
                     {/* Buttons for choosing options */ }
                     <div id='optionContainer' className="container">
@@ -322,6 +342,28 @@ class Arena extends React.Component {
  * which makes queries to the database and passes the results as props.
  * We must provide a function that defines the queries.
  */
+
+const itemComplaintMutation = gql`
+mutation ($input: SubmitItemComplaintInput!) {
+    submitItemComplaint (input: $input) {
+        clientMutationId
+    }
+}`
+
+const itemComplaintMutationConfig = {
+    name: 'itemComplaint'
+}
+
+const pairComplaintMutation = gql`
+mutation ($input: SubmitPairComplaintInput!) {
+    submitPairComplaint (input: $input) {
+        clientMutationId
+    }
+}`
+
+const pairComplaintMutationConfig = {
+    name: 'pairComplaint'
+}
 
 const questionQuery = gql`query($contrastId:Int) {
     getQuestions(contrastId:$contrastId, number: 10) {

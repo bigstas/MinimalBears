@@ -29,7 +29,6 @@ class UserAppBody extends React.Component {
             if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
             console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
-            userId =   this.props.accountInfo.getAccountInfo.id
             tutorial = this.props.accountInfo.getAccountInfo.tutorial
             native =   this.props.accountInfo.getAccountInfo.native
         }
@@ -39,13 +38,11 @@ class UserAppBody extends React.Component {
             <div id="app-container">
                 <Nav callbackLogOut={this.props.logOut} username={username} />
                 {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props.
-                username should come from query due to being wrapped by graphql for wrapped case; otherwise username is bool: false.
-                userId should no longer be necessary. */}
+                username should come from query due to being wrapped by graphql for wrapped case; otherwise username is bool: false. */}
                 {React.cloneElement(
                     this.props.children, 
                     {
                         username: username,
-                        userId: userId,
                         hasSeenTutorial: tutorial,
                         native: native,
                         activeLanguageId: this.state.activeLanguageId, 
@@ -63,7 +60,6 @@ class UserAppBody extends React.Component {
 // Calling graphql on this turns it into a function which returns a React element (needed below)
 const accountInfoQuery = gql`query{
     getAccountInfo {
-        id
         username
         interface
         native

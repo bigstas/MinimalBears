@@ -22,3 +22,6 @@ lib/articles
 
 # Translation drafts for the About page
 lib/translations/about
+
+# A spreadsheet with language codes
+lib/ISO-692.ods
