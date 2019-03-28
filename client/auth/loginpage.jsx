@@ -59,11 +59,11 @@ class AuthLoginPage extends React.Component {
                 passwordError: false
             })
             return
-        } else {
+        } /*else {
             this.setState({
                 emailError: emailFail  // sets to false? Should this just be removed as we set to false later anyway?
             })
-        }
+        }*/
         // Try to log in
         this.props.login({variables: {input: {tryEmail: this.state.emailValue,
                                               tryPassword: this.state.passwordValue}}})
@@ -71,7 +71,6 @@ class AuthLoginPage extends React.Component {
             console.dir(response)
             const {jwt, refresh} = response.data.authenticateFromEmail.tokenPair
             if (!!jwt) {
-                console.log("we can see the jwt")
                 this.setState({
                     emailError: false,
                     passwordError: false

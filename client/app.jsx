@@ -23,9 +23,9 @@ class UserAppBody extends React.Component {
         let native = null
         let username = false
         // TODO: remove all userId references in app
-        let userId = null
         let tutorial = false
         if (this.props.accountInfo) {
+            console.log("jwt: " + localStorage['token'])
             if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
             console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
@@ -101,6 +101,7 @@ class AppBody extends React.Component {
             // Store the token in memory, to be added to request headers
             localStorage.setItem('token', raw_jwt)
             // Set the state, to change the app
+            console.log('jwt valid, setting isLoggedIn to True')
             this.setState({
                 isLoggedIn: true
             })
@@ -155,7 +156,7 @@ class AppBody extends React.Component {
     componentWillMount() {
         const raw_jwt = localStorage.getItem('token')
         if (!!raw_jwt) {
-            console.log('found json web token')
+            console.log('found json web token, running setUser as App compenent mounts')
             this.setUser(raw_jwt)
             this.refresh()
         }

@@ -110,7 +110,7 @@ CREATE FUNCTION private.generate_jwt_for_user(username text)
 
             IF n_moderator = 0
             THEN
-                RETURN ('loggedin', username)::json_web_token;
+                RETURN ('loggedin', username)::json_web_token; -- x::Y means cast x to type Y
             ELSE
                 RETURN ('moderator', username)::json_web_token;
             END IF;
@@ -270,8 +270,38 @@ CREATE FUNCTION public.get_account_info()
         WHERE username = current_setting('jwt.claims.username')
     $$;
 
--- TODO: want to be able to get all usernames to be able to tell a joining user whether their username is unique in real time
--- probably don't want to do the same with email addresses, as this is more sensitive information
+-- TODO test this; integrate it into the rest of the code
+CREATE FUNCTION public.is_unique_username(try_username text)
+    RETURNS boolean
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT CASE WHEN EXISTS (
+            SELECT * 
+            FROM private.account_info 
+            WHERE username = try_username
+        )
+        THEN 1::BIT
+        ELSE 0::BIT
+        END
+    $$;
+
+CREATE FUNCTION public.is_unique_email(try_email text)
+    RETURNS boolean
+    LANGUAGE SQL
+    SECURITY DEFINER
+    STABLE
+    AS $$
+        SELECT CASE WHEN EXISTS (
+            SELECT * 
+            FROM private.account_info 
+            WHERE email = try_email
+        )
+        THEN 1::BIT
+        ELSE 0::BIT
+        END
+    $$;
 
 CREATE TYPE public.recording_history AS (
     recorded bigint,
