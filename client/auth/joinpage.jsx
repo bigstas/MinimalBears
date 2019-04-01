@@ -35,14 +35,14 @@ class AuthJoinPage extends React.Component {
         }
     }
     
-    toggleCustomLanguage = () => { // arrow function keeps "this" defined as class
+    toggleCustomLanguage = () => { // arrow function keeps "this" defined as class instance
         this.setState({ 
             inputCustomLanguage: !this.state.inputCustomLanguage,
             customNativeLanguage: null
         })
     }
     
-    handleChange = (event) => { // arrow function keeps "this" defined as class
+    handleChange = (event) => { // arrow function keeps "this" defined as class instance
         let field = event.target.name
         //console.log("event.target.name : " + event.target.name)   // for debugging
         if      (field === "username") { this.setState({username:      event.target.value}) }
@@ -53,7 +53,7 @@ class AuthJoinPage extends React.Component {
         else {alert ("something is wrong")}
     }
     
-    getDropdownValue = (selectedOptions) => { // arrow function keeps "this" as class
+    getDropdownValue = (selectedOptions) => { // arrow function keeps "this" as class instance
         let values = []
         selectedOptions.map(function(option, index) {
             values.push(option.value)

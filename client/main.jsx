@@ -4,35 +4,36 @@ import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
 import Routes from './routes'
 import React from 'react'
-import ApolloClient from 'apollo-boost'
+import ApolloClient from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
-import { ApolloLink, from } from 'apollo-link'
+import { setContext } from 'apollo-link-context'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
 
 // Connect to the database using Apollo
 // Add middleware that adds a Json Web Token (JWT) to the request header
 
-const httpLink = new HttpLink({ uri: '/graphql' });
+const httpLink = new HttpLink({ uri: '/graphql' })
 
-const authMiddleware = new ApolloLink((operation, forward) => {
-  // add the authorization to the headers
-  const token = localStorage.getItem('token')
-  operation.setContext(({ headers = {} }) => ({
-    headers: {
-      ...headers,
-      authorization: 'Bearer ' + token || null,
-    } 
-  }));
-
-  return forward(operation);
+const authMiddleware = setContext((request, old_context) => {
+    // add authorization to the headers
+    const token = localStorage.getItem('token')
+    const new_context = {
+        ...old_context,
+        headers: {
+            ...old_context.headers,
+            authorization: 'Bearer ' + token || null
+        }
+    }
+    console.log('middleware')
+    console.log(new_context)
+    return new_context
 })
 
 const client = new ApolloClient({
-  link: from([
-    authMiddleware,
-    httpLink
-  ]),
-});
+    link: authMiddleware.concat(httpLink),
+    cache: new InMemoryCache()
+})
 
 // <ApolloProvider> allows React to connect to Apollo
 // <Routes> allows client-side routing
