@@ -18,16 +18,20 @@ const httpLink = new HttpLink({ uri: '/graphql' })
 const authMiddleware = setContext((request, old_context) => {
     // add authorization to the headers
     const token = localStorage.getItem('token')
-    const new_context = {
-        ...old_context,
-        headers: {
-            ...old_context.headers,
-            authorization: 'Bearer ' + token || null
+    if (!!token) {
+        const new_context = {
+            ...old_context,
+            headers: {
+                ...old_context.headers,
+                authorization: 'Bearer ' + token || null
+            }
         }
+        console.log('middleware')
+        console.log(new_context)
+        return new_context
+    } else {
+        return old_context
     }
-    console.log('middleware')
-    console.log(new_context)
-    return new_context
 })
 
 const client = new ApolloClient({
