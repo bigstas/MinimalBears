@@ -16,8 +16,8 @@ class PeaksObject extends React.Component {
         console.log("this.props.src is " + this.props.src)
         return (
             <div>
-                <div id='audioContainer' ref={this.audioContainerRef} />
-                <audio id='mainAudio' ref={this.mainAudioRef} src={this.props.src} controls={false} />
+                <div id='audioContainer' ref={this.audioContainerRef.bind(this)} />
+                <audio id='mainAudio' ref={this.mainAudioRef.bind(this)} src={this.props.src} controls={false} />
             </div>
         )
     }
@@ -60,10 +60,11 @@ class PeaksObject extends React.Component {
             overviewHighlightRectangleColor: 'grey',
             logger: console.error.bind(console)
         })
+        console.log("Peaks init done")
     }
     
     componentDidMount() {
-    	this.mainAudio.addEventListener('loadeddata', this.updatePeaksObject)
+    	this.mainAudio.addEventListener('loadeddata', this.updatePeaksObject.bind(this))
 	}
     
     shouldComponentUpdate(nextProps, nextState) {
@@ -139,15 +140,15 @@ class EditingPage extends React.Component {
                 <p><Translate content="edit.thisRecording" />{this.state.src[this.state.whichSrc]}</p> {/* The idea is that the moderator should be able to see what word was supposed to be being recorded, otherwise we could have silly errors! */}
                 <PeaksObject src={this.state.src[this.state.whichSrc]} ref="PeaksObject" />
                 <div id='topButtons' style={{display: "block"}}>
-                    <div className="authbtn" onClick={this.playOrPause} ><Translate content="edit.playAll" /></div>
-                    <div className="authbtn" onClick={this.playClip} ><Translate content="edit.playClip" /></div>
+                    <div className="authbtn" onClick={this.playOrPause.bind(this)} ><Translate content="edit.playAll" /></div>
+                    <div className="authbtn" onClick={this.playClip.bind(this)} ><Translate content="edit.playClip" /></div>
                     <div className="authbtn" onClick={this.zoom.bind(this, true)} ><Translate content="edit.zoomIn" /></div>
                     <div className="authbtn" onClick={this.zoom.bind(this, false)} ><Translate content="edit.zoomOut" /></div>
                 </div>
                 <div id='bottomButtons' style={{display: "block"}}>
                 <div className="authbtn" onClick={this.handleSubmit.bind(this, false)} ><Translate content="edit.acceptFull" /></div>
                 <div className="authbtn" onClick={this.handleSubmit.bind(this, true)} ><Translate content="edit.acceptSegment" /></div>
-                <div className="authbtn" onClick={this.handleReject} ><Translate content="edit.reject" /></div>
+                <div className="authbtn" onClick={this.handleReject.bind(this)} ><Translate content="edit.reject" /></div>
                     </div>
             </div>
         )
