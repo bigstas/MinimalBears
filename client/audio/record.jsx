@@ -2,7 +2,6 @@
 submittedAudio.wav originally called 320654__rhodesmas__level-up-02.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
 */
 import React from 'react'
-import { createContainer } from 'meteor/react-meteor-data'
 import { Link, withRouter } from 'react-router'
 import update from 'immutability-helper'
 // For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
@@ -15,6 +14,7 @@ import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
 import Tutorial from '../auxiliary/tutorials'
 import { PreRecord, RecordSelector, NoRecordPage } from './norecord'
+import zip from '../auxiliary/zip'
 
     
 // Note that we use 'meteor/maxencecornet:audio-recorder',
@@ -428,7 +428,9 @@ next: ${next}`)
     }
     
     dispatchAudio () {
-        const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
+        // TODO: probably remove _ (underscore / lodash) from our dependencies; no need to add such a big library when we can write our own one or two util functions
+        //const blobPackets = _.zip(this.props.recordingWords, this.state.audioBlobs)
+        const blobPackets = zip(this.props.recordingWords, this.state.audioBlobs)
         const promiseArray = blobPackets.map( (packet) => {
             const itemId = packet[0][1]
             const blob = packet[1]
@@ -492,14 +494,14 @@ next: ${next}`)
             <div>
                 <Tutorial autorun={!this.props.hasSeenTutorial} ref={c => (this.joyride = c)} />
                 <div className='panel animated fadeIn' id='record'>
-                    <TopRow next={this.state.next} 
-                            max={this.props.recordingWords.length -1} 
-                            mode={this.state.mode} 
-                            callback={this.recordCallback} 
-                            playbackAll={this.playbackAll} 
-                            submitAudio={this.dispatchAudio} 
+                    <TopRow next={this.state.next}
+                            max={this.props.recordingWords.length -1}
+                            mode={this.state.mode}
+                            callback={this.recordCallback.bind(this)}
+                            playbackAll={this.playbackAll.bind(this)}
+                            submitAudio={this.dispatchAudio.bind(this)} 
                             recordedSoFar={this.state.audioURLs.length}
-                            restartTutorial={this.restartTutorial}
+                            restartTutorial={this.restartTutorial.bind(this)}
                             />
                     <div id="wordList">
                         {this.props.recordingWords.map(
@@ -614,7 +616,7 @@ class WrappedRecordPage extends React.Component {
                 // if they haven't recorded in any language before, display a selector
                 return <RecordSelector callback={this.selectLanguage.bind(this)} />
             } else if (!this.state.pressedStartTutorialButton && !this.props.hasSeenTutorial) { 
-                return <PreRecord callback={this.startTutorial} />
+                return <PreRecord callback={this.startTutorial.bind(this)} />
             } else {
                 return <RecordPage recordingWords={firstWords} 
                            submitAudio={this.props.audioMutation} 
