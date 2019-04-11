@@ -390,6 +390,7 @@ CREATE FUNCTION get_questions(contrast_id integer, number integer)
 CREATE FUNCTION get_items_to_record(language_id text, number integer)
     RETURNS SETOF item
     LANGUAGE SQL
+    SECURITY DEFINER -- because public needs access to this function, but pending_audio is for moderators only
     STABLE
     AS $$
         SELECT *
