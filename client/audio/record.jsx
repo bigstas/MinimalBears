@@ -612,7 +612,7 @@ class WrappedRecordPage extends React.Component {
 
             if (!this.state.recordingLanguage) {
                 // if they haven't recorded in any language before, display a selector
-                return <RecordSelector callback={this.selectLanguage} />
+                return <RecordSelector callback={this.selectLanguage.bind(this)} />
             } else if (!this.state.pressedStartTutorialButton && !this.props.hasSeenTutorial) { 
                 return <PreRecord callback={this.startTutorial} />
             } else {
