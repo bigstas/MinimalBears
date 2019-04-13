@@ -26,7 +26,7 @@ class Dropdown extends React.Component {
     
     logOut() {
         this.props.callbackLogOut()
-        alert("You are logging out :)")
+        //alert("You are logging out :)")
     }
     
     render() {
@@ -134,7 +134,7 @@ class Nav extends React.Component {
                             onMouseUp={this.mouseUpHandler.bind(this)}>
                                 <img src="cogwheels.png" style={{height: '40px'}} />
                         </li>
-                        <li style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
+                        <li id="username" style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
                 {!this.state.dropdown ? <span /> :
