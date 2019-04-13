@@ -472,6 +472,10 @@ class Charts extends React.Component {
         
         const allStats = this.props.allStats.getAllStats
         console.log(allStats)
+        // TODO: this can maybe be refactored, not so nice with the repeated if blocks
+        if (allStats === undefined) {
+            return ( <Translate component="p" content="home.profile.charts.noTrainingOccurred" /> )
+        }
         const chartData = makeChartData(this.props.period, allStats, this.props.contrast)
         console.log(chartData)
         if (chartData === false) {

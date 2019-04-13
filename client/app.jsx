@@ -24,9 +24,11 @@ class UserAppBody extends React.Component {
         let username = false
         // TODO: remove all userId references in app
         let tutorial = false
-        if (this.props.accountInfo) {
+        //if (this.props.accountInfo) { <-- was getting errors when there was no token but there was this prop
+        if (this.props.accountInfo && localStorage['token']) {
             console.log("jwt: " + localStorage['token'])
             if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
+            console.log("ACCOUNT INFO:")
             console.log(this.props.accountInfo)
             username = this.props.accountInfo.getAccountInfo.username
             tutorial = this.props.accountInfo.getAccountInfo.tutorial
@@ -122,10 +124,15 @@ class AppBody extends React.Component {
         clearInterval(this.refreshTimer)
         console.log('logging out')
         // second argument is a callback that setState will call when it is finished
-        this.setState( { isLoggedIn: false }, this.props.client.resetStore() )
-        // Behaviour seems right, but GraphQL permission denied errors are being called (due to above line)
-        // on get_account_info, get_practice_languages, and get_all_stats (twice).
-        // TODO - find the reason for the error, and fix so that no error gets raised.
+        // Getting an error about passing a Promise instead of a function here, is that right?
+        console.dir(typeof(this.props.client.resetStore()))
+        // Below - order has been reversed; cannot put resetStore as callback of setState because it's a promise, not a function
+        //this.setState( { isLoggedIn: false }, this.props.client.resetStore() )
+        this.props.client.resetStore()
+        .then(() => {
+            this.setState( { isLoggedIn: false } )
+        })
+        
         console.log("Logout successful")
     }
     

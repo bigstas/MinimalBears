@@ -331,7 +331,7 @@ CREATE FUNCTION public.get_account_recording_history()
                 WHEN audio_moderation.approved = 'false' THEN 1
                 ELSE 0
                 END
-            ) AS "rejected"
+            ) AS "rejected" -- use public.get_num_audio to distinguish pending vs. rejected
             FROM audio INNER JOIN audio_moderation
             ON audio.file = audio_moderation.file
             WHERE audio.speaker=my_username;
