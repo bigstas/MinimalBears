@@ -6,11 +6,16 @@ import UserProfile from '../auth/profile'
 
     
 function GuestHome(props) {
+    const metmeth = function() {
+        Meteor.call('editAudio', volume=0.2, trim={ start: 0.5, duration: 1})
+    }
+
     return (
         <div className='panel animated fadeIn' id='guestHome'>
             <div id='usermessage'>
                 <img src="bear7.png" />
                 <h2><Translate content="home.welcome" />!</h2>
+                <button onClick={metmeth}>Meteor method</button>
                 <Translate component="p" content="home.intro" unsafe />
                 {/*<strong><Translate content="general.minbears" /></strong><Translate content="home.intro" />*/}
                 <div className='button homebtn' id='guestbutton'><Link className='btnLink' to="/train"><Translate content="home.continue" /></Link></div>

@@ -52,6 +52,11 @@ NPM INSTRUCTIONS
 1. $ meteor npm install (this installs everything required in package.json)
 2. $ meteor npm install --save <packagename> (this installs a new package)
 
+CYPRESS
+To run cypress, use:
+./node_modules/.bin/cypress open
+from the project root.
+
 RESET INSTRUCTIONS
 1. $ meteor reset (optional - this clears all of Meteor's cached files)
 2a. Delete everything in ./node_modules

@@ -32,11 +32,11 @@ class Dropdown extends React.Component {
     render() {
         let authElement, registerElement, contactUs
         if (this.props.username) {
-            authElement = <div className='dropdownElement' onClick={this.logOut.bind(this)}><Translate content="nav.logout" /></div>
+            authElement = <div id="dropdown-logout" className='dropdownElement' onClick={this.logOut.bind(this)}><Translate content="nav.logout" /></div>
             registerElement = <span /> // "empty" element
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
-            authElement =     <div className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
+            authElement =     <div id="dropdown-login" className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
             registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
             contactUs = <span />
         }
@@ -129,7 +129,7 @@ class Nav extends React.Component {
                         <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
                         <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
                         <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>
-                        <li style={{float: 'right', cursor: 'pointer'}} 
+                        <li id="cogs" style={{float: 'right', cursor: 'pointer'}} 
                             onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))} 
                             onMouseUp={this.mouseUpHandler.bind(this)}>
                                 <img src="cogwheels.png" style={{height: '40px'}} />

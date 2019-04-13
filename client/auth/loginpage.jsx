@@ -129,7 +129,7 @@ class AuthLoginPage extends React.Component {
                                     <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} /><br/></td></tr>
                                 </tbody>    
                             </table>
-                            <div className="authbtn" onClick={this.handleSubmit.bind(this)} >
+                            <div id="login-btn" className="authbtn" onClick={this.handleSubmit.bind(this)} >
                                 <Translate content="auth.login.loginButtonLabel" />
                             </div>
                         </form>

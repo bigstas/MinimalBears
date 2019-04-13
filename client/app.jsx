@@ -25,7 +25,8 @@ class UserAppBody extends React.Component {
         // TODO: remove all userId references in app
         let tutorial = false
         //if (this.props.accountInfo) { <-- was getting errors when there was no token but there was this prop
-        if (this.props.accountInfo && localStorage['token']) {
+        //if (this.props.accountInfo && localStorage['token']) {
+        if (this.props.accountInfo && !this.props.accountInfo.error && localStorage['token']) {
             console.log("jwt: " + localStorage['token'])
             if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
             console.log("ACCOUNT INFO:")
@@ -101,7 +102,7 @@ class AppBody extends React.Component {
         if (!!jwt && timestamp < jwt.exp * 1000) {
             // If the token is still valid:
             // Store the token in memory, to be added to request headers
-            localStorage.setItem('token', raw_jwt)
+            localStorage.setItem('token', raw_jwt) // all localStorage calls are synchronous
             // Set the state, to change the app
             console.log('jwt valid, setting isLoggedIn to True')
             this.setState({
