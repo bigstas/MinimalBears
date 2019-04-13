@@ -39,12 +39,17 @@
     "tween": "^0.9.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.4.3",
     "babel-cli": "^6.23.0",
     "babel-jest": "^19.0.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.23.0",
     "cypress": "^3.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "jest": "^19.0.2",
     "jest-cli": "^19.0.2",
+    "react-test-renderer": "^16.8.6",
     "regenerator-runtime": "^0.10.3"
   },
   "resolutions": {
@@ -60,8 +65,9 @@
       "json"
     ],
     "roots": [
-      "lib/tests"
-    ]
+      "tests/jest"
+    ],
+    "testRegex": "/.*\\.(js|jsx)$"
   },
   "babel": {
     "presets": [
