@@ -665,7 +665,9 @@ const audioMutationConfig = {
     name: 'audioMutation'
 }
 
-export default compose(
+const ComposedWrappedRecordPage = compose(
     graphql(itemQuery, itemQueryConfig),
     graphql(audioMutation, audioMutationConfig))
 (withRouter(WrappedRecordPage))
+
+export { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage }
