@@ -16,18 +16,16 @@ import { ApolloProvider } from 'react-apollo'
 const httpLink = new HttpLink({ uri: '/graphql' })
 
 const authMiddleware = setContext((request, old_context) => {
-    // add authorization to the headers
+    // add authorization to the headers, if there is a JWT in localStorage
     const token = localStorage.getItem('token')
     if (!!token) {
         const new_context = {
             ...old_context,
             headers: {
                 ...old_context.headers,
-                authorization: 'Bearer ' + token || null
+                authorization: 'Bearer ' + token
             }
         }
-        console.log('middleware')
-        console.log(new_context)
         return new_context
     } else {
         return old_context
