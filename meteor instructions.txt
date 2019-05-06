@@ -52,12 +52,10 @@ NPM INSTRUCTIONS
 1. $ meteor npm install (this installs everything required in package.json)
 2. $ meteor npm install --save <packagename> (this installs a new package)
 
-TESTING
-To run cypress (end-to-end testing), use:
+CYPRESS
+To run cypress, use:
 ./node_modules/.bin/cypress open
 from the project root.
-To run jest (unit testing), use:
-npm run test
 
 RESET INSTRUCTIONS
 1. $ meteor reset (optional - this clears all of Meteor's cached files)

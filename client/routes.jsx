@@ -6,7 +6,7 @@ import AppBody from './app'
 import Home from './static/home'
 import AuthJoinPage from './auth/joinpage'
 import AuthSignInPage from './auth/loginpage'
-import { ComposedWrappedRecordPage } from './audio/record'
+import { RecordPageWithData } from './audio/record'
 import TrainPage from './training/train' // takes place of arena
 import About from './static/about'
 import Contact from './suggestions/contact'
@@ -24,7 +24,7 @@ const renderRoutes = () => (
             <IndexRoute component={Home} />
             <Route path="train" component={TrainPage} />
             <Route path="about" component={About} />
-            <Route path="record" component={ComposedWrappedRecordPage} />
+            <Route path="record" component={RecordPageWithData} />
             <Route path="register" component={AuthJoinPage} />
             <Route path="login" component={AuthSignInPage} />
             <Route path="edit" component={EditingPage} />

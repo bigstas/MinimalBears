@@ -580,7 +580,7 @@ next: ${next}`)
 }
 
 // TODO define an SQL function for this
-class WrappedRecordPage extends React.Component {
+class RecordPageWithSelector extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -665,9 +665,9 @@ const audioMutationConfig = {
     name: 'audioMutation'
 }
 
-const ComposedWrappedRecordPage = compose(
+const RecordPageWithData = compose(
     graphql(itemQuery, itemQueryConfig),
     graphql(audioMutation, audioMutationConfig))
-(withRouter(WrappedRecordPage))
+(withRouter(RecordPageWithSelector))
 
-export { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage }
+export { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData }
