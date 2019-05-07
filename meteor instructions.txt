@@ -52,10 +52,12 @@ NPM INSTRUCTIONS
 1. $ meteor npm install (this installs everything required in package.json)
 2. $ meteor npm install --save <packagename> (this installs a new package)
 
-CYPRESS
-To run cypress, use:
-./node_modules/.bin/cypress open
-from the project root.
+TESTING
+To run cypress:
+$ ./node_modules/.bin/cypress open
+To run mocha:
+$ TEST_WATCH=1
+$ meteor test --driver-package meteortesting:mocha --port 3100
 
 RESET INSTRUCTIONS
 1. $ meteor reset (optional - this clears all of Meteor's cached files)
