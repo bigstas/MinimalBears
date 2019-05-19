@@ -25,3 +25,4 @@ meteorhacks:picker      # For server-side routing
 shell-server@0.3.1            # For the `meteor shell` command
 fourseven:scss
 dynamic-import@0.4.2
+static-html
