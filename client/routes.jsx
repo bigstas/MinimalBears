@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 // route components
 import AppBody from './app'
 import Home from './static/home'
-import AuthJoinPage from './auth/joinpage'
+import { JoinPageWithData } from './auth/joinpage'
 import AuthSignInPage from './auth/loginpage'
 import { RecordPageWithData } from './audio/record'
 import TrainPage from './training/train' // takes place of arena

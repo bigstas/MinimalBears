@@ -14,7 +14,7 @@ function PreRecord(props) {
         </div>
     )
 }
-
+// TODO this should be sensitive to the user's actual languages!
 function RecordSelector(props) {
     const options = [{
         id: 'eng',

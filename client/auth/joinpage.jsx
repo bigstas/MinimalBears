@@ -248,9 +248,9 @@ const signupConfig = {
     name: 'signup'
 }
 
-//export default graphql(signup, signupConfig)(AuthJoinPage)
-
-export default compose(
+const JoinPageWithData = compose(
     graphql(signup, signupConfig),
     graphql(allLanguages, allLanguagesConfig)
 )(AuthJoinPage)
+
+export { JoinPageWithData, validateEmail }

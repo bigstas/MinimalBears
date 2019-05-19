@@ -1,10 +1,5 @@
 // some record page imports
 import React from 'react'
-//import LoadingPage from '../../client/auxiliary/loading'
-//import Translate from 'react-translate-component'
-//import counterpart from 'counterpart'
-//import Tutorial from '../../client/auxiliary/tutorials'
-import { PreRecord, RecordSelector, NoRecordPage } from '/client/audio/norecord'
 // testing imports
 import { configure, shallow, mount } from 'enzyme'
 import chai from 'chai'
