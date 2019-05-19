@@ -11,7 +11,7 @@ import chai from 'chai'
 import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
 // the page itself
-import { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '/client/audio/record'
+import { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '/client/audio/record'
 
 configure({ adapter: new Adapter() })
 
@@ -75,12 +75,24 @@ function testModes(componentClass, elementId, props, enabledModes, labels) {
 describe('Record page', function() {
     describe('Enabled/disabled status', function() {
         // these elements all have to have their enabled status checked
-        // NOTE: the 'ReRecordButton - not recorded yet' tests are strictly the same, 
         const config = [
-            { name: 'StartButton',   id: 'startButton',     class: StartButton,   enabledModes: ["wait", "done", "record"], props: { next: 0, max: 10 }, labels: null },
-            { name: 'StopButton',    id: 'stopButton',      class: StopButton,    enabledModes: ["record"],                 props: { next: 0, max: 10 }, labels: null },
-            { name: 'PlayAllButton', id: 'playAllButton',   class: PlayAllButton, enabledModes: ["wait", "done"],           props: { recordedSoFar: 1 }, labels: null },
-            { name: 'ReRecordButton - not recorded yet', id: 'firstReRecordWord', class: ReRecord,   enabledModes: [], props: { index: 0, next: 1, srcExists: false, focused: true },
+            { name: 'StartButton',   id: 'startButton',   class: StartButton,   enabledModes: ["wait", "done", "record"], props: { next: 0, max: 10 }, labels: null },
+            { name: 'StopButton',    id: 'stopButton',    class: StopButton,    enabledModes: ["record"],                 props: { next: 0, max: 10 }, labels: null },
+            { name: 'PlayAllButton', id: 'playAllButton', class: PlayAllButton, enabledModes: ["wait", "done"],           props: { recordedSoFar: 1 }, labels: null },
+            { name: 'SubmitButton',  id: 'submitButton',  class: SubmitButton,  enabledModes: ["done"],                   props: {},                   labels: null },
+            { name: 'TutorialButton',id: 'tutorialButton',class: TutorialButton,enabledModes: ["wait", "done"],           props: {},                   labels: null },
+            { name: 'PlaybackOne - not recorded yet', id: 'firstPlaybackWord', class: PlaybackOne,enabledModes: [], props: { index: 0, srcExists: false },
+                labels: {
+                    disabled: "is disabled in all modes if this word has not been recorded yet"
+                }    
+            },
+            { name: 'PlaybackOne - already recorded', id: 'firstPlaybackWord', class: PlaybackOne,enabledModes: ["wait", "done"], props: { index: 0, srcExists: true },
+                labels: {
+                    enabled: "is enabled in wait and done modes if this word has already been recorded",
+                    disabled: "is disabled in all other modes if this word has already been recorded"
+                }    
+            },
+            { name: 'ReRecordButton - not recorded yet', id: 'firstReRecordWord', class: ReRecord, enabledModes: [], props: { index: 0, next: 1, srcExists: false, focused: true },
                 labels: { 
                     disabled: "is disabled in all modes if this word has not been recorded yet"
                 }
@@ -96,13 +108,21 @@ describe('Record page', function() {
             describe(c.name, ()=> { testModes(c.class, c.id, c.props, c.enabledModes, c.labels) })
         }
     })
-    // TODO TutorialButton function
     
-    // TODO PlaybackOne function
-    
-    // TODO WordRow function
+    describe('Button rows', function() {
+        describe('TopRow', function() {
+            it('has no tests - no logic, automatically passing', function() {
+                chai.assert.isTrue(true)
+            })
+        })
+        describe('WordRow', function() {
+            it('has no tests - no logic, automatically passing', function() {
+                chai.assert.isTrue(true)
+            })
+        })
+    })
     
     // TODO RecordPage object
-    
     // TODO WrappedRecordPage object
+    // leave these for integration testing?
 })

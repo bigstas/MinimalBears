@@ -179,7 +179,7 @@ function PlayAllButton(props) {
 function SubmitButton(props) {
     /* Press this button to submit the audio to the database. 
      * Enabled when in done mode (i.e. when all the words have been recorded).
-     * props: mode, submitAudio
+     * props: mode, callback
      */
     const disabled = !(props.mode === "done")
     const className = (disabled ? 'topRowButton transparent' : 'topRowButton topRowButtonEnabled animated rubberBand')
@@ -187,7 +187,7 @@ function SubmitButton(props) {
         <div>
             <div className={className} id='submitButton'
                 data-tip data-for='submitTooltip' data-delay-show='500'
-                onClick={disabled ? null : props.submitAudio}>
+                onClick={disabled ? null : props.callback}>
                     <Translate content="record.submit" />
             </div>
             <ReactTooltip id='submitTooltip' place="bottom" type="light" effect="solid">
@@ -199,23 +199,25 @@ function SubmitButton(props) {
 
 function TutorialButton(props) {
     /* Press this button to start the tutorial. */
+    const enabled = ["wait", "done"].includes(props.mode)
+
     return (
-        <div className='topRowButton topRowButtonEnabled' id='tutorialButton' onClick={props.restartTutorial}>?</div>
+        <div className='topRowButton topRowButtonEnabled' id='tutorialButton' onClick={enabled ? props.callback : null}>?</div>
     )
 }
 
 function TopRow(props) {
     /* The top row of buttons.
-     * Includes: start, stop, play all, submit.
+     * Includes: start, stop, play all, submit, tutorial.
      * props: mode, callback, next, max, playbackAll, recordedSoFar, submitAudio
      */
     return (
         <div id='topRow'>
-            <StartButton   mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
-            <StopButton    mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
-            <PlayAllButton mode={props.mode} callback={props.playbackAll} recordedSoFar={props.recordedSoFar} />
-            <SubmitButton  mode={props.mode} submitAudio={props.submitAudio} />
-            <TutorialButton restartTutorial={props.restartTutorial} />
+            <StartButton    mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
+            <StopButton     mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
+            <PlayAllButton  mode={props.mode} callback={props.playbackAll} recordedSoFar={props.recordedSoFar} />
+            <SubmitButton   mode={props.mode} callback={props.submitAudio} />
+            <TutorialButton mode={props.mode} callback={props.restartTutorial} />
         </div>
     )
 }
@@ -293,7 +295,7 @@ function PlaybackOne(props) {
     
     return (
         <div style={{display: 'inline-block'}}>
-            <div className={className} id={id} key={props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>props.playbackFunction(props.index, false)}>
+            <div className={className} id={id} key={props.index} data-tip data-for={tooltipId} data-delay-show='500' onClick={disabled ? null : ()=>props.callback(props.index, false)}>
                 <img className='buttonIcon' id='playIcon' src='play.png' />
             </div>
             <ReactTooltip id={tooltipId} place="bottom" type="light" effect="solid">
@@ -318,7 +320,7 @@ function WordRow(props) {
     return (
         <div id={id} className={rowClassName}>
             <ReRecord index={props.index} mode={props.mode} next={props.next} srcExists={props.srcExists} callback={props.callback} focused={props.focused} />
-            <PlaybackOne index={props.index} mode={props.mode} srcExists={props.srcExists} playbackFunction={props.playbackFunction}  />
+            <PlaybackOne index={props.index} mode={props.mode} srcExists={props.srcExists} callback={props.playbackFunction}  />
             <p style={{display: "inline", cursor: "default"}}>{props.word}</p>
         </div>
     )
@@ -670,4 +672,4 @@ const RecordPageWithData = compose(
     graphql(audioMutation, audioMutationConfig))
 (withRouter(RecordPageWithSelector))
 
-export { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData }
+export { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData }
