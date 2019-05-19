@@ -10,42 +10,76 @@ import { configure, shallow, mount } from 'enzyme'
 import chai from 'chai'
 import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
-//import jest from 'jest' // surely I have to import this?
 // the page itself
 import { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '/client/audio/record'
 
 configure({ adapter: new Adapter() })
 
+// NOTE: there is a fair bit of code repetition in this file.
+// It may be a good idea to try to refactor that.
+// The below function is a partial refactor to reduce code repetition.
+function assertFunctionRunsOnClick(dummyFunction, element, elementId, expectClicked, message) {
+    chai.assert.equal(dummyFunction.called, false)
+    element.find('#' + elementId).simulate('click')
+    if (!message) message = "[no message supplied in testing code]"
+    chai.assert.equal(dummyFunction.called, expectClicked, message)
+}
 
-// StartButton function
 describe('StartButton', function() {
-    it('is enabled in done mode', function() {        
-        const dummyfunc = sinon.fake()
-        const start = mount(<StartButton mode="done" next={0} max={10} callback={dummyfunc} />)
-        //expect(dummyfunc).not.toHaveBeenCalled()
-        chai.assert.equal(dummyfunc.callCount, 0)
-        start.find('#startButton').simulate('click')
-        //expect(dummyfunc).toHaveBeenCalled()
-        chai.assert.equal(dummyfunc.callCount, 1)
+    it('is enabled in done and wait mode', function() {
+        for (let mode of ["wait", "done"]) {
+            const dummyfunc = sinon.fake()
+            const start = mount(<StartButton mode={mode} next={0} max={10} callback={dummyfunc} />)
+            const message = "fails in " + mode + " mode"
+            assertFunctionRunsOnClick(dummyfunc, start, 'startButton', true, message)
+        }
     })
 })
 
-/*
-test("StartButton is enabled in done mode (and some other modes?)", () => {
-    const dummyfunc = jest.fn((a,b,c,d,e,f) => a+1)
-    const start = mount(<StartButton mode="done" next={0} max={10} callback={dummyfunc} />)
-    expect(dummyfunc).not.toHaveBeenCalled()
-    start.find('#startButton').simulate('click')
-    expect(dummyfunc).toHaveBeenCalled()
-})*/
+describe('StopButton', function() {
+    it('is disabled in done and wait mode', function() {
+        for (let mode of ["wait", "done"]) {
+            const dummyfunc = sinon.fake()
+            const stop = mount(<StopButton mode={mode} next={0} max={10} callback={dummyfunc} />)
+            const message = "fails in " + mode + " mode"
+            assertFunctionRunsOnClick(dummyfunc, stop, 'stopButton', false, message)
+        }
+    })
+})
 
-// TODO StopButton function
-
-// TODO PlayAllButton function
+describe('PlayAllButton', function() {
+    it('is enabled in done and wait mode', function() {
+        for (let mode of ["wait", "done"]) {
+            const dummyfunc = sinon.fake()
+            const playall = mount(<PlayAllButton mode={mode} recordedSoFar={2} playAllFunction={dummyfunc} />)
+            assertFunctionRunsOnClick(dummyfunc, playall, 'playAllButton', true)
+        }
+    })
+})
 
 // TODO TutorialButton function
 
-// TODO ReRecord function
+
+describe('ReRecord button', function() {
+    it('is disabled in all modes if this word has not been recorded yet, regardless of focus', function() {
+        for (let mode of ["wait", "record", "done", "reRecordSingleToWait", "reRecordSingleToDone", "playback", "playbackAll"]) {
+            for (let focused of [true, false]) {
+                const dummyfunc = sinon.fake()
+                const reRecord = mount(<ReRecord index={0} mode={mode} next={1} srcExists={false} callback={dummyfunc} focused={focused} />)
+                assertFunctionRunsOnClick(dummyfunc, reRecord, "firstReRecordWord", false)
+            }
+        }
+    })
+    it('is enabled in wait mode and done mode if this word has already been recorded, regardless of focus', function() {
+        for (let mode of ["wait", "done"]) {
+            for (let focused of [true, false]) {
+                const dummyfunc = sinon.fake()
+                const reRecord = mount(<ReRecord index={0} mode={mode} next={1} srcExists={true} callback={dummyfunc} focused={true} />)
+                assertFunctionRunsOnClick(dummyfunc, reRecord, "firstReRecordWord", true)
+            }
+        }
+    })
+})
 
 // TODO PlaybackOne function
 

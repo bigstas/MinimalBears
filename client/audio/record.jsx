@@ -142,7 +142,7 @@ function StopButton(props) {
     
     return (
         <div>
-            <div className={className} id='stopIc' data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>props.callback( stop, start, mode, focus, next )}>
+            <div className={className} id='stopButton' data-tip data-for='stopTooltip' data-delay-show='500' onClick={disabled ? null : ()=>props.callback( stop, start, mode, focus, next )}>
                 <img className='buttonIcon' id='stopIcon' src={'stop.png'} />
             </div>
             <ReactTooltip id='stopTooltip' place="bottom" type="light" effect="solid">
