@@ -1,22 +1,35 @@
 // some record page imports
-/*
 import React from 'react'
-import LoadingPage from '../../client/auxiliary/loading'
-import Translate from 'react-translate-component'
-import counterpart from 'counterpart'
-import Tutorial from '../../client/auxiliary/tutorials'
-import { PreRecord, RecordSelector, NoRecordPage } from '../../client/audio/norecord'
+//import LoadingPage from '../../client/auxiliary/loading'
+//import Translate from 'react-translate-component'
+//import counterpart from 'counterpart'
+//import Tutorial from '../../client/auxiliary/tutorials'
+import { PreRecord, RecordSelector, NoRecordPage } from '/client/audio/norecord'
 // testing imports
 import { configure, shallow, mount } from 'enzyme'
+import chai from 'chai'
+import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
 //import jest from 'jest' // surely I have to import this?
 // the page itself
-import { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '../../client/audio/record'
+import { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '/client/audio/record'
 
 configure({ adapter: new Adapter() })
-*/
+
 
 // StartButton function
+describe('StartButton', function() {
+    it('is enabled in done mode', function() {        
+        const dummyfunc = sinon.fake()
+        const start = mount(<StartButton mode="done" next={0} max={10} callback={dummyfunc} />)
+        //expect(dummyfunc).not.toHaveBeenCalled()
+        chai.assert.equal(dummyfunc.callCount, 0)
+        start.find('#startButton').simulate('click')
+        //expect(dummyfunc).toHaveBeenCalled()
+        chai.assert.equal(dummyfunc.callCount, 1)
+    })
+})
+
 /*
 test("StartButton is enabled in done mode (and some other modes?)", () => {
     const dummyfunc = jest.fn((a,b,c,d,e,f) => a+1)
