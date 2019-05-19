@@ -11,6 +11,7 @@ import 'react-select/dist/react-select.css'
 import LoadingPage from '../auxiliary/loading'
 import decodeError from '../auxiliary/errors'
 
+// TODO: this is repeated in the loginpage. Move this to a util file.
 function validateEmail(email) {
     /* A regexp to check that an email address is in the form anyString@anyString.anyString
      */

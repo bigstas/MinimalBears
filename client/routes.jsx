@@ -25,7 +25,7 @@ const renderRoutes = () => (
             <Route path="train" component={TrainPage} />
             <Route path="about" component={About} />
             <Route path="record" component={RecordPageWithData} />
-            <Route path="register" component={AuthJoinPage} />
+            <Route path="register" component={JoinPageWithData} />
             <Route path="login" component={AuthSignInPage} />
             <Route path="edit" component={EditingPage} />
             <Route path="contact" component={Contact} />
