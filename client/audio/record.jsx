@@ -155,7 +155,7 @@ function StopButton(props) {
 function PlayAllButton(props) {
     /* Press this button to play back all the audio.
      * Available in done mode (i.e. when all the words have been recorded).
-     * props: recordedSoFar, mode, playAllFunction
+     * props: recordedSoFar, mode, callback
      */
     
     // display props
@@ -166,7 +166,7 @@ function PlayAllButton(props) {
         <div>
             <div className={className} id='playAllButton'
                 data-tip data-for='playAllTooltip' data-delay-show='500'
-                onClick={disabled ? null : props.playAllFunction}>
+                onClick={disabled ? null : props.callback}>
                     <Translate content="record.playbackAll" />
             </div>
             <ReactTooltip id='playAllTooltip' place="bottom" type="light" effect="solid">
@@ -213,7 +213,7 @@ function TopRow(props) {
         <div id='topRow'>
             <StartButton   mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
             <StopButton    mode={props.mode} callback={props.callback} next={props.next} max={props.max} />
-            <PlayAllButton mode={props.mode} playAllFunction={props.playbackAll} recordedSoFar={props.recordedSoFar} />
+            <PlayAllButton mode={props.mode} callback={props.playbackAll} recordedSoFar={props.recordedSoFar} />
             <SubmitButton  mode={props.mode} submitAudio={props.submitAudio} />
             <TutorialButton restartTutorial={props.restartTutorial} />
         </div>

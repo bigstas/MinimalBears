@@ -15,99 +15,88 @@ import { StartButton, StopButton, PlayAllButton, TutorialButton, TopRow, ReRecor
 
 configure({ adapter: new Adapter() })
 
-// NOTE: there is a fair bit of code repetition in this file.
-// It may be a good idea to try to refactor that.
-// The below function is a partial refactor to reduce code repetition.
-// NOTE 2: The Mocha function `beforeEach` may be helpful in the refactoring effort.
-function assertFunctionRunsOnClick(dummyFunction, element, elementId, expectClicked, message) {
-    chai.assert.equal(dummyFunction.called, false)
+function assertFunctionRunsOnClick(componentClass, elementId, props, expectClicked, message) {
+    /* Test that a function is called (or not) when clicked.
+     * componentClass: React component class (not HTML/CSS class!)
+     * elementId: HTML/CSS id
+     * props: props to be passed to the class, except for the callback, which is injected here
+     * expectClicked: whether the callback should fire or not on click
+     * message: optional, gives a custom additional message in the testing browser if the test fails
+     */
+    const dummyfunc = sinon.fake()
+    // makes a copy as props is an object and therefore a reference type
+    const fullProps = JSON.parse(JSON.stringify(props))
+    fullProps['callback'] = dummyfunc
+    // mount: an Enzyme method to "create" an object; the code in the brackets is React without JSX
+    const element = mount(React.createElement(componentClass, fullProps, null))
+    // assertions
+    chai.assert.equal(dummyfunc.called, false)
     element.find('#' + elementId).simulate('click')
     if (!message) message = "[no message supplied in testing code]"
-    chai.assert.equal(dummyFunction.called, expectClicked, message)
+    chai.assert.equal(dummyfunc.called, expectClicked, message)
 }
 
-const MODES = ["wait", "record", "done", "reRecordSingleToWait", "reRecordSingleToDone", "playback", "playbackAll"]
+function testModes(componentClass, elementId, props, enabledModes, labels) {
+    /* A function to test whether a component is enabled and disabled in the appropriate modes.
+     * By "enabled", I mean that its onClick callback fires.
+     * Arguments as in assertFunctionRunsOnClick (above), except one:
+     * labels: optional, object with names given to the "describe" function, shown as titles in the testing browser
+     */
+    const allModes = ["wait", "record", "done", "reRecordSingleToWait", "reRecordSingleToDone", "playback", "playbackAll"]
+    function run(mode, expectToRun) {
+        // form a copy - props is an object and therefore a reference type
+        const augmentedProps = JSON.parse(JSON.stringify(props))
+        augmentedProps['mode'] = mode
+        const message = "fails in " + mode + " mode"
+        assertFunctionRunsOnClick(componentClass, elementId, augmentedProps, expectToRun, message)
+    }
+    labels = labels || { 
+        enabled:  'is enabled in the following modes: ' + enabledModes.join(', '),
+        disabled: 'is disabled in all other modes'
+    }
+    if (enabledModes.length > 0) { // you could have no modes enabled, then no need for this block, hence the if statement
+        it(labels['enabled'], function () {
+            for (let mode of enabledModes) {
+                run(mode, true)
+            }
+        })
+    }
+    if (enabledModes.length < allModes.length) { // you could have no modes disabled, then no need for this block, hence this if statement
+        it(labels['disabled'], function() {
+            for (let mode of allModes) {
+                if ( !(enabledModes.includes(mode)) ) {
+                    run(mode, false)
+                }
+            }
+        })
+    }
+}
 
 describe('Record page', function() {
-    describe('StartButton', function() {
-        const enabledModes = ["wait", "done", "record"]
-    
-        it('is enabled in done, wait, and record mode', function() {
-            for (let mode of enabledModes) {
-                const dummyfunc = sinon.fake()
-                const start = mount(<StartButton mode={mode} next={0} max={10} callback={dummyfunc} />)
-                const message = "fails in " + mode + " mode"
-                assertFunctionRunsOnClick(dummyfunc, start, 'startButton', true, message)
-            }
-        })
-        it('is disabled in all other modes', function() {
-            for (let mode of MODES) {
-                if ( !(enabledModes.includes(mode)) ) {
-                    const dummyfunc = sinon.fake()
-                    const start = mount(<StartButton mode={mode} next={0} max={10} callback={dummyfunc} />)
-                    const message = "fails in " + mode + " mode"
-                    assertFunctionRunsOnClick(dummyfunc, start, 'startButton', false, message)
+    describe('Enabled/disabled status', function() {
+        // these elements all have to have their enabled status checked
+        // NOTE: the 'ReRecordButton - not recorded yet' tests are strictly the same, 
+        const config = [
+            { name: 'StartButton',   id: 'startButton',     class: StartButton,   enabledModes: ["wait", "done", "record"], props: { next: 0, max: 10 }, labels: null },
+            { name: 'StopButton',    id: 'stopButton',      class: StopButton,    enabledModes: ["record"],                 props: { next: 0, max: 10 }, labels: null },
+            { name: 'PlayAllButton', id: 'playAllButton',   class: PlayAllButton, enabledModes: ["wait", "done"],           props: { recordedSoFar: 1 }, labels: null },
+            { name: 'ReRecordButton - not recorded yet', id: 'firstReRecordWord', class: ReRecord,   enabledModes: [], props: { index: 0, next: 1, srcExists: false, focused: true },
+                labels: { 
+                    disabled: "is disabled in all modes if this word has not been recorded yet"
+                }
+            },
+            { name: 'ReRecordButton - already recorded', id: 'firstReRecordWord', class: ReRecord,   enabledModes: ["wait", "done", "reRecordSingleToWait", "reRecordSingleToDone"], props: { index: 0, next: 1, srcExists: true, focused: true },
+                labels: {
+                    enabled: "is enabled in wait, done, reRecordSingleToWait, and reRecordSingleToDone modes if the word has already been recorded",
+                    disabled: "is disabled in all other modes if the word has already been recorded"
                 }
             }
-        })
+        ]
+        for (let c of config) {
+            describe(c.name, ()=> { testModes(c.class, c.id, c.props, c.enabledModes, c.labels) })
+        }
     })
-    
-    describe('StopButton', function() {
-        const enabledModes = ["record"]
-    
-        it('is enabled in record mode', function() {
-            for (let mode of enabledModes) {
-                const dummyfunc = sinon.fake()
-                const stop = mount(<StopButton mode={mode} next={0} max={10} callback={dummyfunc} />)            
-                const message = "fails in " + mode + " mode"
-                assertFunctionRunsOnClick(dummyfunc, stop, 'stopButton', true, message)
-            }
-        })
-        it('is disabled in all other modes', function() {
-            for (let mode of MODES) {
-                if ( !(enabledModes.includes(mode)) ) {
-                    const dummyfunc = sinon.fake()
-                    const stop = mount(<StopButton mode={mode} next={0} max={10} callback={dummyfunc} />)            
-                    const message = "fails in " + mode + " mode"
-                    assertFunctionRunsOnClick(dummyfunc, stop, 'stopButton', false, message)
-                }
-            }
-        })
-    })
-    
-    describe('PlayAllButton', function() {
-        it('is enabled in done and wait mode', function() {
-            for (let mode of ["wait", "done"]) {
-                const dummyfunc = sinon.fake()
-                const playall = mount(<PlayAllButton mode={mode} recordedSoFar={2} playAllFunction={dummyfunc} />)
-                assertFunctionRunsOnClick(dummyfunc, playall, 'playAllButton', true)
-            }
-        })
-    })
-    
     // TODO TutorialButton function
-    
-    
-    describe('ReRecord button', function() {
-        it('is disabled in all modes if this word has not been recorded yet, regardless of focus', function() {
-            for (let mode of MODES) {
-                for (let focused of [true, false]) {
-                    const dummyfunc = sinon.fake()
-                    const reRecord = mount(<ReRecord index={0} mode={mode} next={1} srcExists={false} callback={dummyfunc} focused={focused} />)
-                    assertFunctionRunsOnClick(dummyfunc, reRecord, "firstReRecordWord", false)
-                }
-            }
-        })
-        it('is enabled in wait mode and done mode if this word has already been recorded, regardless of focus', function() {
-            for (let mode of ["wait", "done"]) {
-                for (let focused of [true, false]) {
-                    const dummyfunc = sinon.fake()
-                    const reRecord = mount(<ReRecord index={0} mode={mode} next={1} srcExists={true} callback={dummyfunc} focused={true} />)
-                    assertFunctionRunsOnClick(dummyfunc, reRecord, "firstReRecordWord", true)
-                }
-            }
-        })
-    })
     
     // TODO PlaybackOne function
     
