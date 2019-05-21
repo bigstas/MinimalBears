@@ -616,6 +616,8 @@ GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO anyuser;
 GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO anyuser;
 
 -- Logged in users
+-- Ping (for testing)
+GRANT EXECUTE ON FUNCTION public.ping() TO guest;
 -- Authentication
 GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;

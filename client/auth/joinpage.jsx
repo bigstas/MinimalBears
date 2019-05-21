@@ -19,6 +19,32 @@ function validateEmail(email) {
     return re.test(email)
 }
 
+// TODO: these are likely to be shared between the joinpage and the loginpage, 
+// so best off moving this to a util file
+function InputRow(props) {
+    /**
+     * Props: translateLabel, type (text, email, or password), name, placeholder, callback (on change)
+     */
+    return (
+        <tr>
+            <td className="tdText"><Translate content={props.translateLabel} /></td>
+            <td><input type={props.type} name={props.name} placeholder={props.placeholder} onChange={props.callback} /></td>
+        </tr>
+    )
+}
+
+function MessageRow(props) {
+    /**
+     * Props: colSpan, className (of p), translateLabel
+     */
+    return (
+        <tr>
+            <td colSpan={props.colSpan} className="tdError"><p className={props.className}><Translate content={props.translateLabel} /></p></td>
+        </tr>
+    )
+}
+
+
 class AuthJoinPage extends React.Component {
 	constructor(props) {
         super(props)
@@ -139,23 +165,23 @@ class AuthJoinPage extends React.Component {
                                 
                                 <tbody>
                                 {/* Email error message (usually .style.display=none) */}
-                                    <tr><td colSpan="2" className="tdError"><p className={this.state.emailError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.emailError" /></p></td></tr>
+                                    <MessageRow colSpan={2} className={this.state.emailError ? "authErrorMsg" : "noDisplay"} translateLabel="auth.register.emailError" />
                                 {/* Input email */}
-                                    <tr><td className="tdText"><Translate content="auth.email" /></td><td><input type="text" name="email" placeholder="koala@minbears.wow" onChange={this.handleChange} /></td></tr>
+                                    <InputRow translateLabel="auth.email" type="email" name="email" placeholder="koala@minbears.wow" callback={this.handleChange} />
                                 {/* Username error message (usually .style.display=none) */}
-                                    <tr><td colSpan="2" className="tdError"><p className={this.state.usernameError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.usernameError" /></p></td></tr>
+                                    <MessageRow colSpan={2} className={this.state.usernameError ? "authErrorMsg" : "noDisplay"} translateLabel="auth.register.usernameError" />
                                 {/* Input username */}
-                                    <tr><td className="tdText"><Translate content="auth.username" /></td><td><input type="text" name="username" placeholder="koala" onChange={this.handleChange} /></td></tr>
+                                    <InputRow translateLabel="auth.username" type="text" name="username" placeholder="koala" callback={this.handleChange} />                                    
                                 {/* Password error message (usually .style.display=none) */}
-                                    <tr><td colSpan="2" className="tdError"><p className={this.state.passwordError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.passwordError" /></p></td></tr>
+                                    <MessageRow colSpan={2} className={this.state.passwordError ? "authErrorMsg" : "noDisplay"} translateLabel="auth.register.passwordError" />
                                 {/* Input password */}
-                                    <tr><td className="tdText"><Translate content="auth.password" /></td><td><input type="password" name="password" onChange={this.handleChange} /></td></tr>
+                                    <InputRow translateLabel="auth.password" type="password" name="password" placeholder="" callback={this.handleChange} />
                                 {/* Empty table row to make spacing between each line the same (otherwise the two password fields are closer together than the rest) */}
                                     <tr><td></td><td></td></tr>
                                 {/* Input confirm password */}
-                                    <tr><td className="tdText"><Translate content="auth.confirmPassword" /></td><td><input type="password" name="confirmPassword" onChange={this.handleChange} /></td></tr>
+                                    <InputRow translateLabel="auth.confirmPassword" type="password" name="confirmPassword" placeholder="" callback={this.handleChange} />                                    
                                 {/* Native language error message (usually .style.display=none) */}
-                                    <tr><td colSpan="2" className="tdError"><p className={this.state.languageError ? "authErrorMsg" : "noDisplay"}><Translate content="auth.register.languageError" /></p></td></tr>
+                                    <MessageRow colSpan={2} className={this.state.languageError ? "authErrorMsg" : "noDisplay"} translateLabel="auth.register.languageError" />                                    
                                 {/* Choose native language */}
                                     <tr>
                                         <td className="tdText">
@@ -249,9 +275,16 @@ const signupConfig = {
     name: 'signup'
 }
 
+const signupFunction = graphql(signup, signupConfig)
+const allLanguagesFunction = graphql(allLanguages, allLanguagesConfig)
+
+const JoinPageWithData = compose(
+    signupFunction, allLanguagesFunction
+)(AuthJoinPage)
+/*
 const JoinPageWithData = compose(
     graphql(signup, signupConfig),
     graphql(allLanguages, allLanguagesConfig)
 )(AuthJoinPage)
-
-export { JoinPageWithData, validateEmail }
+*/
+export { JoinPageWithData, validateEmail, signupFunction, allLanguagesFunction }

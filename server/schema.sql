@@ -256,6 +256,14 @@ CREATE FUNCTION get_items_from_string(string text)
     $$;
 
 -- User functions --
+-- Ping (used for testing, just returns string "PONG")
+CREATE FUNCTION ping()
+    RETURNS text
+    LANGUAGE SQL
+    STABLE
+    AS $$
+        SELECT 'PONG'::text;
+    $$;
 
 -- For a user to submit their audio recordings
 -- This records a file being saved (outside the database)
