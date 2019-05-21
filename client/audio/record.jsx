@@ -672,4 +672,4 @@ const RecordPageWithData = compose(
     graphql(audioMutation, audioMutationConfig))
 (withRouter(RecordPageWithSelector))
 
-export { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData }
+export { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData, itemQuery, itemQueryConfig, audioMutation }

@@ -1,12 +1,14 @@
 // some record page imports
 import React from 'react'
+import { graphql } from 'react-apollo'
 // testing imports
+import { MockedProvider } from 'react-apollo/test-utils'
 import { configure, shallow, mount } from 'enzyme'
 import chai from 'chai'
 import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
 // the page itself
-import { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage } from '/client/audio/record'
+import { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage, itemQuery, itemQueryConfig, audioMutation } from '/client/audio/record'
 
 configure({ adapter: new Adapter() })
 
@@ -117,6 +119,57 @@ describe('Record page', function() {
         })
     })
     
+    describe('Record page object', function() {
+        const mocks = [
+            {
+                request: {
+                    query: itemQuery,
+                    variables: {
+                        languageId: 'eng',
+                        number: 10
+                    },
+                },
+                result: {
+                    data: {
+                        getItemsToRecord: {
+                            nodes: [
+                                {
+                                    homophones: ["here", "hear"],
+                                    id: 123
+                                }, {
+                                    homophones: ["their", "there", "they're"],
+                                    id: 456
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+        
+        it('trivial example works', function() {
+            // make sure you open the browser console when you run this test -
+            // there are a lot of warnings and errors there to pay attention to
+            class MockedComponent extends React.Component {
+                // Does it need a constructor?
+                render() {
+                    console.dir(this.props)
+                    return (
+                        <div>
+                            <p>{this.props.text}</p>
+                        </div>
+                    )
+                }
+            }
+            const MockedComponentWithData = graphql(itemQuery, itemQueryConfig)(MockedComponent)
+            const MockedEnsemble = mount(
+                <MockedProvider mocks={mocks}>
+                    <MockedComponentWithData text="Hello World" />
+                </MockedProvider>
+            )
+            chai.assert.isDefined(MockedEnsemble)
+        })
+    })
     // TODO RecordPage object
     // TODO WrappedRecordPage object
     // leave these for integration testing?

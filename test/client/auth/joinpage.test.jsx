@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 // testing imports
+import { MockedProvider } from 'react-apollo/test-utils'
 import { configure, shallow, mount } from 'enzyme'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
