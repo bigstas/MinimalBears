@@ -616,8 +616,6 @@ GRANT EXECUTE ON FUNCTION public.get_questions(integer, integer) TO anyuser;
 GRANT EXECUTE ON FUNCTION public.answer_question(integer, text, boolean) TO anyuser;
 
 -- Logged in users
--- Ping (for testing)
-GRANT EXECUTE ON FUNCTION public.ping() TO guest;
 -- Authentication
 GRANT EXECUTE ON FUNCTION public.refresh(text) TO loggedin;
 GRANT EXECUTE ON FUNCTION public.new_refresh_token(text) TO loggedin;
@@ -659,3 +657,6 @@ GRANT EXECUTE ON FUNCTION public.check_moderator_for_file(text) TO moderator;
 GRANT EXECUTE ON FUNCTION public.get_audio_submissions(text, integer) TO moderator;
 GRANT EXECUTE ON FUNCTION public.moderate_audio(text, boolean) TO moderator;
 GRANT EXECUTE ON FUNCTION public.edit_audio(text, interval, interval, double precision) TO moderator;
+
+-- Testing
+GRANT EXECUTE ON FUNCTION public.ping() TO anyuser;
