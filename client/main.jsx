@@ -13,9 +13,7 @@ import { ApolloProvider } from 'react-apollo'
 // Connect to the database using Apollo
 // Add middleware that adds a Json Web Token (JWT) to the request header
 
-const httpLink = new HttpLink({ uri: '/graphql' })
-
-const authMiddleware = setContext((request, old_context) => {
+const authMiddleware = function(request, old_context) {
     // add authorization to the headers
     const token = localStorage.getItem('token')
     if (!!token) {
@@ -32,10 +30,10 @@ const authMiddleware = setContext((request, old_context) => {
     } else {
         return old_context
     }
-})
+}
 
 const client = new ApolloClient({
-    link: authMiddleware.concat(httpLink),
+    link: setContext(authMiddleware).concat(new HttpLink({ uri: '/graphql' })),
     cache: new InMemoryCache()
 })
 
@@ -49,3 +47,5 @@ Meteor.startup(() => {
         </ApolloProvider>,
         document.getElementById('content'))
 })
+
+export { authMiddleware, client }
