@@ -1,5 +1,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
+import { browserHistory } from 'react-router'
+import counterpart from 'counterpart'
 import gql from 'graphql-tag'
 // testing imports
 import { MockedProvider } from 'react-apollo/test-utils'
@@ -9,10 +11,15 @@ import chaiAsPromised from 'chai-as-promised'
 import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
 // the page itself
-import { validateEmail, signupFunction, allLanguagesFunction, AuthJoinPage } from '/client/auth/joinpage'
+import { validateEmail, JoinPageWithData } from '/client/auth/joinpage'
+// GraphQL queries
+import { allLanguages, signup } from '/lib/graphql'
 
 configure({ adapter: new Adapter() })
 chai.use(chaiAsPromised) // for promises
+
+require('/lib/translations/eng')
+counterpart.setLocale('eng')
 
 describe('Join page', function() {
     describe('validateEmail function', function() {
@@ -34,61 +41,64 @@ describe('Join page', function() {
             })
         }
     })
-
-    describe('trivial promise', function() {
-        it('2+2==4', function() {
-            // "eventually" is the method for handling promises
-            chai.assert.eventually.equal(Promise.resolve(2+2), 4, "promise did not resolve")
-        })
-    })
     
-    describe('signupFunction', function() {
-        it('can get data', function() {
+    describe('GraphQL queries', function() {
+        let joinPage
+        
+        beforeEach(function() {
+            sinon.stub(browserHistory, 'push').callsFake(()=>{})
             
-	        const ping = gql`query { ping }`
-	        const pingConfig = { name: 'pingFn' }
-	
-	        // NOTE: if there will be a bunch of tests here (which there probably will),
-	        // and each one will need setup/teardown code (e.g. of React elements),
-	        // then consider using beforeEach() and related functions to avoid code repetition.
-	        function Elem(props) {
-	            console.log(this.props)
-	            return (
-	                <div>
-	                    <p>{props.text}</p>
-	                    <p>{props.pingFn ? props.pingFn.ping : "hello again"}</p>
-	                </div>
-	            )
-	        }
-	        const MountedPlainElem = mount(<Elem text="Hello World" />)
-	        const ElemWithPing = graphql(ping, pingConfig)(() => <Elem text="Hello World" />)
-	        const MountedElemWithPing = mount(
-	            <MockedProvider mocks={[]}>
-                    <ElemWithPing text="Hello World" />
-                </MockedProvider>
-	        )
-	        
-        })
-    })
-    
-    /*describe('signupFunction', function () {
-        it('signs up with new credentials', function() {
-            const uniqueUser = new Date().toString().replace(/\s+/g, '').toLowerCase()
-            const uniqueEmail = uniqueUser + "@minimalbears.com"
-            const uniqueCreds = {
-                email: uniqueEmail,
-                password: "1234",
-                username: uniqueUser,
-                interface: 'eng',
-                nativeArray: ['eng', 'deu'],
-                customNative: null
-            }
-            const params = {
-                variables: {
-                    input: uniqueCreds
+            mocks = [
+                {
+                    request: {
+                        query: allLanguages},
+                    result: {
+                        data: {allLanguages: {nodes: [{id:'eng', name:'English'},
+                                                      {id:'deu', name:'Deutsch'}]}}}
+                },
+                {
+                    request: {
+                        query: signup,
+                        variables: {input: {
+                            email: 'email@example.com',
+                            password: "1234",
+                            username: 'user',
+                            interface: 'eng',
+                            nativeArray: ['eng', 'deu'],
+                            customNative: null}}},
+                    result: {
+                        data: {tokenPair: {jwt: 'myjwt', refresh: 'myrefreshtoken'}}} 
                 }
-            }
-            chai.assert.isFulfilled(signup(params), "signup promise is not fulfilled")
+            ]
+            
+            const wrapper = mount(
+                <MockedProvider mocks={mocks} addTypename={false}>
+                    <JoinPageWithData />
+                </MockedProvider>
+            )
+            joinPage = wrapper.find('JoinPage').first().instance()
         })
-    })*/
+        
+        it('signing up with valid values redirects to homepage', function(done) {
+            joinPage.setState({
+                username: 'user',
+                emailValue: 'email@example.com',
+                passwordValue: '1234',
+                confirmPassword: '1234',
+                nativeLanguage: ['eng','deu'],
+                customNativeLanguage: null
+            }, () => {  // after state has been set
+                console.log('after state set')
+                console.dir(joinPage.props.languages)
+                joinPage.handleSubmit(new Event('')).then(() => {
+                    console.log('after submitting')
+                    chai.assert.isTrue(browserHistory.push.called)
+                    done()
+                })
+            })
+        })
+        // TODO need to test invalid values for signup
+        // TODO need to test languages in dropdown
+        // TODO need to test loading page if no response 
+    })
 })

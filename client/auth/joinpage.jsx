@@ -45,7 +45,7 @@ function MessageRow(props) {
 }
 
 
-class AuthJoinPage extends React.Component {
+class JoinPage extends React.Component {
 	constructor(props) {
         super(props)
 		this.state = {
@@ -118,32 +118,34 @@ class AuthJoinPage extends React.Component {
                 customNativeLanguage = null 
             }
             
-            this.props.signup({variables: {input: {email: this.state.emailValue,
-                                                   password: this.state.passwordValue,
-                                                   username: this.state.username,
-                                                   interface: counterpart.getLocale(),
-                                                   nativeArray: this.state.nativeLanguage,
-                                                   customNative: customNativeLanguage}}})
-            .then((response) => {
-                const newUserId = response.data.signup.integer
-                console.log(newUserId)
-                console.log('New user created with id ' + newUserId + ' and username ' + this.state.username)
+            return this.props.signup({variables: {input: {email: this.state.emailValue,
+                                                          password: this.state.passwordValue,
+                                                          username: this.state.username,
+                                                          interface: counterpart.getLocale(),
+                                                          nativeArray: this.state.nativeLanguage,
+                                                          customNative: customNativeLanguage}}
+            }).then((response) => {
+                const jwt = response.data.tokenPair.jwt
+                const refresh = response.data.tokenPair.refresh 
+                
                 // TODO log in (below)
                 // uncomment below and insert JWT to auto-login
                 //this.props.callbackUser( /* JWT goes in here!! */)
+                
                 // change page (navigates to Home)
                 browserHistory.push('/')
             }).catch((error) => {
+                console.dir(error)
                 alert(decodeError(error))
             })
         }
     }
     
     render() {
-        if (this.props.allLanguages.loading) {
+        if (this.props.languages.loading) {
             return <LoadingPage />
         } 
-        const optionList = this.props.allLanguages.allLanguages.nodes.map((row) => {
+        const optionList = this.props.languages.allLanguages.nodes.map((row) => {
             return { value: row.id, label: row.name }
         })
         
@@ -254,7 +256,7 @@ class AuthJoinPage extends React.Component {
 
 const JoinPageWithData = compose(
     graphql(signup, {name: 'signup'}),
-    graphql(allLanguages, {name: 'allLanguages'})
-)(AuthJoinPage)
+    graphql(allLanguages, {name: 'languages'})
+)(JoinPage)
 
-export { JoinPageWithData, validateEmail }
+export { JoinPageWithData, JoinPage, validateEmail }
