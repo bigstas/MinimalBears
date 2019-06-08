@@ -2,14 +2,14 @@
 import { Navigation, Link, browserHistory } from 'react-router'
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
 import ReactTooltip from 'react-tooltip'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
-import LoadingPage from '../auxiliary/loading'
-import decodeError from '../auxiliary/errors'
+import LoadingPage from '/client/auxiliary/loading'
+import decodeError from '/client/auxiliary/errors'
+import { allLanguages, signup } from '/lib/graphql'
 
 // TODO: this is repeated in the loginpage. Move this to a util file.
 function validateEmail(email) {
@@ -252,39 +252,9 @@ class AuthJoinPage extends React.Component {
     }
 }
 
-const allLanguages = gql`query {
-    allLanguages {
-        nodes {
-            name
-            id
-        }
-    }
-}`
-const allLanguagesConfig = {
-    name: 'allLanguages'
-}
-
-const signup = gql`mutation ($input: SignupInput!) {
-    signup(input:$input) {
-        clientMutationId
-    }
-}`
-
-// Variables must be defined when the function is called
-const signupConfig = {
-    name: 'signup'
-}
-
-const signupFunction = graphql(signup, signupConfig)
-const allLanguagesFunction = graphql(allLanguages, allLanguagesConfig)
-
 const JoinPageWithData = compose(
-    signupFunction, allLanguagesFunction
+    graphql(signup, {name: 'signup'}),
+    graphql(allLanguages, {name: 'allLanguages'})
 )(AuthJoinPage)
-/*
-const JoinPageWithData = compose(
-    graphql(signup, signupConfig),
-    graphql(allLanguages, allLanguagesConfig)
-)(AuthJoinPage)
-*/
-export { JoinPageWithData, validateEmail, signupFunction, allLanguagesFunction }
+
+export { JoinPageWithData, validateEmail }

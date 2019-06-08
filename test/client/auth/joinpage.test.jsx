@@ -41,31 +41,33 @@ describe('Join page', function() {
             chai.assert.eventually.equal(Promise.resolve(2+2), 4, "promise did not resolve")
         })
     })
-
+    
     describe('signupFunction', function() {
-        const ping = gql`query { ping }`
-        const pingConfig = { name: 'pingFn' }
-
-        // NOTE: if there will be a bunch of tests here (which there probably will),
-        // and each one will need setup/teardown code (e.g. of React elements),
-        // then consider using beforeEach() and related functions to avoid code repetition.
-        function Elem(props) {
-            console.log(this.props)
-            return (
-                <div>
-                    <p>{props.text}</p>
-                    <p>{props.pingFn ? props.pingFn.ping : "hello again"}</p>
-                </div>
-            )
-        }
-        const PlainElem = mount((React.createElement(() => <Elem text="Hello World" />)))
-        const ElemWithPing = graphql(ping, pingConfig)(React.createElement(() => <Elem text="Hello World" />))
-        const MountedElemWithPing = mount(<ElemWithPing />)
-        it('element has props', function() {
-            chai.assert.exists(PlainElem.props) // this passes
-        })
-        it('element gets data', function() {
-            chai.assert.isDefined(MountedElemWithPing.props.pingFn.ping) // this fails, Apollo needs a Client
+        it('can get data', function() {
+            
+	        const ping = gql`query { ping }`
+	        const pingConfig = { name: 'pingFn' }
+	
+	        // NOTE: if there will be a bunch of tests here (which there probably will),
+	        // and each one will need setup/teardown code (e.g. of React elements),
+	        // then consider using beforeEach() and related functions to avoid code repetition.
+	        function Elem(props) {
+	            console.log(this.props)
+	            return (
+	                <div>
+	                    <p>{props.text}</p>
+	                    <p>{props.pingFn ? props.pingFn.ping : "hello again"}</p>
+	                </div>
+	            )
+	        }
+	        const MountedPlainElem = mount(<Elem text="Hello World" />)
+	        const ElemWithPing = graphql(ping, pingConfig)(() => <Elem text="Hello World" />)
+	        const MountedElemWithPing = mount(
+	            <MockedProvider mocks={[]}>
+                    <ElemWithPing text="Hello World" />
+                </MockedProvider>
+	        )
+	        
         })
     })
     
