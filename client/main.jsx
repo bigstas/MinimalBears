@@ -1,51 +1,21 @@
-// Meteor startup script. Runs reactRoutes, and puts the result in the 'content' div in index.html.
+// Meteor startup script.
+// <ApolloProvider> allows React to connect to Apollo
+// <Routes> allows client-side routing
+// The rendered page inserted into index.html under 'content'
 
 import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
-import Routes from './routes'
 import React from 'react'
-import ApolloClient from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
 
-// Connect to the database using Apollo
-// Add middleware that adds a Json Web Token (JWT) to the request header
+import Routes from './routes'
+import { client } from './middleware'
 
-const authMiddleware = function(request, old_context) {
-    // add authorization to the headers
-    const token = localStorage.getItem('token')
-    if (!!token) {
-        const new_context = {
-            ...old_context,
-            headers: {
-                ...old_context.headers,
-                authorization: 'Bearer ' + token || null
-            }
-        }
-        console.log('middleware')
-        console.log(new_context)
-        return new_context
-    } else {
-        return old_context
-    }
-}
-
-const client = new ApolloClient({
-    link: setContext(authMiddleware).concat(new HttpLink({ uri: '/graphql' })),
-    cache: new InMemoryCache()
-})
-
-// <ApolloProvider> allows React to connect to Apollo
-// <Routes> allows client-side routing
-// The rendered page inserted into the HTML under 'content'
 Meteor.startup(() => {
     render(
         <ApolloProvider client={client}>
             <Routes/>
         </ApolloProvider>,
-        document.getElementById('content'))
+        document.getElementById('content')
+    )
 })
-
-export { authMiddleware, client }

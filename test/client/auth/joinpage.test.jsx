@@ -88,10 +88,7 @@ describe('Join page', function() {
                 nativeLanguage: ['eng','deu'],
                 customNativeLanguage: null
             }, () => {  // after state has been set
-                console.log('after state set')
-                console.dir(joinPage.props.languages)
                 joinPage.handleSubmit(new Event('')).then(() => {
-                    console.log('after submitting')
                     chai.assert.isTrue(browserHistory.push.called)
                     done()
                 })
