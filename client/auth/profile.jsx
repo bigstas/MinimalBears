@@ -2,11 +2,11 @@ import React from 'react'
 import { Link } from 'react-router'
 import Translate from 'react-translate-component'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import Charts from './charts'
-import ContrastDropdown from './contrastdropdown'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"
 
+import Charts from './charts'
+import ContrastDropdown from './contrastdropdown'
+import { practiceLanguageQuery } from '/lib/graphql'
 
 function TopBand(props) {
     /* The title strip at the top of the page, with no graphs in it.
@@ -120,12 +120,7 @@ class UserProfile extends React.Component {
     }
 }
 
-const practiceLanguagesQuery = gql`query ($unit: String, $number: Int) {
-  getPracticeLanguages(unit: $unit, number: $number) {
-    nodes
-  }
-}`
-const practiceLanguagesQueryConfig = {
+const practiceLanguageQueryConfig = {
     name: 'practiceLanguages',
     options: (ownProps) => ({
         variables: {
@@ -135,4 +130,4 @@ const practiceLanguagesQueryConfig = {
     })
 }
 
-export default graphql(practiceLanguagesQuery ,practiceLanguagesQueryConfig)(UserProfile)
+export default graphql(practiceLanguageQuery, practiceLanguageQueryConfig)(UserProfile)

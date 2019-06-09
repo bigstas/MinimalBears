@@ -5,7 +5,8 @@ import Translate from 'react-translate-component'
 // other charts available: Doughnut, Line, Radar, Bubble, Polar, Scatter, HorizontalBar
 import { Bar, Pie } from 'react-chartjs-2' // Charts
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+
+import { statsQuery } from '/lib/graphql'
 
 // JS doesn't handle modulo of negative integers well, so here's a function to get around that
 function mod(n, m) {
@@ -466,17 +467,17 @@ class Charts extends React.Component {
     }
     
     render() {
-        if (this.props.allStats.loading) {
+        if (this.props.stats.loading) {
             return( <LoadingPage /> )
         }
         
-        const allStats = this.props.allStats.getAllStats
-        console.log(allStats)
+        const stats = this.props.stats.getAllStats
+        console.log(stats)
         // TODO: this can maybe be refactored, not so nice with the repeated if blocks
-        if (allStats === undefined) {
+        if (stats === undefined) {
             return ( <Translate component="p" content="home.profile.charts.noTrainingOccurred" /> )
         }
-        const chartData = makeChartData(this.props.period, allStats, this.props.contrast)
+        const chartData = makeChartData(this.props.period, stats, this.props.contrast)
         console.log(chartData)
         if (chartData === false) {
             return ( <Translate component="p" content="home.profile.charts.noTrainingOccurred" /> )
@@ -522,16 +523,6 @@ class Charts extends React.Component {
         
 }
 
-const allStatsQuery = gql`query ($languageId: String, $unit: String, $number: Int) {
-  getAllStats(languageId: $languageId, unit: $unit, number: $number) {
-    nodes {
-      stamp
-      contrast
-      count
-      sum
-    }
-  }
-}`
 // TODO: Is this really the best way? Loading times could be shorter / loading could be less frequent
 // if we take all the queries we need at the start and calculate based on them, rather than 
 // making new queries as the user changes what they want to view on the page.
@@ -541,8 +532,8 @@ const periodMapper = {
     month: ['day', 29],
     year:  ['month', 11]
 }   
-const allStatsQueryConfig = { 
-    name: 'allStats',
+const statsQueryConfig = { 
+    name: 'stats',
     options: (ownProps) => ({
         variables: {
             languageId: ownProps.language,
@@ -552,4 +543,4 @@ const allStatsQueryConfig = {
     })
 }
 
-export default graphql(allStatsQuery, allStatsQueryConfig)(Charts)
+export default graphql(statsQuery, statsQueryConfig)(Charts)

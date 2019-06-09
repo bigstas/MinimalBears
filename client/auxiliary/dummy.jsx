@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+
+import { submitAudioMutation } from '/lib/graphql'
 
 function sum(a,b) {
     return a + b
@@ -31,28 +32,7 @@ class MyClass extends React.Component {
     }
 }
 
-
-const getUser = gql`query {
-    getCurrentUser(input: $input) {
-        output
-    }
-}`
-
-const login = gql`query ($email: String!, $password: String!) {
-    authenticate(tryEmail: $email, tryPassword: $password)
-}`
-
-const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
-    submitAudio (input: $input) {
-        output
-    }
-}`
-
-const audioMutationConfig = {
-    name: 'audioMutation'
-}
-
 // Wrap the class according to the function
-export default graphql(audioMutation, audioMutationConfig)(MyClass)
+export default graphql(audioMutation, {name: 'audioMutation'})(MyClass)
 
 export { sum }

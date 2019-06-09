@@ -13,7 +13,7 @@ import Adapter from 'enzyme-adapter-react-16'
 // the page itself
 import { validateEmail, JoinPageWithData } from '/client/auth/joinpage'
 // GraphQL queries
-import { allLanguages, signup } from '/lib/graphql'
+import { allLanguagesQuery, signupMutation } from '/lib/graphql'
 
 configure({ adapter: new Adapter() })
 chai.use(chaiAsPromised) // for promises
@@ -51,14 +51,14 @@ describe('Join page', function() {
             mocks = [
                 {
                     request: {
-                        query: allLanguages},
+                        query: allLanguagesQuery},
                     result: {
                         data: {allLanguages: {nodes: [{id:'eng', name:'English'},
                                                       {id:'deu', name:'Deutsch'}]}}}
                 },
                 {
                     request: {
-                        query: signup,
+                        query: signupMutation,
                         variables: {input: {
                             email: 'email@example.com',
                             password: "1234",

@@ -2,7 +2,6 @@
 import fs from 'fs'
 import child from 'child_process'
 // GraphQL
-import gql from 'graphql-tag'
 import ApolloClient from 'apollo-boost'
 // The PostGraphQL server defines an HTTP endpoint to access the database
 // To access the database in this way, the web server needs to make HTTP requests
@@ -11,6 +10,8 @@ import ApolloClient from 'apollo-boost'
 // The following package allows us to make HTTP requests
 // It's 'isomorphic' because the fetch function looks the same for the server and client
 import fetch from 'isomorphic-fetch'
+
+import { allLanguagesQuery, editAudioMutation } from '/lib/graphql'
 
 // Meteor methods!
 // https://coderwall.com/p/7tpa8w/file-upload-with-meteor-method
@@ -34,19 +35,9 @@ Meteor.methods({
         
         console.log('nowwhat')
         
-        client.query({query: gql`
-            query {
-                allLanguages {
-                    nodes {
-                        id
-                        name
-                    }
-                }
-            }
-        `}).then((res) => {
+        client.query({query: allLanguagesQuery}).then((res) => {
             console.log('success')
             console.log(res)
-            
         }).catch((err) => {
             console.log('error')
             console.log(err)
@@ -103,25 +94,6 @@ Meteor.methods({
     }
 })
 
-// TODO: the below maybe doesn't need to work like the rest of the app because it's not throught react-apollo?
-// INSERT INTO public.audio_edit (file, moderator, stamp, from_start, from_end, volume)
-const moderationMutation = gql`mutation ($input: EditAudioInput!) {
-    editAudio (input: $input) {
-        clientMutaitonId
-    }
-}` // returns void, so follow what e.g. completeTutorialMutation does
-
-const moderationMutationConfig = {
-    name: 'moderationMutation',
-    options: {
-        variables: {
-            input: {
-                clientMutaitonId: "0" /* not used but gql appears to demand it */
-            }
-        }
-    }
-}
-
 // call this like so: Meteor.call('trimAudio', volume, trim)
 // TODO: could refactor this so it doesn't call both edits if it doesn't have to
 Meteor.methods({
@@ -172,16 +144,9 @@ Meteor.methods({
                                 // below gives permission denied unless you're logged in as moderator
                                 // TODO: try this, logged in as moderator
                                 /*client.query({
-                                    query: gql`
-                                        mutation ($input: EditAudioInput!) {
-                                            editAudio (input: $input) {
-                                                clientMutationId
-                                            }
-                                        }
-                                    `,
+                                    query: editAudioMutation,
                                     variables: {
                                         input: {
-                                            clientMutaitonId: "edit mutation",
                                             file: inputFile, // TODO: probably only want the name, not the path as this will give
                                             fromStart: {
                                                 seconds: trim.start

@@ -9,7 +9,7 @@ import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import LoadingPage from '/client/auxiliary/loading'
 import decodeError from '/client/auxiliary/errors'
-import { allLanguages, signup } from '/lib/graphql'
+import { allLanguagesQuery, signupMutation } from '/lib/graphql'
 
 // TODO: this is repeated in the loginpage. Move this to a util file.
 function validateEmail(email) {
@@ -255,8 +255,8 @@ class JoinPage extends React.Component {
 }
 
 const JoinPageWithData = compose(
-    graphql(signup, {name: 'signup'}),
-    graphql(allLanguages, {name: 'languages'})
+    graphql(signupMutation, {name: 'signup'}),
+    graphql(allLanguagesQuery, {name: 'languages'})
 )(JoinPage)
 
 export { JoinPageWithData, JoinPage, validateEmail }

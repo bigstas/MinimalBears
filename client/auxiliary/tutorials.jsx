@@ -2,8 +2,8 @@ import React from 'react'
 import Joyride from 'react-joyride'
 import Translate from 'react-translate-component'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-    
+
+import { completeTutorialMutation } from '/lib/graphql'    
 
 function RecordPageTutorial(props) {
     const selectors = ['#firstWord',  //0
@@ -41,7 +41,7 @@ function RecordPageTutorial(props) {
                     // come back, the tutorial prop from the query on the Record page still comes
                     // through as "false", you need to refresh the page to get it to be "true".
                     // It should be changed right away instead!
-                    props.completeTutorialMutation()
+                    props.completeTutorial()
                     .then( (response) => {
                         console.log('Tutorial is complete - mutation sent to database.')
                         console.log(response)
@@ -62,23 +62,9 @@ function RecordPageTutorial(props) {
     )
 }
 
-const completeTutorialMutation = gql`
-mutation ($input: CompleteTutorialInput!) {
-    completeTutorial(input: $input) {
-        clientMutationId
-    }
-}`
-
 const completeTutorialMutationConfig = {
-    name: 'completeTutorialMutation',
-    withRef: true, /* Allows use of React refs */
-    options: {
-        variables: {
-            input: {
-                clientMutationId: "0" /* This is not being used, but gql appears to demand it */
-            }
-        }
-    }
+    name: 'completeTutorial',
+    withRef: true /* Allows use of React refs */
 }
 
 export default graphql(completeTutorialMutation, completeTutorialMutationConfig)(RecordPageTutorial)

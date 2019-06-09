@@ -7,10 +7,16 @@
 */
 import React from 'react'
 import Translate from 'react-translate-component'
-import DonePanel from './donepanel'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
 
+import DonePanel from './donepanel'
+import {
+    questionQuery,
+    answerQuestionMutation,
+    itemComplaintMutation,
+    pairComplaintMutation,
+    audioComplaintMutation
+} from '/lib/graphql'
 
 // Progress bar
 function ProgressBar(props) {
@@ -337,46 +343,6 @@ class Arena extends React.Component {
     }
 }
 
-
-/* The 'graphql' function will create a wrapper for a class,
- * which makes queries to the database and passes the results as props.
- * We must provide a function that defines the queries.
- */
-
-const itemComplaintMutation = gql`
-mutation ($input: SubmitItemComplaintInput!) {
-    submitItemComplaint (input: $input) {
-        clientMutationId
-    }
-}`
-
-const itemComplaintMutationConfig = {
-    name: 'itemComplaint'
-}
-
-const pairComplaintMutation = gql`
-mutation ($input: SubmitPairComplaintInput!) {
-    submitPairComplaint (input: $input) {
-        clientMutationId
-    }
-}`
-
-const pairComplaintMutationConfig = {
-    name: 'pairComplaint'
-}
-
-const questionQuery = gql`query($contrastId:Int) {
-    getQuestions(contrastId:$contrastId, number: 10) {
-        nodes {
-          pair
-          first
-          second
-          file
-          correct
-        }
-    }
-}`
-
 const questionQueryConfig = {
     name: 'questions',
     options: (ownProps) => ({
@@ -386,18 +352,10 @@ const questionQueryConfig = {
     })
 }
 
-const statsMutation = gql`mutation ($input: AnswerQuestionInput!) {
-    answerQuestion (input: $input) {
-        clientMutationId
-    }
-}` // what is clientMutationId for?
-
-const statsMutationConfig = {
-    name: 'statsMutation'
-}
-
 export default compose(
     graphql(questionQuery, questionQueryConfig),
-    graphql(statsMutation, statsMutationConfig))
-(Arena)
-//export default graphql(questionQuery, questionQueryConfig)(Arena)
+    graphql(answerQuestionMutation, {name: 'statsMutation'}),
+    graphql(itemComplaintMutation, {name: 'itemComplaint'}),
+    graphql(pairComplaintMutation, {name: 'pairComplaint'}),
+    graphql(audioComplaintMutation, {name: 'audioComplaint'})
+)(Arena)

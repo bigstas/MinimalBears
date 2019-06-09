@@ -1,10 +1,11 @@
 import { Navigation, Link } from 'react-router'
 import React from 'react'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 import Translate from 'react-translate-component'
 import { browserHistory } from 'react-router'
-import decodeError from '../auxiliary/errors';
+
+import decodeError from '../auxiliary/errors'
+import { loginMutation } from '/lib/graphql'
 
 // TODO: if you are already logged in, login and register join pages should be unavailable (you should be redirected, e.g. to your profile)
     
@@ -144,18 +145,4 @@ class AuthLoginPage extends React.Component {
     }
 }
 
-const login = gql`mutation ($input: AuthenticateFromEmailInput!) {
-    authenticateFromEmail(input: $input) {
-        tokenPair {
-            jwt
-            refresh
-        }
-    }
-}`
-
-// Variables must be defined when the function is called
-const loginConfig = {
-    name: 'login'
-}
-
-export default graphql(login, loginConfig)(AuthLoginPage)
+export default graphql(loginMutation, {name: 'login'})(AuthLoginPage)

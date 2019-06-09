@@ -8,14 +8,14 @@ import update from 'immutability-helper'
 import ReactTooltip from 'react-tooltip'
 // data mutations and queries
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
-import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
+
 import Tutorial from '../auxiliary/tutorials'
 import { PreRecord, RecordSelector, NoRecordPage } from './norecord'
 import zip from '../auxiliary/zip'
-
+import LoadingPage from '../auxiliary/loading'
+import { itemQuery, submitAudioMutation } from '/lib/graphql'
     
 // Note that we use 'meteor/maxencecornet:audio-recorder',
 // which defines window.Recorder for us
@@ -634,15 +634,7 @@ class RecordPageWithSelector extends React.Component {
     }
 }
 
-const itemQuery = gql`query ($languageId: String!, $number: Int!) {
-    getItemsToRecord(languageId: $languageId, number: $number) {
-        nodes {
-            id
-            language
-            homophones
-        }
-    }
-}`
+
 const itemQueryConfig = {
     name: 'items',
     options: (ownProps) => ({
@@ -656,20 +648,24 @@ const itemQueryConfig = {
     })
 }
 
-const audioMutation = gql`mutation ($input: SubmitAudioInput!) {
-    submitAudio (input: $input) {
-        integer
-    }
-}` // "integer" is the id of the new row
-
-// Variables must be defined when the function is called
-const audioMutationConfig = {
-    name: 'audioMutation'
-}
+// TODO submitAudioMutation should be done via a Meteor method
 
 const RecordPageWithData = compose(
     graphql(itemQuery, itemQueryConfig),
-    graphql(audioMutation, audioMutationConfig))
-(withRouter(RecordPageWithSelector))
+    graphql(submitAudioMutation, {name: 'audioMutation'})
+)(withRouter(RecordPageWithSelector))
 
-export { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, RecordPageWithSelector, RecordPageWithData, itemQuery, itemQueryConfig, audioMutation }
+export {
+    StartButton,
+    StopButton,
+    PlayAllButton,
+    SubmitButton,
+    TutorialButton,
+    TopRow,
+    ReRecord,
+    PlaybackOne,
+    WordRow,
+    RecordPage,
+    RecordPageWithSelector,
+    RecordPageWithData
+}

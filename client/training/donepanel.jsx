@@ -3,7 +3,8 @@ import Translate from 'react-translate-component'
 import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+
+import { contrastAverageQuery } from '/lib/graphql'
 
 function random(myArray) {
     const rand = myArray[Math.floor(Math.random() * myArray.length)]
@@ -60,10 +61,6 @@ function DonePanel(props) {
         </div>
     )
 }
-
-const contrastAverageQuery = gql`query($contrastId:Int, $unit: String, $number: Int){
-    getContrastAvg(contrastId: $contrastId, unit: $unit, number: $number)
-}`
 
 const contrastAverageQueryConfig = {
     name: 'contrastAverage',

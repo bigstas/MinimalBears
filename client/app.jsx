@@ -1,11 +1,17 @@
 import React from 'react'
 import jwtDecode from 'jwt-decode'
 import { withApollo, graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
-import Nav from './auxiliary/nav'
 import Translate from 'react-translate-component'
 
-class UserAppBody extends React.Component {
+import Nav from './auxiliary/nav'
+import { refreshMutation, accountInfoQuery } from '/lib/graphql'
+
+// The app always uses AppBody, which always contains MinimalAppBody.
+// If the user is signed in, there is an intermediate wrapper SignedInAppBody.
+
+// TODO This page can probably be written more cleanly
+
+class MinimalAppBody extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -59,30 +65,7 @@ class UserAppBody extends React.Component {
     }
 }
 
-// UserAppBody will be wrapped in AppBody if user is logged in, this setup comes before the wrapping
-// Calling graphql on this turns it into a function which returns a React element (needed below)
-const accountInfoQuery = gql`query{
-    getAccountInfo {
-        username
-        interface
-        native
-        customNative
-        tutorial
-        email
-    }
-}`
-// Try this out without config, then the name defaults to "data". Then could delete this.
-const accountInfoQueryConfig = {
-    name: 'accountInfo',
-    options: {
-        // This doesn't fix the problem with logout, and we may want to move to "no-cache".
-        // In the current version of Apollo, "no-cache" seems to not be an option.
-        // Commented out as it was causing crashes for Gergő.
-        //fetchPolicy: "standby"
-    }
-}
-const SignedInAppBody = graphql(accountInfoQuery, accountInfoQueryConfig)(UserAppBody)
-
+const SignedInAppBody = graphql(accountInfoQuery, {name: 'accountInfo'})(MinimalAppBody)
 
 class AppBody extends React.Component {
 	constructor(props) {
@@ -176,19 +159,11 @@ class AppBody extends React.Component {
         if (this.state.isLoggedIn) {
             AppBodyClass = SignedInAppBody
         } else {
-            AppBodyClass = UserAppBody
+            AppBodyClass = MinimalAppBody
         }
         return <AppBodyClass children={this.props.children} setUser={this.setUser.bind(this)} logOut={this.logOut.bind(this)} />
     }
 }
 
-const refresh = gql`mutation($input:RefreshInput!) {
-    refresh(input:$input) {
-        jsonWebToken
-    }
-}`
-const refreshConfig = {
-    name: 'refresh'
-}
-
-export default withApollo(graphql(refresh, refreshConfig)(AppBody))
+// withApollo allows direct access to the "client" object as a prop
+export default withApollo(graphql(refreshMutation, {name: 'refresh'})(AppBody))

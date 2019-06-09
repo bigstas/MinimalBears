@@ -7,8 +7,24 @@ import { configure, shallow, mount } from 'enzyme'
 import chai from 'chai'
 import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
+
 // the page itself
-import { StartButton, StopButton, PlayAllButton, SubmitButton, TutorialButton, TopRow, ReRecord, PlaybackOne, WordRow, RecordPage, WrappedRecordPage, ComposedWrappedRecordPage, itemQuery, itemQueryConfig, audioMutation } from '/client/audio/record'
+import {
+    StartButton,
+    StopButton,
+    PlayAllButton,
+    SubmitButton,
+    TutorialButton,
+    TopRow,
+    ReRecord,
+    PlaybackOne,
+    WordRow,
+    RecordPage,
+    RecordPageWithSelector,
+    RecordPageWithData
+} from '/client/audio/record'
+
+import { itemQuery, pingQuery } from '/lib/graphql'
 
 configure({ adapter: new Adapter() })
 
@@ -20,16 +36,16 @@ function assertFunctionRunsOnClick(componentClass, elementId, props, expectClick
      * expectClicked: whether the callback should fire or not on click
      * message: optional, gives a custom additional message in the testing browser if the test fails
      */
+    if (!message) message = "[no message supplied in testing code]"
+    
     const dummyfunc = sinon.fake()
-    // makes a copy as props is an object and therefore a reference type
-    const fullProps = JSON.parse(JSON.stringify(props))
+    const fullProps = JSON.parse(JSON.stringify(props)) // copy props
     fullProps['callback'] = dummyfunc
     // mount: an Enzyme method to "create" an object; the code in the brackets is React without JSX
     const element = mount(React.createElement(componentClass, fullProps, null))
-    // assertions
+    // assert the function is called after clicking but not before
     chai.assert.equal(dummyfunc.called, false)
     element.find('#' + elementId).simulate('click')
-    if (!message) message = "[no message supplied in testing code]"
     chai.assert.equal(dummyfunc.called, expectClicked, message)
 }
 
@@ -134,9 +150,11 @@ describe('Record page', function() {
                         getItemsToRecord: {
                             nodes: [
                                 {
+                                    language: "eng",
                                     homophones: ["here", "hear"],
                                     id: 123
                                 }, {
+                                    language: "eng",
                                     homophones: ["their", "there", "they're"],
                                     id: 456
                                 }
@@ -161,9 +179,9 @@ describe('Record page', function() {
                     )
                 }
             }
-            const MockedComponentWithData = graphql(itemQuery, itemQueryConfig)(MockedComponent)
+            const MockedComponentWithData = graphql(pingQuery)(MockedComponent)
             const MockedEnsemble = mount(
-                <MockedProvider mocks={mocks}>
+                <MockedProvider mocks={mocks} addTypename={false}>
                     <MockedComponentWithData text="Hello World" />
                 </MockedProvider>
             )

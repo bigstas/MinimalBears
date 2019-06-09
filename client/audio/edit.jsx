@@ -1,10 +1,10 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import Peaks from 'peaks.js'
-import { withRouter } from 'react-router' // TODO: is this necessary?
-import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
+
 import LoadingPage from '../auxiliary/loading'
+import { moderationQuery, approveAudioMutation, editAudioMutation } from '/lib/graphql'
 
 function NoEditPage(props) {
     return (
@@ -180,70 +180,21 @@ class EditingPage extends React.Component {
     }
 }
 
-class WrappedEditingPage extends React.Component {
-    constructor(props) {
-        super(props) // ...what does this do?
-        // set any requisite state here
-    }
-
-    render() {
-        // TODO: not certain about userId, router, and route here - all necessary?
-        return <EditingPage
-                    audio={this.props.moderationQuery}
-                    submitEdits={this.props.editAudioMutation}
-                    approveAudio={this.props.approveAudioMutation}
-                    userId={this.props.userId}
-                    router={this.props.router} route={this.props.route}
-                />
-    }
-}
-
-const moderationQuery = gql`
-query ($languageId: String!, $number: Int!){
-	getAudioSubmissions(languageId: $languageId, number: $number) {
-	    nodes {
-    	    file
-            speaker
-            item
-            stamp
-        }
-    }
-}`
-
 const moderationQueryConfig = {
-    name: 'moderationQuery',
+    name: 'audio',
     options: (ownProps) => ({
         variables: {
             languageId: ownProps.username ? ownProps.native[0] : 'eng'
         }
     })
 }
+// TODO allow the user to choose language to moderate,
+// out of the languages they are a moderator for
 
-const approveAudioMutation = gql`
-mutation ($input: ModerateAudioInput!) {
-    moderateAudio(input: $input) {
-        clientMutationId
-    }
-}
-`
-
-const approveAudioMutationConfig = {
-    name: 'approveAudioMutation'
-}
-
-const editAudioMutation = gql`
-mutation ($input: EditAudioInput!) {
-    editAudio(input: $input) {
-        clientMutationId
-    }
-}`
-
-const editAudioMutationConfig = {
-    name: 'editAudioMutation'
-}
+// TODO replace mutations with Meteor methods
 
 export default compose(
     graphql(moderationQuery, moderationQueryConfig),
-    graphql(approveAudioMutation, approveAudioMutationConfig),
-    graphql(editAudioMutation, editAudioMutationConfig))
-(withRouter(WrappedEditingPage))
+    graphql(approveAudioMutation, {name: 'approveAudio'}),
+    graphql(editAudioMutation, {name: 'submitEdits'})
+)(EditingPage)

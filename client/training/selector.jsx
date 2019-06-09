@@ -1,8 +1,9 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import LoadingPage from '../auxiliary/loading'
 import Translate from 'react-translate-component'
+
+import LoadingPage from '../auxiliary/loading'
+import { trainingLanguageQuery, contrastQuery } from '/lib/graphql'
 
 function Selector(props) {
     /* A series of buttons from which the user can choose one
@@ -125,28 +126,6 @@ class ContrastSelector extends React.Component {
     }
 }
 
-const languageQuery = gql`query {
-    allTrainingLanguages {
-        nodes {
-            name
-            id
-        }
-    }
-}`
-
-const contrastQuery = gql`query ($languageId:String!) {
-    getContrastsWithExamples(languageId:$languageId) {
-        nodes {
-            name
-            id
-            examples {
-                first
-                second
-            }
-        }
-    }
-}`
-
 const contrastQueryConfig = {
     options: (ownProps) => ({
         variables: {
@@ -155,7 +134,7 @@ const contrastQueryConfig = {
     })
 }
 
-const ConnectedLanguageSelector = graphql(languageQuery)(LanguageSelector)
+const ConnectedLanguageSelector = graphql(trainingLanguageQuery)(LanguageSelector)
 const ConnectedContrastSelector = graphql(contrastQuery, contrastQueryConfig)(ContrastSelector)
 
 export { Selector, ConnectedLanguageSelector, ConnectedContrastSelector }
