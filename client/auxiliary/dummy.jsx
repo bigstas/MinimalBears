@@ -33,6 +33,6 @@ class MyClass extends React.Component {
 }
 
 // Wrap the class according to the function
-export default graphql(audioMutation, {name: 'audioMutation'})(MyClass)
+export default graphql(submitAudioMutation, {name: 'audioMutation'})(MyClass)
 
 export { sum }

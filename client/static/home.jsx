@@ -1,6 +1,6 @@
 import React from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
-import { Link } from 'react-router'    
+import { Link } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import UserProfile from '../auth/profile'
 
@@ -27,7 +27,7 @@ function GuestHome(props) {
 }
 
 function Home(props) {
-    return ( props.username ?
+    return ( props.isLoggedIn ?
     	<UserProfile username={props.username} user_id={props.user_id} />
     	: <GuestHome /> )
 }

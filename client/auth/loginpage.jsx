@@ -1,8 +1,7 @@
-import { Navigation, Link } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import Translate from 'react-translate-component'
-import { browserHistory } from 'react-router'
 
 import decodeError from '../auxiliary/errors'
 import { loginMutation } from '/lib/graphql'
@@ -80,7 +79,7 @@ class AuthLoginPage extends React.Component {
                 localStorage.setItem('refreshToken', refresh)
                 
                 // change page (currently navigates to Home)
-                browserHistory.push('/')
+                this.props.history.push('/')
                 console.log("got to the end of the things that need doing on loginpage")
             } else {
                 this.setState({ // TODO: this isn't working, see below catch(error)
@@ -145,4 +144,4 @@ class AuthLoginPage extends React.Component {
     }
 }
 
-export default graphql(loginMutation, {name: 'login'})(AuthLoginPage)
+export default graphql(loginMutation, {name: 'login'})(withRouter(AuthLoginPage))

@@ -1,7 +1,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import ReactTooltip from 'react-tooltip'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 
 import { contrastAverageQuery } from '/lib/graphql'

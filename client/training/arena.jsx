@@ -291,7 +291,7 @@ class Arena extends React.Component {
             snd.play()
             
             return <DonePanel handleClick={this.restart.bind(this)}
-                       loggedIn={!!this.props.username}
+                       loggedIn={this.props.isLoggedIn}
                        score={100*this.state.score/this.state.maxRounds}
                        activeContrastId={this.props.activeContrastId}
                     /> 

@@ -2,7 +2,7 @@
 submittedAudio.wav originally called 320654__rhodesmas__level-up-02.wav, taken from user "rhodesmas" on freesound.org, under Creative Commons Attribution 3.0 Unported Licence; no changes have been made
 */
 import React from 'react'
-import { Link, withRouter } from 'react-router'
+import { Link, Prompt } from 'react-router-dom'
 import update from 'immutability-helper'
 // For tooltip details and options, see http://wwayne.com/react-tooltip/ and https://www.npmjs.com/package/react-tooltip
 import ReactTooltip from 'react-tooltip'
@@ -495,6 +495,7 @@ next: ${next}`)
         return (
             <div>
                 <Tutorial autorun={!this.props.hasSeenTutorial} ref={c => (this.joyride = c)} />
+                <Prompt when={this.state.audioURLs.length > 0} message={counterpart.translate("record.leaveHook")} />
                 <div className='panel animated fadeIn' id='record'>
                     <TopRow next={this.state.next}
                             max={this.props.recordingWords.length -1}
@@ -566,13 +567,6 @@ next: ${next}`)
             return element
         }, this)
         // TODO: do the event listeners ever need to be replaced?
-        
-        // set route leave hook - asks you whether you want to leave ifyou have unsaved recordings
-        this.props.router.setRouteLeaveHook(this.props.route, () => {
-            if (this.state.audioURLs.length > 0) {
-                return (counterpart.translate("record.leaveHook"))
-            }
-        })
     }
         
     componentWillUnmount() {
@@ -604,45 +598,42 @@ class RecordPageWithSelector extends React.Component {
     }
     
     render() {
-        if (this.props.username) {
-            if (this.props.items.loading) { return <LoadingPage /> }
-
-            const firstNodes = this.props.items.getItemsToRecord.nodes.slice(0,10)
-            console.log(firstNodes)
-            const firstWords = firstNodes.map( function(item) {
-                return [item.homophones, item.id]
-            })
-            console.log(firstNodes)
-
-            if (!this.state.recordingLanguage) {
-                // if they haven't recorded in any language before, display a selector
-                return <RecordSelector callback={this.selectLanguage.bind(this)} />
-            } else if (!this.state.pressedStartTutorialButton && !this.props.hasSeenTutorial) { 
-                return <PreRecord callback={this.startTutorial.bind(this)} />
-            } else {
-                return <RecordPage recordingWords={firstWords} 
-                           submitAudio={this.props.audioMutation} 
-                           refetchCallback={this.refetchQuery} 
-                           hasSeenTutorial={this.props.hasSeenTutorial} 
-                           userId={this.props.userId} 
-                           router={this.props.router} route={this.props.route}
-                        />
-            }
-        }
+        if (!this.props.isLoggedIn) { return <NoRecordPage loggedIn={false} /> }
+        if (this.props.accountInfo.loading || this.props.items.loading) { return <LoadingPage /> }
         // TODO: else if (... native language not being recorded ...) { return <NoRecordPage loggedIn={true} reason='noSuchLanguage' /> }
-        else { return <NoRecordPage loggedIn={false} /> }
+        
+        const words = this.props.items.getItemsToRecord.nodes.map( function(item) {
+            return [item.homophones, item.id]
+        })
+
+        if (!this.state.recordingLanguage) {
+            // if they haven't recorded in any language before, display a selector
+            // The nesting of objects needs to be fixed
+            // -- if the query depends on state, the state must be higher
+            return <RecordSelector callback={this.selectLanguage.bind(this)} />
+        } else if (!this.state.pressedStartTutorialButton && !this.props.hasSeenTutorial) { 
+            return <PreRecord callback={this.startTutorial.bind(this)} />
+        } else {
+            return <RecordPage recordingWords={words}
+                       submitAudio={this.props.audioMutation}
+                       refetchCallback={this.refetchQuery}
+                       hasSeenTutorial={this.props.hasSeenTutorial} 
+                       userId={this.props.userId}
+                    />
+        }
     }
 }
 
 
 const itemQueryConfig = {
     name: 'items',
-    options: (ownProps) => ({
+    skip: (props) => (props.accountInfo.loading || props.accountInfo.error),
+    options: (props) => ({
         variables: {
             // TODO this should take the whole array and do something with it server-side, instead of just taking the first element
             // e.g. check user's native languages / if one, choose / if more than one, display a selector
             // -- but this should be informed by what languages we can actually record for!
-            languageId: ownProps.username ? ownProps.native[0] : 'eng',  
+            languageId: props.accountInfo.getAccountInfo.native[0],  
             number: 10
         }
     })
@@ -653,7 +644,7 @@ const itemQueryConfig = {
 const RecordPageWithData = compose(
     graphql(itemQuery, itemQueryConfig),
     graphql(submitAudioMutation, {name: 'audioMutation'})
-)(withRouter(RecordPageWithSelector))
+)(RecordPageWithSelector)
 
 export {
     StartButton,

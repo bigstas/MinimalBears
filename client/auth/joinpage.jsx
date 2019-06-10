@@ -1,5 +1,5 @@
 // Question mark image taken from wikimedia commons (open source)
-import { Navigation, Link, browserHistory } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import React from 'react'
 import { graphql, compose } from 'react-apollo'
 import Translate from 'react-translate-component'
@@ -133,7 +133,7 @@ class JoinPage extends React.Component {
                 //this.props.callbackUser( /* JWT goes in here!! */)
                 
                 // change page (navigates to Home)
-                browserHistory.push('/')
+                this.props.history.push('/')
             }).catch((error) => {
                 console.dir(error)
                 alert(decodeError(error))
@@ -257,6 +257,6 @@ class JoinPage extends React.Component {
 const JoinPageWithData = compose(
     graphql(signupMutation, {name: 'signup'}),
     graphql(allLanguagesQuery, {name: 'languages'})
-)(JoinPage)
+)(withRouter(JoinPage))
 
 export { JoinPageWithData, JoinPage, validateEmail }

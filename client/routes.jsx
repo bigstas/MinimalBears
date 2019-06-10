@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { Route, Switch } from 'react-router'
 
 // route components
 import AppBody from './app'
@@ -18,22 +18,18 @@ import NotFound from './static/notfound'
 //import Dummy from './auxiliary/dummy'
 
 
-const renderRoutes = () => (
-    <Router history={browserHistory} >
-        <Route path="/" component={AppBody} >
-            <IndexRoute component={Home} />
-            <Route path="train" component={TrainPage} />
-            <Route path="about" component={About} />
-            <Route path="record" component={RecordPageWithData} />
-            <Route path="register" component={JoinPageWithData} />
-            <Route path="login" component={AuthSignInPage} />
-            <Route path="edit" component={EditingPage} />
-            <Route path="contact" component={Contact} />
-            {/*<Route path="dummy" component={Dummy} />
-            <Route path="loading" component={LoadingPage} />  -- for development / debugging purposes only */}
-            <Route path="*" component={NotFound} />
-        </Route>
-    </Router>
+const Routes = (props) => (
+    <Switch>
+        <Route exact path="/" render={() => <Home {...props}/>} />
+        <Route path="/train" render={() => <TrainPage {...props}/>} />
+        <Route path="/about" render={() => <About {...props}/>} />
+        <Route path="/record" render={() => <RecordPageWithData {...props}/>} />
+        <Route path="/register" render={() => <JoinPageWithData {...props}/>} />
+        <Route path="/login" render={() => <AuthSignInPage {...props}/>} />
+        <Route path="/edit" render={() => <EditingPage {...props}/>} />
+        <Route path="/contact" render={() => <Contact {...props}/>} />
+        <Route path="*" render={() => <NotFound {...props}/>} />
+    </Switch>
 )
 
-export default renderRoutes
+export default Routes

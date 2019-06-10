@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import { graphql } from 'react-apollo'
 import { FacebookButton, FacebookCount, TwitterButton, TwitterCount } from "react-social"

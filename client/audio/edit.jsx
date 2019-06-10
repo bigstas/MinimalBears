@@ -184,7 +184,7 @@ const moderationQueryConfig = {
     name: 'audio',
     options: (ownProps) => ({
         variables: {
-            languageId: ownProps.username ? ownProps.native[0] : 'eng'
+            languageId: ownProps.isLoggedIn ? ownProps.accountInfo.getAccountInfo.native[0] : 'eng'
         }
     })
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import YouTube from 'react-youtube'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'
     

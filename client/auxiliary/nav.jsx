@@ -1,6 +1,6 @@
 // Navigation bar
 import React from 'react'
-import { Link, IndexLink } from 'react-router'
+import { Link, NavLink } from 'react-router-dom'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
@@ -31,7 +31,7 @@ class Dropdown extends React.Component {
     
     render() {
         let authElement, registerElement, contactUs
-        if (this.props.username) {
+        if (this.props.isLoggedIn) {
             authElement = <div id="dropdown-logout" className='dropdownElement' onClick={this.logOut.bind(this)}><Translate content="nav.logout" /></div>
             registerElement = <span /> // "empty" element
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
@@ -42,7 +42,7 @@ class Dropdown extends React.Component {
         }
             
         let moderationElement
-        if (this.props.username && true) { // TODO - should read: if this person has the authority / rights to be a moderator AND if this person is logged in
+        if (this.props.isLoggedIn && true) { // TODO - should read: if this person has the authority / rights to be a moderator AND if this person is logged in
             moderationElement = <div className='dropdownElement'><Link className='plainLink' to="/edit"><Translate content="nav.moderation" /></Link></div>
         } else {
             moderationElement = <span /> // "empty" element
@@ -125,16 +125,16 @@ class Nav extends React.Component {
             <div className="container">
                 <nav>
                     <ul>
-                        <li style={{maxHeight:'40px'}}><IndexLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></IndexLink></li>
-                        <li><Link to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></Link></li>
-                        <li><Link to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></Link></li>
-                        <li><Link to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></Link></li>
+                        <li style={{maxHeight:'40px'}}><NavLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></NavLink></li>
+                        <li><NavLink to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></NavLink></li>
+                        <li><NavLink to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></NavLink></li>
+                        <li><NavLink to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></NavLink></li>
                         <li id="cogs" style={{float: 'right', cursor: 'pointer'}} 
                             onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))} 
                             onMouseUp={this.mouseUpHandler.bind(this)}>
                                 <img src="cogwheels.png" style={{height: '40px'}} />
                         </li>
-                        <li id="username" style={{float: 'right'}}><p>{!!this.props.username ? this.props.username : <Translate content="nav.guest" />}</p></li>
+                        <li id="username" style={{float: 'right'}}><p>{this.props.isLoggedIn ? this.props.username : <Translate content="nav.guest" />}</p></li>
                     </ul>
                 </nav>
                 {!this.state.dropdown ? <span /> :

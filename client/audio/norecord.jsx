@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'  
+import { Link } from 'react-router-dom'
 import Translate from 'react-translate-component'
 import { Selector } from '../training/selector'
 

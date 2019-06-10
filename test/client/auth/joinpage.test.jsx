@@ -1,6 +1,6 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
-import { browserHistory } from 'react-router'
+import { MemoryRouter } from 'react-router'
 import counterpart from 'counterpart'
 import gql from 'graphql-tag'
 // testing imports
@@ -44,10 +44,9 @@ describe('Join page', function() {
     
     describe('GraphQL queries', function() {
         let joinPage
+        let router
         
         beforeEach(function() {
-            sinon.stub(browserHistory, 'push').callsFake(()=>{})
-            
             mocks = [
                 {
                     request: {
@@ -73,10 +72,14 @@ describe('Join page', function() {
             
             const wrapper = mount(
                 <MockedProvider mocks={mocks} addTypename={false}>
-                    <JoinPageWithData />
+                    <MemoryRouter>
+                        <JoinPageWithData />
+                    </MemoryRouter>
                 </MockedProvider>
             )
             joinPage = wrapper.find('JoinPage').first().instance()
+            router = wrapper.find('MemoryRouter').first().instance()
+            sinon.stub(router.history, 'push')
         })
         
         it('signing up with valid values redirects to homepage', function(done) {
@@ -89,7 +92,7 @@ describe('Join page', function() {
                 customNativeLanguage: null
             }, () => {  // after state has been set
                 joinPage.handleSubmit(new Event('')).then(() => {
-                    chai.assert.isTrue(browserHistory.push.called)
+                    chai.assert.isTrue(router.history.push.called)
                     done()
                 })
             })

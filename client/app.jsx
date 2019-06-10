@@ -4,17 +4,63 @@ import { withApollo, graphql, compose } from 'react-apollo'
 import Translate from 'react-translate-component'
 
 import Nav from './auxiliary/nav'
+import Routes from './routes'
 import { refreshMutation, accountInfoQuery } from '/lib/graphql'
 
-// The app always uses AppBody, which always contains MinimalAppBody.
-// If the user is signed in, there is an intermediate wrapper SignedInAppBody.
+// AppContainer is a lightweight container for the Nav bar and current page
 
-// TODO This page can probably be written more cleanly
+const AppContainer = (props) => {
+    // If the user is not logged in, provide empty account data
+    if (!props.isLoggedIn) {
+        props = {
+            accountInfo: {
+                error: null,
+                loading: false,
+                getAccountInfo: {
+                    username: null,
+                    interface: null,
+                    native: [],
+                    customNative: null,
+                    tutorial: false,
+                    email: null
+                }
+            },
+            username: null,
+            ...props
+        }
+    }
+    
+    return ( 
+        <div>
+            <Nav callbackLogOut={props.callbackLogOut} username={props.username} isLoggedIn={props.isLoggedIn} />,
+            <Routes {...props} />
+        </div>
+    )
+}
 
-class MinimalAppBody extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
+// If the user is logged in, fetch account info
+// Make username easily accessible as a prop
+
+const AppContainerWithData = graphql(accountInfoQuery, {
+    name: 'accountInfo',
+    skip: (props) => (!props.isLoggedIn),
+    props: (props) => {
+        const username = (props.accountInfo.loading || props.accountInfo.error) ?
+            null :
+            props.accountInfo.getAccountInfo.username
+        return {username, ...props}
+    }
+})(AppContainer)
+
+// AppBody contains app-level state (such as whether the user is logged in)
+// and provides authentication methods
+
+class AppBody extends React.Component {
+    constructor(props) {
+        super(props)
+        const raw_jwt = localStorage.getItem('token')
+        this.state = {
+            isLoggedIn: !!raw_jwt, // true if there is a jwt in local storage, false otherwise
             activeLanguageId: null
         }
     }
@@ -23,57 +69,6 @@ class MinimalAppBody extends React.Component {
         this.setState({
             activeLanguageId: langId
         })
-    }
-    
-    render() {
-        let native = null
-        let username = false
-        // TODO: remove all userId references in app
-        let tutorial = false
-        //if (this.props.accountInfo) { <-- was getting errors when there was no token but there was this prop
-        //if (this.props.accountInfo && localStorage['token']) {
-        if (this.props.accountInfo && !this.props.accountInfo.error && localStorage['token']) {
-            console.log("jwt: " + localStorage['token'])
-            if (this.props.accountInfo.loading) { return <Translate component="div" content="loading.loading" /> }
-            console.log("ACCOUNT INFO:")
-            console.log(this.props.accountInfo)
-            username = this.props.accountInfo.getAccountInfo.username
-            tutorial = this.props.accountInfo.getAccountInfo.tutorial
-            native =   this.props.accountInfo.getAccountInfo.native
-        }
-        console.log("Username is: " + username)
-            
-        return (
-            <div id="app-container">
-                <Nav callbackLogOut={this.props.logOut} username={username} />
-                {/* Insert the children according to routes.jsx (this.props.children), along with the childrens' props.
-                username should come from query due to being wrapped by graphql for wrapped case; otherwise username is bool: false. */}
-                {React.cloneElement(
-                    this.props.children, 
-                    {
-                        username: username,
-                        hasSeenTutorial: tutorial,
-                        native: native,
-                        activeLanguageId: this.state.activeLanguageId, 
-                        callbackLanguage: this.setLanguage.bind(this),
-                        callbackUser: this.props.setUser,
-                        callbackLogOut: this.props.logOut
-                    }
-                )}
-            </div>
-        )
-    }
-}
-
-const SignedInAppBody = graphql(accountInfoQuery, {name: 'accountInfo'})(MinimalAppBody)
-
-class AppBody extends React.Component {
-	constructor(props) {
-		super(props)
-        const raw_jwt = localStorage.getItem('token')
-        this.state = {
-            isLoggedIn: !!raw_jwt // true if there is a jwt in local storage, false otherwise
-        }
     }
     
     setUser(raw_jwt) {
@@ -107,11 +102,6 @@ class AppBody extends React.Component {
         localStorage.removeItem('token')
         clearInterval(this.refreshTimer)
         console.log('logging out')
-        // second argument is a callback that setState will call when it is finished
-        // Getting an error about passing a Promise instead of a function here, is that right?
-        console.dir(typeof(this.props.client.resetStore()))
-        // Below - order has been reversed; cannot put resetStore as callback of setState because it's a promise, not a function
-        //this.setState( { isLoggedIn: false }, this.props.client.resetStore() )
         this.props.client.resetStore()
         .then(() => {
             this.setState( { isLoggedIn: false } )
@@ -154,14 +144,15 @@ class AppBody extends React.Component {
     }
     
     render() {
-        let AppBodyClass
-        
-        if (this.state.isLoggedIn) {
-            AppBodyClass = SignedInAppBody
-        } else {
-            AppBodyClass = MinimalAppBody
+        // Props to be passed to AppContainer
+        let pageProps = {
+            isLoggedIn: this.state.isLoggedIn,
+            activeLanguageId: this.state.activeLanguageId,
+            callbackLanguage: this.setLanguage.bind(this),
+            callbackUser: this.setUser.bind(this),
+            callbackLogOut: this.logOut.bind(this),
         }
-        return <AppBodyClass children={this.props.children} setUser={this.setUser.bind(this)} logOut={this.logOut.bind(this)} />
+        return <AppContainerWithData {...pageProps} />
     }
 }
 
