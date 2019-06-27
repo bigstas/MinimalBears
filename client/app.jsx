@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode'
 import { withApollo, graphql, compose } from 'react-apollo'
 import Translate from 'react-translate-component'
 
-import Nav from './auxiliary/nav'
+import { Nav } from './auxiliary/nav'
 import Routes from './routes'
 import { refreshMutation, accountInfoQuery } from '/lib/graphql'
 
@@ -72,7 +72,11 @@ class AppBody extends React.Component {
     }
     
     setUser(raw_jwt) {
-        const jwt = jwtDecode(raw_jwt)
+        // jwtDecode cannot take null or undefined values
+        console.log("This is the raw jwt:", raw_jwt)
+        let jwt
+        if (raw_jwt) jwt = jwtDecode(raw_jwt)
+        else jwt = null
         
         // Check if the token has expired
         // Note that getTime() is in milliseconds, but jwt.exp is in seconds
@@ -157,4 +161,5 @@ class AppBody extends React.Component {
 }
 
 // withApollo allows direct access to the "client" object as a prop
-export default withApollo(graphql(refreshMutation, {name: 'refresh'})(AppBody))
+const AppBodyWithRefresh = withApollo(graphql(refreshMutation, {name: 'refresh'})(AppBody))
+export { AppContainer, AppContainerWithData, AppBody, AppBodyWithRefresh }

@@ -9,14 +9,14 @@ import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { BrowserRouter } from 'react-router-dom'
 
-import AppBody from './app'
+import { AppBodyWithRefresh } from './app'
 import { client } from './middleware'
 
 Meteor.startup(() => {
     render(
         <ApolloProvider client={client}>
             <BrowserRouter>
-                <AppBody/>
+                <AppBodyWithRefresh/>
             </BrowserRouter>
         </ApolloProvider>,
         document.getElementById('content')
