@@ -65,20 +65,20 @@ class Dropdown extends React.Component {
                     {contactUs}
                 </BrowserRouter>
                 <hr />
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'eng')}>English</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'fra')}>Français</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'esp')}>Español</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'lit')}>Lietuvių</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'bah')}>Bahasa</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'rus')}>Русский</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'chm')}>中文</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'jap')}>日本語</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'far')}>فارسی</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'ara')}>العربی</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'geo')}>ქართული</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'eng')}>English</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'fra')}>Français</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'esp')}>Español</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'lit')}>Lietuvių</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'bah')}>Bahasa</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'rus')}>Русский</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'chm')}>中文</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'jap')}>日本語</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'far')}>فارسی</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'ara')}>العربی</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'geo')}>ქართული</div>
             </div>
         )
     }

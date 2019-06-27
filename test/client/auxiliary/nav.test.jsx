@@ -8,15 +8,13 @@ import sinon from 'sinon'
 import Adapter from 'enzyme-adapter-react-16'
 // Nav page imports
 import { Nav, Dropdown } from '/client/auxiliary/nav'
+import counterpart from 'counterpart'
 
 configure({ adapter: new Adapter() })
 
 describe('Nav', function() {
-    describe('Main Nav body', function() {
-        it('bla', function() {
-            let nav = mount(<Nav />)
-        })
-    })
+    // Could also test some things in the Nav itself (TODO),
+    // this is pretty low priority though.
     describe('Nav dropdown', function() {
         const logoutFunc = sinon.stub()
         const loggedIn = mount(<Dropdown isLoggedIn={true} callbackLogOut={logoutFunc} className='foo' onMouseDown={sinon.stub()} onMouseUp={sinon.stub()} />)
@@ -25,6 +23,7 @@ describe('Nav', function() {
             chai.assert.isFalse(loggedIn.exists('#dropdown-login'))
             chai.assert.isFalse(loggedIn.exists('#dropdown-register'))
         })
+        //const logoutFunc = sinon.spy(Dropdown.prototype, 'logOut')
         it('calls logOut method when you click the logout button', function() {
             chai.assert.equal(logoutFunc.callCount, 0)
             loggedIn.find('#dropdown-logout').simulate('click')
@@ -36,7 +35,15 @@ describe('Nav', function() {
             chai.assert.isTrue(loggedOut.exists('#dropdown-login'))
             chai.assert.isTrue(loggedOut.exists('#dropdown-register'))
         })
-        
-        
+        it('changes to the expected locale when you click on any languageSwitch', function() {
+            const numberOfLangs = loggedIn.find('.languageSwitch').length
+            console.log("number of langs:", numberOfLangs)
+            const languageList = ['eng','fra','esp','deu','pol','hun','lit','bah','rus','chm','jap','far','ara','geo']
+            const languageSwitches = loggedIn.find('.languageSwitch')
+            for (let i=0; i<numberOfLangs; i++) {
+                languageSwitches.at(i).simulate('click')
+                chai.assert.equal(counterpart.getLocale(), languageList[i])
+            }
+        })
     })
 })
