@@ -1,6 +1,6 @@
 // Navigation bar
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { BrowserRouter, Link, NavLink } from 'react-router-dom'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
@@ -19,6 +19,14 @@ function BetaSign(props) {
 }
 
 class Dropdown extends React.Component {
+    /**
+     * Dropdown in Nav bar. For changing language, login/logout/register.
+     * @prop isLoggedIn -- whether the user is logged in or not
+     * @prop callbackLogOut -- the logging-out function
+     * @prop className
+     * @prop onMouseDown
+     * @prop onMouseUp
+     */
     handleClick (newLocale) {
         // Sets locale for <Translate> components.
         counterpart.setLocale(newLocale)
@@ -37,7 +45,7 @@ class Dropdown extends React.Component {
             contactUs = <div className='dropdownElement'><Link className='plainLink' to="/contact"><Translate content="nav.contactUs" /></Link></div>
         } else {
             authElement =     <div id="dropdown-login" className='dropdownElement'><Link className='plainLink' to="/login"><Translate content="nav.login" /></Link></div>
-            registerElement = <div className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
+            registerElement = <div id="dropdown-register" className='dropdownElement'><Link className='plainLink' to="/register"><Translate content="nav.register" /></Link></div>
             contactUs = <span />
         }
             
@@ -50,25 +58,27 @@ class Dropdown extends React.Component {
         
         return (
             <div className={this.props.className} onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-                {authElement}
-                {registerElement}
-                {moderationElement}
-                {contactUs}
+                <BrowserRouter>
+                    {authElement}
+                    {registerElement}
+                    {moderationElement}
+                    {contactUs}
+                </BrowserRouter>
                 <hr />
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'eng')}>English</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'fra')}>Français</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'esp')}>Español</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'lit')}>Lietuvių</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'bah')}>Bahasa</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'rus')}>Русский</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'chm')}>中文</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'jap')}>日本語</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'far')}>فارسی</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'ara')}>العربی</div>
-                <div className='dropdownElement' onClick={this.handleClick.bind(this,'geo')}>ქართული</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'eng')}>English</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'fra')}>Français</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'esp')}>Español</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'deu')}>Deutsch</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'pol')}>Polski</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'hun')}>Magyar</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'lit')}>Lietuvių</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'bah')}>Bahasa</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'rus')}>Русский</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'chm')}>中文</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'jap')}>日本語</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'far')}>فارسی</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'ara')}>العربی</div>
+                <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'geo')}>ქართული</div>
             </div>
         )
     }
@@ -125,10 +135,12 @@ class Nav extends React.Component {
             <div className="container">
                 <nav>
                     <ul>
-                        <li style={{maxHeight:'40px'}}><NavLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></NavLink></li>
-                        <li><NavLink to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></NavLink></li>
-                        <li><NavLink to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></NavLink></li>
-                        <li><NavLink to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></NavLink></li>
+                        <BrowserRouter> {/* all Navlinks need to be inside a BrowserRouter (or alternatives: MemoryRouter, HashRouter) */}
+                            <li style={{maxHeight:'40px'}}><NavLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></NavLink></li>
+                            <li><NavLink to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></NavLink></li>
+                            <li><NavLink to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></NavLink></li>
+                            <li><NavLink to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></NavLink></li>
+                        </BrowserRouter>
                         <li id="cogs" style={{float: 'right', cursor: 'pointer'}} 
                             onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))} 
                             onMouseUp={this.mouseUpHandler.bind(this)}>
@@ -157,4 +169,4 @@ class Nav extends React.Component {
     }
 }
 
-export default Nav
+export { Nav, Dropdown }
