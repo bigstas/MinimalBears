@@ -1,3 +1,4 @@
+/*
 describe('my object', function() {
     this.slow(0.1)
     it('test1', function() {
@@ -8,3 +9,4 @@ describe('my object', function() {
         console.log('never gets here')
     })
 })
+*/

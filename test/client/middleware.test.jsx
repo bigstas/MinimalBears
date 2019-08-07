@@ -1,5 +1,4 @@
-import { authMiddleware, client } from '/client/middleware'
-import { setContext } from 'apollo-link-context'
+import { authMiddleware } from '/client/middleware'
 
 import chai from 'chai'
 
