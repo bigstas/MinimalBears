@@ -1,6 +1,6 @@
 // Navigation bar
 import React from 'react'
-import { BrowserRouter, Link, NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import counterpart from 'counterpart'
 import Translate from 'react-translate-component'    
     
@@ -58,12 +58,10 @@ class Dropdown extends React.Component {
         
         return (
             <div className={this.props.className} onMouseDown={this.props.onMouseDown} onMouseUp={this.props.onMouseUp}>
-                <BrowserRouter>
-                    {authElement}
-                    {registerElement}
-                    {moderationElement}
-                    {contactUs}
-                </BrowserRouter>
+                {authElement}
+                {registerElement}
+                {moderationElement}
+                {contactUs}
                 <hr />
                 <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'eng')}>English</div>
                 <div className='dropdownElement languageSwitch' onClick={this.handleClick.bind(this,'fra')}>Français</div>
@@ -135,12 +133,10 @@ class Nav extends React.Component {
             <div className="container">
                 <nav>
                     <ul>
-                        <BrowserRouter> {/* all Navlinks need to be inside a BrowserRouter (or alternatives: MemoryRouter, HashRouter) */}
-                            <li style={{maxHeight:'40px'}}><NavLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></NavLink></li>
-                            <li><NavLink to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></NavLink></li>
-                            <li><NavLink to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></NavLink></li>
-                            <li><NavLink to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></NavLink></li>
-                        </BrowserRouter>
+                        <li style={{maxHeight:'40px'}}><NavLink to="/" activeClassName="activeNavbarElement" style={{padding: "0", backgroundColor: "#DE8312"}}><img src="favicon.ico" style={{height: "40px"}} /><BetaSign /></NavLink></li>
+                        <li><NavLink to="/about" activeClassName="activeNavbarElement"><Translate content="nav.about" /></NavLink></li>
+                        <li><NavLink to="/train" activeClassName="activeNavbarElement"><Translate content="nav.train" /></NavLink></li>
+                        <li><NavLink to="/record" activeClassName="activeNavbarElement"><Translate content="nav.record" /></NavLink></li>
                         <li id="cogs" style={{float: 'right', cursor: 'pointer'}} 
                             onMouseDown={this.mouseDownHandler.bind(this,this.toggleDropdown.bind(this))} 
                             onMouseUp={this.mouseUpHandler.bind(this)}>

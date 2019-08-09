@@ -1,5 +1,4 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
 import { Route, Switch } from 'react-router'
 
 // route components
@@ -19,19 +18,17 @@ import NotFound from './static/notfound'
 
 
 const Routes = (props) => (
-    <BrowserRouter> {/* Should not use <Switch /> outside a Router */}
-        <Switch>
-            <Route exact path="/" render={() => <Home {...props}/>} />
-            <Route path="/train" render={() => <TrainPage {...props}/>} />
-            <Route path="/about" render={() => <About {...props}/>} />
-            <Route path="/record" render={() => <RecordPageWithData {...props}/>} />
-            <Route path="/register" render={() => <JoinPageWithData {...props}/>} />
-            <Route path="/login" render={() => <AuthSignInPage {...props}/>} />
-            <Route path="/edit" render={() => <EditingPage {...props}/>} />
-            <Route path="/contact" render={() => <Contact {...props}/>} />
-            <Route path="*" render={() => <NotFound {...props}/>} />
-        </Switch>
-    </BrowserRouter>
+    <Switch>
+        <Route exact path="/" render={() => <Home {...props}/>} />
+        <Route path="/train" render={() => <TrainPage {...props}/>} />
+        <Route path="/about" render={() => <About {...props}/>} />
+        <Route path="/record" render={() => <RecordPageWithData {...props}/>} />
+        <Route path="/register" render={() => <JoinPageWithData {...props}/>} />
+        <Route path="/login" render={() => <AuthSignInPage {...props}/>} />
+        <Route path="/edit" render={() => <EditingPage {...props}/>} />
+        <Route path="/contact" render={() => <Contact {...props}/>} />
+        <Route path="*" render={() => <NotFound {...props}/>} />
+    </Switch>
 )
 
 export default Routes
